@@ -13,18 +13,6 @@
    "queued_at": "2026-09-15T19:22:39+00:00"
   },
   {
-   "slug": "gw01-short1",
-   "title": "Take out their five best gameweeks",
-   "file": "videos/gw01-short1-20260915-1929.mp4",
-   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw01-short1-20260915-1929.mp4",
-   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw01-short1-20260915-1929.mp4",
-   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw01-short1-20260915-1929.jpg",
-   "bytes": 2037722,
-   "seconds": 62.644,
-   "caption": "Someone wins your mini-league every year, and every year they explain why. Here's the test that finds out whether they were any good: take their five best gameweeks out.\n\nI ran it on the model I built. 35% a year became 17%. An index tracker does about 15%. Five trades out of 89 were doing three quarters of the work \u2014 which means six years of effort beat doing nothing by two points a year.\n\nBuilt something yourself? Delete your five best trades and run it again. If the edge disappears, it was never an edge. On 8 October mine stops being a backtest.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
-   "queued_at": "2026-09-15T19:29:44+00:00"
-  },
-  {
    "slug": "gw01-short2",
    "title": "It's like picking your teams in May",
    "file": "videos/gw01-short2-20260915-1937.mp4",
@@ -47,7 +35,19 @@
    "seconds": 58.539,
    "caption": "I'm an engineer. Not finance. My savings sat in an index tracker doing ten or fifteen percent in a good year, and every so often something would double in a fortnight and I'd read about it on my lunch break.\n\nI could hand it to someone who gets paid whether I win or lose, or I could write down my own rules. So I wrote a runbook: rules, not hunches, trading while I'm at work. Six seasons on paper, 35% a year. Then I went looking for the flaws and found three \u2014 they're the next three videos.\n\nOn 8 October it stops being paper. Every pick it makes goes up here four weeks later: wins, losses, red arrows. I've no idea how it ends, which is rather the point.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
    "queued_at": "2026-09-15T20:42:46+00:00"
+  },
+  {
+   "slug": "gw01-short1",
+   "title": "Take out their five best gameweeks",
+   "file": "videos/gw01-short1-20260915-2049.mp4",
+   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw01-short1-20260915-2049.mp4",
+   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw01-short1-20260915-2049.mp4",
+   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw01-short1-20260915-2049.jpg",
+   "bytes": 1853523,
+   "seconds": 55.719,
+   "caption": "Someone wins your mini-league every year, and every year they explain why. Here's the test that finds out whether they were any good: take their five best gameweeks out.\n\nI ran it on the model I built. 35% a year became 17%. An index tracker does about 15%. Five trades out of 89 were doing three quarters of the work \u2014 which means six years of effort beat doing nothing by two points a year.\n\nBuilt something yourself? Delete your five best trades and run it again. If the edge disappears, it was never an edge. On 8 October mine stops being a backtest.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
+   "queued_at": "2026-09-15T20:49:33+00:00"
   }
  ],
- "updated_at": "2026-09-15T20:42:46+00:00"
+ "updated_at": "2026-09-15T20:49:33+00:00"
 }
