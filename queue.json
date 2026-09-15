@@ -13,18 +13,6 @@
    "queued_at": "2026-09-15T19:22:39+00:00"
   },
   {
-   "slug": "gw01-short2",
-   "title": "It's like picking your teams in May",
-   "file": "videos/gw01-short2-20260915-1937.mp4",
-   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw01-short2-20260915-1937.mp4",
-   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw01-short2-20260915-1937.mp4",
-   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw01-short2-20260915-1937.jpg",
-   "bytes": 2218112,
-   "seconds": 62.969,
-   "caption": "I picked my stocks the way you'd cheat at fantasy football: with the final table already in front of me. Took six years to notice, and it wasn't the rules that were wrong.\n\nThe rules were clean \u2014 nothing peeked at tomorrow. The bias got in when I typed out the list of companies the model is allowed to look at, because I wrote that list this year, knowing which ones had already run.\n\nSo ask where your own list came from. If you chose it knowing how the story ended, your backtest is a memory, not a test. On 8 October mine stops being a backtest.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
-   "queued_at": "2026-09-15T19:37:13+00:00"
-  },
-  {
    "slug": "gw00-opener",
    "title": "I don't have a fund manager. I wrote one.",
    "file": "videos/gw00-opener-20260915-2042.mp4",
@@ -47,7 +35,19 @@
    "seconds": 55.719,
    "caption": "Someone wins your mini-league every year, and every year they explain why. Here's the test that finds out whether they were any good: take their five best gameweeks out.\n\nI ran it on the model I built. 35% a year became 17%. An index tracker does about 15%. Five trades out of 89 were doing three quarters of the work \u2014 which means six years of effort beat doing nothing by two points a year.\n\nBuilt something yourself? Delete your five best trades and run it again. If the edge disappears, it was never an edge. On 8 October mine stops being a backtest.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
    "queued_at": "2026-09-15T20:49:33+00:00"
+  },
+  {
+   "slug": "gw01-short2",
+   "title": "It's like picking your teams in May",
+   "file": "videos/gw01-short2-20260915-2057.mp4",
+   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw01-short2-20260915-2057.mp4",
+   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw01-short2-20260915-2057.mp4",
+   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw01-short2-20260915-2057.jpg",
+   "bytes": 1799225,
+   "seconds": 53.061,
+   "caption": "I picked my stocks the way you'd cheat at fantasy football: with the final table already in front of me. Took six years to notice, and it wasn't the rules that were wrong.\n\nThe rules were clean \u2014 nothing peeked at tomorrow. The bias got in when I typed out the list of companies the model is allowed to look at, because I wrote that list this year, knowing which ones had already run.\n\nSo ask where your own list came from. If you chose it knowing how the story ended, your backtest is a memory, not a test. On 8 October mine stops being a backtest.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
+   "queued_at": "2026-09-15T20:57:14+00:00"
   }
  ],
- "updated_at": "2026-09-15T20:49:33+00:00"
+ "updated_at": "2026-09-15T20:57:14+00:00"
 }
