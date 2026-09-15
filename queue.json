@@ -25,18 +25,6 @@
    "queued_at": "2026-09-15T14:21:12+00:00"
   },
   {
-   "slug": "gw01-short3",
-   "title": "Deleting the winners didn't reduce the pain",
-   "file": "videos/gw01-short3-20260915-1421.mp4",
-   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw01-short3-20260915-1421.mp4",
-   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw01-short3-20260915-1421.mp4",
-   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw01-short3-20260915-1421.jpg",
-   "bytes": 1578651,
-   "seconds": 48.485,
-   "caption": "I deleted my five best results. The return halved. The worst run didn't move: \u221251.3% became \u221250.9%. The pain was never coming from the trades that worked.\n\nThat's the bit people skip. Your winners set the reward; they do almost nothing about the drop. At the worst point half the money was gone and it stayed gone for months before it came back.\n\nSo don't judge a system on its good months. Ask what its worst run was, and whether you'd have sat through it. On 8 October I find out whether I can.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
-   "queued_at": "2026-09-15T14:21:12+00:00"
-  },
-  {
    "slug": "gw00-opener",
    "title": "I don't have a fund manager. I wrote one.",
    "file": "videos/gw00-opener-20260915-1918.mp4",
@@ -47,7 +35,19 @@
    "seconds": 64.13,
    "caption": "I'm an engineer. Not finance. My savings sat in an index tracker doing ten or fifteen percent in a good year, and every so often something would double in a fortnight and I'd read about it on my lunch break.\n\nI could hand it to someone who gets paid whether I win or lose, or I could write down my own rules. So I wrote a runbook: rules, not hunches, trading while I'm at work. Six seasons on paper, 35% a year. Then I went looking for the flaws and found three \u2014 they're the next three videos.\n\nOn 8 October it stops being paper. Every pick it makes goes up here four weeks later: wins, losses, red arrows. I've no idea how it ends, which is rather the point.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
    "queued_at": "2026-09-15T19:18:36+00:00"
+  },
+  {
+   "slug": "gw01-short3",
+   "title": "Deleting the winners didn't reduce the pain",
+   "file": "videos/gw01-short3-20260915-1922.mp4",
+   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw01-short3-20260915-1922.mp4",
+   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw01-short3-20260915-1922.mp4",
+   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw01-short3-20260915-1922.jpg",
+   "bytes": 1769788,
+   "seconds": 50.987,
+   "caption": "I deleted my five best results. The return halved. The worst run didn't move: \u221251.3% became \u221250.9%. The pain was never coming from the trades that worked.\n\nThat's the bit people skip. Your winners set the reward; they do almost nothing about the drop. At the worst point half the money was gone and it stayed gone for months before it came back.\n\nSo don't judge a system on its good months. Ask what its worst run was, and whether you'd have sat through it. On 8 October I find out whether I can.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
+   "queued_at": "2026-09-15T19:22:39+00:00"
   }
  ],
- "updated_at": "2026-09-15T19:18:36+00:00"
+ "updated_at": "2026-09-15T19:22:39+00:00"
 }
