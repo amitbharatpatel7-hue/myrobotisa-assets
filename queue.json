@@ -1,18 +1,6 @@
 {
  "items": [
   {
-   "slug": "gw00-opener",
-   "title": "I don't have a fund manager. I wrote one.",
-   "file": "videos/gw00-opener-20260915-1918.mp4",
-   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw00-opener-20260915-1918.mp4",
-   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw00-opener-20260915-1918.mp4",
-   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw00-opener-20260915-1918.jpg",
-   "bytes": 2080977,
-   "seconds": 64.13,
-   "caption": "I'm an engineer. Not finance. My savings sat in an index tracker doing ten or fifteen percent in a good year, and every so often something would double in a fortnight and I'd read about it on my lunch break.\n\nI could hand it to someone who gets paid whether I win or lose, or I could write down my own rules. So I wrote a runbook: rules, not hunches, trading while I'm at work. Six seasons on paper, 35% a year. Then I went looking for the flaws and found three \u2014 they're the next three videos.\n\nOn 8 October it stops being paper. Every pick it makes goes up here four weeks later: wins, losses, red arrows. I've no idea how it ends, which is rather the point.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
-   "queued_at": "2026-09-15T19:18:36+00:00"
-  },
-  {
    "slug": "gw01-short3",
    "title": "Deleting the winners didn't reduce the pain",
    "file": "videos/gw01-short3-20260915-1922.mp4",
@@ -47,7 +35,19 @@
    "seconds": 62.969,
    "caption": "I picked my stocks the way you'd cheat at fantasy football: with the final table already in front of me. Took six years to notice, and it wasn't the rules that were wrong.\n\nThe rules were clean \u2014 nothing peeked at tomorrow. The bias got in when I typed out the list of companies the model is allowed to look at, because I wrote that list this year, knowing which ones had already run.\n\nSo ask where your own list came from. If you chose it knowing how the story ended, your backtest is a memory, not a test. On 8 October mine stops being a backtest.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
    "queued_at": "2026-09-15T19:37:13+00:00"
+  },
+  {
+   "slug": "gw00-opener",
+   "title": "I don't have a fund manager. I wrote one.",
+   "file": "videos/gw00-opener-20260915-2042.mp4",
+   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw00-opener-20260915-2042.mp4",
+   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw00-opener-20260915-2042.mp4",
+   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw00-opener-20260915-2042.jpg",
+   "bytes": 1796086,
+   "seconds": 58.539,
+   "caption": "I'm an engineer. Not finance. My savings sat in an index tracker doing ten or fifteen percent in a good year, and every so often something would double in a fortnight and I'd read about it on my lunch break.\n\nI could hand it to someone who gets paid whether I win or lose, or I could write down my own rules. So I wrote a runbook: rules, not hunches, trading while I'm at work. Six seasons on paper, 35% a year. Then I went looking for the flaws and found three \u2014 they're the next three videos.\n\nOn 8 October it stops being paper. Every pick it makes goes up here four weeks later: wins, losses, red arrows. I've no idea how it ends, which is rather the point.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
+   "queued_at": "2026-09-15T20:42:46+00:00"
   }
  ],
- "updated_at": "2026-09-15T19:37:13+00:00"
+ "updated_at": "2026-09-15T20:42:46+00:00"
 }
