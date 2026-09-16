@@ -1,18 +1,6 @@
 {
  "items": [
   {
-   "slug": "gw01-short3",
-   "title": "Deleting the winners didn't reduce the pain",
-   "file": "videos/gw01-short3-20260916-0825.mp4",
-   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw01-short3-20260916-0825.mp4",
-   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw01-short3-20260916-0825.mp4",
-   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw01-short3-20260916-0825.jpg",
-   "bytes": 1686792,
-   "seconds": 47.967,
-   "caption": "I deleted my five best results. The return halved. The worst run didn't move: \u221251.3% became \u221250.9%. The pain was never coming from the trades that worked.\n\nThat's the bit people skip. Your winners set the reward; they do almost nothing about the drop. At the worst point half the money was gone and it stayed gone for months before it came back.\n\nSo don't judge a system on its good months. Ask what its worst run was, and whether you'd have sat through it. On 8 October I find out whether I can.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
-   "queued_at": "2026-09-16T08:25:49+00:00"
-  },
-  {
    "slug": "gw00-opener",
    "title": "I don't have a fund manager. I wrote one.",
    "file": "videos/gw00-opener-20260916-0840.mp4",
@@ -47,7 +35,19 @@
    "seconds": 57.88,
    "caption": "I picked my stocks the way you'd cheat at fantasy football: with the final table already in front of me. Took six years to notice, and it wasn't the rules that were wrong.\n\nThe rules were clean \u2014 nothing peeked at tomorrow. The bias got in when I typed out the list of companies the model is allowed to look at, because I wrote that list this year, knowing which ones had already run.\n\nSo ask where your own list came from. If you chose it knowing how the story ended, your backtest is a memory, not a test. On 8 October mine stops being a backtest.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
    "queued_at": "2026-09-16T08:55:26+00:00"
+  },
+  {
+   "slug": "gw01-short3",
+   "title": "Deleting the winners didn't reduce the pain",
+   "file": "videos/gw01-short3-20260916-0903.mp4",
+   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw01-short3-20260916-0903.mp4",
+   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw01-short3-20260916-0903.mp4",
+   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw01-short3-20260916-0903.jpg",
+   "bytes": 1739070,
+   "seconds": 50.519,
+   "caption": "I deleted my five best results. The return halved. The worst run didn't move: \u221251.3% became \u221250.9%. The pain was never coming from the trades that worked.\n\nThat's the bit people skip. Your winners set the reward; they do almost nothing about the drop. At the worst point half the money was gone and it stayed gone for months before it came back.\n\nSo don't judge a system on its good months. Ask what its worst run was, and whether you'd have sat through it. On 8 October I find out whether I can.\n\nResearch output, not investment advice. Everything shown is a backtest\nrun on historical data with paper money \u2014 no real positions, past or\npresent. I'm an engineer, not a financial adviser, and nothing here is\na recommendation to buy or sell anything.",
+   "queued_at": "2026-09-16T09:03:46+00:00"
   }
  ],
- "updated_at": "2026-09-16T08:55:26+00:00"
+ "updated_at": "2026-09-16T09:03:46+00:00"
 }
