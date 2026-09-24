@@ -173,11 +173,12 @@ def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
            footnote: str | None = None) -> str:
     header = (
         f'<table role="presentation" width="100%" cellpadding="0" '
-        f'cellspacing="0" style="background:{CHROME};'
+        f'cellspacing="0" bgcolor="{CHROME}" style="background:{CHROME};'
+        f'background-color:{CHROME};'
         f'border-radius:{CARD_RADIUS}px;margin:0 0 20px;">'
         f'<tr><td style="padding:28px 28px 24px;">'
         f'{eyebrow(eyebrow_text)}'
-        f'<div style="font-size:22px;font-weight:700;color:#FFFFFF;'
+        f'<div style="font-size:26px;font-weight:800;color:#FFFFFF;'
         f'margin:0 0 6px;">{esc(title)}</div>'
         f'<div style="font-size:14px;color:{CHROME_SUBTITLE};">'
         f'{esc(subtitle)}</div>'
@@ -198,7 +199,8 @@ def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
             f'text-decoration:underline;">{esc(label)}</a>')
     footer = (
         f'<table role="presentation" width="100%" cellpadding="0" '
-        f'cellspacing="0" style="background:{PAGE};'
+        f'cellspacing="0" bgcolor="{PAGE}" style="background:{PAGE};'
+        f'background-color:{PAGE};'
         f'border-radius:{PANEL_RADIUS}px;margin:16px 0 0;">'
         f'<tr><td style="padding:18px 24px;">{"".join(footer_bits)}'
         f'</td></tr></table>') if footer_bits else ""
@@ -211,9 +213,11 @@ def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
         '<meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
         '<meta name="color-scheme" content="light only">\n'
+        '<meta name="supported-color-schemes" content="light only">\n'
+        '<style>:root{color-scheme:light only}</style>\n'
         f'<title>{esc(title)}</title>\n'
         '</head>\n'
-        f'<body style="margin:0;padding:24px;background:{PAGE};'
+        f'<body bgcolor="{PAGE}" style="margin:0;padding:24px;background:{PAGE};'
         f'font-family:{FONT_STACK};">\n'
         '<table role="presentation" width="100%" cellpadding="0" '
         'cellspacing="0" style="max-width:600px;margin:0 auto;">\n'
