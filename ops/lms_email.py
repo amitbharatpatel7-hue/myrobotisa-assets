@@ -156,7 +156,8 @@ def section(heading: str, body_html: str, status: tuple | None = None) -> str:
 
 def panel(inner_rows_html: str) -> str:
     return (f'<table role="presentation" width="100%" cellpadding="0" '
-            f'cellspacing="0" style="background:{CARD};'
+            f'cellspacing="0" bgcolor="{CARD}" style="background:{CARD};'
+        f'background-color:{CARD};'
             f'border-radius:{PANEL_RADIUS}px;border:1px solid {HAIRLINE};'
             f'margin:0 0 16px;">{inner_rows_html}</table>')
 
