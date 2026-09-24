@@ -1,6 +1,14 @@
-"""Last Man Standing house style for Points Per Pound emails.
+"""Last Man Standing house style — the shared email theme for every project.
 
-Single source of truth for the HTML this project's automated emails use.
+Single source of truth for the HTML all of the automated emails use:
+Points Per Pound, Clipped Daily, Last Man Standing and the ops tasks.
+It lives in this repo because ppp-assets is the only PUBLIC repo in the
+estate — a scheduled task fetches with no credentials, so a raw URL in
+any of the private code repos returns 404 and the module never loads.
+
+The theme is brand-neutral: `eyebrow_text` is what names the project
+("POINTS PER POUND", "CLIPPED DAILY", ...), so one palette carries all
+of them and they read as one system.
 No third-party dependencies and no network, so the script or scheduled task
 sending an email can fetch this file raw and import it directly.
 
