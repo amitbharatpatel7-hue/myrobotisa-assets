@@ -51,15 +51,15 @@
   {
    "slug": "gw02-short12",
    "title": "Three days down. It knew the whole time.",
-   "file": "videos/gw02-short12-20261001-0928.mp4",
-   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw02-short12-20261001-0928.mp4",
-   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw02-short12-20261001-0928.mp4",
-   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw02-short12-20261001-0928.jpg",
-   "bytes": 1453894,
-   "seconds": 47.34,
+   "file": "videos/gw02-short12-20261001-1415.mp4",
+   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw02-short12-20261001-1415.mp4",
+   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw02-short12-20261001-1415.mp4",
+   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw02-short12-20261001-1415.jpg",
+   "bytes": 1430000,
+   "seconds": 47.501,
    "caption": "My own automated pipeline went dead for three days and never told me \u2014 it hit a weekly usage cap, and the error said exactly why and exactly when it would recover. But the code that reads errors was watching for the phrase \"usage limit\"; the message said \"weekly limit\". One word apart, so it filed a known, self-explaining outage as an unknown one, sent three emails that never said \"out of credit\", and never retried. Everything running on plain code kept working the whole time. Only the part with a clever step in it broke.\n\nResearch output, not investment advice. Everything shown is a backtest run on historical data with paper money \u2014 no real positions, past or present. I'm an engineer, not a financial adviser, and nothing here is a recommendation to buy or sell anything.",
-   "queued_at": "2026-10-01T09:28:37+00:00"
+   "queued_at": "2026-10-01T14:15:19+00:00"
   }
  ],
- "updated_at": "2026-10-01T09:28:37+00:00"
+ "updated_at": "2026-10-01T14:15:19+00:00"
 }
