@@ -75,15 +75,19 @@
   {
    "slug": "gw02-short9",
    "title": "161 goes. $10.18. Wrong excuse.",
-   "file": "videos/gw02-short9-20261002-1058.mp4",
-   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw02-short9-20261002-1058.mp4",
-   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw02-short9-20261002-1058.mp4",
-   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw02-short9-20261002-1058.jpg",
-   "bytes": 1288848,
-   "seconds": 38.084,
+   "file": "videos/gw02-short9-20261002-1147.mp4",
+   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw02-short9-20261002-1147.mp4",
+   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw02-short9-20261002-1147.mp4",
+   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw02-short9-20261002-1147.jpg",
+   "bytes": 1357217,
+   "seconds": 40.545,
    "caption": "An automated fix took a hundred and sixty-one attempts and $10.18, and built nothing \u2014 no code, no notes. The email it sent told me to check a password, which was reasonable. The actual cause \u2014 it had simply run out of its step budget \u2014 was already sitting in the log that email had just read. It's the app telling you your team is invalid and never saying which player.\n\nResearch output, not investment advice. Everything shown is a backtest run on historical data with paper money \u2014 no real positions, past or present. I'm an engineer, not a financial adviser, and nothing here is a recommendation to buy or sell anything.",
-   "queued_at": "2026-10-02T10:58:30+00:00"
+   "queued_at": "2026-10-02T11:47:36+00:00",
+   "voice_wpm": 206.8,
+   "voice_ref_wpm": 201.0,
+   "voice_attempts": 1,
+   "voice_speed": 0.88
   }
  ],
- "updated_at": "2026-10-02T10:58:30+00:00"
+ "updated_at": "2026-10-02T11:47:36+00:00"
 }
