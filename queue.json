@@ -117,7 +117,22 @@
    "seconds": 44.444,
    "caption": "I handed my stock system to a machine and let it play its first deadline on a practice account. Eleven transfers submitted, eleven rejected \u2014 not because the picks were bad, but because the amounts had six decimal places and the exchange only accepts four. One line of code, found only by playing a real deadline instead of replaying old seasons.\n\nI run this system with my own money, in an ISA. I hold positions in things I talk about, and I say so when I do. This is a record of what I did and what happened \u2014 not a recommendation to do the same. I'm an engineer, not a financial adviser.",
    "queued_at": "2026-10-10T15:29:12+00:00"
+  },
+  {
+   "slug": "gw02-short5",
+   "title": "Five transfers. Zero landed. Marked done anyway.",
+   "file": "videos/gw02-short5-20261010-1534.mp4",
+   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw02-short5-20261010-1534.mp4",
+   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw02-short5-20261010-1534.mp4",
+   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw02-short5-20261010-1534.jpg",
+   "card_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/cards/gw02-short5-card-20261010-1534.mp4",
+   "card_raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/cards/gw02-short5-card-20261010-1534.mp4",
+   "card_bytes": 71043,
+   "bytes": 2387339,
+   "seconds": 43.924,
+   "caption": "Three quarters of my portfolio is the boring template sleeve, and its monthly reshuffle bounced \u2014 all five transfers rejected by the exchange (practice account, paper money, real broker). The system still logged the month as done, which would have left it untouched for another four weeks. Nobody caught it on purpose: a state file's timestamp simply didn't match a single accepted order. The fix is one line \u2014 the month only counts as done when something actually lands.\n\nI run this system with my own money, in an ISA. I hold positions in things I talk about, and I say so when I do. This is a record of what I did and what happened \u2014 not a recommendation to do the same. I'm an engineer, not a financial adviser.",
+   "queued_at": "2026-10-10T15:34:10+00:00"
   }
  ],
- "updated_at": "2026-10-10T15:29:12+00:00"
+ "updated_at": "2026-10-10T15:34:10+00:00"
 }
