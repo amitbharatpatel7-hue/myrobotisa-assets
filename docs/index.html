@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Robot I.S.A. — Build your own robot ISA in 14 days</title>
+<meta name="description" content="The code for your own rules-based ISA system, plus 14 lessons on making it yours with Claude. One price. Early access waitlist, founding price £49.">
+<meta property="og:title" content="Build your own robot ISA in 14 days">
+<meta property="og:description" content="I take the Ls. You take the lessons. Early access waitlist: founding price £49 for the first 100.">
+<meta property="og:image" content="https://myrobotisa.com/avatar.png">
+<meta name="theme-color" content="#34003B">
+<link rel="icon" href="avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --deep:#34003B; --deep2:#4B1155; --rule:#6A3578; --green:#00E87A; --pink:#EA00AB;
+    --ink:#FFFFFF; --muted:#A98FB0; --eye:#9B7FA6;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--deep);color:var(--ink);font-family:Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:var(--green)}
+  .wrap{max-width:760px;margin:0 auto;padding:0 20px}
+  header{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+  .handle{color:var(--muted);font-weight:500;font-size:15px;text-decoration:none}
+  .tag{display:inline-block;background:var(--green);color:var(--deep);font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:6px 12px}
+  .hero{display:grid;grid-template-columns:1fr;gap:28px;align-items:center;padding:28px 0 12px}
+  @media(min-width:700px){.hero{grid-template-columns:1.4fr 1fr;gap:28px}}
+  @media(max-width:520px){button[type=submit]{flex:1 1 100%}}
+  .btn{display:inline-block;text-decoration:none;font-weight:800;font-size:17px;padding:15px 26px;border-radius:999px;background:var(--green);color:var(--deep)}
+  .hero img{width:110px;order:-1;justify-self:start;border-radius:22px;border:3px solid var(--green)}
+  @media(min-width:700px){.hero img{width:100%;max-width:280px;order:0;justify-self:center;border-radius:28px}}
+  .hero{gap:18px}
+  h1{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(44px,9vw,72px);line-height:1.02;margin:14px 0 14px;letter-spacing:.01em;text-transform:uppercase}
+  h1 .p{color:var(--pink)}
+  .promise{font-size:22px;font-weight:700;margin:0 0 8px}
+  .promise .g{color:var(--green)}
+  .line{color:var(--muted);margin:0;font-size:16px}
+  .card{background:var(--deep2);border:1px solid var(--rule);border-radius:22px;padding:24px;margin:28px 0}
+  .price{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;margin:0 0 6px}
+  .price .now{font-family:Anton,Impact,sans-serif;font-size:56px;color:var(--green);line-height:1}
+  .price .later{font-size:18px;color:var(--muted)}
+  .small{font-size:14px;color:var(--muted);margin:6px 0 0}
+  form{margin-top:18px}
+  .row{display:flex;flex-wrap:wrap;gap:10px}
+  input[type=email]{flex:1 1 240px;min-width:0;font:inherit;font-size:17px;padding:15px 18px;border-radius:999px;border:2px solid var(--rule);background:var(--deep);color:var(--ink)}
+  input[type=email]:focus{outline:none;border-color:var(--green)}
+  button{font:inherit;font-weight:800;font-size:17px;padding:15px 26px;border-radius:999px;border:0;background:var(--green);color:var(--deep);cursor:pointer}
+  button[disabled]{opacity:.6;cursor:default}
+  .consent{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:14px;color:var(--ink)}
+  .consent input{margin-top:3px;width:18px;height:18px;accent-color:var(--green);flex:none}
+  .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+  .msg{margin-top:14px;font-weight:600;min-height:1.4em}
+  .msg.ok{color:var(--green)} .msg.err{color:#FF8FB8}
+  h2{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:34px;text-transform:uppercase;margin:44px 0 6px;letter-spacing:.01em}
+  h2 .p{color:var(--pink)}
+  .lead{color:var(--muted);margin:0 0 18px}
+  ol.days{list-style:none;padding:0;margin:0;display:grid;gap:10px}
+  ol.days li{display:grid;grid-template-columns:78px 1fr;gap:12px;align-items:start;background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px 16px}
+  .d{font-family:Anton,Impact,sans-serif;color:var(--green);font-size:20px;line-height:1.3;white-space:nowrap}
+  .t{font-weight:700}
+  .s{color:var(--muted);font-size:14px;margin-top:2px}
+  .isa{color:var(--pink);font-weight:700}
+  ul.not{padding-left:20px;margin:8px 0 0} ul.not li{margin:6px 0}
+  footer{border-top:1px solid var(--rule);margin-top:48px;padding:24px 0 40px;color:var(--eye);font-size:13px;line-height:1.6}
+  footer h3{color:var(--ink);font-size:14px;margin:18px 0 4px}
+  .get{display:grid;grid-template-columns:1fr;gap:12px;margin-top:6px}
+  @media(min-width:640px){.get{grid-template-columns:1fr 1fr}}
+  .get .box{background:var(--deep2);border:1px solid var(--rule);border-radius:18px;padding:18px}
+  .get h3{margin:0 0 8px;font-size:18px} .get h3 .n{color:var(--green)}
+  .get ul{margin:0;padding-left:18px;color:var(--ink);font-size:15px} .get li{margin:5px 0}
+  .exp{border:0;margin:14px 0 0;padding:0;font-size:14px}
+  .exp legend{padding:0;margin-bottom:8px;color:var(--ink)}
+  .exp label{display:inline-flex;align-items:center;gap:6px;margin:0 14px 6px 0;color:var(--muted)}
+  .exp input{accent-color:var(--green);width:16px;height:16px}
+  .preview{background:var(--pink);color:#fff;text-align:center;font-weight:700;font-size:13px;padding:8px 12px}
+</style>
+</head>
+<body>
+<div class="preview" id="preview" hidden>Preview. The form doesn't save anything until the page is live on myrobotisa.com.</div>
+<div class="wrap">
+  <header>
+    <a class="handle" href="https://www.instagram.com/myrobotisa/">@myrobotisa</a>
+    <span class="tag">Early access</span>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h1>Build your own <span class="p">robot ISA</span> in 14 days</h1>
+      <p class="promise">I take the Ls. <span class="g">You take the lessons.</span></p>
+      <p class="line">Investing, explained like a mate would. Not a suit.</p>
+    </div>
+    <img src="avatar.png" alt="The My Robot I.S.A. visor robot">
+  </section>
+
+  <div class="card" id="join">
+    <div class="price"><span class="now">£49</span><span class="later">founding price · £99 after</span></div>
+    <p class="small">One price for both: the code and the 14 lessons. For the first 100 founding members. No payment now. Join the list and you'll get the founding price when it opens.</p>
+    <form id="f" novalidate>
+      <div class="row">
+        <input type="email" id="email" name="email" placeholder="you@email.com" autocomplete="email" required aria-label="Email address">
+        <button type="submit" id="go">Get early access</button>
+      </div>
+      <label class="consent"><input type="checkbox" id="consent" required> <span>Email me when My Robot I.S.A. opens, with the founding price. I can unsubscribe any time.</span></label>
+      <fieldset class="exp"><legend>Optional: how much coding have you done?</legend>
+        <label><input type="radio" name="exp" value="none"> None</label>
+        <label><input type="radio" name="exp" value="some"> A bit</label>
+        <label><input type="radio" name="exp" value="developer"> I'm a developer</label>
+      </fieldset>
+      <label class="exp" style="display:block">Optional: which broker do you use? <input type="text" id="broker" maxlength="40" placeholder="e.g. the app your ISA is with" style="display:block;width:100%;margin-top:8px;font:inherit;font-size:15px;padding:11px 16px;border-radius:999px;border:2px solid var(--rule);background:var(--deep);color:var(--ink)"></label>
+      <div class="hp" aria-hidden="true"><label>Leave this empty <input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>
+      <div class="msg" id="msg" role="status" aria-live="polite"></div>
+    </form>
+  </div>
+
+  <h2>What you <span class="p">get</span></h2>
+  <p class="lead">Two parts, one price. The code gets you running. The lessons make it yours.</p>
+  <div class="get">
+    <div class="box"><h3><span class="n">1.</span> The code</h3><ul>
+      <li>A copy of the system I built, with everything personal taken out</li>
+      <li>Starts on paper money; going live is a deliberate switch</li>
+      <li>One settings file: your rules, your risk limits, what it's allowed to trade (shares, ETFs)</li>
+      <li>Order checks, logging, scheduling and an off switch, already built</li>
+      <li>The reporting I use every day: a daily profit-and-loss email, a weekly signals report, and an alert with the reason when anything fails</li>
+      <li>Your broker: the first one is ready at launch, and more are added in the order the waitlist asks for them</li>
+    </ul></div>
+    <div class="box"><h3><span class="n">2.</span> The 14 lessons</h3><ul>
+      <li>One a day, each the long version of a clip's fix</li>
+      <li>What every part of the code does and why it's there</li>
+      <li>How to change it safely with Claude as your build partner</li>
+      <li>How to test your rules honestly before any real money</li>
+      <li>No coding background needed. Developers can skip ahead</li>
+    </ul></div>
+  </div>
+  <div class="box" style="margin-top:12px"><h3><span class="n">+</span> The QuickStart</h3>
+    <p class="small" style="color:var(--ink);margin:0 0 8px">Your first paper trade in about 30 minutes. One step at a time, each with a short video:</p>
+    <ul style="margin:0;padding-left:18px;font-size:15px">
+      <li>Copy the code to your own GitHub (free)</li>
+      <li>Create your broker API key, on its practice account first</li>
+      <li>Create an email key so the reports reach your inbox</li>
+      <li>Optional: error alerts, and Claude fixing failed runs for you</li>
+      <li>Run the setup check: it tells you exactly what's missing, then makes your first paper trade</li>
+    </ul></div>
+
+  <h2>The 14 <span class="p">days</span></h2>
+  <p class="lead">Every clip on the channel shows an L and the short fix. Each lesson is the long version.</p>
+  <ol class="days">
+    <li><span class="d">DAY 1</span><div><div class="t">Rules, not tips</div><div class="s">What a robot ISA is, what it isn't, and writing your rules down so a machine can follow them.</div></div></li>
+    <li><span class="d">DAY 2</span><div><div class="t">Get it running</div><div class="s">Your copy of the code, set up with Claude, making its first paper trade.</div></div></li>
+    <li><span class="d">DAY 3</span><div><div class="t">Data you can trust</div><div class="s">Prices, gaps and the quiet errors that ruin everything after them.</div></div></li>
+    <li><span class="d">DAY 4</span><div><div class="t">Make it yours</div><div class="s">Changing the rules, risk limits and what it trades, first in the settings file, then in code.</div></div></li>
+    <li><span class="d">DAY 5</span><div><div class="t">Backtest honestly</div><div class="s">No hindsight, no peeking, and why your best backtest is probably lying.</div></div></li>
+    <li><span class="d">DAY 6</span><div><div class="t">Paper money first</div><div class="s">A practice account that behaves like the real thing.</div></div></li>
+    <li><span class="d">DAY 7</span><div><div class="t">The plumbing</div><div class="s">Orders, rounding and the exchange's rules. Six decimal places in, four accepted: eleven rejections.</div></div></li>
+    <li><span class="d">DAY 8</span><div><div class="t">Done means it happened</div><div class="s">Confirming an order actually landed before the system calls the job done.</div></div></li>
+    <li><span class="d">DAY 9</span><div><div class="t">Make it explain itself</div><div class="s">Logs that give you the reason, not just a red cross.</div></div></li>
+    <li><span class="d">DAY 10</span><div><div class="t">Keys and secrets</div><div class="s">Storing them safely, and the invisible line break that broke thirteen runs.</div></div></li>
+    <li><span class="d">DAY 11</span><div><div class="t">It runs while you sleep</div><div class="s">Scheduling, alerts and a daily digest you'll actually read.</div></div></li>
+    <li><span class="d">DAY 12</span><div><div class="t">Limits and an off switch</div><div class="s">Position limits, sanity checks and how to stop everything in one move.</div></div></li>
+    <li><span class="d">DAY 13</span><div><div class="t">Small and real</div><div class="s">Moving from paper to real money carefully, with a broker that offers an API.</div></div></li>
+    <li><span class="d">DAY 14</span><div><div class="t">Keep an honest record</div><div class="s">Reviewing what the system did, wins and Ls, without fooling yourself.</div></div></li>
+  </ol>
+
+  <h2>What it <span class="p">isn't</span></h2>
+  <ul class="not">
+    <li>No stock tips, no signals, no group to copy trades from.</li>
+    <li>No promised returns. A system can be built well and still lose money.</li>
+    <li>Not my picks. The code comes with a deliberately simple example; the rules and what it trades are your decision.</li>
+  </ul>
+
+  <div class="card">
+    <p style="margin:0 0 4px;font-weight:700">Every episode spells out a different <span class="isa">I.S.A.</span></p>
+    <p class="small" style="margin:0">I Said Allow it · It Sold Again · Imperfect System, Always learning…</p>
+    <p style="margin:16px 0 0"><a class="btn" href="#join">Join the waitlist</a></p>
+  </div>
+
+  <footer>
+    <p><strong>Not financial advice.</strong> This is education about building and testing software. I run my own system with my own money, in an ISA, and I hold positions in things I talk about. Investing puts your capital at risk and you may get back less than you put in. What a system did in the past, mine included, says nothing about what it will do next. I'm an engineer, not a financial adviser.</p>
+    <h3>Your email</h3>
+    <p>If you join the waitlist, My Robot I.S.A. (Amit Patel) keeps your email address (and your coding and broker answers, if you give them) to tell you when it opens and to send you the founding price. That's all it's used for. It's stored with Supabase in London and never sold or shared. Every email has an unsubscribe link, and you can ask for your address to be deleted at <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. The lawful basis is your consent, given by ticking the box.</p>
+    <p>© 2026 My Robot I.S.A. · <a href="https://www.youtube.com/@myrobotisa">YouTube</a> · <a href="https://www.instagram.com/myrobotisa/">Instagram</a> · <a href="https://www.tiktok.com/@myrobotisa">TikTok</a></p>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var LIVE_HOSTS = ["myrobotisa.com", "www.myrobotisa.com"];
+  var live = LIVE_HOSTS.indexOf(location.hostname) !== -1;
+  if (!live) document.getElementById("preview").hidden = false;
+  var RPC = "https://vxnestmhtjotidhzzqbo.supabase.co/rest/v1/rpc/join_waitlist";
+  var KEY = "sb_publishable_hjvkAbVw82CKg2rdDZgVcw_XUDbmerV"; // publishable key: can only call join_waitlist, cannot read anything
+  var src = (new URLSearchParams(location.search).get("src") || "").slice(0, 40);
+  var f = document.getElementById("f"), msg = document.getElementById("msg"), go = document.getElementById("go");
+  function say(t, ok){ msg.textContent = t; msg.className = "msg " + (ok ? "ok" : "err"); }
+  f.addEventListener("submit", function(e){
+    e.preventDefault();
+    var email = document.getElementById("email").value.trim();
+    if (document.getElementById("website").value) { say("You're on the list. Check your inbox when we open.", true); return; }
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { say("That email doesn't look right.", false); return; }
+    if (!document.getElementById("consent").checked) { say("Tick the box so we're allowed to email you.", false); return; }
+    if (!live) { say("Preview only: nothing was saved.", true); return; }
+    go.disabled = true; say("Adding you…", true);
+    fetch(RPC, { method: "POST", headers: { "apikey": KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({ p_email: email, p_consent: true, p_source: src || null, p_experience: (f.querySelector('input[name=exp]:checked') || {}).value || null, p_broker: document.getElementById('broker').value.trim() || null }) })
+      .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function(res){
+        if (res === "ok") { say("You're on the list. Founding price locked in for when we open.", true); f.reset(); }
+        else if (res === "invalid_email") say("That email doesn't look right.", false);
+        else say("Tick the box so we're allowed to email you.", false);
+      })
+      .catch(function(){ say("Something went wrong. Try again in a minute.", false); })
+      .then(function(){ go.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>
