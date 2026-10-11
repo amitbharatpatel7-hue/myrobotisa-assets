@@ -162,6 +162,25 @@ dialog .row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 .digest .h b{font-size:18px}
 .digest .b{padding:14px 16px;font-size:14px}
 .digest .b p{margin:0 0 8px}
+/* quickstart */
+.qbar{height:8px;border-radius:999px;background:var(--grid);overflow:hidden;margin:4px 0 6px}
+.qbar i{display:block;height:100%;width:0;background:var(--brand-green);transition:width .3s}
+ol.qs{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
+ol.qs>li{border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:36px 1fr auto;gap:4px 12px;align-items:start}
+ol.qs>li.done{background:var(--sel);border-color:transparent}
+.qn{width:32px;height:32px;border-radius:50%;background:var(--info-bg);color:var(--fg);font-weight:800;display:flex;align-items:center;justify-content:center;font-family:var(--mono)}
+li.done .qn{background:var(--brand-green);color:#1C0A21}
+.qt{font-weight:800}
+.qt small{font-weight:600;color:var(--muted);margin-left:6px}
+.qd{grid-column:2/3;color:var(--muted);font-size:14px}
+.qd ul{margin:6px 0 0;padding-left:18px}
+.qv{grid-column:2/3;font-size:13px;color:var(--gain);font-weight:700;margin-top:4px}
+ol.qs .btn{min-height:40px;padding:6px 12px;font-size:13px}
+@media (max-width:560px){ol.qs>li{grid-template-columns:36px 1fr}.qb{grid-column:2/3}}
+ul.checks{list-style:none;padding:0;margin:14px 0 0}
+ul.checks li{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line);font-size:14px}
+ul.checks li:first-child{border-top:0}
+ul.checks .ic{flex:0 0 22px;font-weight:800;font-family:var(--mono)}
 /* richer demo additions */
 .target-ring{fill:var(--card);stroke:var(--muted);stroke-width:2}
 .actual-dot{fill:var(--chrome)}
@@ -193,6 +212,7 @@ dialog .row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
   <nav id="nav" aria-label="Pages">
     <h3>Demo account</h3>
     <button type="button" data-p="overview" aria-current="page"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Overview</button>
+    <button type="button" data-p="quickstart"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>QuickStart</button>
     <button type="button" data-p="orders"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Orders</button>
     <button type="button" data-p="reports"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg>Reports</button>
     <button type="button" data-p="controls"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="9" y1="9" x2="9" y2="15"/><line x1="15" y1="9" x2="15" y2="15"/></svg>Controls<span class="soon">SOON</span></button>
@@ -263,6 +283,23 @@ dialog .row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 
   <!-- WEEK -->
   <div class="pane" id="p-week" hidden></div>
+
+  <!-- QUICKSTART -->
+  <div class="pane" id="p-quickstart" hidden>
+    <section class="card">
+      <h2>QuickStart: your first paper trade in about 30 minutes</h2>
+      <p class="lede">Five steps, one screen each, each with a short video. Tick them off as you go; the setup check at the end tells you exactly what's missing.</p>
+      <div class="qbar" aria-hidden="true"><i id="qfill"></i></div>
+      <p class="muted-line" id="qcount"></p>
+      <ol class="qs" id="qsteps"></ol>
+    </section>
+    <section class="card">
+      <h2>Setup check</h2>
+      <p class="lede">Runs in your own GitHub. It checks every key, then makes your first paper trade and sends your first report.</p>
+      <button class="btn go" id="qrun" type="button">Run the setup check</button>
+      <ul class="checks" id="qchecks"></ul>
+    </section>
+  </div>
 
   <!-- ORDERS -->
   <div class="pane" id="p-orders" hidden>
@@ -354,7 +391,7 @@ function renderFindings(){
   const F=[];
   const sat=D.holdings.filter(h=>h[2]==="satellite");
   const worst=sat.slice().sort((a,b)=>(a[7]-a[6])-(b[7]-b[6]))[0];
-  if (worst[6]-worst[7] >= 0.5) F.push(["p-warn","Needs a top-up",`${worst[0]} is ${(worst[6]-worst[7]).toFixed(1)} points under its target weight`,`It fell ${Math.abs(worst[5]).toFixed(1)}% since it was bought. The next weekly run tops it up if it still passes your rules.`]);
+  if (worst[6]-worst[7] >= 0.5) F.push(["p-good","On it",`${worst[0]} gets topped up on Monday`,`It's ${(worst[6]-worst[7]).toFixed(1)} points under its target weight, so the next weekly run tops it up automatically. Nothing for you to do.`]);
   const near=D.stops.map(s=>({n:s[0],avg:(s[1]/s[3]-1)*100,stop:(s[1]/s[2]-1)*100})).sort((a,b)=>a.avg-b.avg)[0];
   if (near.avg < 5) F.push(["p-bad","Close to an exit",`${near.n} is ${near.avg.toFixed(1)}% above its 40-week average`,"A weekly close below that line sells it. Nothing to do: the rule acts on its own and tells you when it has."]);
   const th={}; D.holdings.forEach(h=>th[h[3]]=(th[h[3]]||0)+h[4]);
@@ -497,13 +534,35 @@ function weekView(w){
     <section class="card"><h2>Orders</h2>${ords.length?`<div class="tablewrap"><table><tr><th>Date</th><th>What</th><th>Size</th><th>Result</th><th>Why</th></tr>${ords.map(ordRow).join("")}</table></div>`:`<p class="muted-line">No orders this week.</p>`}</section>
     ${signalsReport(w)}`;
 }
-const PANES=["overview","week","orders","reports","controls"];
+const PANES=["overview","quickstart","week","orders","reports","controls"];
 function show(p){ PANES.forEach(x=>$("p-"+x).hidden = x!==p); }
 function clearSel(){ document.querySelectorAll("#nav button,#weeks button").forEach(b=>b.removeAttribute("aria-current")); }
 function showWeek(id){
   const w=D.weeks.find(x=>x.id===id); clearSel(); document.querySelector(`#weeks button[data-w="${id}"]`).setAttribute("aria-current","page");
   $("p-week").innerHTML=weekView(w); show("week"); closeMenu(); scrollTo({top:0});
 }
+
+// ---- quickstart walkthrough (demo: nothing is created)
+const QS=[
+  ["Copy the code","3 min",["Create a free GitHub account if you haven't got one","Press <b>Use this template</b> to make your own private copy"]],
+  ["Your broker key, practice account first","8 min",["Turn on the API in your broker's practice account and create a key","Paste it into your copy's secrets with the one-line helper. Real orders stay off"]],
+  ["Your email key","5 min",["Create a free Resend account and an API key","Paste it in the same way. No domain needed: reports come to your own inbox"]],
+  ["Optional extras","5 min",["Error alerts with a free Sentry account","Claude fixing failed runs for you, if you have a Claude subscription"]],
+  ["Install the app on your phone","2 min",["Open your private dashboard link and sign in with the code emailed to you","Share, then Add to Home Screen"]]
+];
+let qdone=new Set();
+function renderQS(){
+  $("qsteps").innerHTML=QS.map(([t,mins,pts],i)=>`<li class="${qdone.has(i)?'done':''}"><span class="qn">${qdone.has(i)?'✓':i+1}</span><div class="qt">${t}<small>${mins}</small></div><div class="qb"><button class="btn${qdone.has(i)?'':' go'}" type="button" data-q="${i}">${qdone.has(i)?'Undo':'Mark done'}</button></div><div class="qd"><ul>${pts.map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="qv">▶ Watch the ${i===3?'45':'60'}-second video</div></li>`).join("");
+  $("qsteps").querySelectorAll("button[data-q]").forEach(b=>b.addEventListener("click",()=>{const i=+b.dataset.q; qdone.has(i)?qdone.delete(i):qdone.add(i); renderQS();}));
+  $("qfill").style.width=(qdone.size/QS.length*100)+"%";
+  $("qcount").textContent=`${qdone.size} of ${QS.length} steps done · about ${QS.reduce((s,q,i)=>s+(qdone.has(i)?0:parseInt(q[1])),0)} minutes left`;
+}
+$("qrun").addEventListener("click",()=>{
+  const L=[["✓","GitHub copy found, private","up"],["✓","Broker key works · practice account · read and trade allowed","up"],["✓","Email key works · a test email went to you@example.com","up"],["–","Error alerts: optional, skipped","tag"],["–","Claude auto-fix: optional, skipped","tag"],["✓","Real orders are off (practice money)","up"],["✓","First paper trade placed: Global shares fund, £50, filled","up"],["✓","First daily report sent. You're set up.","up"]];
+  const ul=$("qchecks"); ul.innerHTML=""; $("qrun").disabled=true;
+  L.forEach((r,i)=>setTimeout(()=>{ ul.insertAdjacentHTML("beforeend",`<li><span class="ic ${r[2]}">${r[0]}</span><span>${r[1]}</span></li>`); if(i===L.length-1){ $("qrun").disabled=false; $("qrun").textContent="Run it again"; } },350*(i+1)));
+});
+renderQS();
 
 // ---- render
 function renderAll(flash){ syncAccount(); renderTiles(flash); renderFindings(); renderThemes(); renderStops(); renderDigest(); draw1(); draw2(); draw3(); }
@@ -552,6 +611,7 @@ let deferred=null;
 addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferred=e; $("installbtn").hidden=false; });
 $("installbtn").addEventListener("click",async()=>{ if(!deferred) return; deferred.prompt(); await deferred.userChoice.catch(()=>{}); deferred=null; $("installbtn").hidden=true; });
 if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) { $("installhow").textContent="Installed. It opens full screen, like any app."; }
+if (location.hash==="#quickstart") { document.querySelector('#nav button[data-p="quickstart"]').click(); }
 if ("serviceWorker" in navigator && location.protocol==="https:") { navigator.serviceWorker.register("sw.js").catch(()=>{}); }
 </script>
 </body>
