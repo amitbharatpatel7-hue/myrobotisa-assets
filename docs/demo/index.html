@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#34003B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="My Robot">
+<meta name="application-name" content="My Robot I.S.A. demo">
+<meta name="description" content="A demo of the private dashboard that comes with the My Robot I.S.A. kit. Example data only.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+<title>My Robot I.S.A. · Dashboard demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F4F2F6; --card:#FFFFFF; --fg:#1C0A21; --muted:#6B5C72; --line:#E6E0EA; --grid:#EEEAF1;
+  --chrome:#34003B; --chrome-fg:#FFFFFF; --chrome-sub:#CDBBD6; --brand-green:#00E87A; --sel:#E3FBEF; --pink:#EA00AB;
+  --gain:#0A8F52; --loss:#C8214F; --warn:#7A4E00; --warn-bg:#FFE9B0; --bad-bg:#FBE3EA; --good-bg:#D9F7E7; --info-bg:#ECE7F1; --info:#4A3A5A;
+  --s-acct:var(--fg); --s-bench:#2a78d6;
+  --display:"Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --body:"Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#130A16; --card:#1E1322; --fg:#F4EEF6; --muted:#B3A3B9; --line:#34263A; --grid:#2A1E2F;
+  --chrome:#2A0030; --chrome-sub:#CDBBD6; --sel:rgba(0,232,122,.12); --pink:#FF4FC8;
+  --gain:#3FCB86; --loss:#FF6B8A; --warn:#FFD27A; --warn-bg:#3A2A06; --bad-bg:#3A1220; --good-bg:#0F3322; --info-bg:#2A2030; --info:#D9CDE0;
+  --s-bench:#3987e5; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#130A16; --card:#1E1322; --fg:#F4EEF6; --muted:#B3A3B9; --line:#34263A; --grid:#2A1E2F;
+  --chrome:#2A0030; --chrome-sub:#CDBBD6; --sel:rgba(0,232,122,.12); --pink:#FF4FC8;
+  --gain:#3FCB86; --loss:#FF6B8A; --warn:#FFD27A; --warn-bg:#3A2A06; --bad-bg:#3A1220; --good-bg:#0F3322; --info-bg:#2A2030; --info:#D9CDE0;
+  --s-bench:#3987e5; color-scheme:dark }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.shell{display:flex;align-items:flex-start;max-width:1320px;margin:0 auto}
+.wrap{flex:1 1 auto;min-width:0;max-width:1040px;margin:0 auto;padding-inline:16px;padding-block:20px 96px;display:flex;flex-direction:column;gap:18px}
+.num,td.n,.tile .v{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.demo{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn);border-radius:14px;padding:12px 16px;font-weight:700;font-size:14px}
+.demo a{color:inherit}
+header.hero{background:var(--chrome);color:var(--chrome-fg);border-radius:18px;padding:22px 24px;display:flex;flex-wrap:wrap;gap:8px 24px;align-items:flex-end;justify-content:space-between}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--brand-green)}
+header h1{margin:4px 0 0;font-family:var(--display);font-size:clamp(22px,4vw,30px);font-weight:800;letter-spacing:-.01em;text-wrap:balance}
+header .sub{color:var(--chrome-sub);font-size:13px}
+.chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.12);color:var(--chrome-fg);margin-right:6px}
+.chip.halt{background:var(--loss);color:#fff}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:429px){.tiles{grid-template-columns:minmax(0,1fr)}}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:0}
+.tile .k{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tile .v{font-size:clamp(20px,3vw,26px);font-weight:600;margin-top:4px;overflow-wrap:anywhere;transition:color .4s}
+.tile .d{font-size:13px;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
+.flash{animation:flash .9s ease}
+@keyframes flash{0%{background:var(--sel)}100%{background:transparent}}
+.up{color:var(--gain)} .down{color:var(--loss)}
+section.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;min-width:0}
+h2{font-family:var(--display);font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--fg);margin:0 0 2px;padding-left:10px;border-left:4px solid var(--brand-green)}
+.lede{color:var(--muted);font-size:14px;margin:4px 0 14px;max-width:68ch}
+.findings{display:grid;gap:10px}
+.f{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start;padding:12px 0;border-top:1px solid var(--line)}
+.f:first-child{border-top:0;padding-top:2px}
+.pill{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;white-space:nowrap;margin-top:2px;display:inline-block}
+.p-warn{background:var(--warn-bg);color:var(--warn)} .p-bad{background:var(--bad-bg);color:var(--loss)} .p-info{background:var(--info-bg);color:var(--info)} .p-good{background:var(--good-bg);color:var(--gain)}
+.f b{display:block;font-weight:700}
+.f p{margin:2px 0 0;color:var(--muted);font-size:14px;max-width:72ch}
+@media (max-width:560px){.f{grid-template-columns:minmax(0,1fr)}.f .pill{justify-self:start}}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin-bottom:6px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:18px;height:3px;border-radius:2px;display:inline-block}
+.chartbox{position:relative}
+svg text{font-family:var(--body);fill:var(--muted);font-size:11.5px}
+svg .lbl{font-weight:700;font-size:12px;fill:var(--fg)}
+.tip{position:absolute;pointer-events:none;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:12.5px;box-shadow:0 6px 18px rgba(0,0,0,.12);min-width:150px;z-index:2}
+.tip .t{font-weight:700;margin-bottom:4px}
+.tip .r{display:flex;justify-content:space-between;gap:14px;font-family:var(--mono);font-variant-numeric:tabular-nums}
+.tip[hidden]{display:none}
+.twocol{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:860px){.twocol{grid-template-columns:minmax(0,1fr)}}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;text-align:left;padding:0 8px 8px;white-space:nowrap}
+th.n,td.n{text-align:right}
+td{padding:9px 8px;border-top:1px solid var(--line);white-space:nowrap}
+.tablewrap{overflow-x:auto}
+.tag{font-size:11px;color:var(--muted)}
+.bar{height:6px;border-radius:3px;background:var(--grid);position:relative;min-width:70px}
+.bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--brand-green)}
+.pane{display:flex;flex-direction:column;gap:18px}
+.pane[hidden]{display:none}
+footer{color:var(--muted);font-size:12.5px;line-height:1.6}
+/* sidebar */
+aside#side{flex:0 0 240px;position:sticky;top:env(safe-area-inset-top);align-self:flex-start;max-height:100vh;overflow-y:auto;padding:16px}
+.brand{display:flex;align-items:center;gap:8px;margin:0 0 16px}
+.brand .mark{flex:0 0 28px;width:28px;height:28px;border-radius:8px;background:var(--brand-green);display:flex;align-items:center;justify-content:center}
+.brand b{font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gain)}
+.brand b span{color:var(--pink)}
+#refreshbtn{display:flex;align-items:center;justify-content:center;gap:8px;font:inherit;font-size:14px;font-weight:800;width:100%;min-height:44px;padding:8px 14px;border-radius:12px;border:0;background:var(--brand-green);color:#1C0A21;cursor:pointer}
+#refreshbtn.loading svg{animation:spin 1s linear infinite}
+#refreshbtn[disabled]{opacity:.7;cursor:progress}
+#livemsg{font-size:12px;color:var(--muted);margin:8px 2px 16px;line-height:1.35}
+#livemsg.ok::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--brand-green);margin-right:6px;vertical-align:middle}
+#nav{display:flex;flex-direction:column;gap:6px;padding-top:12px;border-top:1px solid var(--line)}
+#nav h3{font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:4px 0 4px;display:flex;align-items:center;gap:6px}
+#nav h3::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--brand-green);animation:pulse 1.6s ease-in-out infinite}
+#nav button{font:inherit;font-size:14px;font-weight:700;text-align:left;min-height:44px;padding:8px 12px;border-radius:12px;border:0;background:transparent;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:10px}
+#nav button:hover{background:var(--info-bg)}
+#nav button[aria-current="page"]{background:var(--sel);color:var(--fg);font-weight:800;box-shadow:inset 3px 0 0 var(--brand-green)}
+#nav button svg{flex:0 0 auto}
+.soon{display:inline-block;margin-left:auto;padding:2px 8px;border-radius:999px;background:var(--info-bg);color:var(--info);font-size:10px;font-weight:800;letter-spacing:.06em}
+.now{display:inline-block;margin-left:auto;padding:2px 8px;border-radius:999px;background:var(--brand-green);color:#1C0A21;font-size:10px;font-weight:800;letter-spacing:.06em}
+#installbox{margin-top:16px;padding:12px;border:1px dashed var(--line);border-radius:12px;font-size:12.5px;color:var(--muted)}
+#installbox b{display:block;color:var(--fg);font-size:13px;margin-bottom:4px}
+#installbtn{margin-top:8px;font:inherit;font-weight:800;font-size:13px;min-height:40px;width:100%;border-radius:12px;border:2px solid var(--brand-green);background:transparent;color:var(--fg);cursor:pointer}
+#installbtn[hidden]{display:none}
+button:focus-visible,a:focus-visible{outline:2px solid var(--brand-green);outline-offset:2px}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.5)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){#nav h3::before,#refreshbtn.loading svg,.flash{animation:none}}
+#menubtn,#scrim{display:none}
+@media (max-width:899px){
+  .shell{display:block}
+  aside#side{position:fixed;z-index:20;top:0;bottom:0;left:0;align-self:stretch;width:min(300px,85vw);max-height:none;background:var(--card);border-right:1px solid var(--line);
+    padding:calc(20px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+    transform:translateX(-105%);visibility:hidden;transition:transform .2s ease,visibility 0s .2s}
+  aside#side.open{transform:none;visibility:visible;transition:transform .2s ease}
+  #scrim{position:fixed;z-index:15;inset:0;background:rgba(0,0,0,.45);border:0}
+  #scrim.open{display:block}
+  #menubtn{display:flex;align-items:center;justify-content:center;position:fixed;z-index:25;width:48px;height:48px;border-radius:50%;
+    left:calc(16px + env(safe-area-inset-left));bottom:calc(16px + env(safe-area-inset-bottom));
+    border:2px solid var(--brand-green);background:var(--chrome);color:var(--chrome-fg);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+  #menubtn .i-x,#menubtn[aria-expanded="true"] .i-bars{display:none}
+  #menubtn[aria-expanded="true"] .i-x{display:block}
+}
+/* controls */
+.ctl{display:grid;grid-template-columns:1fr auto;gap:12px 16px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.ctl:first-of-type{border-top:0}
+.ctl b{display:block}
+.ctl p{margin:2px 0 0;color:var(--muted);font-size:14px}
+@media (max-width:560px){.ctl{grid-template-columns:minmax(0,1fr)}}
+.btn{font:inherit;font-weight:800;font-size:14px;min-height:44px;padding:8px 16px;border-radius:12px;cursor:pointer;border:2px solid var(--line);background:transparent;color:var(--fg)}
+.btn.danger{border-color:var(--loss);color:var(--loss)}
+.btn.go{border-color:var(--brand-green);background:var(--brand-green);color:#1C0A21}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.state{font-family:var(--mono);font-weight:600}
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--fg);padding:20px;max-width:min(420px,90vw)}
+dialog::backdrop{background:rgba(0,0,0,.5)}
+dialog h3{margin:0 0 6px;font-size:18px}
+dialog p{margin:0 0 16px;color:var(--muted);font-size:14px}
+dialog .row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.digest{border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.digest .h{background:var(--chrome);color:#fff;padding:14px 16px}
+.digest .h small{display:block;color:var(--brand-green);font-weight:800;letter-spacing:.14em;font-size:11px}
+.digest .h b{font-size:18px}
+.digest .b{padding:14px 16px;font-size:14px}
+.digest .b p{margin:0 0 8px}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside id="side" aria-label="Navigation">
+  <div class="brand"><span class="mark" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1C0A21" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="12" rx="5"/><path d="M8 13l3-2 2 1.5 3-2.5"/><line x1="12" y1="7" x2="12" y2="4"/></svg></span><b>My Robot <span>I.S.A.</span></b></div>
+  <button id="refreshbtn" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span id="refreshlbl">Refresh now</span></button>
+  <div id="livemsg" role="status">Showing the last close. Refresh now reads your broker live.</div>
+  <nav id="nav" aria-label="Pages">
+    <h3>Demo account</h3>
+    <button type="button" data-p="overview" aria-current="page"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Overview</button>
+    <button type="button" data-p="holdings"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="9" y1="10" x2="9" y2="20"/></svg>Holdings</button>
+    <button type="button" data-p="orders"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Orders</button>
+    <button type="button" data-p="reports"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg>Reports</button>
+    <button type="button" data-p="controls"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="9" y1="9" x2="9" y2="15"/><line x1="15" y1="9" x2="15" y2="15"/></svg>Controls<span class="soon">SOON</span></button>
+  </nav>
+  <div id="installbox">
+    <b>Put it on your phone</b>
+    <span id="installhow">iPhone: Share, then Add to Home Screen. Android: menu, then Install app.</span>
+    <button id="installbtn" type="button" hidden>Install the app</button>
+  </div>
+</aside>
+<button id="scrim" tabindex="-1" aria-hidden="true"></button>
+<button id="menubtn" aria-label="Menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+
+<main class="wrap">
+  <div class="demo" role="note">Demo with made-up example data. Not a real account and not a recommendation. <a href="../#join">Get early access</a></div>
+
+  <header class="hero">
+    <div>
+      <div class="eyebrow">Your robot, at a glance</div>
+      <h1 id="title">Paper account, week six</h1>
+      <div class="sub" id="asof"></div>
+    </div>
+    <div id="chips"><span class="chip">Paper money</span><span class="chip">Example</span></div>
+  </header>
+
+  <!-- OVERVIEW -->
+  <div class="pane" id="p-overview">
+    <div class="tiles" id="tiles"></div>
+    <section class="card">
+      <h2>What the robot noticed</h2>
+      <p class="lede">Rules, not opinions: each finding is a check the system runs every day.</p>
+      <div class="findings" id="findings"></div>
+    </section>
+    <section class="card">
+      <h2>Account against the market</h2>
+      <p class="lede">Both indexed to 100 on the day the account started. Example figures.</p>
+      <div class="legend"><span><i class="sw" style="background:var(--s-acct)"></i>Your account</span><span><i class="sw" style="background:var(--s-bench)"></i>World index</span></div>
+      <div class="chartbox" id="c1"><div class="tip" id="tip1" hidden></div></div>
+    </section>
+  </div>
+
+  <!-- HOLDINGS -->
+  <div class="pane" id="p-holdings" hidden>
+    <section class="card">
+      <h2>What it holds</h2>
+      <p class="lede">Target is what your rules ask for; actual is what the account holds. Example names, not real investments.</p>
+      <div class="tablewrap" id="htable"></div>
+    </section>
+  </div>
+
+  <!-- ORDERS -->
+  <div class="pane" id="p-orders" hidden>
+    <section class="card">
+      <h2>Every order, and what happened to it</h2>
+      <p class="lede">Done means it actually landed. Rejections come with the reason, not just a red cross.</p>
+      <div class="tablewrap" id="otable"></div>
+    </section>
+  </div>
+
+  <!-- REPORTS -->
+  <div class="pane" id="p-reports" hidden>
+    <section class="card">
+      <h2>Today's digest</h2>
+      <p class="lede">The same summary lands in your inbox every evening. A weekly signals report follows on Mondays.</p>
+      <div class="digest"><div class="h"><small>MY ROBOT I.S.A. · DAILY</small><b id="dg-title"></b></div><div class="b" id="dg-body"></div></div>
+    </section>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="pane" id="p-controls" hidden>
+    <section class="card">
+      <h2>Controls <span class="soon" style="margin-left:8px">COMING IN AN UPDATE</span></h2>
+      <p class="lede">The app can stop trading. It can never start a trade or move money: that only happens through your own rules.</p>
+      <div class="ctl"><div><b>Trading</b><p>Status: <span class="state" id="tstate">Running</span></p></div><div><button class="btn danger" id="haltbtn" type="button">Halt trading</button></div></div>
+      <div class="ctl"><div><b>Restart after a halt</b><p>Asks you to confirm, then the next scheduled run carries on.</p></div><div><button class="btn go" id="rearmbtn" type="button" disabled>Restart</button></div></div>
+      <div class="ctl"><div><b>Real orders</b><p>Off: paper money. Switched on deliberately in your own GitHub settings, never from the app.</p></div><div><span class="pill p-info">Paper</span></div></div>
+    </section>
+  </div>
+
+  <footer id="foot"></footer>
+</main>
+</div>
+
+<dialog id="dlg" aria-labelledby="dlg-t">
+  <h3 id="dlg-t">Halt all trading?</h3>
+  <p id="dlg-p">No new orders will be placed until you restart. Holdings stay as they are. (Demo: nothing real happens.)</p>
+  <div class="row"><button class="btn" id="dlg-no" type="button">Cancel</button><button class="btn danger" id="dlg-yes" type="button">Halt trading</button></div>
+</dialog>
+
+<script>
+// Example data only. The real dashboard builds this object from your own repo every day.
+const D = {
+  start: 5000,
+  days: ["1 Sep","2 Sep","3 Sep","4 Sep","7 Sep","8 Sep","9 Sep","10 Sep","11 Sep","14 Sep","15 Sep","16 Sep","17 Sep","18 Sep","21 Sep","22 Sep","23 Sep","24 Sep","25 Sep","28 Sep","29 Sep","30 Sep","1 Oct","2 Oct","5 Oct","6 Oct"],
+  acct:  [5000,4992,5011,5024,5003,4978,4990,5015,5032,5040,5021,5056,5071,5049,5038,5066,5089,5102,5080,5063,5091,5110,5098,5124,5131,5100],
+  bench: [100,99.9,100.3,100.5,100.2,99.6,99.9,100.4,100.8,101.0,100.6,101.2,101.5,101.1,100.9,101.4,101.7,101.9,101.5,101.2,101.6,101.9,101.6,101.8,101.6,101.4],
+  holdings: [ // name, sleeve, value £, return %, target %, actual %
+    ["Global shares fund","core",1080.20,3.1,21,21.1],
+    ["US large companies fund","core",1046.70,4.4,21,20.5],
+    ["UK shares fund","core",1018.30,1.2,20,19.9],
+    ["Government bonds fund","core",742.90,-0.6,15,14.5],
+    ["Example stock A","satellite",392.60,9.8,7,7.7],
+    ["Example stock B","satellite",355.10,2.4,7,6.9],
+    ["Example stock C","satellite",301.40,-5.1,7,5.9]
+  ],
+  orders: [
+    ["6 Oct","Monthly rebalance","5 orders","Filled","p-good","All five landed. Checked against the broker before marking the month done."],
+    ["29 Sep","Example stock C","Buy £40","Filled","p-good","Top-up to target after a fall."],
+    ["14 Sep","Example stock B","Buy £350","Rejected, then filled","p-warn","Amount had 6 decimal places and the exchange accepts 4. Rounded and resent automatically."],
+    ["8 Sep","Example stock A","Buy £350","Filled","p-good","New position from the weekly screen."],
+    ["1 Sep","Opening buys","4 orders","Filled","p-good","Core funds bought at target weights."]
+  ]
+};
+const $ = id => document.getElementById(id);
+const gbp = v => "£" + v.toLocaleString("en-GB",{minimumFractionDigits:2,maximumFractionDigits:2});
+const pct = (v,d=1) => (v>0?"+":v<0?"−":"") + Math.abs(v).toFixed(d) + "%";
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const NS = "http://www.w3.org/2000/svg";
+const el = (t,a={},p) => { const e=document.createElementNS(NS,t); for (const k in a) e.setAttribute(k,a[k]); if(p) p.appendChild(e); return e; };
+const london = () => new Date().toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit",timeZone:"Europe/London"});
+
+let halted = false, cash = 162.80;
+function total(){ return D.holdings.reduce((s,h)=>s+h[2],0) + cash; }
+
+function renderTiles(flash){
+  const v = total(), ret = (v/D.start-1)*100, b = D.bench[D.bench.length-1]-100;
+  const T = [
+    ["Account value", gbp(v), `<span class="${ret>=0?'up':'down'}">${pct(ret)}</span> since 1 Sep`],
+    ["Against the world index", `<span class="${ret-b>=0?'up':'down'}">${(ret-b>=0?"+":"−")+Math.abs(ret-b).toFixed(1)} pts</span>`, `World index ${pct(b)}`],
+    ["Cash not invested", gbp(cash), `${(cash/v*100).toFixed(1)}% of the account`],
+    ["Room before the halt", `${((v-4250)/v*100).toFixed(1)}%`, "Trading stops itself below £4,250"]
+  ];
+  $("tiles").innerHTML = T.map(([k,val,d]) => `<div class="tile${flash?' flash':''}"><div class="k">${k}</div><div class="v">${val}</div><div class="d">${d}</div></div>`).join("");
+}
+function renderFindings(){
+  const c = D.holdings.find(h=>h[0]==="Example stock C");
+  const F = [
+    ["p-warn","Under target",`${c[0]} is ${(c[4]-c[5]).toFixed(1)} points below its target weight`,"It fell 5% this month. The next weekly run tops it up if your rules still want it."],
+    ["p-good","Working","Every order this month landed","The monthly rebalance was only marked done after the broker confirmed all five orders."],
+    ["p-info","Too early","A little ahead of the index since the start","Five weeks is far too short to judge a system. What it does show: the machine does what it says."]
+  ];
+  $("findings").innerHTML = F.map(([cls,p,t,b]) => `<div class="f"><span class="pill ${cls}">${p}</span><div><b>${esc(t)}</b><p>${esc(b)}</p></div></div>`).join("");
+}
+function drawChart(){
+  const box=$("c1"), tip=$("tip1"); box.querySelectorAll("svg").forEach(n=>n.remove());
+  const W=Math.max(300,box.clientWidth), narrow=W<560, H=narrow?230:300, m={l:34,r:narrow?96:120,t:12,b:28};
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:W,height:H,role:"img","aria-label":"Example account against a world index, indexed to 100",style:"display:block"}); box.appendChild(svg);
+  const A=D.acct.map(v=>v/D.start*100), B=D.bench, n=A.length;
+  const lo=Math.floor(Math.min(...A,...B)-.5), hi=Math.ceil(Math.max(...A,...B)+.5);
+  const X=i=>m.l+i/(n-1)*(W-m.l-m.r), Y=v=>m.t+(hi-v)/(hi-lo)*(H-m.t-m.b);
+  for(let v=lo; v<=hi; v++){ el("line",{x1:m.l,x2:W-m.r,y1:Y(v),y2:Y(v),stroke:v===100?"var(--muted)":"var(--grid)","stroke-dasharray":v===100?"3 3":""},svg); const t=el("text",{x:m.l-8,y:Y(v)+4,"text-anchor":"end"},svg); t.textContent=v; }
+  (narrow?[0,12,n-1]:[0,6,12,18,n-1]).forEach(i=>{const t=el("text",{x:X(i),y:H-8,"text-anchor":"middle"},svg); t.textContent=D.days[i];});
+  const S=[{k:"You",c:"var(--s-acct)",w:2.5,v:A},{k:"Index",c:"var(--s-bench)",w:2,v:B}], ends=[];
+  S.forEach(s=>{ el("path",{d:s.v.map((v,i)=>(i?"L":"M")+X(i).toFixed(1)+","+Y(v).toFixed(1)).join(" "),fill:"none",stroke:s.c,"stroke-width":s.w,"stroke-linejoin":"round","stroke-linecap":"round"},svg);
+    el("circle",{cx:X(n-1),cy:Y(s.v[n-1]),r:4,fill:s.c,stroke:"var(--card)","stroke-width":2},svg); ends.push({y:Y(s.v[n-1]),s,v:s.v[n-1]}); });
+  ends.sort((a,b)=>a.y-b.y); for(let i=1;i<ends.length;i++) if(ends[i].y-ends[i-1].y<16) ends[i].y=ends[i-1].y+16;
+  ends.forEach(e=>{const t=el("text",{x:W-m.r+10,y:e.y+4,class:"lbl"},svg); t.textContent=`${e.s.k} ${pct(e.v-100)}`;});
+  const cross=el("line",{y1:m.t,y2:H-m.b,stroke:"var(--muted)",opacity:0},svg);
+  const hit=el("rect",{x:m.l,y:m.t,width:W-m.l-m.r,height:H-m.t-m.b,fill:"transparent"},svg);
+  hit.addEventListener("mousemove",ev=>{const r=svg.getBoundingClientRect(), sx=(ev.clientX-r.left)/r.width*W; const i=Math.max(0,Math.min(n-1,Math.round((sx-m.l)/(W-m.l-m.r)*(n-1))));
+    cross.setAttribute("x1",X(i)); cross.setAttribute("x2",X(i)); cross.setAttribute("opacity",.6);
+    tip.innerHTML=`<div class="t">${D.days[i]} · ${gbp(D.acct[i])}</div><div class="r"><span>You</span><span>${pct(A[i]-100,2)}</span></div><div class="r"><span>Index</span><span>${pct(B[i]-100,2)}</span></div>`;
+    tip.hidden=false; let left=X(i)+14; if(left>W-180) left=X(i)-180; tip.style.left=left+"px"; tip.style.top="8px";});
+  hit.addEventListener("mouseleave",()=>{tip.hidden=true;cross.setAttribute("opacity",0);});
+}
+function renderHoldings(){
+  const max=Math.max(...D.holdings.map(h=>h[4]));
+  let h="<table><tr><th>Holding</th><th>Sleeve</th><th class='n'>Value</th><th class='n'>Return</th><th class='n'>Target</th><th class='n'>Actual</th><th>vs target</th></tr>";
+  D.holdings.forEach(r=>{ h+=`<tr><td><b>${esc(r[0])}</b></td><td class="tag">${r[1]}</td><td class="n">${gbp(r[2])}</td><td class="n ${r[3]>=0?'up':'down'}">${pct(r[3])}</td><td class="n">${r[4].toFixed(1)}%</td><td class="n">${r[5].toFixed(1)}%</td><td><div class="bar"><i style="width:${Math.min(100,r[5]/r[4]*100).toFixed(0)}%"></i></div></td></tr>`; });
+  h+=`<tr><td><b>Cash</b></td><td class="tag">—</td><td class="n">${gbp(cash)}</td><td></td><td></td><td class="n">${(cash/total()*100).toFixed(1)}%</td><td></td></tr>`;
+  $("htable").innerHTML=h+"</table>";
+}
+function renderOrders(){
+  let h="<table><tr><th>Date</th><th>What</th><th>Size</th><th>Result</th><th>Why</th></tr>";
+  D.orders.forEach(o=>{ h+=`<tr><td>${o[0]}</td><td><b>${esc(o[1])}</b></td><td class="n" style="text-align:left">${o[2]}</td><td><span class="pill ${o[4]}">${o[3]}</span></td><td style="white-space:normal;min-width:220px;color:var(--muted)">${esc(o[5])}</td></tr>`; });
+  $("otable").innerHTML=h+"</table>";
+}
+function renderDigest(){
+  const v=total(), prev=D.acct[D.acct.length-2], ch=v-prev;
+  $("dg-title").textContent=`${ch>=0?"+":"−"}${gbp(Math.abs(ch))} today · ${gbp(v)}`;
+  $("dg-body").innerHTML=`<p><b>Orders:</b> none today. Next run Monday 07:30.</p><p><b>Needs you:</b> nothing.</p><p><b>Checks:</b> broker connected, all orders confirmed, nothing near its stop.</p><p class="tag">Example email. Yours comes from your own email key, to your own inbox.</p>`;
+}
+function renderAll(flash){ renderTiles(flash); renderFindings(); renderHoldings(); renderDigest(); }
+
+$("asof").textContent="Example data · last close Tuesday 6 October";
+$("foot").innerHTML="This demo uses made-up example data. The dashboard in the kit shows <b>your</b> account, behind a login only you can pass, using a read-only broker key that can look but never trade. Not financial advice.";
+renderAll(false); renderOrders(); drawChart();
+let rz; addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(drawChart,150);});
+
+// Refresh now: in the kit this reads your broker live with a read-only key. Here it nudges the example prices.
+$("refreshbtn").addEventListener("click",()=>{
+  const b=$("refreshbtn"); b.disabled=true; b.classList.add("loading"); $("refreshlbl").textContent="Refreshing…";
+  setTimeout(()=>{
+    D.holdings.forEach(h=>{ const f=1+(Math.random()-.5)*.008; h[2]=+(h[2]*f).toFixed(2); h[3]=+(h[3]+(f-1)*100).toFixed(1); });
+    renderAll(true);
+    b.disabled=false; b.classList.remove("loading"); $("refreshlbl").textContent="Refresh now";
+    const m=$("livemsg"); m.className="ok"; m.textContent=`Live at ${london()} (London). Example prices.`;
+  },900);
+});
+
+// pages
+const panes=["overview","holdings","orders","reports","controls"];
+document.querySelectorAll("#nav button").forEach(btn=>btn.addEventListener("click",()=>{
+  document.querySelectorAll("#nav button").forEach(b=>b.removeAttribute("aria-current")); btn.setAttribute("aria-current","page");
+  panes.forEach(p=>$("p-"+p).hidden = p!==btn.dataset.p);
+  if(btn.dataset.p==="overview") drawChart();
+  closeMenu(); scrollTo({top:0});
+}));
+
+// drawer
+const side=$("side"), scrim=$("scrim"), menu=$("menubtn");
+function openMenu(){ side.classList.add("open"); scrim.classList.add("open"); menu.setAttribute("aria-expanded","true"); }
+function closeMenu(){ side.classList.remove("open"); scrim.classList.remove("open"); menu.setAttribute("aria-expanded","false"); }
+menu.addEventListener("click",()=> side.classList.contains("open")?closeMenu():openMenu());
+scrim.addEventListener("click",closeMenu);
+addEventListener("keydown",e=>{ if(e.key==="Escape") closeMenu(); });
+
+// halt / restart (demo)
+const dlg=$("dlg");
+function setHalt(h){
+  halted=h; $("tstate").textContent=h?"Halted":"Running"; $("tstate").className="state "+(h?"down":"up");
+  $("haltbtn").disabled=h; $("rearmbtn").disabled=!h;
+  $("chips").innerHTML=`<span class="chip">Paper money</span><span class="chip">Example</span>`+(h?`<span class="chip halt">Halted</span>`:"");
+}
+$("haltbtn").addEventListener("click",()=>{ $("dlg-t").textContent="Halt all trading?"; $("dlg-p").textContent="No new orders will be placed until you restart. Holdings stay as they are. (Demo: nothing real happens.)"; $("dlg-yes").textContent="Halt trading"; $("dlg-yes").className="btn danger"; dlg.dataset.a="halt"; dlg.showModal(); });
+$("rearmbtn").addEventListener("click",()=>{ $("dlg-t").textContent="Restart trading?"; $("dlg-p").textContent="The next scheduled run carries on with your rules. (Demo: nothing real happens.)"; $("dlg-yes").textContent="Restart"; $("dlg-yes").className="btn go"; dlg.dataset.a="rearm"; dlg.showModal(); });
+$("dlg-no").addEventListener("click",()=>dlg.close());
+$("dlg-yes").addEventListener("click",()=>{ setHalt(dlg.dataset.a==="halt"); dlg.close(); });
+setHalt(false);
+
+// install as an app
+let deferred=null;
+addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferred=e; $("installbtn").hidden=false; });
+$("installbtn").addEventListener("click",async()=>{ if(!deferred) return; deferred.prompt(); await deferred.userChoice.catch(()=>{}); deferred=null; $("installbtn").hidden=true; });
+if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) { $("installhow").textContent="Installed. It opens full screen, like any app."; }
+if ("serviceWorker" in navigator && location.protocol==="https:") { navigator.serviceWorker.register("sw.js").catch(()=>{}); }
+</script>
+</body>
+</html>
