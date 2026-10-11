@@ -77,6 +77,13 @@
   .proof{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:8px}
   .proof li{font-size:15px;color:var(--muted)} .proof b{color:var(--green);font-weight:800;margin-right:4px}
   .get a{color:var(--green);font-weight:700}
+  .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:center;margin:8px 0 12px}
+  @media(min-width:700px){.tour{grid-template-columns:1.2fr 1fr}}
+  .tour h2{margin-top:12px}
+  .tour a{color:var(--green);font-weight:700}
+  .tour-video{position:relative;justify-self:center;width:100%;max-width:300px}
+  .tour-video video{display:block;width:100%;aspect-ratio:9/16;border-radius:22px;border:3px solid var(--green);background:var(--deep2);object-fit:cover}
+  .soonbadge{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:var(--deep);color:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;white-space:nowrap}
   .preview{background:var(--pink);color:#fff;text-align:center;font-weight:700;font-size:13px;padding:8px 12px}
 </style>
 </head>
@@ -120,7 +127,22 @@
       <div class="hp" aria-hidden="true"><label>Leave this empty <input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>
       <div class="msg" id="msg" role="status" aria-live="polite"></div>
     </form>
+    <p class="small" style="margin-top:14px">When it opens: pay by card, Apple Pay or Google Pay. Renewals are £49 a year, with a reminder before each one and one-click cancel.</p>
   </div>
+
+  <section class="tour" id="tour">
+    <div class="tour-text">
+      <h2>See it in <span class="p">60 seconds</span></h2>
+      <p class="lead">What it is, what it does and what you get, in under a minute.</p>
+      <p class="small">Prefer to poke around yourself? <a href="demo/">Open the dashboard demo</a>.</p>
+    </div>
+    <div class="tour-video">
+      <video id="welcome" controls playsinline preload="none" poster="welcome-poster.jpg" aria-label="My Robot I.S.A. in 60 seconds">
+        <source src="welcome.mp4" type="video/mp4">
+      </video>
+      <div class="soonbadge" id="vsoon" hidden>Welcome clip coming soon</div>
+    </div>
+  </section>
 
   <h2>What you <span class="p">get</span></h2>
   <p class="lead">Two parts, one price. The code gets you running. The lessons make it yours.</p>
@@ -218,6 +240,12 @@
 </div>
 
 <script>
+(function(){
+  // The welcome clip: until welcome.mp4 is uploaded the poster shows with a "coming soon" badge.
+  var v=document.getElementById("welcome");
+  if (v) { var src=v.querySelector("source"); var miss=function(){ document.getElementById("vsoon").hidden=false; v.removeAttribute("controls"); };
+    try { fetch(src.getAttribute("src"),{method:"HEAD"}).then(function(r){ if(!r.ok) miss(); }).catch(miss); } catch(e){ miss(); } }
+})();
 (function(){
   var LIVE_HOSTS = ["myrobotisa.com", "www.myrobotisa.com"];
   var live = LIVE_HOSTS.indexOf(location.hostname) !== -1;
