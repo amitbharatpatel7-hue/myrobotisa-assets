@@ -484,7 +484,10 @@ function signalsReport(w){
     <p class="tag" style="margin-top:12px">Example report with invented names. Signals come from weekly closes. Not financial advice.</p></div></section>`;
 }
 function weekView(w){
-  const value = w.value ?? total(), chg = w.chg ?? (total()-D.acct[D.days.indexOf("2026-10-02")]);
+  const at = iso => { const i=D.days.indexOf(iso); return i<0 ? null : D.acct[i]; };
+  const value = w.value ?? (w.kind==="live" ? total() : at(w.close));
+  const before = at(addDays(w.close,-7)) ?? D.start;
+  const chg = w.chg ?? (value - before);
   const end=addDays(w.start,6);
   const ords=D.orders.filter(o=>w.orders.includes(o[0]));
   const pos=`<div class="tablewrap"><table><tr><th>Holding</th><th>Sleeve</th><th class="n">Value</th><th class="n">Since bought</th></tr>`+D.holdings.map(h=>`<tr><td><b>${esc(h[0])}</b></td><td class="tag">${h[2]}</td><td class="n">${gbp(h[4])}</td><td class="n ${h[5]>=0?'up':'down'}">${pct(h[5])}</td></tr>`).join("")+`<tr><td><b>Cash</b></td><td class="tag">—</td><td class="n">${gbp(D.cash)}</td><td></td></tr></table></div>`;
