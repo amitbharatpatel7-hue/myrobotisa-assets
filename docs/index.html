@@ -41,6 +41,10 @@
   .price{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;margin:0 0 6px}
   .price .now{font-family:Anton,Impact,sans-serif;font-size:56px;color:var(--green);line-height:1}
   .price .later{font-size:18px;color:var(--muted)}
+.price .was{font-family:Anton,Impact,sans-serif;font-size:34px;color:var(--muted);line-height:1;text-decoration:line-through;text-decoration-color:var(--pink);text-decoration-thickness:3px}
+.renew{margin:0 0 6px;font-size:16px;font-weight:600;color:var(--ink)}
+.was-s{color:var(--muted);text-decoration-color:var(--pink);text-decoration-thickness:2px;margin-right:4px}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .small{font-size:14px;color:var(--muted);margin:6px 0 0}
   form{margin-top:18px}
   .row{display:flex;flex-wrap:wrap;gap:10px}
@@ -142,7 +146,7 @@
     <li><a href="#yours" data-sec="yours">Your copy is yours</a></li>
     <li><a href="#news" data-sec="news">Free newsletter</a></li>
   </ol>
-  <div class="side-cta"><p><b>£99</b> founding price<br><span>£199 after · opens January 2027</span></p><a class="btn" href="#join">Get early access</a></div>
+  <div class="side-cta"><p><s class="was-s"><span class="vh">Usual price </span>£199</s> <b>£99</b> founding price<br><span>First 100 members · opens January 2027</span></p><a class="btn" href="#join">Get early access</a></div>
 </nav>
 <button id="scrim" tabindex="-1" aria-hidden="true"></button>
 <button id="menubtn" aria-label="Sections menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
@@ -168,8 +172,9 @@
   </section>
 
   <div class="card" id="join">
-    <div class="price"><span class="now">£99</span><span class="later">founding price · £199 after</span></div>
-    <p class="small">One price for both: the code and the 14 lessons. For the first 100 founding members. Opens in January 2027, ready for the new ISA year in April. For UK residents at launch, because ISAs are UK-only. No payment now. Join the list and you'll get the founding price when it opens. Day 1 is free to watch before you buy, and there's a 14-day money-back guarantee until you open the code. Not ready? <a href="#news" style="color:var(--green);font-weight:700">Get the free newsletter instead</a>.</p>
+    <div class="price"><s class="was"><span class="vh">Usual price </span>£199</s><span class="now"><span class="vh">Founding price </span>£99</span><span class="later">for the first 100 founding members</span></div>
+    <p class="renew">Includes 12 months of updates. Then £99 a year, and you can cancel any time.</p>
+    <p class="small">One price for both: the code and the 14 lessons. Once the 100 founding places are gone, it's £199. Opens in January 2027, ready for the new ISA year in April. For UK residents at launch, because ISAs are UK-only. No payment now. Join the list and you'll get the founding price when it opens. Day 1 is free to watch before you buy, and there's a 14-day money-back guarantee until you open the code. Not ready? <a href="#news" style="color:var(--green);font-weight:700">Get the free newsletter instead</a>.</p>
     <form id="f" novalidate>
       <div class="row">
         <input type="email" id="email" name="email" placeholder="you@email.com" autocomplete="email" required aria-label="Email address">
@@ -310,7 +315,7 @@
     <li><span class="d">DAY 2</span><div><div class="t">Get it running</div><div class="s">Your copy of the code, set up with Claude, making its first paper trade.</div></div></li>
     <li><span class="d">DAY 3</span><div><div class="t">Data you can trust</div><div class="s">Prices, gaps and the quiet errors that ruin everything after them.</div></div></li>
     <li><span class="d">DAY 4</span><div><div class="t">Make it yours</div><div class="s">Changing the rules, risk limits and what it trades, first in the settings file, then in code.</div></div></li>
-    <li><span class="d">DAY 5</span><div><div class="t">Backtest honestly</div><div class="s">The engine I tested on six years of weekly data, so you can test your own rules before risking a penny. Plus why my own best backtest is probably lying.</div></div></li>
+    <li><span class="d">DAY 5</span><div><div class="t">Backtest honestly</div><div class="s">The engine I tested on six years of weekly data, so you can test your own rules before risking a penny.</div></div></li>
     <li><span class="d">DAY 6</span><div><div class="t">Paper money first</div><div class="s">A practice account that behaves like the real thing.</div></div></li>
     <li><span class="d">DAY 7</span><div><div class="t">The plumbing</div><div class="s">Orders, rounding and the exchange's rules. Six decimal places in, four accepted: eleven rejections.</div></div></li>
     <li><span class="d">DAY 8</span><div><div class="t">Done means it happened</div><div class="s">Confirming an order actually landed before the system calls the job done.</div></div></li>
