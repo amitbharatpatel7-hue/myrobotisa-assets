@@ -119,6 +119,7 @@
         <button type="submit" id="go">Get early access</button>
       </div>
       <label class="consent"><input type="checkbox" id="consent" required> <span>Email me when My Robot I.S.A. opens, with the founding price. I can unsubscribe any time.</span></label>
+      <label class="consent"><input type="checkbox" id="newsletter"> <span>Optional: also send me the fortnightly newsletter: the latest L, the lesson behind it and what's new. I can unsubscribe any time.</span></label>
       <fieldset class="exp"><legend>Optional: how much coding have you done?</legend>
         <label><input type="radio" name="exp" value="none"> None</label>
         <label><input type="radio" name="exp" value="some"> A bit</label>
@@ -238,7 +239,7 @@
   <footer>
     <p><strong>Not financial advice.</strong> This is education about building and testing software. I run my own system with my own money, in an ISA, and I hold positions in things I talk about. Investing puts your capital at risk and you may get back less than you put in. What a system did in the past, mine included, says nothing about what it will do next. I'm an engineer, not a financial adviser.</p>
     <h3>Your email</h3>
-    <p>If you join the waitlist, My Robot I.S.A. (Amit Patel) keeps your email address (and your coding and broker answers, if you give them) to tell you when it opens and to send you the founding price. That's all it's used for. It's stored with Supabase in London and never sold or shared. Every email has an unsubscribe link, and you can ask for your address to be deleted at <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. The lawful basis is your consent, given by ticking the box.</p>
+    <p>If you join the waitlist, My Robot I.S.A. (Amit Patel) keeps your email address (and your coding and broker answers, if you give them) to tell you when it opens and, only if you ticked that box too, to send the newsletter and to send you the founding price. That's all it's used for. It's stored with Supabase in London and never sold or shared. Every email has an unsubscribe link, and you can ask for your address to be deleted at <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. The lawful basis is your consent, given by ticking the box.</p>
     <p>© 2026 My Robot I.S.A. · <a href="https://www.youtube.com/@myrobotisa">YouTube</a> · <a href="https://www.instagram.com/myrobotisa/">Instagram</a> · <a href="https://www.tiktok.com/@myrobotisa">TikTok</a></p>
   </footer>
 </div>
@@ -268,7 +269,7 @@
     if (!live) { say("Preview only: nothing was saved.", true); return; }
     go.disabled = true; say("Adding you…", true);
     fetch(RPC, { method: "POST", headers: { "apikey": KEY, "Content-Type": "application/json" },
-      body: JSON.stringify({ p_email: email, p_consent: true, p_source: src || null, p_experience: (f.querySelector('input[name=exp]:checked') || {}).value || null, p_broker: document.getElementById('broker').value.trim() || null }) })
+      body: JSON.stringify({ p_email: email, p_consent: true, p_source: src || null, p_experience: (f.querySelector('input[name=exp]:checked') || {}).value || null, p_broker: document.getElementById('broker').value.trim() || null, p_newsletter: document.getElementById('newsletter').checked }) })
       .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
       .then(function(res){
         if (res === "ok") { say("You're on the list. Founding price locked in for when we open.", true); f.reset(); }
