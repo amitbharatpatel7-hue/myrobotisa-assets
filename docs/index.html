@@ -96,35 +96,40 @@
   .c-isa{margin-top:14px;padding:14px 16px;border-radius:16px;background:var(--deep);border:1px solid var(--rule)}
   html{scroll-behavior:smooth} @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
   h2[id],#join,#tour,#calc,#news{scroll-margin-top:72px}
-  .side{display:none}
-  @media (min-width:1100px){
-    body{padding-left:250px}
-    .side{display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;width:250px;padding:22px 16px;border-right:1px solid var(--rule);background:var(--deep);overflow-y:auto;z-index:20}
-    .side-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:Anton,Impact,sans-serif;font-size:20px;letter-spacing:.02em;text-transform:uppercase;margin:0 6px 22px}
-    .side-brand img{width:38px;height:38px;border-radius:10px;border:2px solid var(--green)}
-    .side-brand b{color:var(--pink);font-weight:400}
-    .side ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
-    .side ol a{display:block;padding:9px 12px;border-radius:12px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:500;border-left:3px solid transparent}
-    .side ol a:hover{color:var(--ink);background:var(--deep2)}
-    .side ol a.on{color:var(--ink);background:var(--deep2);border-left-color:var(--green)}
-    .side-cta{margin-top:auto;padding:16px 12px 4px;border-top:1px solid var(--rule)}
-    .side-cta p{margin:0 0 12px;font-size:15px;color:var(--ink)} .side-cta p b{color:var(--green);font-size:22px} .side-cta span{color:var(--muted);font-size:13px}
-    .side-cta .btn{display:block;text-align:center;font-size:15px;padding:12px 16px}
-    .chips{display:none!important}
+  .side{display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;width:250px;padding:22px 16px;border-right:1px solid var(--rule);background:var(--deep);overflow-y:auto;z-index:20}
+  .side-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:Anton,Impact,sans-serif;font-size:20px;letter-spacing:.02em;text-transform:uppercase;margin:0 6px 22px}
+  .side-brand img{width:38px;height:38px;border-radius:10px;border:2px solid var(--green)}
+  .side-brand b{color:var(--pink);font-weight:400}
+  .side ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+  .side ol a{display:block;padding:10px 12px;border-radius:12px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:500;border-left:3px solid transparent}
+  .side ol a:hover{color:var(--ink);background:var(--deep2)}
+  .side ol a.on{color:var(--ink);background:var(--deep2);border-left-color:var(--green)}
+  .side-cta{margin-top:auto;padding:16px 12px 4px;border-top:1px solid var(--rule)}
+  .side-cta p{margin:0 0 12px;font-size:15px;color:var(--ink)} .side-cta p b{color:var(--green);font-size:22px} .side-cta span{color:var(--muted);font-size:13px}
+  .side-cta .btn{display:block;text-align:center;font-size:15px;padding:12px 16px}
+  #menubtn,#scrim{display:none}
+  @media (min-width:1100px){ body{padding-left:250px} }
+  @media (max-width:1099px){
+    .side{width:min(300px,85vw);padding:calc(22px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+      transform:translateX(-105%);visibility:hidden;transition:transform .2s ease,visibility 0s .2s;z-index:30}
+    .side-cta{padding-bottom:72px}
+    .side.open{transform:none;visibility:visible;transition:transform .2s ease}
+    #scrim{position:fixed;z-index:25;inset:0;background:rgba(0,0,0,.5);border:0}
+    #scrim.open{display:block}
+    #menubtn{display:flex;align-items:center;justify-content:center;position:fixed;z-index:35;width:48px;height:48px;border-radius:50%;
+      left:calc(16px + env(safe-area-inset-left));bottom:calc(16px + env(safe-area-inset-bottom));
+      border:2px solid var(--green);background:var(--deep);color:var(--ink);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35);padding:0;font-size:0}
+    #menubtn svg{flex:none}
+    #menubtn .i-x,#menubtn[aria-expanded="true"] .i-bars{display:none}
+    #menubtn[aria-expanded="true"] .i-x{display:block}
+    footer{padding-bottom:72px}
   }
-  .chips{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;gap:8px;padding:10px 12px 10px 16px;background:var(--deep);border-bottom:1px solid var(--rule);transform:translateY(-100%);transition:transform .2s ease}
-  .chips.show{transform:none}
-  .chips-in{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0;-webkit-mask-image:linear-gradient(90deg,#000 88%,transparent)}
-  .chips-in::-webkit-scrollbar{display:none}
-  .chips-in a{flex:none;padding:7px 12px;border-radius:999px;border:1px solid var(--rule);color:var(--muted);text-decoration:none;font-size:13px;font-weight:600;white-space:nowrap}
-  .chips-in a.on{color:var(--deep);background:var(--green);border-color:var(--green)}
-  .chips-join{flex:none;padding:8px 16px;border-radius:999px;background:var(--green);color:var(--deep);text-decoration:none;font-weight:800;font-size:14px}
-  @media (prefers-reduced-motion:reduce){.chips{transition:none}}
+  @media (prefers-reduced-motion:reduce){.side,.side.open{transition:none}}
 </style>
 </head>
 <body>
 <div class="preview" id="preview" hidden>Preview. The form doesn't save anything until the page is live on myrobotisa.com.</div>
-<nav class="side" aria-label="Sections">
+<nav class="side" id="side" aria-label="Sections">
   <a class="side-brand" href="#top"><img src="avatar.png" alt=""><span>My Robot <b>I.S.A.</b></span></a>
   <ol>
     <li><a href="#join" data-sec="join">Join the waitlist</a></li>
@@ -139,7 +144,8 @@
   </ol>
   <div class="side-cta"><p><b>£99</b> founding price<br><span>£199 after · opens January 2027</span></p><a class="btn" href="#join">Get early access</a></div>
 </nav>
-<nav class="chips" aria-label="Sections" id="chips"><div class="chips-in"><a href="#tour" data-sec="tour">60 seconds</a><a href="#get" data-sec="get">What you get</a><a href="#isa" data-sec="isa">Why an ISA</a><a href="#calc" data-sec="calc">Calculator</a><a href="#days" data-sec="days">14 days</a><a href="#isnt" data-sec="isnt">What it isn't</a><a href="#yours" data-sec="yours">Your copy</a><a href="#news" data-sec="news">Newsletter</a></div><a class="chips-join" href="#join">Join</a></nav>
+<button id="scrim" tabindex="-1" aria-hidden="true"></button>
+<button id="menubtn" aria-label="Sections menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
 <div class="wrap" id="top">
   <header>
     <a class="handle" href="https://www.instagram.com/myrobotisa/">@myrobotisa</a>
@@ -452,16 +458,22 @@
     run();
   })();
   (function(){
-    var links=[].slice.call(document.querySelectorAll('[data-sec]')), chips=document.getElementById('chips'), hero=document.querySelector('.hero');
+    var links=[].slice.call(document.querySelectorAll('[data-sec]'));
     var secs=['join','tour','get','isa','calc','days','isnt','yours','news'].map(function(i){return document.getElementById(i)}).filter(Boolean);
-    function mark(id){ links.forEach(function(a){ var on=a.getAttribute('data-sec')===id; a.classList.toggle('on',on); if(on&&a.parentNode.classList.contains('chips-in')){ var c=a.parentNode; var l=a.offsetLeft-c.offsetLeft; if(l<c.scrollLeft||l+a.offsetWidth>c.scrollLeft+c.clientWidth) c.scrollTo({left:l-16,behavior:'smooth'}); } }); }
+    function mark(id){ links.forEach(function(a){ a.classList.toggle('on',a.getAttribute('data-sec')===id); }); }
     function onScroll(){
       var y=window.scrollY, cur=null;
       for(var i=0;i<secs.length;i++){ if(secs[i].getBoundingClientRect().top<=120) cur=secs[i].id; }
       mark(cur);
-      if(chips&&hero) chips.classList.toggle('show', hero.getBoundingClientRect().bottom<0);
     }
     window.addEventListener('scroll',onScroll,{passive:true}); window.addEventListener('resize',onScroll); onScroll();
+    var side=document.getElementById('side'), scrim=document.getElementById('scrim'), menu=document.getElementById('menubtn');
+    function openMenu(){ side.classList.add('open'); scrim.classList.add('open'); menu.setAttribute('aria-expanded','true'); }
+    function closeMenu(){ side.classList.remove('open'); scrim.classList.remove('open'); menu.setAttribute('aria-expanded','false'); }
+    menu.addEventListener('click',function(){ side.classList.contains('open')?closeMenu():openMenu(); });
+    scrim.addEventListener('click',closeMenu);
+    side.addEventListener('click',function(e){ if(e.target.closest('a')) closeMenu(); });
+    document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeMenu(); });
   })();
 </script>
 </body>
