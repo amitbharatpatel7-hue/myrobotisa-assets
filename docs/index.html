@@ -113,7 +113,7 @@
 
   <div class="card" id="join">
     <div class="price"><span class="now">£99</span><span class="later">founding price · £199 after</span></div>
-    <p class="small">One price for both: the code and the 14 lessons. For the first 100 founding members. No payment now. Join the list and you'll get the founding price when it opens. Day 1 is free to watch before you buy, and there's a 14-day money-back guarantee until you open the code.</p>
+    <p class="small">One price for both: the code and the 14 lessons. For the first 100 founding members. No payment now. Join the list and you'll get the founding price when it opens. Day 1 is free to watch before you buy, and there's a 14-day money-back guarantee until you open the code. Not ready? <a href="#news" style="color:var(--green);font-weight:700">Get the free newsletter instead</a>.</p>
     <form id="f" novalidate>
       <div class="row">
         <input type="email" id="email" name="email" placeholder="you@email.com" autocomplete="email" required aria-label="Email address">
@@ -232,6 +232,19 @@
     <li><strong>Shared copies go stale.</strong> No updates, no lessons, no support and no community. Copies posted online are taken down.</li>
   </ul>
 
+  <div class="card" id="news">
+    <h2 style="margin:0 0 6px">Not ready to <span class="p">buy?</span></h2>
+    <p class="small" style="margin:0 0 12px;color:var(--ink)">Get the free fortnightly newsletter instead: the latest L, the lesson behind it and what's new. No tips, no signals, no hard sell.</p>
+    <form id="nf" novalidate>
+      <div class="row">
+        <input type="email" id="nemail" placeholder="you@email.com" autocomplete="email" aria-label="Email address for the newsletter">
+        <button type="submit" id="ngo">Get the newsletter</button>
+      </div>
+      <label class="consent"><input type="checkbox" id="nconsent"> <span>Send me the fortnightly newsletter. I can unsubscribe any time.</span></label>
+      <div class="msg" id="nmsg" role="status" aria-live="polite"></div>
+    </form>
+  </div>
+
   <div class="card">
     <p style="margin:0 0 4px;font-weight:700">Every episode spells out a different <span class="isa">I.S.A.</span></p>
     <p class="small" style="margin:0">I Said Allow it · It Sold Again · Imperfect System, Always learning…</p>
@@ -241,7 +254,7 @@
   <footer>
     <p><strong>Not financial advice.</strong> This is education about building and testing software. I run my own system with my own money, in an ISA, and I hold positions in things I talk about. Investing puts your capital at risk and you may get back less than you put in. What a system did in the past, mine included, says nothing about what it will do next. I'm an engineer, not a financial adviser.</p>
     <h3>Your email</h3>
-    <p>If you join the waitlist, My Robot I.S.A. (Amit Patel) keeps your email address (and your coding and broker answers, if you give them) to tell you when it opens and, only if you ticked that box too, to send the newsletter and to send you the founding price. That's all it's used for. It's stored with Supabase in London and never sold or shared. Every email has an unsubscribe link, and you can ask for your address to be deleted at <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. The lawful basis is your consent, given by ticking the box.</p>
+    <p>If you join the waitlist, My Robot I.S.A. (Amit Patel) keeps your email address (and your coding and broker answers, if you give them) only for what you ticked: telling you when it opens, sending the newsletter, or both and to send you the founding price. That's all it's used for. It's stored with Supabase in London and never sold or shared. Every email has an unsubscribe link, and you can ask for your address to be deleted at <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. The lawful basis is your consent, given by ticking the box.</p>
     <p>© 2026 My Robot I.S.A. · <a href="https://www.youtube.com/@myrobotisa">YouTube</a> · <a href="https://www.instagram.com/myrobotisa/">Instagram</a> · <a href="https://www.tiktok.com/@myrobotisa">TikTok</a></p>
   </footer>
 </div>
@@ -252,6 +265,27 @@
   var v=document.getElementById("welcome");
   if (v) { var src=v.querySelector("source"); var miss=function(){ document.getElementById("vsoon").hidden=false; v.removeAttribute("controls"); };
     try { fetch(src.getAttribute("src"),{method:"HEAD"}).then(function(r){ if(!r.ok) miss(); }).catch(miss); } catch(e){ miss(); } }
+})();
+(function(){
+  // Newsletter only: no launch emails, no kit, just the fortnightly newsletter.
+  var live = ["myrobotisa.com","www.myrobotisa.com"].indexOf(location.hostname) !== -1;
+  var f=document.getElementById("nf"), m=document.getElementById("nmsg"), b=document.getElementById("ngo");
+  if(!f) return;
+  function say(t,ok){ m.textContent=t; m.className="msg "+(ok?"ok":"err"); }
+  f.addEventListener("submit",function(e){
+    e.preventDefault();
+    var email=document.getElementById("nemail").value.trim();
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ say("That email doesn't look right.",false); return; }
+    if(!document.getElementById("nconsent").checked){ say("Tick the box so we're allowed to email you.",false); return; }
+    if(!live){ say("Preview only: nothing was saved.",true); return; }
+    b.disabled=true;
+    fetch("https://vxnestmhtjotidhzzqbo.supabase.co/rest/v1/rpc/join_newsletter",{method:"POST",headers:{"apikey":"sb_publishable_hjvkAbVw82CKg2rdDZgVcw_XUDbmerV","Content-Type":"application/json"},
+      body:JSON.stringify({p_email:email,p_consent:true,p_source:(new URLSearchParams(location.search).get("src")||"").slice(0,40)||null})})
+      .then(function(r){ return r.ok?r.json():Promise.reject(r.status); })
+      .then(function(res){ if(res==="ok"){ say("You're in. The next newsletter lands in your inbox.",true); f.reset(); } else say("Something's not right with that email.",false); })
+      .catch(function(){ say("Something went wrong. Try again in a minute.",false); })
+      .then(function(){ b.disabled=false; });
+  });
 })();
 (function(){
   var LIVE_HOSTS = ["myrobotisa.com", "www.myrobotisa.com"];
