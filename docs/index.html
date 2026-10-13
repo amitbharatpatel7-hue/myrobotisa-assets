@@ -99,7 +99,7 @@
   .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:middle}
   .c-isa{margin-top:14px;padding:14px 16px;border-radius:16px;background:var(--deep);border:1px solid var(--rule)}
   html{scroll-behavior:smooth} @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-  h2[id],#join,#tour,#calc,#news{scroll-margin-top:72px}
+  h2[id],#join,#tour,#dayjob,#calc,#news{scroll-margin-top:72px}
   .side{display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;width:250px;padding:22px 16px;border-right:1px solid var(--rule);background:var(--deep);overflow-y:auto;z-index:20}
   .side-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:Anton,Impact,sans-serif;font-size:20px;letter-spacing:.02em;text-transform:uppercase;margin:0 6px 22px}
   .side-brand img{width:38px;height:38px;border-radius:10px;border:2px solid var(--green)}
@@ -137,6 +137,9 @@
   .vs-col.on .vs-k{color:var(--green)}
   .vs-big{margin:4px 0 6px;font-family:Anton,Impact,sans-serif;font-size:28px;line-height:1.05;text-transform:uppercase;color:var(--ink)}
   .vs-s{margin:0;font-size:14px;color:var(--ink)}
+  .dayjob{margin:34px 0 8px}
+  .dayjob .lead{color:var(--ink)}
+  .dayjob .small{margin-top:10px}
 </style>
 </head>
 <body>
@@ -146,6 +149,7 @@
   <ol>
     <li><a href="#join" data-sec="join">Join the waitlist</a></li>
     <li><a href="#tour" data-sec="tour">See it in 60 seconds</a></li>
+    <li><a href="#dayjob" data-sec="dayjob">Built for a day job</a></li>
     <li><a href="#get" data-sec="get">What you get</a></li>
     <li><a href="#isa" data-sec="isa">Why an ISA</a></li>
     <li><a href="#calc" data-sec="calc">Bonus vs ISA calculator</a></li>
@@ -154,7 +158,7 @@
     <li><a href="#yours" data-sec="yours">Your copy is yours</a></li>
     <li><a href="#news" data-sec="news">Free newsletter</a></li>
   </ol>
-  <div class="side-cta"><p><s class="was-s"><span class="vh">Usual price </span>£199</s> <b>£99</b> founding price<br><span>First 100 members · opens January 2027</span></p><a class="btn" href="#join">Get early access</a></div>
+  <div class="side-cta"><p><b>£99</b> founding price<br><span>First 100 members, then £199 · opens January 2027</span></p><a class="btn" href="#join">Get early access</a></div>
 </nav>
 <button id="scrim" tabindex="-1" aria-hidden="true"></button>
 <button id="menubtn" aria-label="Sections menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
@@ -180,7 +184,7 @@
   </section>
 
   <div class="card" id="join">
-    <div class="price"><s class="was"><span class="vh">Usual price </span>£199</s><span class="now"><span class="vh">Founding price </span>£99</span><span class="later">for the first 100 founding members</span></div>
+    <div class="price"><span class="now"><span class="vh">Founding price </span>£99</span><span class="later">for the first 100 founding members, then £199</span></div>
     <p class="renew">Includes 12 months of updates. Then £99 a year, and you can cancel any time.</p>
     <p class="small">One price for both: the code and the 14 lessons. Once the 100 founding places are gone, it's £199. Opens in January 2027, ready for the new ISA year in April. For UK residents at launch, because ISAs are UK-only. No payment now. Join the list and you'll get the founding price when it opens. Day 1 is free to watch before you buy, and there's a 14-day money-back guarantee until you open the code. Not ready? <a href="#news" style="color:var(--green);font-weight:700">Get the free newsletter instead</a>.</p>
     <form id="f" novalidate>
@@ -229,6 +233,13 @@
       </video>
       <div class="soonbadge" id="vsoon" hidden>Welcome clip coming soon</div>
     </div>
+  </section>
+
+  <section class="dayjob" id="dayjob">
+    <h2>Built for people with a <span class="p">day job</span></h2>
+    <p class="lead">You see the stock everyone's talking about at lunchtime. By the time you've finished work it's old news, and you've no time to sit watching charts anyway. So you do nothing, and the ISA allowance sits there.</p>
+    <p class="lead">A robot ISA is the other way round. You set the rules once: what it's allowed to buy, how much risk you'll take, when it should sell. Every week it checks the market, does the maths and puts the proposed moves on your phone. You tap approve on the way home. No chart-watching, no chasing, no deciding at midnight.</p>
+    <p class="small">It won't catch every runaway stock and it doesn't promise to beat anything. It makes sure your plan actually runs while you get on with your life. Capital at risk: it can lose money as well as make it.</p>
   </section>
 
   <h2 id="get">What you <span class="p">get</span></h2>
@@ -487,7 +498,7 @@
   })();
   (function(){
     var links=[].slice.call(document.querySelectorAll('[data-sec]'));
-    var secs=['join','tour','get','isa','calc','days','isnt','yours','news'].map(function(i){return document.getElementById(i)}).filter(Boolean);
+    var secs=['join','tour','dayjob','get','isa','calc','days','isnt','yours','news'].map(function(i){return document.getElementById(i)}).filter(Boolean);
     function mark(id){ links.forEach(function(a){ a.classList.toggle('on',a.getAttribute('data-sec')===id); }); }
     function onScroll(){
       var y=window.scrollY, cur=null;
