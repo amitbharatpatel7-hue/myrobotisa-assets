@@ -142,6 +142,24 @@
   .nonews-stats{display:flex;flex-wrap:wrap;gap:10px 22px;margin:16px 0 0;padding:0;list-style:none}
   .nonews-stats li{font-size:15px;color:var(--muted)}
   .nonews-stats b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:26px;letter-spacing:.01em;color:var(--green);margin-right:6px;vertical-align:-2px}
+  .jobs{margin:34px 0 8px}
+  .jobs .lead{color:var(--ink)}
+  .job{display:grid;grid-template-columns:1fr;gap:4px 18px;margin:18px 0 0}
+  @media(min-width:640px){.job{grid-template-columns:150px 1fr}}
+  .job h3{margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:22px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
+  .job p{margin:0;font-size:16px;line-height:1.55;color:var(--ink)}
+  .dial{margin:22px 0 0;padding:16px 18px;background:var(--deep2);border-radius:18px}
+  .dial-k{margin:0 0 10px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .dial-btns{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+  .dial-btns button{font:inherit;font-weight:700;font-size:14px;padding:9px 16px;border-radius:999px;border:2px solid var(--rule);background:transparent;color:var(--ink);cursor:pointer}
+  .dial-btns button[aria-pressed=true]{background:var(--green);border-color:var(--green);color:var(--deep)}
+  .mix{display:flex;height:34px;border-radius:10px;overflow:hidden;gap:2px}
+  .mix span{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--deep);transition:flex .35s ease;min-width:0;white-space:nowrap;overflow:hidden}
+  .mix span.q{font-size:0}
+  .mix .m1{background:var(--green)}.mix .m2{background:var(--pink);color:#fff}.mix .m3{background:#fff}
+  .mix-key{display:flex;gap:16px;flex-wrap:wrap;margin:10px 0 0;font-size:13px;color:var(--muted)}
+  .mix-key i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  .dial .small{margin:10px 0 0}
   .dayjob{margin:34px 0 8px}
   .dayjob .lead{color:var(--ink)}
   .dayjob .small{margin-top:10px}
@@ -158,6 +176,7 @@
     <li><a href="#join" data-sec="join">Join the waitlist</a></li>
     <li><a href="#tour" data-sec="tour">See it in 60 seconds</a></li>
     <li><a href="#nonews" data-sec="nonews">It doesn't read the news</a></li>
+    <li><a href="#jobs" data-sec="jobs">What the robot does</a></li>
     <li><a href="#dayjob" data-sec="dayjob">Built for a day job</a></li>
     <li><a href="#get" data-sec="get">What you get</a></li>
     <li><a href="#isa" data-sec="isa">Why an ISA</a></li>
@@ -253,6 +272,25 @@
       <li><b>1</b>set of rules, tested before any money moved</li>
     </ul>
     <p class="small" style="margin-top:14px">Still want a punt on the listing everyone's talking about? That's what the <a href="#get">moonshot pot</a> is for: your pick, the robot's size cap and exit rule.</p>
+  </section>
+
+  <section class="jobs" id="jobs">
+    <h2>One ISA. Three jobs. <span class="p">The robot does all three.</span></h2>
+    <div class="job"><h3>The foundation</h3><p>Most of your money goes into one low-cost fund that tracks the world's markets. Nothing to pick, nothing to watch. The robot keeps it topped up and in balance.</p></div>
+    <div class="job"><h3>The hunter</h3><p>A slice rides the market's strongest stocks while they're running and steps out by rule when they stop. The robot finds them, sizes them and sets every exit before it buys. You tap Approve.</p></div>
+    <div class="job"><h3>The moonshot</h3><p>A small pot the robot keeps for the biggest swings: the breakouts it spots, or the one bet you want to make yourself. Either way the size is capped and the exit is set in advance, so a miss can't dent the rest.</p></div>
+    <div class="dial">
+      <p class="dial-k">Your risk dial sets the mix</p>
+      <div class="dial-btns" role="group" aria-label="Risk profile">
+        <button type="button" data-mix="85,12,3" aria-pressed="false">Cautious</button>
+        <button type="button" data-mix="72,22,6" aria-pressed="true">Balanced</button>
+        <button type="button" data-mix="58,32,10" aria-pressed="false">Adventurous</button>
+      </div>
+      <div class="mix" id="mix" aria-live="polite"><span class="m1" style="flex:72">Foundation</span><span class="m2" style="flex:22">Hunter</span><span class="m3 q" style="flex:6">Moonshot</span></div>
+      <p class="mix-key"><span><i style="background:var(--green)"></i>Foundation</span><span><i style="background:var(--pink)"></i>Hunter</span><span><i style="background:#fff"></i>Moonshot</span></p>
+      <p class="small">Pick one on Day 1, change it whenever you like, and the robot does the rest. The bar is illustrative: the exact mix comes from your settings file. Capital at risk: it can lose money as well as make it.</p>
+    </div>
+    <p class="small" style="margin-top:18px;color:var(--ink)"><strong>Already got a tracker with Vanguard or similar?</strong> Then the foundation is sorted, and you already know the bit nobody does for you is the other two jobs. Keep it. Bring the money you'd otherwise punt on a tip.</p>
   </section>
 
   <section class="dayjob" id="dayjob">
@@ -524,6 +562,14 @@
     run();
   })();
   (function(){
+    (function(){
+      var btns=[].slice.call(document.querySelectorAll('.dial-btns button')), segs=document.querySelectorAll('#mix span');
+      btns.forEach(function(b){ b.addEventListener('click',function(){
+        btns.forEach(function(x){ x.setAttribute('aria-pressed', x===b ? 'true':'false'); });
+        var m=b.getAttribute('data-mix').split(',');
+        for(var i=0;i<segs.length;i++){ segs[i].style.flex=m[i]; segs[i].classList.toggle('q', +m[i]<12); }
+      }); });
+    })();
     var links=[].slice.call(document.querySelectorAll('[data-sec]'));
     var secs=['join','tour','dayjob','get','isa','calc','days','isnt','yours','news'].map(function(i){return document.getElementById(i)}).filter(Boolean);
     function mark(id){ links.forEach(function(a){ a.classList.toggle('on',a.getAttribute('data-sec')===id); }); }
