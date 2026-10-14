@@ -137,6 +137,11 @@
   .vs-col.on .vs-k{color:var(--green)}
   .vs-big{margin:4px 0 6px;font-family:Anton,Impact,sans-serif;font-size:28px;line-height:1.05;text-transform:uppercase;color:var(--ink)}
   .vs-s{margin:0;font-size:14px;color:var(--ink)}
+  .nonews{margin:34px 0 8px}
+  .nonews .lead{color:var(--ink)}
+  .nonews-stats{display:flex;flex-wrap:wrap;gap:10px 22px;margin:16px 0 0;padding:0;list-style:none}
+  .nonews-stats li{font-size:15px;color:var(--muted)}
+  .nonews-stats b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:26px;letter-spacing:.01em;color:var(--green);margin-right:6px;vertical-align:-2px}
   .dayjob{margin:34px 0 8px}
   .dayjob .lead{color:var(--ink)}
   .dayjob .small{margin-top:10px}
@@ -152,6 +157,7 @@
   <ol>
     <li><a href="#join" data-sec="join">Join the waitlist</a></li>
     <li><a href="#tour" data-sec="tour">See it in 60 seconds</a></li>
+    <li><a href="#nonews" data-sec="nonews">It doesn't read the news</a></li>
     <li><a href="#dayjob" data-sec="dayjob">Built for a day job</a></li>
     <li><a href="#get" data-sec="get">What you get</a></li>
     <li><a href="#isa" data-sec="isa">Why an ISA</a></li>
@@ -238,6 +244,17 @@
     </div>
   </section>
 
+  <section class="nonews" id="nonews">
+    <h2>It doesn't read <span class="p">the news</span></h2>
+    <p class="lead">It doesn't have an inbox. Your robot ISA never opens a newsletter, a press release or a tip. Every Monday it pulls price history, applies the same rules it was tested on, and proposes its orders. You tap Approve. The only research it ever did was the backtest, on years of data, before a pound moved. Nothing anyone emails you at 7pm can change its mind.</p>
+    <ul class="nonews-stats" aria-label="What the robot reads">
+      <li><b>0</b>newsletters read</li>
+      <li><b>0</b>tips taken</li>
+      <li><b>1</b>set of rules, tested before any money moved</li>
+    </ul>
+    <p class="small" style="margin-top:14px">Still want a punt on the listing everyone's talking about? That's what the <a href="#get">moonshot pot</a> is for: your pick, the robot's size cap and exit rule.</p>
+  </section>
+
   <section class="dayjob" id="dayjob">
     <h2>Built for people with a <span class="p">day job</span></h2>
     <p class="lead">You see the stock everyone's talking about at lunchtime. By the time you've finished work it's old news, and you've no time to sit watching charts anyway. So you do nothing, and the ISA allowance sits there.</p>
@@ -258,6 +275,7 @@
       <li>Starts on paper money; going live is a deliberate switch</li>
       <li>It proposes, you approve: every order lands on your phone and nothing is sent to your broker until you tap Approve. That's how Trading 212's API terms work: their team confirmed in writing (14 Oct 2026) that a program may propose orders as long as you confirm each one yourself. My Robot I.S.A. isn't affiliated with Trading 212</li>
       <li>One settings file: your rules, your risk limits, what it's allowed to trade (shares, ETFs)</li>
+      <li>A moonshot pot for the bet you want to make, like the listing everyone's talking about. You pick it; the robot sets a capped size and an exit rule and enforces both, so one bet can't take the ISA down with it</li>
       <li>Order checks, logging, scheduling and an off switch, already built</li>
       <li>Your own private web app: install it on your phone's home screen, refresh live from your broker in one tap, and see your holdings, every order and why, and the daily report. <a href="demo/">Try the demo</a></li>
       <li>Behind a login only you can pass, with a read-only broker key that can look but never trade</li>
