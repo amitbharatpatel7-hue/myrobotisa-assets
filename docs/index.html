@@ -44,6 +44,9 @@
 .price .was{font-family:Anton,Impact,sans-serif;font-size:34px;color:var(--muted);line-height:1;text-decoration:line-through;text-decoration-color:var(--pink);text-decoration-thickness:3px}
 .trial{margin:10px 0 6px;padding:12px 14px;border-radius:14px;background:var(--deep2);border-left:4px solid var(--green);font-size:15px;line-height:1.5;color:var(--ink)}
 .trial b{color:var(--green)}
+.facts{margin:10px 0 4px;padding:0;list-style:none}
+.facts li{position:relative;padding:3px 0 3px 22px;font-size:14px;line-height:1.45;color:var(--muted)}
+.facts li:before{content:'';position:absolute;left:2px;top:9px;width:10px;height:6px;border-left:2px solid var(--green);border-bottom:2px solid var(--green);transform:rotate(-45deg)}
 .renew{margin:0 0 6px;font-size:16px;font-weight:600;color:var(--ink)}
 .was-s{color:var(--muted);text-decoration-color:var(--pink);text-decoration-thickness:2px;margin-right:4px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -232,40 +235,27 @@
   <div class="card" id="join">
     <div class="price"><span class="now"><span class="vh">Founding price </span>£99</span><span class="later">for the first 100 founding members, then £199</span></div>
     <p class="renew">Includes 12 months of updates. After that, updates are £49 a year if you want them. Nothing renews automatically.</p>
-    <p class="trial"><b>Join the list and you get a free 7-day test drive in December</b>, before anyone can buy: your own dashboard on £10,000 of pretend money, replaying seven real market weeks at one week a day. The emails, the approvals, the good weeks and the bad ones. No code, no broker account, nothing to install. Then decide.</p>
-    <p class="small">One price for both: the code and the 14 lessons. Once the 100 founding places are gone, it's £199. Opens in January 2027, ready for the new ISA year in April. For UK residents at launch, because ISAs are UK-only. No payment now. Join the list and you'll get the test drive in December and the founding price when it opens. Day 1 is free to watch before you buy, and there's a 14-day money-back guarantee until you open the code. Not ready? <a href="#news" style="color:var(--green);font-weight:700">Get the free newsletter instead</a>.</p>
+    <p class="trial"><b>Join the list and get a free 7-day test drive in December.</b> Your own dashboard on £10,000 of pretend money, replaying seven real market weeks, one a day. Nothing to install. Then decide.</p>
+    <ul class="facts">
+      <li>The code and all 14 lessons, one price</li>
+      <li>Opens January 2027, in time for the April ISA year. UK only at launch</li>
+      <li>No payment now. Day 1 free to watch. 14-day money-back until you open the code</li>
+    </ul>
     <form id="f" novalidate>
       <div class="row">
         <input type="email" id="email" name="email" placeholder="you@email.com" autocomplete="email" required aria-label="Email address">
         <button type="submit" id="go">Get early access</button>
       </div>
-      <label class="consent"><input type="checkbox" id="consent" required> <span>Email me when My Robot I.S.A. opens, with the founding price. I can unsubscribe any time.</span></label>
-      <label class="consent"><input type="checkbox" id="newsletter"> <span>Optional: also send me the fortnightly newsletter: the latest L, the lesson behind it and what's new. I can unsubscribe any time.</span></label>
-      <fieldset class="exp"><legend>Optional: how much coding have you done?</legend>
-        <label><input type="radio" name="exp" value="none"> None</label>
-        <label><input type="radio" name="exp" value="some"> A bit</label>
-        <label><input type="radio" name="exp" value="developer"> I'm a developer</label>
-      </fieldset>
-      <fieldset class="exp"><legend>Optional: do you have a Trading 212 account? It's the broker the robot is built and tested on.</legend>
+      <label class="consent"><input type="checkbox" id="consent" required> <span>Email me the test drive, the founding price when it opens, and the fortnightly newsletter. I can unsubscribe any time.</span></label>
+      <fieldset class="exp"><legend>Optional: got a Trading 212 account? It's the broker the robot runs on.</legend>
         <label><input type="radio" name="brk" value="T212 ISA"> Yes, a Stocks ISA</label>
         <label><input type="radio" name="brk" value="T212 Invest"> Yes, Invest only</label>
         <label><input type="radio" name="brk" value="No T212 yet"> Not yet</label>
       </fieldset>
-      <label class="exp" style="display:block">Where do you live? <select id="country" style="display:block;width:100%;margin-top:8px;font:inherit;font-size:15px;padding:11px 16px;border-radius:999px;border:2px solid var(--rule);background:var(--deep);color:var(--ink)">
-        <option value="uk" selected>United Kingdom</option>
-        <option value="ie">Ireland</option>
-        <option value="europe">Elsewhere in Europe</option>
-        <option value="us">United States</option>
-        <option value="ca">Canada</option>
-        <option value="au-nz">Australia or New Zealand</option>
-        <option value="in">India</option>
-        <option value="other">Somewhere else</option>
-      </select></label>
-      <p class="small" id="abroad" hidden style="margin:8px 0 0">Thanks for telling us. At launch it's for UK residents only, because ISAs are a UK account. Join anyway and we'll email you if it opens where you live.</p>
       <div class="hp" aria-hidden="true"><label>Leave this empty <input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>
       <div class="msg" id="msg" role="status" aria-live="polite"></div>
     </form>
-    <p class="small" style="margin-top:14px">When it opens: pay by card, Apple Pay or Google Pay. After the first year, updates are £49 a year: we email you, you decide. Nothing renews automatically.</p>
+    <p class="small" style="margin-top:12px">Not ready to join? <a href="#news" style="color:var(--green);font-weight:700">Just get the free newsletter</a>.</p>
   </div>
 
   <section class="tour" id="tour">
@@ -503,7 +493,7 @@
   <footer>
     <p><strong>Not financial advice.</strong> This is education about building and testing software. I run my own system with my own money, in an ISA, and I hold positions in things I talk about. Investing puts your capital at risk and you may get back less than you put in. What a system did in the past, mine included, says nothing about what it will do next. I'm an engineer, not a financial adviser.</p>
     <h3>Your email</h3>
-    <p>If you join the waitlist, My Robot I.S.A. (Amit Patel) keeps your email address (and your coding, Trading 212 and country answers, if you give them) only for what you ticked: telling you when it opens and sending you the founding price, sending the newsletter, or both. That's all it's used for. It's stored with Supabase in London and never sold or shared. Every email has an unsubscribe link, and you can ask for your address to be deleted at <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. The lawful basis is your consent, given by ticking the box.</p>
+    <p>If you join the waitlist, My Robot I.S.A. (Amit Patel) keeps your email address (and your Trading 212 answer, if you give it) only for what you agreed to: the test drive, telling you when it opens with the founding price, and the fortnightly newsletter, or just the newsletter if you signed up for that alone. That's all it's used for. It's stored with Supabase in London and never sold or shared. Every email has an unsubscribe link, and you can ask for your address to be deleted at <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. The lawful basis is your consent, given by ticking the box.</p>
     <p>© 2026 My Robot I.S.A. · <a href="https://www.youtube.com/@myrobotisa">YouTube</a> · <a href="https://www.instagram.com/myrobotisa/">Instagram</a> · <a href="https://www.tiktok.com/@myrobotisa">TikTok</a></p>
   </footer>
 </div>
@@ -554,7 +544,7 @@
     if (!live) { say("Preview only: nothing was saved.", true); return; }
     go.disabled = true; say("Adding you…", true);
     fetch(RPC, { method: "POST", headers: { "apikey": KEY, "Content-Type": "application/json" },
-      body: JSON.stringify({ p_email: email, p_consent: true, p_source: src || null, p_experience: (f.querySelector('input[name=exp]:checked') || {}).value || null, p_broker: (f.querySelector('input[name=brk]:checked')||{}).value || null, p_newsletter: document.getElementById('newsletter').checked, p_country: document.getElementById('country').value || null }) })
+      body: JSON.stringify({ p_email: email, p_consent: true, p_source: src || null, p_experience: null, p_broker: (f.querySelector('input[name=brk]:checked')||{}).value || null, p_newsletter: true, p_country: 'uk' }) })
       .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
       .then(function(res){
         if (res === "ok") { say("You're on the list. Founding price locked in for when we open.", true); f.reset(); }
@@ -565,7 +555,6 @@
       .then(function(){ go.disabled = false; });
   });
 })();
-  (function(){ var c=document.getElementById('country'), n=document.getElementById('abroad'); if(c&&n) c.addEventListener('change',function(){ n.hidden = !c.value || c.value==='uk'; }); })();
   (function(){
     var $=function(i){return document.getElementById(i)};
     var sal=$('c-sal'), bon=$('c-bon'); if(!sal) return;
