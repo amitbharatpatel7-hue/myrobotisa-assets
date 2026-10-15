@@ -42,6 +42,8 @@
   .price .now{font-family:Anton,Impact,sans-serif;font-size:56px;color:var(--green);line-height:1}
   .price .later{font-size:18px;color:var(--muted)}
 .price .was{font-family:Anton,Impact,sans-serif;font-size:34px;color:var(--muted);line-height:1;text-decoration:line-through;text-decoration-color:var(--pink);text-decoration-thickness:3px}
+.trial{margin:10px 0 6px;padding:12px 14px;border-radius:14px;background:var(--deep2);border-left:4px solid var(--green);font-size:15px;line-height:1.5;color:var(--ink)}
+.trial b{color:var(--green)}
 .renew{margin:0 0 6px;font-size:16px;font-weight:600;color:var(--ink)}
 .was-s{color:var(--muted);text-decoration-color:var(--pink);text-decoration-thickness:2px;margin-right:4px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -186,7 +188,7 @@
 <nav class="side" id="side" aria-label="Sections">
   <a class="side-brand" href="#top"><img src="avatar.png" alt=""><span>My Robot <b>I.S.A.</b></span></a>
   <ol>
-    <li><a href="#join" data-sec="join">Join the waitlist</a></li>
+    <li><a href="#join" data-sec="join">Free test drive</a></li>
     <li><a href="#tour" data-sec="tour">See it in 60 seconds</a></li>
     <li><a href="#nonews" data-sec="nonews">It doesn't read the news</a></li>
     <li><a href="#jobs" data-sec="jobs">What the robot does</a></li>
@@ -200,7 +202,7 @@
     <li><a href="#yours" data-sec="yours">Your copy is yours</a></li>
     <li><a href="#news" data-sec="news">Free newsletter</a></li>
   </ol>
-  <div class="side-cta"><p><b>£99</b> founding price<br><span>First 100 members, then £199 · opens January 2027</span></p><a class="btn" href="#join">Get early access</a></div>
+  <div class="side-cta"><p><b>£99</b> founding price<br><span>First 100 members, then £199 · free test drive in December</span></p><a class="btn" href="#join">Get early access</a></div>
 </nav>
 <button id="scrim" tabindex="-1" aria-hidden="true"></button>
 <button id="menubtn" aria-label="Sections menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
@@ -230,7 +232,8 @@
   <div class="card" id="join">
     <div class="price"><span class="now"><span class="vh">Founding price </span>£99</span><span class="later">for the first 100 founding members, then £199</span></div>
     <p class="renew">Includes 12 months of updates. After that, updates are £49 a year if you want them. Nothing renews automatically.</p>
-    <p class="small">One price for both: the code and the 14 lessons. Once the 100 founding places are gone, it's £199. Opens in January 2027, ready for the new ISA year in April. For UK residents at launch, because ISAs are UK-only. No payment now. Join the list and you'll get the founding price when it opens. Day 1 is free to watch before you buy, and there's a 14-day money-back guarantee until you open the code. Not ready? <a href="#news" style="color:var(--green);font-weight:700">Get the free newsletter instead</a>.</p>
+    <p class="trial"><b>Join the list and you get a free 7-day test drive in December</b>, before anyone can buy: your own dashboard on £10,000 of pretend money, replaying seven real market weeks at one week a day. The emails, the approvals, the good weeks and the bad ones. No code, no broker account, nothing to install. Then decide.</p>
+    <p class="small">One price for both: the code and the 14 lessons. Once the 100 founding places are gone, it's £199. Opens in January 2027, ready for the new ISA year in April. For UK residents at launch, because ISAs are UK-only. No payment now. Join the list and you'll get the test drive in December and the founding price when it opens. Day 1 is free to watch before you buy, and there's a 14-day money-back guarantee until you open the code. Not ready? <a href="#news" style="color:var(--green);font-weight:700">Get the free newsletter instead</a>.</p>
     <form id="f" novalidate>
       <div class="row">
         <input type="email" id="email" name="email" placeholder="you@email.com" autocomplete="email" required aria-label="Email address">
