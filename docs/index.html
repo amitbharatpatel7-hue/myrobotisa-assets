@@ -4,19 +4,29 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>My Robot I.S.A. — Build your own robot ISA in 14 days</title>
-<meta name="description" content="The code for your own rules-based ISA system, plus 14 lessons on making it yours with Claude. One price. Early access waitlist, founding price £99.">
+<meta name="description" content="The code for your own rules-based ISA system, plus 14 lessons on making it yours with Claude. Join the list for a free test drive in December; £99 for the first 100 when it opens in January 2027, then £199.">
+<link rel="canonical" href="https://myrobotisa.com/">
 <meta property="og:title" content="Build your own robot ISA in 14 days">
-<meta property="og:description" content="I take the Ls. You take the lessons. Early access waitlist: founding price £99 for the first 100.">
-<meta property="og:image" content="https://myrobotisa.com/avatar.png">
+<meta property="og:description" content="I take the Ls. You take the lessons. Free test drive in December; £99 for the first 100 in January 2027, then £199.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://myrobotisa.com/">
+<meta property="og:site_name" content="My Robot I.S.A.">
+<meta property="og:image" content="https://myrobotisa.com/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="My Robot I.S.A.: I take the Ls. You take the lessons.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://myrobotisa.com/og.jpg">
 <meta name="theme-color" content="#34003B">
 <link rel="icon" href="avatar.png">
+<link rel="apple-touch-icon" href="demo/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --deep:#34003B; --deep2:#4B1155; --rule:#6A3578; --green:#00E87A; --pink:#EA00AB;
-    --ink:#FFFFFF; --muted:#A98FB0; --eye:#9B7FA6;
+    --ink:#FFFFFF; --pink-bg:#C8008F; --pink-ink:#FF5CCB; --muted:#A98FB0; --eye:#9B7FA6;
   }
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--deep);color:var(--ink);font-family:Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
@@ -70,7 +80,7 @@
   .d{font-family:Anton,Impact,sans-serif;color:var(--green);font-size:20px;line-height:1.3;white-space:nowrap}
   .t{font-weight:700}
   .s{color:var(--muted);font-size:14px;margin-top:2px}
-  .isa{color:var(--pink);font-weight:700}
+  .isa{color:var(--pink-ink);font-weight:700}
   ul.not{padding-left:20px;margin:8px 0 0} ul.not li{margin:6px 0}
   footer{border-top:1px solid var(--rule);margin-top:48px;padding:24px 0 40px;color:var(--eye);font-size:13px;line-height:1.6}
   footer h3{color:var(--ink);font-size:14px;margin:18px 0 4px}
@@ -94,7 +104,7 @@
   .tour-video video{display:block;width:100%;aspect-ratio:9/16;border-radius:22px;border:3px solid var(--green);background:var(--deep2);object-fit:cover}
   .soonbadge{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:var(--deep);color:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;white-space:nowrap}
   .free{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;background:var(--green);color:var(--deep);font-size:11px;font-weight:800;letter-spacing:.06em;vertical-align:middle}
-  .preview{background:var(--pink);color:#fff;text-align:center;font-weight:700;font-size:13px;padding:8px 12px}
+  .preview{background:var(--pink-bg);color:#fff;text-align:center;font-weight:700;font-size:13px;padding:8px 12px}
   .calc-in{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .calc-in label{font-size:15px;color:var(--ink)}
   @media (max-width:520px){.calc-in{grid-template-columns:1fr}}
@@ -104,7 +114,8 @@
   .dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:middle}
   .c-isa{margin-top:14px;padding:14px 16px;border-radius:16px;background:var(--deep);border:1px solid var(--rule)}
   html{scroll-behavior:smooth} @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-  h2[id],#join,#tour,#dayjob,#calc,#news{scroll-margin-top:72px}
+  h2[id],section[id],#join,#calc,#news{scroll-margin-top:24px}
+  body.menu-open{overflow:hidden}
   .side{display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;width:250px;padding:22px 16px;border-right:1px solid var(--rule);background:var(--deep);overflow-y:auto;z-index:20}
   .side-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:Anton,Impact,sans-serif;font-size:20px;letter-spacing:.02em;text-transform:uppercase;margin:0 6px 22px}
   .side-brand img{width:38px;height:38px;border-radius:10px;border:2px solid var(--green)}
@@ -123,7 +134,7 @@
       transform:translateX(-105%);visibility:hidden;transition:transform .2s ease,visibility 0s .2s;z-index:30}
     .side-cta{padding-bottom:72px}
     .side.open{transform:none;visibility:visible;transition:transform .2s ease}
-    #scrim{position:fixed;z-index:25;inset:0;background:rgba(0,0,0,.5);border:0}
+    #scrim{position:fixed;z-index:25;inset:0;background:rgba(0,0,0,.5);border:0;border-radius:0;padding:0}
     #scrim.open{display:block}
     #menubtn{display:flex;align-items:center;justify-content:center;position:fixed;z-index:35;width:48px;height:48px;border-radius:50%;
       left:calc(16px + env(safe-area-inset-left));bottom:calc(16px + env(safe-area-inset-bottom));
@@ -142,7 +153,7 @@
   .vs-col.on .vs-k{color:var(--green)}
   .vs-big{margin:4px 0 6px;font-family:Anton,Impact,sans-serif;font-size:28px;line-height:1.05;text-transform:uppercase;color:var(--ink)}
   .vs-s{margin:0;font-size:14px;color:var(--ink)}
-  .rulebar{display:block;margin:4px 0 18px;padding:12px 16px;border-radius:14px;background:var(--pink);color:#fff;text-decoration:none;font-size:15px;line-height:1.45}
+  .rulebar{display:block;margin:4px 0 18px;padding:12px 16px;border-radius:14px;background:var(--pink-bg);color:#fff;text-decoration:none;font-size:15px;line-height:1.45}
   .rulebar b{font-weight:800}
   .rulebar span{white-space:nowrap;font-weight:800}
   .rules{margin:34px 0 8px}
@@ -152,7 +163,7 @@
   .rules-col{padding:14px 16px;border-radius:16px;background:var(--deep2);border:2px solid var(--rule)}
   .rules-col.on{border-color:var(--pink)}
   .rules-k{margin:0 0 6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  .rules-col.on .rules-k{color:var(--pink)}
+  .rules-col.on .rules-k{color:var(--pink-ink)}
   .rules-col p{margin:0 0 6px;font-size:15px;line-height:1.5;color:var(--ink)}
   .rules-col p:last-child{margin:0}
   .nonews{margin:34px 0 8px}
@@ -174,7 +185,7 @@
   .mix{display:flex;height:34px;border-radius:10px;overflow:hidden;gap:2px}
   .mix span{display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:var(--deep);transition:flex .35s ease;min-width:0;white-space:nowrap;overflow:hidden}
   .mix span.q{font-size:0}
-  .mix .m1{background:var(--green)}.mix .m2{background:var(--pink);color:#fff}.mix .m3{background:#fff}
+  .mix .m1{background:var(--green)}.mix .m2{background:var(--pink-bg);color:#fff}.mix .m3{background:#fff}
   .mix-key{display:flex;gap:16px;flex-wrap:wrap;margin:10px 0 0;font-size:13px;color:var(--muted)}
   .mix-key i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
   .dial .small{margin:10px 0 0}
@@ -182,7 +193,7 @@
   .dayjob .lead{color:var(--ink)}
   .dayjob .small{margin-top:10px}
   .road{margin:18px 0 8px;padding:16px 18px;border-left:4px solid var(--pink);background:var(--deep2);border-radius:0 18px 18px 0}
-  .road-k{margin:0 0 6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pink)}
+  .road-k{margin:0 0 6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pink-ink)}
   .road p:last-child{margin:0;font-size:16px;line-height:1.55;color:var(--ink)}
 </style>
 </head>
@@ -205,7 +216,7 @@
     <li><a href="#yours" data-sec="yours">Your copy is yours</a></li>
     <li><a href="#news" data-sec="news">Free newsletter</a></li>
   </ol>
-  <div class="side-cta"><p><b>£99</b> founding price<br><span>First 100 members, then £199 · free test drive in December</span></p><a class="btn" href="#join">Get early access</a></div>
+  <div class="side-cta"><p><b>£99</b> founding price<br><span>First 100 members, then £199 · free test drive in December</span></p><a class="btn" href="#join">Get the free test drive</a></div>
 </nav>
 <button id="scrim" tabindex="-1" aria-hidden="true"></button>
 <button id="menubtn" aria-label="Sections menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
@@ -222,7 +233,7 @@
       <p class="line">Investing, explained like a mate would. Not a suit.</p>
       <ul class="proof">
         <li><b>30 minutes</b> to your first paper trade, then 14 days at your own pace</li>
-        <li><b>6 years</b> of weekly market data tested, 2020 to 2026</li>
+        <li><b>Tested</b> on weekly market data from January 2020 to September 2026</li>
         <li><b>Live</b> with my own money, in an ISA</li>
         <li><b>Every L</b> shown on the channel, so you don't repeat it</li>
       </ul>
@@ -230,23 +241,24 @@
     <img src="avatar.png" alt="The My Robot I.S.A. visor robot">
   </section>
 
-  <a class="rulebar" href="#rules"><b>The ISA rules change on 6 April 2027.</b> Under 65? Only £12,000 a year can go into a cash ISA. The other £8,000 has to be invested to stay tax-free. <span>What changes →</span></a>
+  <a class="rulebar" href="#rules"><b>The ISA rules change on 6 April 2027.</b> Under 65? Only £12,000 a year can go into a cash ISA. To use the rest tax-free, it goes into a stocks and shares ISA or similar. <span>What changes →</span></a>
 
   <div class="card" id="join">
     <div class="price"><span class="now"><span class="vh">Founding price </span>£99</span><span class="later">for the first 100 founding members, then £199</span></div>
     <p class="renew">Includes 12 months of updates. After that, updates are £49 a year if you want them. Nothing renews automatically.</p>
-    <p class="trial"><b>Join the list and get a free 7-day test drive in December.</b> Your own dashboard on £10,000 of pretend money, replaying seven real market weeks, one a day. Nothing to install. Then decide.</p>
+    <p class="trial"><b>Join the list and get a free 7-day test drive in December.</b> Your own dashboard on £10,000 of pretend money, replaying seven real past market weeks, one a day, good and bad, with stock names hidden. Nothing to install. Past weeks don't predict future ones. Then decide.</p>
     <ul class="facts">
       <li>The code and all 14 lessons, one price</li>
-      <li>Opens January 2027, in time for the April ISA year. UK only at launch</li>
-      <li>No payment now. Day 1 free to watch. 14-day money-back until you open the code</li>
+      <li>Opens January 2027, before the new tax year on 6 April. UK only at launch</li>
+      <li>No payment now. Day 1 is free to watch before you buy</li>
     </ul>
     <form id="f" novalidate>
       <div class="row">
         <input type="email" id="email" name="email" placeholder="you@email.com" autocomplete="email" required aria-label="Email address">
-        <button type="submit" id="go">Get early access</button>
+        <button type="submit" id="go">Get the free test drive</button>
       </div>
-      <label class="consent"><input type="checkbox" id="consent" required> <span>Email me the test drive, the founding price when it opens, and the fortnightly newsletter. I can unsubscribe any time.</span></label>
+      <label class="consent"><input type="checkbox" id="consent" required> <span>Email me the free test drive in December and tell me when sales open in January. I can unsubscribe any time.</span></label>
+      <label class="consent"><input type="checkbox" id="newsletter"> <span>Optional: also send me the fortnightly newsletter. I can unsubscribe any time.</span></label>
       <fieldset class="exp"><legend>Optional: got a Trading 212 account? It's the broker the robot runs on.</legend>
         <label><input type="radio" name="brk" value="T212 ISA"> Yes, a Stocks ISA</label>
         <label><input type="radio" name="brk" value="T212 Invest"> Yes, Invest only</label>
@@ -274,20 +286,20 @@
 
   <section class="nonews" id="nonews">
     <h2>It doesn't read <span class="p">the news</span></h2>
-    <p class="lead">It doesn't have an inbox. Your robot ISA never opens a newsletter, a press release or a tip. Every Sunday it pulls the week's prices, applies the same rules it was tested on, and at 7pm its proposed orders land in your inbox. You approve by 2pm on Monday and they go in at the open. The only research it ever did was the backtest, on years of data, before a pound moved. Nothing anyone emails you at 7pm can change its mind.</p>
+    <p class="lead">It doesn't have an inbox. Your robot ISA never opens a newsletter, a press release or a tip. Every Sunday it pulls the week's prices, applies the same rules it was tested on, and at 7pm its proposed orders land in your inbox. You approve by 2pm on Monday; approved orders go straight to Trading 212 and fill when the market opens. The only research it ever did was the backtest, on years of data, before a pound moved. Nothing anyone emails you at 7pm can change its mind.</p>
     <ul class="nonews-stats" aria-label="What the robot reads">
       <li><b>0</b>newsletters read</li>
       <li><b>0</b>tips taken</li>
       <li><b>1</b>set of rules, tested before any money moved</li>
     </ul>
-    <p class="small" style="margin-top:14px">Still want a punt on the listing everyone's talking about? That's what the <a href="#get">moonshot pot</a> is for: your pick, the robot's size cap and exit rule.</p>
+    <p class="small" style="margin-top:14px">Still want a punt on the listing everyone's talking about? That's what the <a href="#get">moonshot pot</a> is for: a small, capped slice with its exit rule set in advance.</p>
   </section>
 
   <section class="jobs" id="jobs">
     <h2>One ISA. Three jobs. <span class="p">The robot does all three.</span></h2>
-    <div class="job"><h3>The foundation</h3><p>Most of your money goes into one low-cost fund that tracks the world's markets. Nothing to pick, nothing to watch. The robot keeps it topped up and in balance.</p></div>
-    <div class="job"><h3>The hunter</h3><p>A slice rides the market's strongest stocks while they're running and steps out by rule when they stop. The robot finds them, sizes them and sets every exit before it buys. You tap Approve.</p></div>
-    <div class="job"><h3>The moonshot</h3><p>A small pot the robot keeps for the biggest swings: the breakouts it spots, or the one bet you want to make yourself. Either way the size is capped and the exit is set in advance, so a miss can't dent the rest.</p></div>
+    <div class="job"><h3>The foundation</h3><p>In the example settings, most of the money goes into one low-cost fund that tracks the world's markets. Nothing to pick, nothing to watch. The robot invests new cash and keeps it in balance.</p></div>
+    <div class="job"><h3>The hunter</h3><p>A slice rides the market's strongest stocks while they're running and steps out by rule when they stop. The robot finds them, sizes them and sets the exit rule before it buys. You tap Approve.</p></div>
+    <div class="job"><h3>The moonshot</h3><p>A small pot the robot keeps for the biggest swings: the breakouts it spots, or the one bet you want to make yourself. Either way the size is capped and the exit rule is set in advance, to limit what a miss can cost.</p></div>
     <div class="dial">
       <p class="dial-k">Your risk dial sets the mix</p>
       <div class="dial-btns" role="group" aria-label="Risk profile">
@@ -296,10 +308,10 @@
         <button type="button" data-mix="58,32,10" aria-pressed="false">Adventurous</button>
       </div>
       <div class="mix" id="mix" aria-live="polite"><span class="m1" style="flex:72">Foundation</span><span class="m2" style="flex:22">Hunter</span><span class="m3 q" style="flex:6">Moonshot</span></div>
-      <p class="mix-key"><span><i style="background:var(--green)"></i>Foundation</span><span><i style="background:var(--pink)"></i>Hunter</span><span><i style="background:#fff"></i>Moonshot</span></p>
-      <p class="small">Pick one on Day 1, change it whenever you like, and the robot does the rest. The bar is illustrative: the exact mix comes from your settings file. Capital at risk: it can lose money as well as make it.</p>
+      <p class="mix-key"><span><i style="background:var(--green)"></i>Foundation</span><span><i style="background:var(--pink-bg)"></i>Hunter</span><span><i style="background:#fff"></i>Moonshot</span></p>
+      <p class="small">Example settings only, not a recommendation: you choose the split in your settings file and can change it any time, and the robot proposes the rest. Capital at risk: it can lose money as well as make it.</p>
     </div>
-    <p class="small" style="margin-top:18px;color:var(--ink)"><strong>Already have an ISA with Vanguard or similar?</strong> Keep it. A tracker does one job: follow the market. My Robot I.S.A. does that too, then adds the two jobs a tracker can't: finding strong stocks while they're running, and keeping a small moonshot pot, with the rules and the discipline done for you. Both accounts can sit side by side; you don't have to move anything.</p>
+    <p class="small" style="margin-top:18px;color:var(--ink)"><strong>Already have an ISA with Vanguard or similar?</strong> You don't have to move it. A tracker follows the market. My Robot I.S.A. can do that too, and adds two more jobs: finding strong stocks while they're running, and keeping a small moonshot pot, with the rules set in advance. Both accounts can sit side by side.</p>
   </section>
 
   <section class="dayjob" id="dayjob">
@@ -311,37 +323,37 @@
 
   <div class="road" id="road">
     <p class="road-k">Built from the road</p>
-    <p>The brain took hundreds of hours to build and test, and that's what you get when you join. Since then, most of the work has been looking after it from my phone, around a day job or while travelling: on a Nile cruise, in Kansas City for a Chiefs game, in Miami for the World Cup. The robot runs on GitHub's servers and the approvals happen on my phone, so no laptop is left on in a hotel room. It fits around your life, not the other way round.</p>
+    <p>The brain took hundreds of hours to build and test, and that's what you get when you buy. Since then, most of the work has been looking after it from my phone, around a day job or while travelling: on a Nile cruise, in Kansas City for a Chiefs game, in Miami for the World Cup. The robot runs on GitHub's servers and the approvals happen on my phone, so no laptop is left on in a hotel room. It fits around your life.</p>
   </div>
 
   <h2 id="get">What you <span class="p">get</span></h2>
   <p class="lead">Two parts, one price. The code gets you running. The lessons make it yours.</p>
   <div class="get">
     <div class="box"><h3><span class="n">1.</span> The code</h3><ul>
-      <li><b>Your own robot.</b> A copy of my system with the personal bits taken out, and one settings file for your rules, your risk and what it trades.</li>
-      <li><b>It proposes, you approve.</b> Nothing reaches your broker until you tap Approve. Trading 212 confirmed in writing (14 Oct 2026) that's how its API terms work. Not affiliated with Trading 212.</li>
+      <li><b>Your own robot.</b> A copy of my system's code with the personal bits taken out. It ships with example settings, not my live ones; one settings file holds your rules, your risk and what it trades.</li>
+      <li><b>It proposes, you approve.</b> Nothing reaches your broker until you tap Approve. Trading 212 confirmed to me in writing (14 Oct 2026) that a program can propose orders as long as you confirm each one. Not affiliated with Trading 212.</li>
       <li><b>Paper money first.</b> Going live is a deliberate switch. Order checks, logging and an off switch are built in.</li>
-      <li><b>A moonshot pot.</b> Your pick, with a capped size and an exit rule the robot enforces.</li>
-      <li><b>Your own app.</b> Holdings, every order and why, a daily email and an alert when anything fails. Behind a login only you can pass, with a read-only broker key. <a href="demo/">Try the demo</a></li>
-      <li><b>Trading 212, ISA or Invest.</b> More brokers once each is tested. 12 months of updates included.</li>
+      <li><b>A moonshot pot.</b> A small slice for the breakouts it spots or your own pick, with a capped size and an exit rule set in advance.</li>
+      <li><b>Your own app.</b> Holdings, every order and why, a daily email and an alert when anything fails. Behind your own login; the app uses a read-only broker key, and placing orders uses a separate key you control. <a href="demo/">Try the demo</a></li>
+      <li><b>Trading 212, ISA or Invest.</b> Other brokers may follow once tested; no dates promised. 12 months of updates included.</li>
     </ul></div>
     <div class="box"><h3><span class="n">2.</span> The 14 lessons</h3><ul>
-      <li><b>30 minutes a day.</b> What every part of the code does and why.</li>
+      <li><b>About 30 minutes a day.</b> What every part of the code does and why.</li>
       <li><b>Make it yours.</b> Change it safely with Claude as your build partner, and test your rules honestly before real money.</li>
-      <li><b>Bonus toolkit.</b> The eight tools I run everything on, what each costs and what's free.</li>
-      <li><b>No coding needed.</b> Developers can skip ahead.</li>
+      <li><b>Bonus toolkit.</b> The eight tools I run everything on, including Claude (Anthropic's AI assistant), what each costs and what's free. Some have their own costs.</li>
+      <li><b>No coding experience needed.</b> Developers can skip ahead.</li>
     </ul></div>
   </div>
   <div class="get" style="margin-top:12px">
     <div class="box"><h3><span class="n">+</span> The QuickStart</h3>
       <p class="small" style="color:var(--ink);margin:0">Your first paper trade in about 30 minutes: copy the code to GitHub, add your Trading 212 practice key and an email key, run the setup check. A short video for each step. <a href="demo/#quickstart" style="color:var(--green);font-weight:700">See it in the demo</a></p></div>
     <div class="box"><h3><span class="n">+</span> A helping hand</h3>
-      <p class="small" style="color:var(--ink);margin:0">Stuck? Email. Setup questions get an instant answer, anything else a reply from me within two working days. Plus a buyers-only space to share fixes.</p></div>
+      <p class="small" style="color:var(--ink);margin:0">Stuck? Email. Setup questions get an instant automated answer, anything else a reply from me within two working days. Plus a buyers-only space to share fixes.</p></div>
   </div>
 
   <section class="rules" id="rules">
     <h2>The ISA rules change in <span class="p">April 2027</span></h2>
-    <p class="lead">From 6 April 2027, if you're under 65, only £12,000 of your £20,000 ISA allowance can go into cash. To use the other £8,000 tax-free, it has to be invested, in a stocks and shares ISA (or up to £4,000 in a Lifetime ISA, if you qualify).</p>
+    <p class="lead">From 6 April 2027, if you're under 65, only £12,000 of your £20,000 ISA allowance can go into cash. The other £8,000 can still go in tax-free, into a stocks and shares ISA, an Innovative Finance ISA or, if you qualify, a Lifetime ISA (up to £4,000).</p>
     <div class="rules-grid">
       <div class="rules-col">
         <p class="rules-k">Now (2026/27)</p>
@@ -354,7 +366,7 @@
         <p>Moving money from a stocks and shares ISA into cash is banned.</p>
       </div>
     </div>
-    <p class="lead" style="margin-top:16px">Most people have only ever used a cash ISA. If that's you, April brings a new question: what to do with the £8,000. My Robot I.S.A. opens in January, so there's time to set it up, practise on paper money for a few weeks and make up your own mind before the new tax year starts.</p>
+    <p class="lead" style="margin-top:16px">Many people have only ever used a cash ISA. If that's you, April brings a new question: what to do with the £8,000. My Robot I.S.A. opens in January, so there's time to set it up, practise on paper money for a few weeks and make up your own mind before the new tax year starts.</p>
     <p class="small">Over-65s keep the £20,000 cash limit, and the total allowance stays £20,000 until April 2031. Investing can lose money; cash in a cash ISA can't fall in value. Announced in the November 2025 Budget (<a href="https://www.gov.uk/government/publications/tax-free-savings-newsletter-19/tax-free-savings-newsletter-19-november-2025">GOV.UK</a>); details can change before they take effect.</p>
   </section>
 
@@ -404,13 +416,13 @@
         <div class="vs-col on">
           <p class="vs-k">Your robot ISA</p>
           <p class="vs-big">30 minutes to start</p>
-          <p class="vs-s">Your first paper trade in about 30 minutes. Then 14 days, at your own pace, to make the rules yours. After that it does the weekly checking and the maths, and you tap approve. Whatever it makes inside your ISA is yours to keep.</p>
+          <p class="vs-s">Your first paper trade in about 30 minutes. Then 14 days, at your own pace, to make the rules yours. After that it does the weekly checking and the maths, and you tap approve. Any gain inside your ISA is tax-free, and it can lose money too.</p>
         </div>
       </div>
-      <p class="small" style="margin:8px 0 0">The robot can lose money as well as make it, and nothing here promises it will make anything. The difference is the effort, and that ISA gains aren't taxed.</p>
+      <p class="small" style="margin:8px 0 0">The robot can lose money as well as make it, and nothing here promises it will make anything. This compares tax and effort, not returns.</p>
     </div>
     <p class="small" style="margin-top:12px">An estimate for the 2026/27 tax year. It assumes the salary is your only income and ignores pension contributions, student loans and benefits in kind. National Insurance is worked out over the year. Investments can fall as well as rise, and an ISA can lose money too. Working days assume 230 a year. This shows how tax works, not what any investment will make.</p>
-    <details style="margin-top:10px"><summary class="small" style="cursor:pointer;color:var(--green);font-weight:700">See it by tax band</summary>
+    <details style="margin-top:10px"><summary class="small" style="cursor:pointer;color:var(--green);font-weight:700">See it by tax band (England, Wales and NI rates)</summary>
       <p class="small" style="color:var(--ink);margin:10px 0">The bonus you'd need to take home £1:</p>
     <table style="width:100%;border-collapse:collapse;font-size:15px">
       <tr><td style="padding:8px 0;border-bottom:1px solid var(--rule)">Basic-rate taxpayer<br><span class="small">20% tax + 8% NI</span></td><td style="padding:8px 0;border-bottom:1px solid var(--rule);text-align:right"><strong>£1.39</strong></td></tr>
@@ -425,16 +437,16 @@
   <p class="lead">Why 14 days? Because you have a day job. Most days take about 30 minutes and none should take more than 45, one lesson at a time, and by day 14 you understand every part and can run it on your own. When you get stuck, a helping hand is an email away.</p>
   <ol class="days">
     <li><span class="d">DAY 1</span><div><div class="t">Rules, not tips <span class="free">FREE</span></div><div class="s">What a robot ISA is, what it isn't, and writing your rules down so a machine can follow them.</div></div></li>
-    <li><span class="d">DAY 2</span><div><div class="t">Get it running</div><div class="s">Your copy of the code, set up with Claude, making its first paper trade.</div></div></li>
+    <li><span class="d">DAY 2</span><div><div class="t">Get it running</div><div class="s">Your copy of the code set up with Claude, and what your first paper trade actually did.</div></div></li>
     <li><span class="d">DAY 3</span><div><div class="t">Data you can trust</div><div class="s">Prices, gaps and the quiet errors that ruin everything after them.</div></div></li>
     <li><span class="d">DAY 4</span><div><div class="t">Make it yours</div><div class="s">Changing the rules, risk limits and what it trades, first in the settings file, then in code.</div></div></li>
-    <li><span class="d">DAY 5</span><div><div class="t">Backtest honestly</div><div class="s">The engine I tested on six years of weekly data, so you can test your own rules before risking a penny.</div></div></li>
+    <li><span class="d">DAY 5</span><div><div class="t">Backtest honestly</div><div class="s">The engine I tested on weekly data from 2020 to 2026, so you can test your own rules before risking a penny.</div></div></li>
     <li><span class="d">DAY 6</span><div><div class="t">Paper money first</div><div class="s">A practice account that behaves like the real thing.</div></div></li>
-    <li><span class="d">DAY 7</span><div><div class="t">The plumbing</div><div class="s">Orders, rounding and the exchange's rules. Six decimal places in, four accepted: eleven rejections.</div></div></li>
+    <li><span class="d">DAY 7</span><div><div class="t">The plumbing</div><div class="s">Orders, rounding and Trading 212's order rules. Send six decimal places when it accepts four, and you get eleven rejected orders.</div></div></li>
     <li><span class="d">DAY 8</span><div><div class="t">Done means it happened</div><div class="s">Confirming an order actually landed before the system calls the job done.</div></div></li>
     <li><span class="d">DAY 9</span><div><div class="t">Make it explain itself</div><div class="s">Logs that give you the reason, not just a red cross.</div></div></li>
-    <li><span class="d">DAY 10</span><div><div class="t">Keys and secrets</div><div class="s">Storing them safely, and the invisible line break that broke thirteen runs.</div></div></li>
-    <li><span class="d">DAY 11</span><div><div class="t">It runs while you sleep</div><div class="s">Scheduling, alerts and a daily digest you'll actually read.</div></div></li>
+    <li><span class="d">DAY 10</span><div><div class="t">Keys and secrets</div><div class="s">Storing them safely, and the invisible line break that crashed thirteen runs.</div></div></li>
+    <li><span class="d">DAY 11</span><div><div class="t">It runs on a schedule</div><div class="s">Scheduling, alerts and a daily digest you'll actually read.</div></div></li>
     <li><span class="d">DAY 12</span><div><div class="t">Limits and an off switch</div><div class="s">Position limits, sanity checks and how to stop everything in one move.</div></div></li>
     <li><span class="d">DAY 13</span><div><div class="t">Small and real</div><div class="s">Moving from paper to real money carefully: opening a Trading 212 Stocks ISA, and getting money into it the right way, whether that's new money or a transfer from an ISA you already have.</div></div></li>
     <li><span class="d">DAY 14</span><div><div class="t">Keep an honest record</div><div class="s">Reviewing what the system did, wins and Ls, without fooling yourself.</div></div></li>
@@ -444,7 +456,8 @@
   <ul class="not">
     <li>No stock tips, no signals, no group to copy trades from.</li>
     <li>No promised returns. A system can be built well and still lose money.</li>
-    <li>Not my picks. The code comes with a deliberately simple example; the rules and what it trades are your decision.</li>
+    <li>Not my picks. It ships with example settings, not recommendations; the rules and what it trades are your decision.</li>
+    <li>Not an ISA provider, a broker or a financial adviser, and not authorised or regulated by the FCA. Your ISA stays with Trading 212.</li>
   </ul>
 
   <h2 id="yours">Your copy is <span class="p">yours</span></h2>
@@ -453,8 +466,8 @@
     <li><strong>Delivered by private invite.</strong> After you buy, you're invited to the private code repo on GitHub. There's no zip file to forward.</li>
     <li><strong>Every copy is marked.</strong> Each buyer's copy carries its own unique ID, so a shared or posted copy traces straight back to whoever shared it.</li>
     <li><strong>A personal licence.</strong> For your own use only: no sharing, reselling or publishing. Breaking it ends your updates and support.</li>
-    <li><strong>12 months of updates included.</strong> Fixes, new brokers and improvements reach licensed buyers only. After a year, you can carry on getting updates for £49 a year. It never renews automatically: we email you when your year is up, and you choose. You keep every lesson and video released while you had updates, and the version of the code you have is yours forever. Your code keeps working either way.</li>
-    <li><strong>14-day money back, until you open the code.</strong> Change your mind within 14 days and you get a full refund, as long as you haven't opened the code yet. Once you open it, the code is yours, so refunds aren't possible after that (you agree to this at checkout). A refund also ends lesson access and updates.</li>
+    <li><strong>12 months of updates included.</strong> Fixes, new brokers and improvements reach licensed buyers only. After a year, you can carry on getting updates for £49 a year. It never renews automatically: we email you when your year is up, and you choose. You keep every lesson and video released while you had updates, and the version of the code you have is yours forever. It doesn't switch off when updates stop, though a broker change may need an update.</li>
+    <li><strong>Your right to cancel.</strong> You have the legal 14-day right to cancel until you first open the code; at checkout you'll be asked to agree that opening it ends that right. Cancelling ends lesson access and updates. None of this affects your rights if the code or lessons are faulty.</li>
     <li><strong>Shared copies go stale.</strong> No updates, no lessons, no support and no community. Copies posted online are taken down.</li>
   </ul>
 
@@ -474,14 +487,15 @@
   <div class="card">
     <p style="margin:0 0 4px;font-weight:700">Every episode spells out a different <span class="isa">I.S.A.</span></p>
     <p class="small" style="margin:0">I Said Allow it · It Sold Again · Imperfect System, Always learning…</p>
-    <p style="margin:16px 0 0"><a class="btn" href="#join">Join the waitlist</a></p>
+    <p style="margin:16px 0 0"><a class="btn" href="#join">Get the free test drive</a></p>
   </div>
 
   <footer>
     <p><strong>Not financial advice.</strong> This is education about building and testing software. I run my own system with my own money, in an ISA, and I hold positions in things I talk about. Investing puts your capital at risk and you may get back less than you put in. What a system did in the past, mine included, says nothing about what it will do next. I'm an engineer, not a financial adviser.</p>
     <h3>Your email</h3>
-    <p>If you join the waitlist, My Robot I.S.A. (run by Amit Patel) keeps your email address, your Trading 212 answer if you give it, and which link brought you here, to send what you signed up for: the free test drive in December, the founding price when it opens in January, and the fortnightly newsletter. If you take the test drive, it also keeps which orders you approved there, to run it and improve the product. Sign up for the newsletter alone and you only get the newsletter. That's all it's used for, and it's never sold.</p>
-    <p>Your details are stored with Supabase in London, and the emails are sent through Resend. They handle the data only on our behalf, and anything processed outside the UK is covered by UK-approved safeguards. We keep your details until you unsubscribe, and delete them within 12 months of launch if you don't buy. Every email has an unsubscribe link; to drop the newsletter but stay on the list, or to see or delete your data, email <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. The lawful basis is your consent, given by ticking the box. If you're unhappy with how your data is handled, you can complain to the Information Commissioner's Office at <a href="https://ico.org.uk/make-a-complaint/">ico.org.uk</a>.</p>
+    <p>If you join the waitlist, My Robot I.S.A. (run by Amit Patel) keeps your email address, your Trading 212 answer if you give it, and which link brought you here, to send what you signed up for: the free test drive in December, word when sales open in January, and the fortnightly newsletter if you ticked that box. If you take the test drive, it also keeps which orders you approved there, to run it and improve the product. Sign up for the newsletter alone and you only get the newsletter. That's all it's used for, and it's never sold.</p>
+    <p>Your details are stored with Supabase in London, and the emails are sent through Resend. They handle the data only on our behalf, and anything processed outside the UK is covered by UK-approved safeguards. Waitlist details are deleted within 12 months of launch if you don't buy; newsletter subscribers are kept until they unsubscribe. Every email has an unsubscribe link; to see or delete your data, email <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. The lawful basis is your consent, given by ticking the boxes. If you're unhappy with how your data is handled, you can complain to the Information Commissioner's Office at <a href="https://ico.org.uk/make-a-complaint/">ico.org.uk</a>.</p>
+    <p>My Robot I.S.A. is run by Amit Patel · <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. Not affiliated with Trading 212 or Anthropic.</p>
     <p>© 2026 My Robot I.S.A. · <a href="https://www.youtube.com/@myrobotisa">YouTube</a> · <a href="https://www.instagram.com/myrobotisa/">Instagram</a> · <a href="https://www.tiktok.com/@myrobotisa">TikTok</a></p>
   </footer>
 </div>
@@ -505,9 +519,9 @@
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ say("That email doesn't look right.",false); return; }
     if(!document.getElementById("nconsent").checked){ say("Tick the box so we're allowed to email you.",false); return; }
     if(!live){ say("Preview only: nothing was saved.",true); return; }
-    b.disabled=true;
+    b.disabled=true; say("Adding you…",true);
     fetch("https://vxnestmhtjotidhzzqbo.supabase.co/rest/v1/rpc/join_newsletter",{method:"POST",headers:{"apikey":"sb_publishable_hjvkAbVw82CKg2rdDZgVcw_XUDbmerV","Content-Type":"application/json"},
-      body:JSON.stringify({p_email:email,p_consent:true,p_source:(new URLSearchParams(location.search).get("src")||"").slice(0,40)||null})})
+      body:JSON.stringify({p_email:email.toLowerCase(),p_consent:true,p_source:(new URLSearchParams(location.search).get("src")||"").slice(0,40)||null}), signal:(window.AbortSignal&&AbortSignal.timeout)?AbortSignal.timeout(15000):undefined})
       .then(function(r){ return r.ok?r.json():Promise.reject(r.status); })
       .then(function(res){ if(res==="ok"){ say("You're in. The next newsletter lands in your inbox.",true); f.reset(); } else say("Something's not right with that email.",false); })
       .catch(function(){ say("Something went wrong. Try again in a minute.",false); })
@@ -525,19 +539,20 @@
   function say(t, ok){ msg.textContent = t; msg.className = "msg " + (ok ? "ok" : "err"); }
   f.addEventListener("submit", function(e){
     e.preventDefault();
-    var email = document.getElementById("email").value.trim();
+    var email = document.getElementById("email").value.trim().toLowerCase();
     if (document.getElementById("website").value) { say("You're on the list. Check your inbox when we open.", true); return; }
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { say("That email doesn't look right.", false); return; }
-    if (!document.getElementById("consent").checked) { say("Tick the box so we're allowed to email you.", false); return; }
+    if (!document.getElementById("consent").checked) { say("Tick the first box so we're allowed to email you.", false); return; }
     if (!live) { say("Preview only: nothing was saved.", true); return; }
     go.disabled = true; say("Adding you…", true);
     fetch(RPC, { method: "POST", headers: { "apikey": KEY, "Content-Type": "application/json" },
-      body: JSON.stringify({ p_email: email, p_consent: true, p_source: src || null, p_experience: null, p_broker: (f.querySelector('input[name=brk]:checked')||{}).value || null, p_newsletter: true, p_country: 'uk' }) })
+      body: JSON.stringify({ p_email: email, p_consent: true, p_source: src || null, p_experience: null, p_broker: (f.querySelector('input[name=brk]:checked')||{}).value || null, p_newsletter: document.getElementById('newsletter').checked, p_country: 'uk' }), signal: (window.AbortSignal && AbortSignal.timeout) ? AbortSignal.timeout(15000) : undefined })
       .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
       .then(function(res){
-        if (res === "ok") { say("You're on the list. Founding price locked in for when we open.", true); f.reset(); }
+        if (res === "ok") { say("You're on the list. Your free test drive arrives in December, and we'll tell you when sales open in January.", true); f.reset(); }
         else if (res === "invalid_email") say("That email doesn't look right.", false);
-        else say("Tick the box so we're allowed to email you.", false);
+        else if (res === "consent_required") say("Tick the first box so we're allowed to email you.", false);
+        else say("Something went wrong. Try again in a minute.", false);
       })
       .catch(function(){ say("Something went wrong. Try again in a minute.", false); })
       .then(function(){ go.disabled = false; });
@@ -547,7 +562,7 @@
     var $=function(i){return document.getElementById(i)};
     var sal=$('c-sal'), bon=$('c-bon'); if(!sal) return;
     var PA=12570, NI_PT=12570, NI_UEL=50270;
-    function num(v){ v=String(v).replace(/[^0-9.]/g,''); var n=parseFloat(v); return isFinite(n)&&n>0?Math.min(n,10000000):0; }
+    function num(v){ v=String(v).toLowerCase().replace(/[,£\s]/g,''); var mult=/k$/.test(v)?1e3:/m$/.test(v)?1e6:1; v=v.replace(/[^0-9.]/g,''); var n=parseFloat(v)*mult; return isFinite(n)&&n>0?Math.min(n,10000000):0; }
     function gbp(n){ return '£'+Math.round(n).toLocaleString('en-GB'); }
     function pa(g){ return g<=100000?PA:Math.max(0,PA-Math.floor((g-100000)/2)); }
     function bands(t,b){ var tax=0,lo=0; for(var i=0;i<b.length;i++){ var hi=b[i][0], r=b[i][1]; if(t>lo){ tax+=(Math.min(t,hi)-lo)*r; } lo=hi; } return tax; }
@@ -564,9 +579,9 @@
       $('c-tax').textContent='−'+gbp(T); $('c-ni').textContent='−'+gbp(N);
       $('c-keep').textContent=gbp(K)+' ('+Math.round(K/B*100)+'%)';
       $('c-bk').style.width=(K/B*100)+'%'; $('c-bt').style.width=(T/B*100)+'%'; $('c-bn').style.width=(N/B*100)+'%';
-      $('c-isa1').textContent='The same '+gbp(B)+' as a gain inside an ISA: you keep '+gbp(B)+'.';
+      $('c-isa1').textContent='If the same '+gbp(B)+' were a gain inside an ISA, there would be no tax on it.';
       var per=K>0?(B/K):0;
-      $('c-isa2').textContent= per ? 'On your salary, every £1 of bonus leaves you about '+(K/B*100).toFixed(0)+'p. To take home £1 you need about £'+per.toFixed(2)+' of bonus. Every £1 an ISA makes is yours.' : '';
+      $('c-isa2').textContent= (per && T+N>0) ? 'On your salary, every £1 of bonus leaves you about '+(K/B*100).toFixed(0)+'p. To take home £1 you need about £'+per.toFixed(2)+' of bonus. Every £1 an ISA makes is yours.' : '';
       var C=cgt(B,S);
       var TH=S-itax(S,reg)-ni(S), days=TH>0?(T+N)/(TH/230):0;
       $('c-vs1').textContent='Targets, reviews and late nights. Then tax and National Insurance take '+gbp(T+N)+(days>=1?', about '+Math.round(days)+' working day'+(Math.round(days)===1?'':'s')+' of your take-home pay.':'.');
@@ -584,11 +599,11 @@
       btns.forEach(function(b){ b.addEventListener('click',function(){
         btns.forEach(function(x){ x.setAttribute('aria-pressed', x===b ? 'true':'false'); });
         var m=b.getAttribute('data-mix').split(',');
-        for(var i=0;i<segs.length;i++){ segs[i].style.flex=m[i]; segs[i].classList.toggle('q', +m[i]<12); }
+        for(var i=0;i<segs.length;i++){ segs[i].style.flex=m[i]; segs[i].classList.toggle('q', +m[i]<15); }
       }); });
     })();
     var links=[].slice.call(document.querySelectorAll('[data-sec]'));
-    var secs=['join','tour','dayjob','get','isa','calc','days','isnt','yours','news'].map(function(i){return document.getElementById(i)}).filter(Boolean);
+    var secs=links.map(function(a){return document.getElementById(a.getAttribute('data-sec'))}).filter(Boolean);
     function mark(id){ links.forEach(function(a){ a.classList.toggle('on',a.getAttribute('data-sec')===id); }); }
     function onScroll(){
       var y=window.scrollY, cur=null;
@@ -597,8 +612,8 @@
     }
     window.addEventListener('scroll',onScroll,{passive:true}); window.addEventListener('resize',onScroll); onScroll();
     var side=document.getElementById('side'), scrim=document.getElementById('scrim'), menu=document.getElementById('menubtn');
-    function openMenu(){ side.classList.add('open'); scrim.classList.add('open'); menu.setAttribute('aria-expanded','true'); }
-    function closeMenu(){ side.classList.remove('open'); scrim.classList.remove('open'); menu.setAttribute('aria-expanded','false'); }
+    function openMenu(){ side.classList.add('open'); scrim.classList.add('open'); menu.setAttribute('aria-expanded','true'); document.body.classList.add('menu-open'); var f1=side.querySelector('a'); if(f1) setTimeout(function(){ f1.focus(); },50); }
+    function closeMenu(){ var was=side.classList.contains('open'); side.classList.remove('open'); scrim.classList.remove('open'); menu.setAttribute('aria-expanded','false'); document.body.classList.remove('menu-open'); if(was && side.contains(document.activeElement)) menu.focus(); }
     menu.addEventListener('click',function(){ side.classList.contains('open')?closeMenu():openMenu(); });
     scrim.addEventListener('click',closeMenu);
     side.addEventListener('click',function(e){ if(e.target.closest('a')) closeMenu(); });
