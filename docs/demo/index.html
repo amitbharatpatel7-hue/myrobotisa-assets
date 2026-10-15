@@ -331,7 +331,7 @@ body.qs-mode section.card h2{font-family:Anton, Impact, sans-serif;font-weight:4
   <div class="pane" id="p-reports" hidden>
     <section class="card">
       <h2>Today's digest</h2>
-      <p class="lede">The same summary lands in your inbox every evening. The weekly signals report follows on Mondays (open any week in the menu to see one).</p>
+      <p class="lede">The same summary lands in your inbox every evening. The weekly proposals arrive at 7pm on Sunday, to approve by 2pm Monday (open any week in the menu to see one).</p>
       <div class="digest"><div class="h"><small>MY ROBOT I.S.A. · DAILY</small><b id="dg-title"></b></div><div class="b" id="dg-body"></div></div>
     </section>
   </div>
@@ -408,9 +408,9 @@ function renderFindings(){
   const F=[];
   const sat=D.holdings.filter(h=>h[2]==="satellite");
   const worst=sat.slice().sort((a,b)=>(a[7]-a[6])-(b[7]-b[6]))[0];
-  if (worst[6]-worst[7] >= 0.5) F.push(["p-good","On it",`${worst[0]} gets topped up on Monday`,`It's ${(worst[6]-worst[7]).toFixed(1)} points under its target weight, so the next weekly run tops it up automatically. Nothing for you to do.`]);
+  if (worst[6]-worst[7] >= 0.5) F.push(["p-good","On it",`${worst[0]} will be topped up in the next proposals`,`It's ${(worst[6]-worst[7]).toFixed(1)} points under its target weight, so Sunday's 7pm proposals include a top-up for you to approve.`]);
   const near=D.stops.map(s=>({n:s[0],avg:(s[1]/s[3]-1)*100,stop:(s[1]/s[2]-1)*100})).sort((a,b)=>a.avg-b.avg)[0];
-  if (near.avg < 5) F.push(["p-bad","Close to an exit",`${near.n} is ${near.avg.toFixed(1)}% above its 40-week average`,"A weekly close below that line sells it. Nothing to do: the rule acts on its own and tells you when it has."]);
+  if (near.avg < 5) F.push(["p-bad","Close to an exit",`${near.n} is ${near.avg.toFixed(1)}% above its 40-week average`,"A weekly close below that line means Sunday's proposals will include a sell for you to approve."]);
   const th={}; D.holdings.forEach(h=>th[h[3]]=(th[h[3]]||0)+h[4]);
   const hw=((th["Chip makers"]||0)+(th["AI hardware"]||0))/total()*100;
   if (hw > 30) F.push(["p-info","Watch","It is one bet, not two",`Chip makers and AI hardware together are ${hw.toFixed(0)}% of the account, so they will tend to rise and fall together. The theme chart below shows the split.`]);
@@ -431,7 +431,7 @@ function draw1(){
   $("lg1").innerHTML=SER.map(s=>`<span><i class="sw" style="background:${s.color}"></i>${s.key}</span>`).join("");
   const t0=dt(D.days[0]).getTime(), t1=dt(lastDay).getTime(), xv=s=>(dt(s).getTime()-t0)/(t1-t0);
   const series=SER.map(s=>({...s,pts: s.f ? Object.entries(D.bench).map(([d,b])=>[xv(d),b[s.f],d]) : D.acct.map((v,i)=>[xv(D.days[i]),v/D.start*100,D.days[i]])}));
-  const W=Math.max(300,box.clientWidth), narrow=W<560, H=narrow?250:320, m={l:34,r:narrow?92:116,t:12,b:28};
+  const W=Math.max(240,box.clientWidth), narrow=W<560, H=narrow?250:320, m={l:34,r:narrow?92:116,t:12,b:28};
   const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:W,height:H,role:"img","aria-label":"Example account against three indexes, indexed to 100",style:"display:block"}); box.appendChild(svg);
   const all=series.flatMap(s=>s.pts.map(p=>p[1])), lo=Math.floor(Math.min(...all)-.5), hi=Math.ceil(Math.max(...all)+.5);
   const X=v=>m.l+v*(W-m.l-m.r), Y=v=>m.t+(hi-v)/(hi-lo)*(H-m.t-m.b);
@@ -463,7 +463,7 @@ function draw1(){
 function draw2(){
   const box=$("c2"), tip=$("tip2"); box.querySelectorAll("svg").forEach(n=>n.remove());
   const rows=D.holdings.map(h=>{const cost=h[4]/(1+h[5]/100); return {n:h[0],s:h[1],sleeve:h[2],g:h[4]-cost,ret:h[5]};}).sort((a,b)=>b.g-a.g);
-  const W=Math.max(280,box.clientWidth), rowH=26, m={l:78,r:58,t:6,b:6}, H=m.t+m.b+rows.length*rowH;
+  const W=Math.max(240,box.clientWidth), rowH=26, m={l:78,r:58,t:6,b:6}, H=m.t+m.b+rows.length*rowH;
   const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:W,height:H,role:"img","aria-label":"Example profit or loss per holding in pounds",style:"display:block"}); box.appendChild(svg);
   const mn=Math.min(0,...rows.map(r=>r.g))*1.15, mx=Math.max(...rows.map(r=>r.g))*1.1, X=v=>m.l+(v-mn)/(mx-mn)*(W-m.l-m.r), z=X(0);
   el("line",{x1:z,x2:z,y1:m.t-2,y2:H-m.b+2,stroke:"var(--muted)"},svg);
@@ -479,7 +479,7 @@ function draw2(){
 // ---- chart 3: target vs actual weight
 function draw3(){
   const box=$("c3"), tip=$("tip3"); box.querySelectorAll("svg").forEach(n=>n.remove());
-  const W=Math.max(280,box.clientWidth), rowH=26, m={l:78,r:20,t:6,b:26}, H=m.t+m.b+D.holdings.length*rowH;
+  const W=Math.max(240,box.clientWidth), rowH=26, m={l:78,r:20,t:6,b:26}, H=m.t+m.b+D.holdings.length*rowH;
   const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:W,height:H,role:"img","aria-label":"Example target and actual weight per holding",style:"display:block"}); box.appendChild(svg);
   const X=v=>m.l+v/15*(W-m.l-m.r);
   [0,5,10,15].forEach(v=>{el("line",{x1:X(v),x2:X(v),y1:m.t,y2:H-m.b,stroke:"var(--grid)"},svg); const t=el("text",{x:X(v),y:H-8,"text-anchor":"middle"},svg); t.textContent=v+"%";});
@@ -512,7 +512,7 @@ function renderOrders(){ $("otable").innerHTML="<table><tr><th>Date</th><th>What
 function renderDigest(){
   const v=total(), prev=D.acct.at(-2), ch=v-prev;
   $("dg-title").textContent=`${ch>=0?"+":"−"}${gbp(Math.abs(ch))} today · ${gbp(v)}`;
-  $("dg-body").innerHTML=`<p><b>Orders:</b> none today. Next weekly run Monday 07:30 (London).</p><p><b>Needs you:</b> nothing.</p><p><b>Checks:</b> broker connected · every order confirmed · ${D.stops.length} stops checked, one within 5% of its 40-week average.</p><p class="tag">Example email. Yours comes from your own email key, to your own inbox.</p>`;
+  $("dg-body").innerHTML=`<p><b>Orders:</b> none today. Next proposals Sunday at 7pm (London), to approve by 2pm Monday.</p><p><b>Needs you:</b> nothing.</p><p><b>Checks:</b> broker connected · every order confirmed · ${D.stops.length} stops checked.</p><p class="tag">Example email. Yours comes from your own email key, to your own inbox.</p>`;
 }
 
 // ---- weeks: sidebar list and the weekly view
@@ -529,7 +529,7 @@ function signalsReport(w){
   const watch=`<div class="tablewrap"><table><tr><th>#</th><th>Stock</th><th>Theme</th><th class="n">Score</th><th class="n">vs 40-wk avg</th></tr>`+D.watchlist.map((r,i)=>`<tr><td>${i+1}</td><td><b>${r[0]}</b></td><td>${r[1]}</td><td class="n score">${r[2].toFixed(2)}</td><td class="n up">+${r[3]}%</td></tr>`).join("")+`</table></div>`;
   const hold=`<div class="tablewrap"><table><tr><th>Holding</th><th class="n">Entry</th><th class="n">Now</th><th class="n">Return</th></tr>`+D.stops.slice().reverse().map(s=>{const h=sat.find(x=>x[1]===s[0]); const entry=s[1]/(1+h[5]/100); return `<tr><td><b>${s[0]}</b></td><td class="n">${entry.toFixed(2)}</td><td class="n">${s[1].toFixed(2)}</td><td class="n ${h[5]>=0?'up':'down'}">${pct(h[5])}</td></tr>`;}).join("")+`</table></div>`;
   const moon = w.kind==="live" ? `<ul><li><b>Buy Stock G</b> · optics: rank score 0.89</li><li><b>Buy Stock H</b> · cooling: rank score 0.78</li></ul><p class="muted-line">Moonshot pot: ${gbp(D.moonshot.pot)} if you approve it, 0 of ${D.moonshot.slots} slots used. Proposals only: nothing is bought until you say yes.</p>` : `<p>Pot not funded yet.</p>`;
-  return `<section class="card"><h2>Signals report</h2><p class="muted-line">The weekly report this week's run acted on, as emailed on ${wdm(w.start)}.</p><div class="md">
+  return `<section class="card"><h2>Signals report</h2><p class="muted-line">The weekly report behind this week's proposals, as emailed the Sunday before at 7pm.</p><div class="md">
     <h4>Satellite: actions this week</h4>${satAct}${hold}
     <h4>Satellite: watchlist, top eligible by rank</h4>${watch}
     <h4>Moonshot pot: proposals this week</h4>${moon}
@@ -569,7 +569,7 @@ const QS=[
 ];
 let qdone=new Set();
 function renderQS(){
-  $("qsteps").innerHTML=QS.map(([t,mins,pts],i)=>`<li class="${qdone.has(i)?'done':''}"><span class="qn">${qdone.has(i)?'✓':i+1}</span><div class="qt">${t}<small>${mins}</small></div><div class="qb"><button class="btn${qdone.has(i)?'':' go'}" type="button" data-q="${i}">${qdone.has(i)?'Undo':'Mark done'}</button></div><div class="qd"><ul>${pts.map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="qv">▶ Watch the ${i===3?'45':'60'}-second video</div></li>`).join("");
+  $("qsteps").innerHTML=QS.map(([t,mins,pts],i)=>`<li class="${qdone.has(i)?'done':''}"><span class="qn">${qdone.has(i)?'✓':i+1}</span><div class="qt">${t}<small>${mins}</small></div><div class="qb"><button class="btn${qdone.has(i)?'':' go'}" type="button" data-q="${i}">${qdone.has(i)?'Undo':'Mark done'}</button></div><div class="qd"><ul>${pts.map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="qv">Video for this step coming soon</div></li>`).join("");
   $("qsteps").querySelectorAll("button[data-q]").forEach(b=>b.addEventListener("click",()=>{const i=+b.dataset.q; qdone.has(i)?qdone.delete(i):qdone.add(i); renderQS();}));
   $("qfill").style.width=(qdone.size/QS.length*100)+"%";
   $("qcount").textContent=`${qdone.size} of ${QS.length} steps done · about ${QS.reduce((s,q,i)=>s+(qdone.has(i)?0:parseInt(q[1])),0)} minutes left`;
