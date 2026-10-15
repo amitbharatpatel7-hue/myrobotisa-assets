@@ -137,6 +137,19 @@
   .vs-col.on .vs-k{color:var(--green)}
   .vs-big{margin:4px 0 6px;font-family:Anton,Impact,sans-serif;font-size:28px;line-height:1.05;text-transform:uppercase;color:var(--ink)}
   .vs-s{margin:0;font-size:14px;color:var(--ink)}
+  .rulebar{display:block;margin:4px 0 18px;padding:12px 16px;border-radius:14px;background:var(--pink);color:#fff;text-decoration:none;font-size:15px;line-height:1.45}
+  .rulebar b{font-weight:800}
+  .rulebar span{white-space:nowrap;font-weight:800}
+  .rules{margin:34px 0 8px}
+  .rules .lead{color:var(--ink)}
+  .rules-grid{display:grid;grid-template-columns:1fr;gap:10px;margin:14px 0 0}
+  @media(min-width:640px){.rules-grid{grid-template-columns:1fr 1fr}}
+  .rules-col{padding:14px 16px;border-radius:16px;background:var(--deep2);border:2px solid var(--rule)}
+  .rules-col.on{border-color:var(--pink)}
+  .rules-k{margin:0 0 6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .rules-col.on .rules-k{color:var(--pink)}
+  .rules-col p{margin:0 0 6px;font-size:15px;line-height:1.5;color:var(--ink)}
+  .rules-col p:last-child{margin:0}
   .nonews{margin:34px 0 8px}
   .nonews .lead{color:var(--ink)}
   .nonews-stats{display:flex;flex-wrap:wrap;gap:10px 22px;margin:16px 0 0;padding:0;list-style:none}
@@ -179,6 +192,7 @@
     <li><a href="#jobs" data-sec="jobs">What the robot does</a></li>
     <li><a href="#dayjob" data-sec="dayjob">Built for a day job</a></li>
     <li><a href="#get" data-sec="get">What you get</a></li>
+    <li><a href="#rules" data-sec="rules">April 2027 ISA changes</a></li>
     <li><a href="#isa" data-sec="isa">Why an ISA</a></li>
     <li><a href="#calc" data-sec="calc">Bonus vs ISA calculator</a></li>
     <li><a href="#days" data-sec="days">The 14 days</a></li>
@@ -202,7 +216,7 @@
       <p class="promise">I take the Ls. <span class="g">You take the lessons.</span></p>
       <p class="line">Investing, explained like a mate would. Not a suit.</p>
       <ul class="proof">
-        <li><b>30 minutes</b> a day for 14 days, built around a day job</li>
+        <li><b>30 minutes</b> to your first paper trade, then 14 days at your own pace</li>
         <li><b>6 years</b> of weekly market data tested, 2020 to 2026</li>
         <li><b>Live</b> with my own money, in an ISA</li>
         <li><b>Every L</b> shown on the channel, so you don't repeat it</li>
@@ -210,6 +224,8 @@
     </div>
     <img src="avatar.png" alt="The My Robot I.S.A. visor robot">
   </section>
+
+  <a class="rulebar" href="#rules"><b>The ISA rules change on 6 April 2027.</b> Under 65? Only £12,000 a year can go into a cash ISA. The other £8,000 has to be invested to stay tax-free. <span>What changes →</span></a>
 
   <div class="card" id="join">
     <div class="price"><span class="now"><span class="vh">Founding price </span>£99</span><span class="later">for the first 100 founding members, then £199</span></div>
@@ -343,6 +359,25 @@
   <div class="box" style="margin-top:12px"><h3><span class="n">+</span> A helping hand</h3>
     <p class="small" style="color:var(--ink);margin:0">The aim is that you can run it yourself. When you're stuck, email: setup questions get an instant answer, and anything else gets a reply from me within two working days. Plus a buyers-only space to ask questions and share fixes.</p></div>
 
+  <section class="rules" id="rules">
+    <h2>The ISA rules change in <span class="p">April 2027</span></h2>
+    <p class="lead">From 6 April 2027, if you're under 65, only £12,000 of your £20,000 ISA allowance can go into cash. To use the other £8,000 tax-free, it has to be invested, in a stocks and shares ISA (or up to £4,000 in a Lifetime ISA, if you qualify).</p>
+    <div class="rules-grid">
+      <div class="rules-col">
+        <p class="rules-k">Now (2026/27)</p>
+        <p>Up to <b>£20,000</b> a year in a cash ISA.</p>
+        <p>Money can move from a stocks and shares ISA into cash.</p>
+      </div>
+      <div class="rules-col on">
+        <p class="rules-k">From 6 April 2027, under 65</p>
+        <p>Up to <b>£12,000</b> in cash. The other <b>£8,000</b> only stays tax-free if it's invested.</p>
+        <p>Moving money from a stocks and shares ISA into cash is banned.</p>
+      </div>
+    </div>
+    <p class="lead" style="margin-top:16px">Most people have only ever used a cash ISA. If that's you, April brings a new question: what to do with the £8,000. My Robot I.S.A. opens in January, so there's time to set it up, practise on paper money for a few weeks and make up your own mind before the new tax year starts.</p>
+    <p class="small">Over-65s keep the £20,000 cash limit, and the total allowance stays £20,000 until April 2031. Investing can lose money; cash in a cash ISA can't fall in value. Announced in the November 2025 Budget (<a href="https://www.gov.uk/government/publications/tax-free-savings-newsletter-19/tax-free-savings-newsletter-19-november-2025">GOV.UK</a>); details can change before they take effect.</p>
+  </section>
+
   <h2 id="isa">Why it lives in an <span class="p">ISA</span></h2>
   <p class="lead">In a stocks and shares ISA you pay no Capital Gains Tax and no tax on dividends. You can put in up to £20,000 each tax year.</p>
   <div class="card" style="margin-top:0">
@@ -378,6 +413,7 @@
         <p style="margin:0 0 6px"><strong style="color:var(--green)" id="c-isa1"></strong></p>
         <p class="small" style="color:var(--ink);margin:0" id="c-isa2"></p>
         <p class="small" style="margin:6px 0 0" id="c-isa3"></p>
+        <p class="small" style="color:var(--ink);margin:10px 0 0;padding-top:10px;border-top:1px solid var(--rule)" id="c-pen"></p>
       </div>
       <div class="vs" aria-label="Your bonus compared with building your robot ISA">
         <div class="vs-col">
@@ -554,6 +590,7 @@
       var C=cgt(B,S);
       var TH=S-itax(S,reg)-ni(S), days=TH>0?(T+N)/(TH/230):0;
       $('c-vs1').textContent='Targets, reviews and late nights. Then tax and National Insurance take '+gbp(T+N)+(days>=1?', about '+Math.round(days)+' working day'+(Math.round(days)===1?'':'s')+' of your take-home pay.':'.');
+      $('c-pen').innerHTML='<strong>Want to keep more of the bonus itself?</strong> That\'s a pension question, not an ISA one. Ask payroll about bonus sacrifice: paid into your pension instead, the whole '+gbp(B)+' goes in, against '+gbp(K)+' in your pocket, and more if your employer passes on its own National Insurance saving. Pension money is locked until at least 55 (57 from April 2028); your ISA is the money you can reach. From April 2029 the National Insurance part of the saving is capped at £2,000 a year; the income tax relief stays.';
       $('c-isa3').textContent='In a normal investing account, Capital Gains Tax on a '+gbp(B)+' gain would be '+gbp(C)+(C?(', leaving '+gbp(B-C)+'.'):' (it fits in the £3,000 tax-free allowance).');
     }
     function tidy(e){ var n=num(e.target.value); e.target.value=n?gbp(n):''; run(); }
