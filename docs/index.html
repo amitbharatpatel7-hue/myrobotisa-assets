@@ -426,8 +426,8 @@
   </div>
 
   <div class="card" id="calc">
-    <p style="margin:0 0 6px;font-weight:700">Your bonus vs your ISA</p>
-    <p class="small" style="color:var(--ink);margin:0 0 14px">Put in your salary and a bonus. See what tax and National Insurance take, and what the same amount would be worth as a gain inside an ISA. Nothing you type leaves this page.</p>
+    <p style="margin:0 0 6px;font-weight:700">Your bonus effort vs your I.S.A. effort</p>
+    <p class="small" style="color:var(--ink);margin:0 0 14px">A bonus takes a year of work, then tax takes a share. Put in your salary and a bonus to see how much, then compare the effort of a robot I.S.A. Nothing you type leaves this page.</p>
     <div class="calc-in">
       <label>Your yearly salary<input type="text" id="c-sal" inputmode="numeric" value="£60,000" style="box-sizing:border-box;width:100%;margin-top:6px;font:inherit;font-size:16px;padding:11px 16px;border-radius:999px;border:2px solid var(--rule);background:var(--deep);color:var(--ink)"></label>
       <label>A bonus<input type="text" id="c-bon" inputmode="numeric" value="£5,000" style="box-sizing:border-box;width:100%;margin-top:6px;font:inherit;font-size:16px;padding:11px 16px;border-radius:999px;border:2px solid var(--rule);background:var(--deep);color:var(--ink)"></label>
@@ -437,19 +437,6 @@
       <label><input type="radio" name="c-reg" value="sco"> Scotland</label>
     </fieldset>
     <div id="c-out" aria-live="polite">
-      <p style="margin:14px 0 8px;font-weight:700" id="c-head"></p>
-      <div class="c-bar" aria-hidden="true"><span class="k" id="c-bk"></span><span class="t" id="c-bt"></span><span class="n" id="c-bn"></span></div>
-      <table style="width:100%;border-collapse:collapse;font-size:15px;margin-top:10px">
-        <tr><td style="padding:6px 0;border-bottom:1px solid var(--rule)"><span class="dot t"></span>Income tax</td><td style="padding:6px 0;border-bottom:1px solid var(--rule);text-align:right" id="c-tax"></td></tr>
-        <tr><td style="padding:6px 0;border-bottom:1px solid var(--rule)"><span class="dot n"></span>National Insurance</td><td style="padding:6px 0;border-bottom:1px solid var(--rule);text-align:right" id="c-ni"></td></tr>
-        <tr><td style="padding:6px 0"><span class="dot k"></span><strong>In your pocket</strong></td><td style="padding:6px 0;text-align:right"><strong id="c-keep"></strong></td></tr>
-      </table>
-      <div class="c-isa">
-        <p style="margin:0 0 6px"><strong style="color:var(--green)" id="c-isa1"></strong></p>
-        <p class="small" style="color:var(--ink);margin:0" id="c-isa2"></p>
-        <p class="small" style="margin:6px 0 0" id="c-isa3"></p>
-        <p class="small" style="color:var(--ink);margin:10px 0 0;padding-top:10px;border-top:1px solid var(--rule)" id="c-pen"></p>
-      </div>
       <div class="vs" aria-label="Your bonus compared with building your robot ISA">
         <div class="vs-col">
           <p class="vs-k">Your bonus</p>
@@ -461,6 +448,18 @@
           <p class="vs-big">30 minutes to start</p>
           <p class="vs-s">Your first paper trade in about 30 minutes. Then 14 days, at your own pace, to make the rules yours. After that it does the weekly checking and the maths, and you tap approve. Any gain inside your ISA is tax-free, and it can lose money too.</p>
         </div>
+      </div>
+      <p style="margin:14px 0 8px;font-weight:700" id="c-head"></p>
+      <div class="c-bar" aria-hidden="true"><span class="k" id="c-bk"></span><span class="t" id="c-bt"></span><span class="n" id="c-bn"></span></div>
+      <table style="width:100%;border-collapse:collapse;font-size:15px;margin-top:10px">
+        <tr><td style="padding:6px 0;border-bottom:1px solid var(--rule)"><span class="dot t"></span>Income tax</td><td style="padding:6px 0;border-bottom:1px solid var(--rule);text-align:right" id="c-tax"></td></tr>
+        <tr><td style="padding:6px 0;border-bottom:1px solid var(--rule)"><span class="dot n"></span>National Insurance</td><td style="padding:6px 0;border-bottom:1px solid var(--rule);text-align:right" id="c-ni"></td></tr>
+        <tr><td style="padding:6px 0"><span class="dot k"></span><strong>In your pocket</strong></td><td style="padding:6px 0;text-align:right"><strong id="c-keep"></strong></td></tr>
+      </table>
+      <div class="c-isa">
+        <p style="margin:0 0 6px"><strong style="color:var(--green)" id="c-isa1"></strong></p>
+        <p class="small" style="color:var(--ink);margin:0" id="c-isa2"></p>
+        <p class="small" style="margin:6px 0 0" id="c-isa3"></p>
       </div>
       <p class="small" style="margin:8px 0 0">The robot can lose money as well as make it, and nothing here promises it will make anything. This compares tax and effort, not returns.</p>
     </div>
@@ -621,6 +620,7 @@
   var KEY = "sb_publishable_hjvkAbVw82CKg2rdDZgVcw_XUDbmerV"; // publishable key: can only call join_waitlist, cannot read anything
   var src = (new URLSearchParams(location.search).get("src") || "").slice(0, 40);
   var f = document.getElementById("f"), msg = document.getElementById("msg"), go = document.getElementById("go");
+  if (!f) return;
   function say(t, ok){ msg.textContent = t; msg.className = "msg " + (ok ? "ok" : "err"); }
   f.addEventListener("submit", function(e){
     e.preventDefault();
@@ -670,7 +670,6 @@
       var C=cgt(B,S);
       var TH=S-itax(S,reg)-ni(S), days=TH>0?(T+N)/(TH/230):0;
       $('c-vs1').textContent='Targets, reviews and late nights. Then tax and National Insurance take '+gbp(T+N)+(days>=1?', about '+Math.round(days)+' working day'+(Math.round(days)===1?'':'s')+' of your take-home pay.':'.');
-      $('c-pen').innerHTML='<strong>Want more of the bonus itself?</strong> Ask your payroll team about paying it into your pension instead (called bonus sacrifice). Then all '+gbp(B)+' goes in, not '+gbp(K)+'. The catch: you can\'t touch pension money until you\'re 55 (57 from April 2028). Your ISA is money you can get at any time, and it\'s where My Robot I.S.A. works.';
       $('c-isa3').textContent= C ? 'Outside an ISA, the tax on a '+gbp(B)+' gain would be '+gbp(C)+'.' : 'Outside an ISA, a '+gbp(B)+' gain would fit in the £3,000 yearly tax-free allowance; bigger gains are taxed.';
     }
     function tidy(e){ var n=num(e.target.value); e.target.value=n?gbp(n):''; run(); }
