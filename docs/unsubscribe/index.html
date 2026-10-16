@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Unsubscribe · My Robot I.S.A.</title>
+<link rel="icon" href="../avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{color-scheme:dark;--deep:#34003B;--deep2:#4A0F55;--green:#00E87A;--ink:#fff;--muted:#D9C6DE;--rule:rgba(255,255,255,.18)}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--deep);color:var(--ink);font-family:Poppins,system-ui,sans-serif;padding:24px 16px}
+  .card{max-width:440px;width:100%;background:var(--deep2);border:1px solid var(--rule);border-radius:22px;padding:28px 24px;text-align:center}
+  img{width:72px;height:72px;border-radius:18px}
+  h1{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.02em;font-size:34px;line-height:1.05;margin:16px 0 10px}
+  p{color:var(--muted);line-height:1.55;margin:0 0 18px}
+  button{font:inherit;font-weight:800;font-size:16px;background:var(--green);color:var(--deep);border:0;border-radius:999px;padding:13px 26px;cursor:pointer}
+  button:disabled{opacity:.6;cursor:default}
+  a{color:var(--green);font-weight:700}
+  .small{font-size:13px;margin:18px 0 0}
+</style>
+</head>
+<body>
+<main class="card">
+  <img src="../avatar.png" alt="">
+  <h1 id="h">Unsubscribe?</h1>
+  <p id="p">You'll stop getting all emails from My Robot I.S.A., including the test drive and the launch email.</p>
+  <button id="go" type="button">Unsubscribe me</button>
+  <p class="small"><a href="../">Back to myrobotisa.com</a></p>
+</main>
+<script>
+(function(){
+  var t = new URLSearchParams(location.search).get("t") || "";
+  var go = document.getElementById("go"), h = document.getElementById("h"), p = document.getElementById("p");
+  if (!/^[0-9a-f-]{36}$/i.test(t)) {
+    h.textContent = "Link not recognised";
+    p.innerHTML = 'This unsubscribe link looks incomplete. Email <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a> and we\'ll remove you by hand.';
+    go.hidden = true; return;
+  }
+  go.addEventListener("click", function(){
+    go.disabled = true; go.textContent = "Unsubscribing…";
+    fetch("https://vxnestmhtjotidhzzqbo.supabase.co/functions/v1/waitlist-unsubscribe", {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ t: t }),
+      signal: (window.AbortSignal && AbortSignal.timeout) ? AbortSignal.timeout(15000) : undefined
+    }).then(function(r){ if (!r.ok) throw r.status;
+      h.textContent = "You're unsubscribed";
+      p.textContent = "You won't get any more emails from us. Changed your mind? You can sign up again on the site any time.";
+      go.hidden = true;
+    }).catch(function(){
+      go.disabled = false; go.textContent = "Try again";
+      p.innerHTML = 'Something went wrong. Try again, or email <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a> and we\'ll remove you by hand.';
+    });
+  });
+})();
+</script>
+</body>
+</html>
