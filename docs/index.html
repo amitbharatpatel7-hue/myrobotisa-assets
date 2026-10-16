@@ -91,6 +91,12 @@
   .isa-now i{font-style:normal;color:var(--green)}
   @media (prefers-reduced-motion:reduce){.isa-now{transition:none}}
   ul.not{padding-left:20px;margin:8px 0 0} ul.not li{margin:6px 0}
+  ol.steps{margin:6px 0 16px;padding-left:22px;display:grid;gap:12px}
+  ol.steps li{line-height:1.55;padding-left:4px}
+  ol.steps li::marker{color:var(--green);font-weight:800}
+  details.words{background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px 18px;margin:0 0 16px}
+  details.words summary{cursor:pointer;font-weight:700}
+  details.words p{margin:10px 0 0;color:var(--muted);line-height:1.55}
   .faq details{border-top:1px solid var(--rule);padding:14px 0}
   .faq details:last-of-type{border-bottom:1px solid var(--rule)}
   .faq summary{cursor:pointer;font-weight:700;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
@@ -226,6 +232,7 @@
     <li><a href="#nonews" data-sec="nonews">It doesn't read the news</a></li>
     <li><a href="#jobs" data-sec="jobs">What the robot does</a></li>
     <li><a href="#dayjob" data-sec="dayjob">Built for a day job</a></li>
+    <li><a href="#start" data-sec="start">How to start</a></li>
     <li><a href="#get" data-sec="get">What you get</a></li>
     <li><a href="#rules" data-sec="rules">April 2027 ISA changes</a></li>
     <li><a href="#isa" data-sec="isa">Why an ISA</a></li>
@@ -344,6 +351,23 @@
     <p class="road-k">Built from the road</p>
     <p>The brain took hundreds of hours to build and test, and that's what you get when you buy. Since then, most of the work has been looking after it from my phone, around a day job or while travelling: on a Nile cruise, in Kansas City for a Chiefs game, in Miami for the World Cup. The robot runs on GitHub's servers and the approvals happen on my phone, so no laptop is left on in a hotel room. It fits around your life.</p>
   </div>
+
+  <section class="start" id="start">
+    <h2>Never invested before? <span class="p">Start here</span></h2>
+    <p class="lead">Four steps. You don't need to know anything about investing to begin, and no real money is involved until step 4.</p>
+    <ol class="steps">
+      <li><b>Open a Stocks and Shares ISA with Trading 212.</b> It's free to open in their app, and it's the account the robot works with. Already have one? Skip this step.</li>
+      <li><b>Take the free test drive in December.</b> Your own dashboard on £10,000 of pretend money, replaying seven real past market weeks, one a day. Nothing to install or pay.</li>
+      <li><b>Buy in January and do the 30-minute QuickStart.</b> Your robot starts on pretend money, so you can learn how it behaves with nothing at stake.</li>
+      <li><b>Switch to real money when you're ready.</b> Put in what you want to invest; you can add up to £20,000 a year across your ISAs. Every Sunday at 7pm the robot sends its proposed orders, and you tap Approve by 2pm on Monday.</li>
+    </ol>
+    <details class="words"><summary>Three words explained</summary>
+      <p><b>ISA:</b> an account where everything your money makes is tax-free. Anyone in the UK over 18 can put in up to £20,000 a year.</p>
+      <p><b>Stocks and shares ISA:</b> the kind of ISA that buys shares and funds, so its value goes up and down. A cash ISA is a savings account.</p>
+      <p><b>Pension or SIPP:</b> tax relief on the way in, but locked until 55 (57 from April 2028). My Robot I.S.A. doesn't work with pensions yet. <a href="#faq-sipp" style="color:var(--green);font-weight:700">Why not?</a></p>
+    </details>
+    <p><a class="btn" href="#join">Get the free test drive</a></p>
+  </section>
 
   <h2 id="get">What you <span class="p">get</span></h2>
   <p class="lead">Two parts, one price. The code gets you running. The lessons make it yours.</p>
@@ -508,6 +532,9 @@
       <p>If you stop, you keep every lesson and video released while you had updates, and the version of the code you have is yours forever. It doesn't switch off, though a broker changing its systems may need an update to keep working.</p></details>
     <details id="faq-cancel"><summary>Can I cancel after buying?</summary>
       <p>You have the legal 14-day right to cancel until you first open the code. At checkout you'll be asked to agree that opening the code ends that right, because once it's opened it can't be handed back. Cancelling ends lesson access and updates. None of this affects your rights if the code or lessons turn out to be faulty.</p></details>
+    <details id="faq-sipp"><summary>Can I use my pension or SIPP?</summary>
+      <p>Not yet. The robot places orders through Trading 212's connection for programs, and Trading 212 only opens that connection for Stocks and Shares ISA and Invest accounts. Trading 212 launched a SIPP in 2026, but programs can't connect to it. If that changes, we'll test it before we say yes.</p>
+      <p>Please don't move a pension to use My Robot I.S.A. Moving a pension can lose you valuable benefits, and it's worth getting regulated financial advice first.</p></details>
     <details id="faq-brokers"><summary>Which brokers does it work with?</summary>
       <p>Trading 212 at launch, in a Stocks and Shares ISA or an Invest account. More brokers to come. Let us cook, and we'll serve them once they're tested.</p></details>
     <details id="faq-code"><summary>Do I need to be able to code?</summary>
@@ -637,14 +664,14 @@
       $('c-tax').textContent='−'+gbp(T); $('c-ni').textContent='−'+gbp(N);
       $('c-keep').textContent=gbp(K)+' ('+Math.round(K/B*100)+'%)';
       $('c-bk').style.width=(K/B*100)+'%'; $('c-bt').style.width=(T/B*100)+'%'; $('c-bn').style.width=(N/B*100)+'%';
-      $('c-isa1').textContent='If the same '+gbp(B)+' were a gain inside an ISA, there would be no tax on it.';
+      $('c-isa1').textContent='In an ISA, what your money makes is all yours.';
       var per=K>0?(B/K):0;
-      $('c-isa2').textContent= (per && T+N>0) ? 'On your salary, every £1 of bonus leaves you about '+(K/B*100).toFixed(0)+'p. To take home £1 you need about £'+per.toFixed(2)+' of bonus. Every £1 an ISA makes is yours.' : '';
+      $('c-isa2').textContent= (per && T+N>0) ? 'Your '+gbp(B)+' bonus became '+gbp(K)+' after tax. If your ISA makes '+gbp(B)+', you keep all '+gbp(B)+': no tax on the gains, no tax on dividends, nothing to put on a tax return.' : 'Money your ISA makes is never taxed: no tax on the gains, no tax on dividends, nothing to put on a tax return.';
       var C=cgt(B,S);
       var TH=S-itax(S,reg)-ni(S), days=TH>0?(T+N)/(TH/230):0;
       $('c-vs1').textContent='Targets, reviews and late nights. Then tax and National Insurance take '+gbp(T+N)+(days>=1?', about '+Math.round(days)+' working day'+(Math.round(days)===1?'':'s')+' of your take-home pay.':'.');
-      $('c-pen').innerHTML='<strong>Want to keep more of the bonus itself?</strong> That\'s a pension question, not an ISA one. Ask payroll about bonus sacrifice: paid into your pension instead, the whole '+gbp(B)+' goes in, against '+gbp(K)+' in your pocket, and more if your employer passes on its own National Insurance saving. Pension money is locked until at least 55 (57 from April 2028); your ISA is the money you can reach. From April 2029 the National Insurance part of the saving is capped at £2,000 a year; the income tax relief stays.';
-      $('c-isa3').textContent='In a normal investing account, Capital Gains Tax on a '+gbp(B)+' gain would be '+gbp(C)+(C?(', leaving '+gbp(B-C)+'.'):' (it fits in the £3,000 tax-free allowance).');
+      $('c-pen').innerHTML='<strong>Want more of the bonus itself?</strong> Ask your payroll team about paying it into your pension instead (called bonus sacrifice). Then all '+gbp(B)+' goes in, not '+gbp(K)+'. The catch: you can\'t touch pension money until you\'re 55 (57 from April 2028). Your ISA is money you can get at any time, and it\'s where My Robot I.S.A. works.';
+      $('c-isa3').textContent= C ? 'Outside an ISA, the tax on a '+gbp(B)+' gain would be '+gbp(C)+'.' : 'Outside an ISA, a '+gbp(B)+' gain would fit in the £3,000 yearly tax-free allowance; bigger gains are taxed.';
     }
     function tidy(e){ var n=num(e.target.value); e.target.value=n?gbp(n):''; run(); }
     [sal,bon].forEach(function(el){ el.addEventListener('input',run); el.addEventListener('blur',tidy); });
