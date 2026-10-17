@@ -115,6 +115,12 @@ aside#side{flex:0 0 240px;position:sticky;top:env(safe-area-inset-top);align-sel
 #nav button:hover{background:var(--info-bg)}
 #nav button[aria-current="page"]{background:var(--sel);color:var(--fg);font-weight:800;box-shadow:inset 3px 0 0 var(--brand-green)}
 #nav button svg{flex:0 0 auto}
+#nav a.back{font-size:14px;font-weight:700;min-height:44px;padding:8px 12px;border-radius:12px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:10px;margin-top:6px;border-top:1px solid var(--line);border-radius:0;padding-top:14px}
+#nav a.back:hover{color:var(--fg)}
+.namebox{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px}
+.namebox label{font-size:13px;color:var(--chrome-sub)}
+.namebox input{font:inherit;font-size:14px;width:150px;max-width:60vw;padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff}
+.namebox button{font:inherit;font-size:13px;font-weight:800;padding:7px 14px;border-radius:999px;border:0;background:var(--brand-green);color:#1C0A21;cursor:pointer}
 .soon{display:inline-block;margin-left:auto;padding:2px 8px;border-radius:999px;background:var(--info-bg);color:var(--info);font-size:10px;font-weight:800;letter-spacing:.06em}
 .now{display:inline-block;margin-left:auto;padding:2px 8px;border-radius:999px;background:var(--brand-green);color:#1C0A21;font-size:10px;font-weight:800;letter-spacing:.06em}
 #installbox{margin-top:16px;padding:12px;border:1px dashed var(--line);border-radius:12px;font-size:12.5px;color:var(--muted)}
@@ -202,18 +208,12 @@ ul.checks .ic{flex:0 0 22px;font-weight:800;font-family:var(--mono)}
 .score{font-family:var(--mono)}
 @media (prefers-reduced-motion: reduce){#weeks h3.live::before{animation:none}}
 
-/* QuickStart wears the website's look (deep purple, Anton + Poppins), not the dashboard's */
-body.qs-mode{--bg:#34003B;--card:#4B1155;--fg:#FFFFFF;--muted:#A98FB0;--line:#6A3578;--grid:#6A3578;--sel:rgba(0,232,122,.14);--info-bg:#5A1E66;--chrome:#34003B;
-  --display:Anton, Impact, "Arial Narrow", sans-serif;--body:Poppins, system-ui, -apple-system, "Segoe UI", sans-serif;color-scheme:dark}
-body.qs-mode .demo, body.qs-mode header.hero{display:none}
-body.qs-mode section.card{border-radius:22px}
-body.qs-mode #p-quickstart a{color:#00E87A}
-body.qs-mode{--gain:#3FCB86;--brand-green:#00E87A}
-body.qs-mode section.card h2{font-family:Anton, Impact, sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.02em;font-size:22px}
+/* QuickStart follows the dashboard's own theme (17 Oct 2026); only the overview hero is hidden on it */
+body.qs-mode header.hero{display:none}
 .qs-hero{padding:8px 4px 4px}
-.qs-hero .qs-tag{display:inline-block;margin:0;background:#00E87A;color:#34003B;font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:6px 12px}
-.qs-hero h1{font-family:Anton, Impact, sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(34px,8vw,56px);line-height:1.04;margin:14px 0 10px;letter-spacing:.01em;text-wrap:balance}
-.qs-hero h1 span{color:#EA00AB}
+.qs-hero .qs-tag{display:inline-block;margin:0;background:var(--brand-green);color:#1C0A21;font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:6px 12px}
+.qs-hero h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,6vw,40px);line-height:1.1;margin:14px 0 10px;letter-spacing:-.01em;text-wrap:balance}
+.qs-hero h1 span{color:var(--gain)}
 .qs-hero p{margin:0;color:var(--muted);font-size:16px;max-width:60ch}
 </style>
 </head>
@@ -230,6 +230,7 @@ body.qs-mode section.card h2{font-family:Anton, Impact, sans-serif;font-weight:4
     <button type="button" data-p="orders"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Orders</button>
     <button type="button" data-p="reports"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg>Reports</button>
     <button type="button" data-p="controls"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="9" y1="9" x2="9" y2="15"/><line x1="15" y1="9" x2="15" y2="15"/></svg>Controls<span class="soon">SOON</span></button>
+      <a class="back" href="../"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>Back to myrobotisa.com</a>
   </nav>
   <div id="weeks" aria-label="Weeks"></div>
   <div id="installbox">
@@ -246,11 +247,12 @@ body.qs-mode section.card h2{font-family:Anton, Impact, sans-serif;font-weight:4
 
   <header class="hero">
     <div>
-      <div class="eyebrow">Your robot, at a glance</div>
+      <div class="eyebrow" id="owner">Your Robot ISA, at a glance</div>
       <h1 id="title">Week five · live since 5 Oct</h1>
       <div class="sub" id="asof"></div>
     </div>
     <div id="chips"></div>
+    <form class="namebox" id="nameform"><label for="ownername">Make it yours:</label><input id="ownername" maxlength="20" autocomplete="given-name" placeholder="Your first name"><button type="submit">Save</button></form>
   </header>
 
   <!-- OVERVIEW -->
@@ -628,6 +630,15 @@ let deferred=null;
 addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferred=e; $("installbtn").hidden=false; });
 $("installbtn").addEventListener("click",async()=>{ if(!deferred) return; deferred.prompt(); await deferred.userChoice.catch(()=>{}); deferred=null; $("installbtn").hidden=true; });
 if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) { $("installhow").textContent="Installed. It opens full screen, like any app."; }
+// Make it yours: the visitor's first name on the robot, kept only in this browser
+(function(){
+  const box=$("ownername"), form=$("nameform"), eb=$("owner"); if(!box||!form||!eb) return;
+  const clean=v=>String(v||"").replace(/[^A-Za-z\u00C0-\u024F' -]/g,"").trim().slice(0,20);
+  const paint=n=>{ eb.textContent = n ? n+"'s Robot ISA, at a glance" : "Your Robot ISA, at a glance"; document.title = (n ? n+"'s Robot ISA" : "My Robot I.S.A.")+" · demo"; };
+  let n=""; try{ n=clean(localStorage.getItem("mri-name")); }catch(e){}
+  box.value=n; paint(n);
+  form.addEventListener("submit",e=>{ e.preventDefault(); const v=clean(box.value); box.value=v; try{ v?localStorage.setItem("mri-name",v):localStorage.removeItem("mri-name"); }catch(e){} paint(v); });
+})();
 if (location.hash==="#quickstart") { document.querySelector('#nav button[data-p="quickstart"]').click(); }
 if ("serviceWorker" in navigator && location.protocol==="https:") { navigator.serviceWorker.register("sw.js").catch(()=>{}); }
 </script>
