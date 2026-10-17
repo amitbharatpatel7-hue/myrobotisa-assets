@@ -147,7 +147,52 @@
    "seconds": 36.91,
    "caption": "Three quarters of my portfolio is the boring template sleeve, and its monthly reshuffle bounced \u2014 all five transfers rejected by the exchange (practice account, paper money, real broker). The system still logged the month as done, which would have left it untouched for another four weeks. Nobody caught it on purpose: a state file's timestamp simply didn't match a single accepted order. The fix is one line \u2014 the month only counts as done when something actually lands.\n\nI run this system with my own money, in an ISA. I hold positions in things I talk about, and I say so when I do. This is a record of what I did and what happened \u2014 not a recommendation to do the same. I'm an engineer, not a financial adviser.",
    "queued_at": "2026-10-11T16:12:25+00:00"
+  },
+  {
+   "slug": "gw02-short2",
+   "title": "The manager never sleeps",
+   "file": "videos/gw02-short2-20261017-1307.mp4",
+   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw02-short2-20261017-1307.mp4",
+   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw02-short2-20261017-1307.mp4",
+   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw02-short2-20261017-1307.jpg",
+   "card_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/cards/gw02-short2-card-20261017-1307.mp4",
+   "card_raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/cards/gw02-short2-card-20261017-1307.mp4",
+   "card_bytes": 49669,
+   "bytes": 1273248,
+   "seconds": 38.52,
+   "caption": "How the machine runs the season without me: every Monday it makes the transfers before the deadline, every evening it posts the points, every Sunday it grades itself. When something breaks, a second AI reads the incident, writes the fix and sends me a pull request to approve from my phone. My laptop can be off for a month.\n\nI run this system with my own money, in an ISA. I hold positions in things I talk about, and I say so when I do. This is a record of what I did and what happened \u2014 not a recommendation to do the same. I'm an engineer, not a financial adviser.",
+   "queued_at": "2026-10-17T13:07:03+00:00"
+  },
+  {
+   "slug": "gw02-short4",
+   "title": "It marked its own homework. Red.",
+   "file": "videos/gw02-short4-20261017-1307.mp4",
+   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw02-short4-20261017-1307.mp4",
+   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw02-short4-20261017-1307.mp4",
+   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw02-short4-20261017-1307.jpg",
+   "card_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/cards/gw02-short4-card-20261017-1307.mp4",
+   "card_raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/cards/gw02-short4-card-20261017-1307.mp4",
+   "card_bytes": 56665,
+   "bytes": 1258441,
+   "seconds": 38.27,
+   "caption": "Every Sunday a second AI reviews the one that runs my stock system and rates it green, amber or red. On 14 September it rated itself red, listed thirteen failed runs, found the cause and said what a human had to decide. I'd rather a manager who tells me the season's gone wrong than one who tells me what I want to hear.\n\nI run this system with my own money, in an ISA. I hold positions in things I talk about, and I say so when I do. This is a record of what I did and what happened \u2014 not a recommendation to do the same. I'm an engineer, not a financial adviser.",
+   "queued_at": "2026-10-17T13:07:03+00:00"
+  },
+  {
+   "slug": "gw02-short6",
+   "title": "Auto-draft agreed with me. Then it fell further.",
+   "file": "videos/gw02-short6-20261017-1307.mp4",
+   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw02-short6-20261017-1307.mp4",
+   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw02-short6-20261017-1307.mp4",
+   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw02-short6-20261017-1307.jpg",
+   "card_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/cards/gw02-short6-card-20261017-1307.mp4",
+   "card_raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/cards/gw02-short6-card-20261017-1307.mp4",
+   "card_bytes": 51865,
+   "bytes": 1571223,
+   "seconds": 49.57,
+   "caption": "I worried my differentials only worked because I'd chosen them already knowing which had boomed. So I built a squad by auto-draft instead \u2014 pulled straight from sector index rosters, nothing hand-picked. It returned almost as much as mine, with a smaller worst run. Then I ran the same test I always run: delete the five best gameweeks. Mine fell from 35% to 17% a year. Auto-draft fell further, to 10% \u2014 below what doing nothing at all would have made.\n\nI run this system with my own money, in an ISA. I hold positions in things I talk about, and I say so when I do. This is a record of what I did and what happened \u2014 not a recommendation to do the same. I'm an engineer, not a financial adviser.",
+   "queued_at": "2026-10-17T13:07:03+00:00"
   }
  ],
- "updated_at": "2026-10-11T16:12:25+00:00"
+ "updated_at": "2026-10-17T13:07:03+00:00"
 }
