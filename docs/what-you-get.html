@@ -396,7 +396,6 @@
       var C=cgt(B,S);
       var TH=S-itax(S,reg)-ni(S), days=TH>0?(T+N)/(TH/230):0;
       $('c-vs1').textContent='Targets, reviews and late nights. Then tax and National Insurance take '+gbp(T+N)+(days>=1?', about '+Math.round(days)+' working day'+(Math.round(days)===1?'':'s')+' of your take-home pay.':'.');
-      $('c-isa3').textContent= C ? 'Outside an ISA, the tax on a '+gbp(B)+' gain would be '+gbp(C)+'.' : 'Outside an ISA, a '+gbp(B)+' gain would fit in the £3,000 yearly tax-free allowance; bigger gains are taxed.';
     }
     function tidy(e){ var n=num(e.target.value); e.target.value=n?gbp(n):''; run(); }
     [sal,bon].forEach(function(el){ el.addEventListener('input',run); el.addEventListener('blur',tidy); });
