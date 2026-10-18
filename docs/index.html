@@ -126,6 +126,7 @@
   .tour a{color:var(--green);font-weight:700}
   .tour-video{position:relative;justify-self:center;width:100%;max-width:300px}
   .tour-video video{display:block;width:100%;aspect-ratio:9/16;border-radius:22px;border:3px solid var(--green);background:var(--deep2);object-fit:cover}
+  .tour-video video:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   .soonbadge{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:var(--deep);color:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;white-space:nowrap}
   .free{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;background:var(--green);color:var(--deep);font-size:11px;font-weight:800;letter-spacing:.06em;vertical-align:middle}
   .preview{background:var(--pink-bg);color:#fff;text-align:center;font-weight:700;font-size:13px;padding:8px 12px}
@@ -221,7 +222,7 @@
   .road p:last-child{margin:0;font-size:16px;line-height:1.55;color:var(--ink)}
   .v2-next{margin:28px 0 8px}
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://myrobotisa.com/#org","name":"My Robot I.S.A.","url":"https://myrobotisa.com/","logo":"https://myrobotisa.com/avatar.png","email":"hello@myrobotisa.com","sameAs":["https://www.instagram.com/myrobotisa"]},{"@type":"WebSite","@id":"https://myrobotisa.com/#site","url":"https://myrobotisa.com/","name":"My Robot I.S.A.","inLanguage":"en-GB","publisher":{"@id":"https://myrobotisa.com/#org"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://myrobotisa.com/#org","name":"My Robot I.S.A.","url":"https://myrobotisa.com/","logo":"https://myrobotisa.com/avatar.png","email":"hello@myrobotisa.com","sameAs":["https://www.instagram.com/myrobotisa"]},{"@type":"WebSite","@id":"https://myrobotisa.com/#site","url":"https://myrobotisa.com/","name":"My Robot I.S.A.","inLanguage":"en-GB","publisher":{"@id":"https://myrobotisa.com/#org"}},{"@type":"VideoObject","name":"My Robot I.S.A. in 30 seconds","description":"What My Robot I.S.A. is, what it does and what it costs, in Amit's own words.","thumbnailUrl":"https://myrobotisa.com/welcome-poster.jpg","contentUrl":"https://myrobotisa.com/clips/welcome.mp4","uploadDate":"2026-10-18","duration":"PT28S","inLanguage":"en-GB","publisher":{"@id":"https://myrobotisa.com/#org"}}]}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -293,12 +294,12 @@
 
   <section class="tour" id="tour">
     <div class="tour-text">
-      <h2>See it in <span class="p">60 seconds</span></h2>
-      <p class="lead">What it is, what it does and what you get, in under a minute.</p>
+      <h2>See it in <span class="p">30 seconds</span></h2>
+      <p class="lead">What it is, what it does and what it costs, in my own words. Sound on.</p>
       <p class="small">Prefer to poke around yourself? <a href="demo/">Open the dashboard demo</a>.</p>
     </div>
     <div class="tour-video">
-      <a class="vposter" href="demo/" aria-label="Welcome clip coming soon. Open the dashboard demo instead"><img src="welcome-poster.jpg" alt="" width="300" height="533"><span class="soonbadge">Clip coming soon · tap for the demo</span></a>
+      <video class="clip" controls playsinline preload="metadata" poster="welcome-poster.jpg" width="300" height="533" aria-label="Welcome clip: what My Robot I.S.A. is, in 28 seconds"><source src="clips/welcome.mp4" type="video/mp4">Your browser can't play this clip. <a href="demo/">Open the dashboard demo instead</a>.</video>
     </div>
   </section>
 
