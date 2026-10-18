@@ -23,7 +23,7 @@
 :root{
   --bg:#F4F2F6; --card:#FFFFFF; --fg:#1C0A21; --muted:#6B5C72; --line:#E6E0EA; --grid:#EEEAF1;
   --chrome:#34003B; --chrome-fg:#FFFFFF; --chrome-sub:#CDBBD6; --brand-green:#00E87A; --sel:#E3FBEF; --pink:#EA00AB;
-  --gain:#0A8F52; --loss:#C8214F; --warn:#7A4E00; --warn-bg:#FFE9B0; --bad-bg:#FBE3EA; --good-bg:#D9F7E7; --info-bg:#ECE7F1; --info:#4A3A5A;
+  --gain:#077A46; --loss:#C8214F; --warn:#7A4E00; --warn-bg:#FFE9B0; --bad-bg:#FBE3EA; --good-bg:#D9F7E7; --info-bg:#ECE7F1; --info:#4A3A5A;
   --s-acct:var(--fg); --s-bench:#2a78d6;
   --display:"Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --body:"Schibsted Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -90,7 +90,7 @@ table{width:100%;border-collapse:collapse;font-size:13.5px}
 th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;text-align:left;padding:0 8px 8px;white-space:nowrap}
 th.n,td.n{text-align:right}
 td{padding:9px 8px;border-top:1px solid var(--line);white-space:nowrap}
-.tablewrap{overflow-x:auto}
+.tablewrap{overflow-x:auto} .tablewrap:focus-visible{outline:2px solid var(--brand-green);outline-offset:2px}
 .tag{font-size:11px;color:var(--muted)}
 .bar{height:6px;border-radius:3px;background:var(--grid);position:relative;min-width:70px}
 .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:3px;background:var(--brand-green)}
@@ -292,7 +292,7 @@ body.qs-mode header.hero{display:none}
       <section class="card">
         <h2>Distance to the exits</h2>
         <p class="lede">A satellite stock is sold when a weekly close falls below its trailing stop or its 40-week average.</p>
-        <div class="tablewrap" id="t5"></div>
+        <div class="tablewrap" id="t5" tabindex="0" role="region" aria-label="Order history table, scrolls sideways"></div>
       </section>
     </div>
   </div>
