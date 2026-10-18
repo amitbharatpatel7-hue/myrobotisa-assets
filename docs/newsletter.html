@@ -126,6 +126,7 @@
   .tour a{color:var(--green);font-weight:700}
   .tour-video{position:relative;justify-self:center;width:100%;max-width:300px}
   .tour-video video{display:block;width:100%;aspect-ratio:9/16;border-radius:22px;border:3px solid var(--green);background:var(--deep2);object-fit:cover}
+  .tour-video video:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   .soonbadge{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:var(--deep);color:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;white-space:nowrap}
   .free{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;background:var(--green);color:var(--deep);font-size:11px;font-weight:800;letter-spacing:.06em;vertical-align:middle}
   .preview{background:var(--pink-bg);color:#fff;text-align:center;font-weight:700;font-size:13px;padding:8px 12px}
@@ -220,6 +221,8 @@
   .road-k{margin:0 0 6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pink-ink)}
   .road p:last-child{margin:0;font-size:16px;line-height:1.55;color:var(--ink)}
   .v2-next{margin:28px 0 8px}
+  h1.pg{font-size:34px;margin:44px 0 6px;line-height:1.1} h1.pg .p{color:var(--pink)}
+  h2.h3{font-family:inherit;text-transform:none;letter-spacing:0;line-height:1.3} footer h2.h3{color:var(--ink);font-size:14px;margin:18px 0 4px} .box h2.h3{margin:0 0 8px;font-size:18px} .box h2.h3 .n{color:var(--green)} .job h2.h3{margin:0;font-family:Anton,Impact,sans-serif;font-size:22px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
 </style>
 </head>
 <body>
@@ -247,7 +250,7 @@
   </header>
 <main id="main">
   <div class="card" id="news">
-    <h2 style="margin:0 0 6px">Not ready to <span class="p">buy?</span></h2>
+    <h1 class="pg" style="margin:0 0 6px">Not ready to <span class="p">buy?</span></h1>
     <p class="small" style="margin:0 0 12px;color:var(--ink)">Get the free fortnightly newsletter instead: the latest L, the lesson behind it and what's new. No tips, no signals, no hard sell.</p>
     <form id="nf" novalidate>
       <div class="row">
@@ -265,7 +268,7 @@
 </main>
   <footer>
     <p><strong>Not financial advice.</strong> This is education about building and testing software. I run my own system with my own money, in an ISA, and I hold positions in things I talk about. Investing puts your capital at risk and you may get back less than you put in. What a system did in the past, mine included, says nothing about what it will do next. I'm an engineer, not a financial adviser. My Robot I.S.A. sells software and lessons; it isn't an ISA manager, a broker or an investment adviser, and it isn't authorised or regulated by the FCA.</p>
-    <h3>Your email</h3>
+    <h2 class="h3">Your email</h2>
     <p>If you join the waitlist, My Robot I.S.A. (run by Amit Patel) keeps your email address, your Trading 212 answer if you give it (so we can skip steps you've already done), and which link brought you here, to send what you signed up for: the free test drive in December, and word when sales open in January. If you take the test drive, it also keeps which orders you approved there, to run it and improve the product. Sign up for the newsletter alone and you only get the newsletter. That's all it's used for, and it's never sold.</p>
     <p>Your details are stored with Supabase in London, and the emails are sent through Resend. They handle the data only on our behalf, and anything processed outside the UK is covered by UK-approved safeguards. Waitlist details are deleted within 12 months of launch if you don't buy; newsletter subscribers are kept until they unsubscribe. Every email has an unsubscribe link; to see or delete your data, email <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. The lawful basis is your consent, given by ticking the box. If you're unhappy with how your data is handled, you can complain to the Information Commissioner's Office at <a href="https://ico.org.uk/make-a-complaint/">ico.org.uk</a>.</p>
     <p>My Robot I.S.A. is run by Amit Patel · <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. Not affiliated with Trading 212 or Anthropic.</p>
