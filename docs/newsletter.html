@@ -57,6 +57,7 @@
 .facts{margin:10px 0 4px;padding:0;list-style:none}
 .facts li{position:relative;padding:3px 0 3px 22px;font-size:14px;line-height:1.45;color:var(--muted)}
 .facts li:before{content:'';position:absolute;left:2px;top:9px;width:10px;height:6px;border-left:2px solid var(--green);border-bottom:2px solid var(--green);transform:rotate(-45deg)}
+.anchor{margin:0 0 14px;font-size:14px;color:var(--muted)} .anchor a{color:var(--green);font-weight:700}
 .renew{margin:0 0 6px;font-size:16px;font-weight:600;color:var(--ink)}
 .was-s{color:var(--muted);text-decoration-color:var(--pink);text-decoration-thickness:2px;margin-right:4px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -108,6 +109,15 @@
   .faq details ul{color:var(--muted);margin:8px 0 0}
   footer{border-top:1px solid var(--rule);margin-top:48px;padding:24px 0 40px;color:var(--eye);font-size:13px;line-height:1.6}
   footer h3{color:var(--ink);font-size:14px;margin:18px 0 4px}
+  .cmp h2{margin-top:44px} .vs-wrap{overflow-x:auto;margin:14px -16px 0;padding:0 16px} .vs-wrap:focus-visible{outline:3px solid var(--green);outline-offset:-3px}
+  .vs-table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px;line-height:1.35}
+  .vs-table th,.vs-table td{text-align:left;vertical-align:top;padding:10px 10px 10px 0;border-bottom:1px solid var(--rule)}
+  .vs-table thead th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .vs-table tbody th{font-weight:700;color:var(--ink);width:150px} .vs-table span{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
+  .vs-table i{font-style:normal;font-weight:700} .vs-table i.y{color:var(--green)} .vs-table i.n{color:var(--pink-ink)}
+  .vs-table tr.us th,.vs-table tr.us td{background:var(--deep2)} .vs-table tr.us th{border-left:4px solid var(--green);padding-left:8px;border-radius:8px 0 0 8px} .vs-table tr.us td:last-child{border-radius:0 8px 8px 0}
+  .vs-note{margin-top:12px}
+  .nl-sample p{color:var(--muted);margin:0 0 10px;line-height:1.5} .nl-sample p b{color:var(--ink)}
   .get{display:grid;grid-template-columns:1fr;gap:12px;margin-top:6px}
   @media(min-width:640px){.get{grid-template-columns:1fr 1fr}}
   .box{background:var(--deep2);border:1px solid var(--rule);border-radius:18px;padding:18px}
@@ -123,6 +133,8 @@
   .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:center;margin:8px 0 12px}
   @media(min-width:700px){.tour{grid-template-columns:1.2fr 1fr}}
   .tour h2{margin-top:12px}
+  .who{display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:start;margin-top:40px} .who img{border-radius:24px;border:3px solid var(--green);width:96px;height:96px} .who h2{margin:0 0 8px} .who p{margin:0 0 10px;color:var(--ink)} .who a{color:var(--green);font-weight:700}
+  @media (max-width:480px){.who{grid-template-columns:1fr} .who img{width:72px;height:72px}}
   .tour a{color:var(--green);font-weight:700}
   .tour-video{position:relative;justify-self:center;width:100%;max-width:300px}
   .tour-video video{display:block;width:100%;aspect-ratio:9/16;border-radius:22px;border:3px solid var(--green);background:var(--deep2);object-fit:cover}
@@ -261,6 +273,24 @@
       <div class="hp" aria-hidden="true"><input type="text" id="nwebsite" name="website" tabindex="-1" autocomplete="off"></div>
       <div class="msg" id="nmsg" role="status" aria-live="polite"></div>
     </form>
+    <div class="nl-what">
+      <p class="small" style="color:var(--ink);margin:18px 0 6px"><b>Every issue, every other Thursday:</b></p>
+      <ul class="facts">
+        <li><b>The L.</b> One thing that went wrong this fortnight, in the robot or in my head, and what it cost</li>
+        <li><b>The lesson.</b> The rule, check or habit that came out of it, so you don't repeat it</li>
+        <li><b>What's new.</b> Changes to the robot, the lessons and the site, with dates</li>
+      </ul>
+      <p class="small" style="margin:10px 0 0">Five minutes to read. No tips, no signals, no stock names, no hard sell. Unsubscribe with one tap.</p>
+    </div>
+  </div>
+
+  <div class="card nl-sample" aria-label="Sample newsletter issue">
+    <p class="small" style="margin:0 0 4px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--green)">Sample issue</p>
+    <p style="margin:0 0 14px;font-weight:700;color:var(--ink)">Eleven rejected orders and one decimal place</p>
+    <p><b>The L.</b> Monday morning, eleven of the robot's orders bounced. Not one filled. The log said "invalid quantity" eleven times and nothing else. The money sat in cash for a week while I worked out why.</p>
+    <p><b>The lesson.</b> I was sending quantities to six decimal places. Trading 212 accepts four. The fix was one line; the real fix was a check that rounds every order to what the exchange accepts before it's sent, and a log line that says what was sent, not just that it failed. That check is now Day 7 of the lessons.</p>
+    <p><b>What's new.</b> The site moved to separate pages. The demo has a QuickStart tab. The welcome clip is live on the home page.</p>
+    <p class="small" style="margin:12px 0 0">Not financial advice. Capital at risk. Written by a person, sent to people who asked for it.</p>
   </div>
 
 
