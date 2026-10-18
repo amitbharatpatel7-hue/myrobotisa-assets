@@ -57,6 +57,7 @@
 .facts{margin:10px 0 4px;padding:0;list-style:none}
 .facts li{position:relative;padding:3px 0 3px 22px;font-size:14px;line-height:1.45;color:var(--muted)}
 .facts li:before{content:'';position:absolute;left:2px;top:9px;width:10px;height:6px;border-left:2px solid var(--green);border-bottom:2px solid var(--green);transform:rotate(-45deg)}
+.anchor{margin:0 0 14px;font-size:14px;color:var(--muted)} .anchor a{color:var(--green);font-weight:700}
 .renew{margin:0 0 6px;font-size:16px;font-weight:600;color:var(--ink)}
 .was-s{color:var(--muted);text-decoration-color:var(--pink);text-decoration-thickness:2px;margin-right:4px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -108,6 +109,15 @@
   .faq details ul{color:var(--muted);margin:8px 0 0}
   footer{border-top:1px solid var(--rule);margin-top:48px;padding:24px 0 40px;color:var(--eye);font-size:13px;line-height:1.6}
   footer h3{color:var(--ink);font-size:14px;margin:18px 0 4px}
+  .cmp h2{margin-top:44px} .vs-wrap{overflow-x:auto;margin:14px -16px 0;padding:0 16px} .vs-wrap:focus-visible{outline:3px solid var(--green);outline-offset:-3px}
+  .vs-table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px;line-height:1.35}
+  .vs-table th,.vs-table td{text-align:left;vertical-align:top;padding:10px 10px 10px 0;border-bottom:1px solid var(--rule)}
+  .vs-table thead th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .vs-table tbody th{font-weight:700;color:var(--ink);width:150px} .vs-table span{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
+  .vs-table i{font-style:normal;font-weight:700} .vs-table i.y{color:var(--green)} .vs-table i.n{color:var(--pink-ink)}
+  .vs-table tr.us th,.vs-table tr.us td{background:var(--deep2)} .vs-table tr.us th{border-left:4px solid var(--green);padding-left:8px;border-radius:8px 0 0 8px} .vs-table tr.us td:last-child{border-radius:0 8px 8px 0}
+  .vs-note{margin-top:12px}
+  .nl-sample p{color:var(--muted);margin:0 0 10px;line-height:1.5} .nl-sample p b{color:var(--ink)}
   .get{display:grid;grid-template-columns:1fr;gap:12px;margin-top:6px}
   @media(min-width:640px){.get{grid-template-columns:1fr 1fr}}
   .box{background:var(--deep2);border:1px solid var(--rule);border-radius:18px;padding:18px}
@@ -123,6 +133,8 @@
   .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:center;margin:8px 0 12px}
   @media(min-width:700px){.tour{grid-template-columns:1.2fr 1fr}}
   .tour h2{margin-top:12px}
+  .who{display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:start;margin-top:40px} .who img{border-radius:24px;border:3px solid var(--green);width:96px;height:96px} .who h2{margin:0 0 8px} .who p{margin:0 0 10px;color:var(--ink)} .who a{color:var(--green);font-weight:700}
+  @media (max-width:480px){.who{grid-template-columns:1fr} .who img{width:72px;height:72px}}
   .tour a{color:var(--green);font-weight:700}
   .tour-video{position:relative;justify-self:center;width:100%;max-width:300px}
   .tour-video video{display:block;width:100%;aspect-ratio:9/16;border-radius:22px;border:3px solid var(--green);background:var(--deep2);object-fit:cover}
@@ -269,10 +281,29 @@
   </div>
   <div class="get" style="margin-top:12px">
     <div class="box"><h2 class="h3"><span class="n">+</span> The QuickStart</h2>
-      <p class="small" style="color:var(--ink);margin:0">Your first paper trade in about 30 minutes: copy the code to GitHub, add your Trading 212 practice key and an email key, run the setup check. A short video for each step. <a href="demo/#quickstart" style="color:var(--green);font-weight:700">See it in the demo</a></p></div>
+      <p class="small" style="color:var(--ink);margin:0">Your first paper trade in about 30 minutes: copy the code to GitHub, add your Trading 212 practice key and an email key, run the setup check. A short video for each step. <b>The QuickStart promise:</b> if you can't get to your first paper trade within 60 minutes with our help, email within 14 days of buying and we refund you in full. <a href="demo/#quickstart" style="color:var(--green);font-weight:700">See it in the demo</a></p></div>
     <div class="box"><h2 class="h3"><span class="n">+</span> A helping hand</h2>
-      <p class="small" style="color:var(--ink);margin:0">Stuck? Email. Setup questions get an instant automated answer, anything else a reply from me within two working days. Plus a buyers-only space to share fixes.</p></div>
+      <p class="small" style="color:var(--ink);margin:0">Stuck? Email. Setup questions get an instant automated answer, anything else a reply from the team within two working days. Plus a buyers-only space to share fixes.</p></div>
   </div>
+
+  <section class="cmp" id="vs">
+    <h2>Why this, and <span class="p">not the others?</span></h2>
+    <p class="lead">Four ways to put money to work in a stocks and shares ISA without watching charts, and what each one costs and lets you do. Cost and control, not returns: a cheaper product isn't a better one, and any of them can lose money.</p>
+    <div class="vs-wrap" tabindex="0" role="region" aria-label="Comparison table, scrolls sideways on small screens">
+    <table class="vs-table">
+      <caption class="vh">Comparison of ways to run a stocks and shares ISA</caption>
+      <thead><tr><th scope="col">Option</th><th scope="col">Cost over 3 years on £20,000</th><th scope="col">Sells as well as buys</th><th scope="col">You can read the code</th><th scope="col">You approve each order</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Robo-adviser<span>Nutmeg, Wealthify, Moneyfarm</span></th><td>£360 to £450, plus fund costs, and it carries on every year</td><td><i class="y">Yes</i></td><td><i class="n">No</i></td><td><i class="n">No</i><span>they decide</span></td></tr>
+        <tr><th scope="row">Trading 212 Pie<span>AutoInvest</span></th><td>£0</td><td><i class="n">No</i><span>buys only, no exit rule</span></td><td><i class="n">No</i></td><td><i class="n">No</i><span>automatic</span></td></tr>
+        <tr><th scope="row">Bot subscription<span>StockHero, TrendSpider and similar</span></th><td>£1,400 to £4,500, and it carries on</td><td><i class="y">Yes</i></td><td><i class="n">No</i><span>lives on their servers</span></td><td><i class="n">No</i></td></tr>
+        <tr><th scope="row">Build it yourself</th><td>£0 and a few hundred hours</td><td><i class="y">If you write it</i></td><td><i class="y">Yes</i></td><td><i class="y">Yes</i></td></tr>
+        <tr class="us"><th scope="row">My Robot I.S.A.</th><td>£99 to £397<span>£99 or £199 once; updates £99 a year, only if you want them</span></td><td><i class="y">Yes</i><span>by rule, set before it buys</span></td><td><i class="y">Every line</i></td><td><i class="y">Yes</i><span>Sunday 7pm, approve by Monday 2pm</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="small vs-note">Costs as published in October 2026: Nutmeg 0.75% a year on the first £100,000, Wealthify 0.6%, Moneyfarm about 0.7%, all before fund costs; StockHero and TrendSpider from about $50 to $160 a month; Trading 212 Pies are free to run. Robo-advisers and Pies are regulated or provided by regulated firms; My Robot I.S.A. is software and lessons, not a regulated service. Your money stays in your own Trading 212 ISA with every option but a robo-adviser, where the firm holds it.</p>
+  </section>
 
   <h2 id="isnt">What it <span class="p">isn't</span></h2>
   <ul class="not">
@@ -288,7 +319,7 @@
     <li><strong>Delivered by private invite.</strong> After you buy, you're invited to the private code repo on GitHub. There's no zip file to forward.</li>
     <li><strong>Every copy is marked.</strong> Each buyer's copy carries its own unique ID, so a shared or posted copy traces straight back to whoever shared it.</li>
     <li><strong>A personal licence.</strong> For your own use only: no sharing, reselling or publishing. Breaking it ends your updates and support.</li>
-    <li><strong>12 months of updates included.</strong> Fixes, new brokers and improvements. After that it's £99 a year if you want them, and it never renews on its own. <a href="questions.html#faq-updates" style="color:var(--green);font-weight:700">How updates work</a></li>
+    <li><strong>12 months of updates included.</strong> Fixes, new brokers and improvements. After that it's £99 a year if you want them (founding members keep that rate for life), and it never renews on its own. <a href="questions.html#faq-updates" style="color:var(--green);font-weight:700">How updates work</a></li>
     <li><strong>Shared copies go stale.</strong> No updates, no lessons, no support and no community. Copies posted online are taken down.</li>
   </ul>
 
