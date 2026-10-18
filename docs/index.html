@@ -57,6 +57,7 @@
 .facts{margin:10px 0 4px;padding:0;list-style:none}
 .facts li{position:relative;padding:3px 0 3px 22px;font-size:14px;line-height:1.45;color:var(--muted)}
 .facts li:before{content:'';position:absolute;left:2px;top:9px;width:10px;height:6px;border-left:2px solid var(--green);border-bottom:2px solid var(--green);transform:rotate(-45deg)}
+.anchor{margin:0 0 14px;font-size:14px;color:var(--muted)} .anchor a{color:var(--green);font-weight:700}
 .renew{margin:0 0 6px;font-size:16px;font-weight:600;color:var(--ink)}
 .was-s{color:var(--muted);text-decoration-color:var(--pink);text-decoration-thickness:2px;margin-right:4px}
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -108,6 +109,15 @@
   .faq details ul{color:var(--muted);margin:8px 0 0}
   footer{border-top:1px solid var(--rule);margin-top:48px;padding:24px 0 40px;color:var(--eye);font-size:13px;line-height:1.6}
   footer h3{color:var(--ink);font-size:14px;margin:18px 0 4px}
+  .cmp h2{margin-top:44px} .vs-wrap{overflow-x:auto;margin:14px -16px 0;padding:0 16px} .vs-wrap:focus-visible{outline:3px solid var(--green);outline-offset:-3px}
+  .vs-table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px;line-height:1.35}
+  .vs-table th,.vs-table td{text-align:left;vertical-align:top;padding:10px 10px 10px 0;border-bottom:1px solid var(--rule)}
+  .vs-table thead th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .vs-table tbody th{font-weight:700;color:var(--ink);width:150px} .vs-table span{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
+  .vs-table i{font-style:normal;font-weight:700} .vs-table i.y{color:var(--green)} .vs-table i.n{color:var(--pink-ink)}
+  .vs-table tr.us th,.vs-table tr.us td{background:var(--deep2)} .vs-table tr.us th{border-left:4px solid var(--green);padding-left:8px;border-radius:8px 0 0 8px} .vs-table tr.us td:last-child{border-radius:0 8px 8px 0}
+  .vs-note{margin-top:12px}
+  .nl-sample p{color:var(--muted);margin:0 0 10px;line-height:1.5} .nl-sample p b{color:var(--ink)}
   .get{display:grid;grid-template-columns:1fr;gap:12px;margin-top:6px}
   @media(min-width:640px){.get{grid-template-columns:1fr 1fr}}
   .box{background:var(--deep2);border:1px solid var(--rule);border-radius:18px;padding:18px}
@@ -123,6 +133,8 @@
   .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:center;margin:8px 0 12px}
   @media(min-width:700px){.tour{grid-template-columns:1.2fr 1fr}}
   .tour h2{margin-top:12px}
+  .who{display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:start;margin-top:40px} .who img{border-radius:24px;border:3px solid var(--green);width:96px;height:96px} .who h2{margin:0 0 8px} .who p{margin:0 0 10px;color:var(--ink)} .who a{color:var(--green);font-weight:700}
+  @media (max-width:480px){.who{grid-template-columns:1fr} .who img{width:72px;height:72px}}
   .tour a{color:var(--green);font-weight:700}
   .tour-video{position:relative;justify-self:center;width:100%;max-width:300px}
   .tour-video video{display:block;width:100%;aspect-ratio:9/16;border-radius:22px;border:3px solid var(--green);background:var(--deep2);object-fit:cover}
@@ -270,12 +282,14 @@
   <div class="card" id="join">
     <h2 class="vh">Join the waitlist</h2>
     <div class="price"><span class="now"><span class="vh">Founding price </span>£99</span><span class="later">for the first 100 founding members, then £199</span></div>
-    <p class="renew">Includes 12 months of updates. After that, updates are £99 a year if you want them. Nothing renews automatically.</p>
+    <p class="renew">Includes 12 months of updates. After that, updates are £99 a year if you want them. Nothing renews automatically, and founding members keep the £99 rate for life.</p>
+    <p class="anchor">For comparison, a robo-adviser on £20,000 charges about £120 to £150 a year, every year, before fund costs. <a href="what-you-get.html#vs">See the comparison</a></p>
     <p class="trial"><b>Join the list and get a free 7-day test drive in December.</b> Your own dashboard on £10,000 of pretend money, replaying seven real past market weeks, one a day, good and bad, with stock names hidden. Nothing to install. Past weeks don't predict future ones. Then decide.</p>
     <ul class="facts">
       <li>The code and all 14 lessons, one price</li>
       <li>Opens January 2027, before the new tax year on 6 April. UK only at launch</li>
       <li>No payment now. Day 1 is free to watch before you buy</li>
+      <li>The QuickStart promise: first paper trade within 60 minutes, with our help, or your money back</li>
     </ul>
     <form id="f" novalidate>
       <div class="row">
@@ -302,6 +316,15 @@
     </div>
     <div class="tour-video">
       <video class="clip" controls playsinline preload="metadata" poster="welcome-poster.jpg" width="300" height="533" aria-label="Welcome clip: what My Robot I.S.A. is, in 28 seconds"><source src="clips/welcome.mp4" type="video/mp4">Your browser can't play this clip. <a href="demo/">Open the dashboard demo instead</a>.</video>
+    </div>
+  </section>
+
+  <section class="who" id="who">
+    <img src="avatar.png" alt="" width="96" height="96">
+    <div>
+      <h2>Who's <span class="p">behind it</span></h2>
+      <p>My Robot I.S.A. is a UK business founded by Amit Patel. Amit has spent twenty years as an engineer and architect for large organisations, among them Shell, Checkout.com, the UK Government's digital service and NBC Universal, across government, energy, fintech, publishing and media. His work is the unglamorous kind that keeps thousands of devices secure and compliant: rules written as code, tested before they're trusted, run on a schedule, with the records to prove what happened. The robot is built the same way.</p>
+      <p>It runs with the founder's own money, in his own ISA, and every L goes on the channel so you don't repeat it. We're not financial advisers and we don't sell tips. What we sell is the code the robot runs and the lessons to make it yours. Questions go to <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a> and a person answers them. <a href="https://www.linkedin.com/in/appleamit" rel="noopener">Amit on LinkedIn</a></p>
     </div>
   </section>
 
@@ -341,7 +364,7 @@
   </footer>
 </div>
 
-<script>(function(){var M={"nonews":"how-it-works.html","jobs":"how-it-works.html","mix":"how-it-works.html","mixsay":"how-it-works.html","dayjob":"how-it-works.html","road":"how-it-works.html","days":"how-it-works.html","get":"what-you-get.html","isnt":"what-you-get.html","yours":"what-you-get.html","rules":"isa-rules.html","isa":"isa-rules.html","calc":"isa-rules.html","c-sal":"isa-rules.html","c-bon":"isa-rules.html","c-out":"isa-rules.html","c-vs1":"isa-rules.html","c-head":"isa-rules.html","c-bk":"isa-rules.html","c-bt":"isa-rules.html","c-bn":"isa-rules.html","c-tax":"isa-rules.html","c-ni":"isa-rules.html","c-keep":"isa-rules.html","c-isa1":"isa-rules.html","c-isa2":"isa-rules.html","news":"newsletter.html","nf":"newsletter.html","nemail":"newsletter.html","ngo":"newsletter.html","nconsent":"newsletter.html","nwebsite":"newsletter.html","nmsg":"newsletter.html","faq":"questions.html","faq-2020":"questions.html","faq-t212":"questions.html","faq-updates":"questions.html","faq-cancel":"questions.html","faq-sipp":"questions.html","faq-brokers":"questions.html","faq-code":"questions.html","faq-paper":"questions.html","faq-time":"questions.html","faq-share":"questions.html","faq-miss":"questions.html","faq-safe":"questions.html","faq-run":"questions.html","faq-money":"questions.html","faq-rules":"questions.html","faq-advice":"questions.html","faq-close":"questions.html","faq-uk":"questions.html"};var h=location.hash.slice(1);if(h&&M[h]&&!document.getElementById(h))location.replace(M[h]+location.search+"#"+h);})();</script>
+<script>(function(){var M={"nonews":"how-it-works.html","jobs":"how-it-works.html","mix":"how-it-works.html","mixsay":"how-it-works.html","dayjob":"how-it-works.html","road":"how-it-works.html","days":"how-it-works.html","get":"what-you-get.html","vs":"what-you-get.html","isnt":"what-you-get.html","yours":"what-you-get.html","rules":"isa-rules.html","isa":"isa-rules.html","calc":"isa-rules.html","c-sal":"isa-rules.html","c-bon":"isa-rules.html","c-out":"isa-rules.html","c-vs1":"isa-rules.html","c-head":"isa-rules.html","c-bk":"isa-rules.html","c-bt":"isa-rules.html","c-bn":"isa-rules.html","c-tax":"isa-rules.html","c-ni":"isa-rules.html","c-keep":"isa-rules.html","c-isa1":"isa-rules.html","c-isa2":"isa-rules.html","news":"newsletter.html","nf":"newsletter.html","nemail":"newsletter.html","ngo":"newsletter.html","nconsent":"newsletter.html","nwebsite":"newsletter.html","nmsg":"newsletter.html","faq":"questions.html","faq-2020":"questions.html","faq-t212":"questions.html","faq-updates":"questions.html","faq-cancel":"questions.html","faq-sipp":"questions.html","faq-brokers":"questions.html","faq-code":"questions.html","faq-paper":"questions.html","faq-time":"questions.html","faq-share":"questions.html","faq-miss":"questions.html","faq-safe":"questions.html","faq-run":"questions.html","faq-money":"questions.html","faq-rules":"questions.html","faq-advice":"questions.html","faq-close":"questions.html","faq-uk":"questions.html"};var h=location.hash.slice(1);if(h&&M[h]&&!document.getElementById(h))location.replace(M[h]+location.search+"#"+h);})();</script>
 <script>var V2SRC=(function(){try{var q=new URLSearchParams(location.search).get("src");if(q)sessionStorage.setItem("src",q.slice(0,40));return (q||sessionStorage.getItem("src")||"").slice(0,40)||null;}catch(e){return null;}})();</script>
 <script>
 (function(){
