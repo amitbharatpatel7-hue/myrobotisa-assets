@@ -110,6 +110,9 @@
   footer{border-top:1px solid var(--rule);margin-top:48px;padding:24px 0 40px;color:var(--eye);font-size:13px;line-height:1.6}
   footer h3{color:var(--ink);font-size:14px;margin:18px 0 4px}
   .cmp h2{margin-top:44px} .vs-wrap{overflow-x:auto;margin:14px -16px 0;padding:0 16px} .vs-wrap:focus-visible{outline:3px solid var(--green);outline-offset:-3px}
+  .rec h2{margin-top:44px} .rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+  @media(min-width:640px){.rec-grid{grid-template-columns:repeat(4,1fr)}}
+  .rec-tile{background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px 14px 12px} .rec-tile b{display:block;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:40px;line-height:1;color:var(--green)} .rec-tile b.off{color:var(--pink-ink)} .rec-tile span{display:block;margin-top:6px;font-size:13px;color:var(--muted)}
   .vs-table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px;line-height:1.35}
   .vs-table th,.vs-table td{text-align:left;vertical-align:top;padding:10px 10px 10px 0;border-bottom:1px solid var(--rule)}
   .vs-table thead th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
@@ -247,6 +250,7 @@
     <li><a href="how-it-works.html">How it works</a></li>
     <li><a href="what-you-get.html">What you get</a></li>
     <li><a href="demo/">Try the demo</a></li>
+    <li><a href="status.html">Robot status</a></li>
     <li><a href="isa-rules.html">ISA rules and calculator</a></li>
     <li><a href="newsletter.html" class="on" aria-current="page">Free newsletter</a></li>
     <li><a href="questions.html">Questions</a></li>
@@ -437,6 +441,20 @@
     side.addEventListener('click',function(e){ if(e.target.closest('a')) closeMenu(); });
     document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeMenu(); });
   })();
+</script>
+<script>
+(function(){
+  var g=document.getElementById("recgrid"); if(!g) return;
+  var meta=document.getElementById("recmeta");
+  fetch("status.json",{cache:"no-store"}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(d){
+    var f=function(id,v){ document.getElementById(id).textContent=v; };
+    f("r-weeks", d.weeks_run); f("r-missed", d.missed_weeks); f("r-orders", d.orders_sent);
+    var st=document.getElementById("r-state"); st.textContent = d.trading==="halted" ? "Halted" : "Running"; if(d.trading==="halted") st.classList.add("off");
+    var ld=function(iso){ try{ return new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Europe/London",timeZoneName:"short"}).format(new Date(iso)); }catch(e){ return iso; } };
+    meta.textContent = "Last weekly run: " + ld(d.last_run_at) + ". Record since " + new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/London"}).format(new Date(d.first_run_at)) + ". Updated " + ld(d.generated_at) + ".";
+    g.hidden=false;
+  }).catch(function(){ meta.textContent="The record isn't available right now. Try again later."; });
+})();
 </script>
 </body>
 </html>
