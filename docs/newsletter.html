@@ -110,7 +110,9 @@
   footer{border-top:1px solid var(--rule);margin-top:48px;padding:24px 0 40px;color:var(--eye);font-size:13px;line-height:1.6}
   footer h3{color:var(--ink);font-size:14px;margin:18px 0 4px}
   .cmp h2{margin-top:44px} .vs-wrap{overflow-x:auto;margin:14px -16px 0;padding:0 16px} .vs-wrap:focus-visible{outline:3px solid var(--green);outline-offset:-3px}
-  .rec h2{margin-top:44px} .rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+  .tl h2{margin-top:44px} .tl-week{background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px 16px;margin:10px 0} .tl-week h3,.tl-week h2.h3{margin:0 0 6px;font-size:17px;font-family:inherit;text-transform:none;letter-spacing:0;color:var(--ink)} .tl-week .fp{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--muted);word-break:break-all} .tl-week .pill{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;margin-left:8px;background:var(--deep);border:1px solid var(--rule);color:var(--green)} .tl-week .pill.wait{color:var(--muted)} .tl-week .pill.bad{color:var(--pink-ink)}
+  .tl-wrap{overflow-x:auto;margin:8px -16px 0;padding:0 16px} .tl-wrap:focus-visible{outline:3px solid var(--green);outline-offset:-3px} .tl-table{width:100%;min-width:560px;border-collapse:collapse;font-size:14px;margin-top:0} .tl-table th,.tl-table td{text-align:left;padding:6px 8px 6px 0;border-bottom:1px solid var(--rule);vertical-align:top} .tl-table th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .rec h2{margin-top:44px} .tr h3,.tr h2.h3{margin:0 0 10px;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:24px;letter-spacing:.02em;text-transform:uppercase;color:var(--green)} .tr p{margin:0 0 10px;color:var(--ink)} .tr ol{margin:0 0 12px;padding-left:22px;color:var(--ink)} .tr li{margin:0 0 8px;line-height:1.45} .tr .small{color:var(--muted)} .rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
   @media(min-width:640px){.rec-grid{grid-template-columns:repeat(4,1fr)}}
   .rec-tile{background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px 14px 12px} .rec-tile b{display:block;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:40px;line-height:1;color:var(--green)} .rec-tile b.off{color:var(--pink-ink)} .rec-tile span{display:block;margin-top:6px;font-size:13px;color:var(--muted)}
   .vs-table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px;line-height:1.35}
@@ -251,6 +253,7 @@
     <li><a href="what-you-get.html">What you get</a></li>
     <li><a href="demo/">Try the demo</a></li>
     <li><a href="status.html">Robot status</a></li>
+    <li><a href="trades.html">Trade log</a></li>
     <li><a href="isa-rules.html">ISA rules and calculator</a></li>
     <li><a href="newsletter.html" class="on" aria-current="page">Free newsletter</a></li>
     <li><a href="questions.html">Questions</a></li>
@@ -441,6 +444,32 @@
     side.addEventListener('click',function(e){ if(e.target.closest('a')) closeMenu(); });
     document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeMenu(); });
   })();
+</script>
+<script>
+(function(){
+  var list=document.getElementById("tllist"); if(!list) return;
+  var meta=document.getElementById("tlmeta");
+  var ld=function(iso,withTime){ try{ var o={day:"numeric",month:"short",year:"numeric",timeZone:"Europe/London"}; if(withTime){o.hour="2-digit";o.minute="2-digit";o.timeZoneName="short";} return new Intl.DateTimeFormat("en-GB",o).format(new Date(iso)); }catch(e){ return iso; } };
+  var esc=function(x){ return String(x==null?"":x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];}); };
+  fetch("trades/index.json",{cache:"no-store"}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(idx){
+    var weeks=Object.keys(idx.weeks||{}).sort().reverse();
+    if(!weeks.length){ meta.textContent="No weeks in the log yet."; return; }
+    meta.textContent = weeks.length + (weeks.length===1?" week":" weeks") + " in the log. Fingerprints are published within the hour of each Sunday decision; plans are revealed after " + (idx.delay_days||28) + " days. Updated " + ld(idx.updated_at,true) + ".";
+    weeks.forEach(function(w){
+      var e=idx.weeks[w]; var box=document.createElement("div"); box.className="tl-week";
+      var revealed = e.status==="revealed";
+      var pill = revealed ? (e.commitment_matches===false ? '<span class="pill bad">fingerprint mismatch</span>' : '<span class="pill">revealed, fingerprint matches</span>') : '<span class="pill wait">sealed until ' + esc(ld(e.reveal_after)) + '</span>';
+      box.innerHTML = '<h2 class="h3">Week of ' + esc(ld(w)) + pill + '</h2><p class="small" style="margin:0 0 6px">' + esc(e.orders) + (e.orders===1?' order':' orders') + ' decided ' + esc(ld(e.decided_at,true)) + '. Fingerprint published ' + esc(ld(e.published_at||e.decided_at,true)) + '.</p><p class="fp">SHA-256 ' + esc(e.sha256) + '</p>';
+      list.appendChild(box);
+      if(revealed){
+        fetch("trades/"+w+".json",{cache:"no-store"}).then(function(r){return r.json();}).then(function(d){
+          var rows=(d.orders||[]).map(function(o){ var f=(d.fills||[]).filter(function(x){return x.symbol===o.symbol&&x.side===o.side;})[0]; return '<tr><td>'+esc(o.side)+'</td><td>'+esc(o.symbol)+'</td><td>'+esc(o.sleeve)+'</td><td>'+esc(o.quantity)+'</td><td>£'+esc(o.est_value)+'</td><td>'+esc(o.reason)+'</td><td>'+esc(f?f.status:"no fill recorded")+'</td></tr>'; }).join("");
+          box.insertAdjacentHTML("beforeend",'<p class="small" style="margin:8px 0 0">Account: '+esc(d.env)+' · profile: '+esc(d.risk_profile)+(d.halted?' · halted':'')+'. Revealed '+esc(ld(d.revealed_at,true))+'.</p><div class="tl-wrap" tabindex="0" role="region" aria-label="Orders table, scrolls sideways on small screens"><table class="tl-table"><thead><tr><th>Side</th><th>Symbol</th><th>Sleeve</th><th>Qty</th><th>Est. value</th><th>Rule</th><th>Fill</th></tr></thead><tbody>'+rows+'</tbody></table></div>');
+        }).catch(function(){});
+      }
+    });
+  }).catch(function(){ meta.textContent="The log isn't available right now. Try again later."; });
+})();
 </script>
 <script>
 (function(){
