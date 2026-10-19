@@ -170,6 +170,10 @@
   .side-cta{margin-top:0;padding:16px 12px 4px;border-top:1px solid var(--rule)}
   .side-cta p{margin:0 0 12px;font-size:15px;color:var(--ink)} .side-cta p b{color:var(--green);font-size:22px} .side-cta span{color:var(--muted);font-size:13px}
   .side-cta .btn{display:block;text-align:center;font-size:15px;padding:12px 16px}
+  .nl-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+  .nl-list li{background:var(--deep2);border:1px solid var(--rule);border-radius:14px;padding:12px 14px}
+  .nl-list a{color:var(--ink);font-weight:700;text-decoration:none} .nl-list a:hover{color:var(--green)}
+  .nl-list time{display:block;font-size:12.5px;color:var(--muted);margin:2px 0 4px} .nl-list p{margin:0;font-size:14.5px;color:var(--muted)}
   .side-cta p.side-social{display:flex;justify-content:center;gap:10px;margin:12px 0 2px}
   .side-social a{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;color:var(--muted);border:1px solid var(--rule)}
   .side-social a:hover,.side-social a:focus-visible{color:var(--green);border-color:var(--green)}
@@ -534,6 +538,18 @@
     });
   }).catch(function(){ meta.textContent="The log isn't available right now. Try again later."; });
 })();
+</script>
+<script>
+  // Past newsletter issues (19 Oct 2026): newsletter/index.json is written by the assets repo's
+  // publish-newsletter workflow, which moves each issue onto the site a week after subscribers get it.
+  (function(){ var L=document.getElementById("nllist"); if(!L) return;
+    fetch("newsletter/index.json",{cache:"no-store"}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(d){
+      var it=(d&&d.issues)||[]; if(!it.length) return;
+      function e(x){ return String(x).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+      L.innerHTML=it.map(function(i){ return '<li><a href="'+e(i.url)+'">'+e(i.title)+'</a><time datetime="'+e(i.sent)+'">Sent '+e(new Date(i.sent+"T12:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}))+'</time>'+(i.summary?'<p>'+e(i.summary)+'</p>':'')+'</li>'; }).join("");
+      L.hidden=false; var n=document.getElementById("nlnone"); if(n) n.hidden=true;
+    }).catch(function(){});
+  })();
 </script>
 <script>
 (function(){
