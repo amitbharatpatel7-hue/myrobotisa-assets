@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta name="color-scheme" content="light dark">
+<meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#34003B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -18,7 +18,7 @@
 <title>My Robot I.S.A. · Dashboard demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Anton&family=Poppins:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Anton&family=Poppins:wght@400;500;600;700;800&display=swap">
 <style>
 :root{
   --bg:#F4F2F6; --card:#FFFFFF; --fg:#1C0A21; --muted:#6B5C72; --line:#E6E0EA; --grid:#EEEAF1;
@@ -39,6 +39,17 @@
   --chrome:#2A0030; --chrome-sub:#CDBBD6; --sel:rgba(0,232,122,.12); --pink:#FF4FC8;
   --gain:#3FCB86; --loss:#FF6B8A; --warn:#FFD27A; --warn-bg:#3A2A06; --bad-bg:#3A1220; --good-bg:#0F3322; --info-bg:#2A2030; --info:#D9CDE0;
   --s-bench:#3987e5; color-scheme:dark }
+/* 19 Oct 2026 (Amit): the demo wears the website's own look, purple and Poppins, in light and dark mode alike,
+   so it reads as the same product. Numbers keep the mono face so columns line up. */
+html:root:not([data-theme="x"]){
+  --bg:#34003B; --card:#4B1155; --fg:#FFFFFF; --muted:#C9B3D0; --line:#6A3578; --grid:#5A2A66;
+  --chrome:#260029; --chrome-fg:#FFFFFF; --chrome-sub:#D9C6DE; --brand-green:#00E87A; --sel:rgba(0,232,122,.14); --pink:#FF5CCB;
+  --gain:#00E87A; --loss:#FF7A96; --warn:#FFD27A; --warn-bg:#4F3410; --bad-bg:#5A1A33; --good-bg:#0F4A2E; --info-bg:#5A2A66; --info:#EADFF0;
+  --s-acct:#FFFFFF; --s-bench:#7FB3FF; color-scheme:dark;
+  --display:Poppins, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --body:Poppins, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+html:root:not([data-theme="x"]) .actual-dot{fill:#C9A3E0}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;
   padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
