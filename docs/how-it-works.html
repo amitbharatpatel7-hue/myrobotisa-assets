@@ -214,6 +214,15 @@
   .nonews-stats{display:flex;flex-wrap:wrap;gap:10px 22px;margin:16px 0 0;padding:0;list-style:none}
   .nonews-stats li{font-size:15px;color:var(--muted)}
   .nonews-stats b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:26px;letter-spacing:.01em;color:var(--green);margin-right:6px;vertical-align:-2px}
+  .calm{margin:26px 0 0;background:var(--deep2);border:1px solid var(--rule);border-radius:20px;padding:20px 20px 16px}
+  .calm h3,.calm h2.h3{margin:0 0 6px;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:24px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
+  .calm h3 .g,.calm h2.h3 .g{color:var(--green)}
+  .calm>p{margin:0 0 4px;color:var(--ink)}
+  .calm-grid{display:grid;grid-template-columns:1fr;gap:12px;margin:14px 0 10px}
+  @media(min-width:640px){.calm-grid{grid-template-columns:1fr 1fr}}
+  .calm-grid div{border-left:4px solid var(--green);padding:2px 0 2px 12px}
+  .calm-grid b{display:block;color:var(--ink);font-size:16px;margin-bottom:2px}
+  .calm-grid span{color:var(--muted);font-size:15px;line-height:1.5}
   .jobs{margin:34px 0 8px}
   .jobs .lead{color:var(--ink)}
   .job{display:grid;grid-template-columns:1fr;gap:4px 18px;margin:18px 0 0}
@@ -279,6 +288,17 @@
       <li><b>1</b>set of rules, tested before any money moved</li>
     </ul>
     <p class="small" style="margin-top:14px">Still want a punt on the listing everyone's talking about? That's what the <a href="what-you-get.html#get">moonshot pot</a> is for: a small, capped slice with its exit rule set in advance.</p>
+    <div class="calm" id="calm">
+      <h2 class="h3">When the headlines turn scary, <span class="g">it stays calm</span></h2>
+      <p>A crash is when reading the news tends to cost people most: they sell near the bottom, then buy back after the bounce. The robot can't panic, because it never sees a headline. It watches the one thing every crisis has to show up in: prices.</p>
+      <div class="calm-grid">
+        <div><b>Prices move first</b><span>By the time a crisis makes the front page, it's already in the price. The robot checks every holding every week and acts on what the market is doing, not on what anyone fears it might do.</span></div>
+        <div><b>The exit plan already exists</b><span>Every holding gets its exit rule before it's bought: a trailing stop under its peak, and a sale if it closes below its 40-week average. No decisions at 3am.</span></div>
+        <div><b>It sits out the slide</b><span>It only buys while prices are above their long-term average, so in a fall it holds cash rather than guessing the bottom. A circuit breaker stops all trading if the account drops past a limit you set.</span></div>
+        <div><b>You keep the final say</b><span>Nothing trades without your tap. If the news worries you, don't approve. The robot brings the calm; you stay in charge.</span></div>
+      </div>
+      <p class="small">The Covid crash of 2020 is in the backtest for exactly this reason. A backtest shows how the rules behaved, not how they'll behave next time; nothing can see a crash coming, and the robot checks once a week. Capital at risk. <a href="questions.html#faq-crash">More in the FAQ</a>.</p>
+    </div>
   </section>
 
   <section class="jobs" id="jobs">
