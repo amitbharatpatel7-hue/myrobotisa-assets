@@ -1,0 +1,38 @@
+name: Publish newsletter issues
+
+# Each newsletter issue reaches subscribers first; its web page waits in queue/newsletter/ and
+# moves onto myrobotisa.com a week later (see tools/publish_newsletter.py). Thursdays, 07:17 UTC.
+# This repository is public, so its Actions minutes are free.
+
+on:
+  schedule:
+    - cron: "17 7 * * 4"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Move due issues onto the site
+        id: pub
+        run: |
+          python3 tools/publish_newsletter.py | tee out.txt
+          if git status --porcelain | grep -q .; then echo "changed=true" >> "$GITHUB_OUTPUT"; fi
+      - name: Commit
+        if: steps.pub.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A docs/newsletter queue/newsletter
+          git commit -m "Newsletter: $(cat out.txt)"
+          git push
+      - name: Rebuild the site
+        if: steps.pub.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" || echo "Pages build request refused; the push should trigger it anyway"
