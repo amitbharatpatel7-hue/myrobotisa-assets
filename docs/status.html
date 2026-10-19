@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nothing to hide: the robot's public record · My Robot I.S.A.</title>
-<meta name="description" content="The public reliability record: weeks run, weeks missed, orders sent and whether trading is running or halted, rebuilt nightly from the robot's own logs. No return figures, by design.">
+<title>Nothing to hide: the robot's public record and trade log · My Robot I.S.A.</title>
+<meta name="description" content="The public record: weeks run, weeks missed and whether trading is running, rebuilt nightly, plus every order on the founder's account, fingerprinted on the day and revealed four weeks later. No return figures.">
 <link rel="canonical" href="https://myrobotisa.com/status.html">
-<meta property="og:title" content="Nothing to hide: the robot's public record">
-<meta property="og:description" content="The public reliability record: weeks run, weeks missed, orders sent and whether trading is running or halted, rebuilt nightly from the robot's own logs. No return figures, by design.">
+<meta property="og:title" content="Nothing to hide: the robot's public record and trade log">
+<meta property="og:description" content="The public record: weeks run, weeks missed and whether trading is running, rebuilt nightly, plus every order on the founder's account, fingerprinted on the day and revealed four weeks later. No return figures.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://myrobotisa.com/status.html">
 <meta property="og:site_name" content="My Robot I.S.A.">
@@ -170,6 +170,7 @@
   .side-cta{margin-top:0;padding:16px 12px 4px;border-top:1px solid var(--rule)}
   .side-cta p{margin:0 0 12px;font-size:15px;color:var(--ink)} .side-cta p b{color:var(--green);font-size:22px} .side-cta span{color:var(--muted);font-size:13px}
   .side-cta .btn{display:block;text-align:center;font-size:15px;padding:12px 16px}
+  .side-cta p.side-nl{margin:10px 0 0;text-align:center;font-size:13px;color:var(--muted)} .side-nl a{color:var(--green);font-weight:700}
   #menubtn,#scrim{display:none}
   @media (min-width:1100px){ body{padding-left:250px} }
   @media (max-width:1099px){
@@ -263,13 +264,11 @@
     <li><a href="what-you-get.html">What you get</a></li>
     <li><a href="demo/">Try the demo</a></li>
     <li><a href="status.html" class="on" aria-current="page">Nothing to hide</a></li>
-    <li><a href="trades.html">Trade log</a></li>
-    <li><a href="isa-rules.html">ISA rules and calculator</a></li>
-    <li><a href="newsletter.html">Free newsletter</a></li>
+    <li><a href="isa-rules.html">ISA rules</a></li>
     <li><a href="questions.html">Questions</a></li>
   </ol>
   <p class="side-follow">Watch it work: <a href="https://www.youtube.com/@myrobotisa">YouTube</a> · <a href="https://www.instagram.com/myrobotisa/">Instagram</a> · <a href="https://www.tiktok.com/@myrobotisa">TikTok</a></p>
-  <div class="side-cta"><p><b>£99</b> founding price<br><span>First 100 members, then £199 · free test drive in December</span></p><a class="btn" href="index.html#join">Get the free test drive</a></div>
+  <div class="side-cta"><p><b>£99</b> founding price<br><span>First 100 members, then £199 · free test drive in December</span></p><a class="btn" href="index.html#join">Get the free test drive</a><p class="side-nl">Not ready? <a href="newsletter.html#news">Get the free newsletter</a></p></div>
 </nav>
 <button id="scrim" tabindex="-1" aria-hidden="true"></button>
 <button id="menubtn" aria-label="Sections menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
@@ -295,7 +294,7 @@
       <p>Most ways of investing without the work are a black box: a fund, a robo-adviser, a bot on someone else's servers. You hand money over and trust the label. We'd rather put you in charge, and the only honest way to ask for that trust is to show our working. So we publish three things that, as far as we know, no other company selling an investing robot publishes.</p>
       <ol>
         <li><b>This status record,</b> rebuilt every night from the robot's own logs: did it run, did it miss, is it halted.</li>
-        <li><b><a href="trades.html#trades" style="color:var(--green)">The trade log</a>,</b> from 18 October 2026: every order the robot places on the founder's own account, in a public repository, four weeks after the event. The rule that fired, the date and time, the size and the broker's confirmation. At decision time we publish only a fingerprint of the plan, so you can prove later that nothing was changed after the fact, and nobody can treat it as a tip.</li>
+        <li><b><a href="#trades" style="color:var(--green)">The trade log</a>,</b> from 18 October 2026: every order the robot places on the founder's own account, in a public repository, four weeks after the event. The rule that fired, the date and time, the size and the broker's confirmation. At decision time we publish only a fingerprint of the plan, so you can prove later that nothing was changed after the fact, and nobody can treat it as a tip.</li>
         <li><b>Every L,</b> on the channel and in the newsletter, with the lesson that came out of it.</li>
       </ol>
       <p class="small">Why four weeks in arrears: a live feed of trades is a signals service, which is regulated and not what we are. A record is not a recommendation. Published trades show what the robot did on one account with its own settings; they say nothing about what it will do next, and they are not a performance claim. Capital at risk.</p>
@@ -303,8 +302,16 @@
     <p class="small"><b>What counts.</b> A week is "run" when the robot's weekly job completed on GitHub's servers and its proposals went out; a week is "missed" when a Sunday passed with no completed run. "Orders sent" is every order handed to Trading 212 since the record began, on the practice and real accounts together. None of this says whether an order made or lost money, and past weeks say nothing about future ones. Capital at risk.</p>
   </section>
 
+  <section class="tl" id="trades">
+    <h2>The <span class="p">trade log</span></h2>
+    <p class="lead">Every week the robot decides, we publish a fingerprint of its plan within the hour. Four weeks later we publish the plan itself and what the broker did with it. The fingerprint proves the plan wasn't changed after the fact; the delay means it can never be a tip. Orders on the founder's own account, since 18 October 2026.</p>
+    <p class="small" id="tlmeta" role="status" aria-live="polite">Loading the log…</p>
+    <div id="tllist"></div>
+    <p class="small"><b>How to check a fingerprint yourself.</b> Each revealed week's file on <a href="https://github.com/amitbharatpatel7-hue/myrobotisa-assets/tree/main/docs/trades" rel="noopener">GitHub</a> contains the plan and a nonce; the SHA-256 of the plan's canonical JSON (keys sorted, no spaces) equals the fingerprint published four weeks earlier, and GitHub's commit history shows when each was published. Not a recommendation and not a performance record: sizes and fills on one account with its own settings, nothing about what the robot will do next. Capital at risk.</p>
+  </section>
 
-  <p class="v2-next"><a class="btn" href="trades.html">Next: Trade log &rarr;</a></p>
+
+  <p class="v2-next"><a class="btn" href="isa-rules.html">Next: ISA rules &rarr;</a></p>
 </main>
   <footer>
     <p><strong>Not financial advice.</strong> This is education about building and testing software. Our founder runs the system with his own money, in an ISA, and holds positions in things we talk about. Investing puts your capital at risk and you may get back less than you put in. What a system did in the past, ours included, says nothing about what it will do next. We're software engineers, not financial advisers. My Robot I.S.A. sells software and lessons; it isn't an ISA manager, a broker or an investment adviser, and it isn't authorised or regulated by the FCA.</p>
