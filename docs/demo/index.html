@@ -64,6 +64,7 @@ header h1{margin:4px 0 0;font-family:var(--display);font-size:clamp(22px,4vw,30p
 header .sub{color:var(--chrome-sub);font-size:13px}
 .chip{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.12);color:var(--chrome-fg);margin-right:6px}
 .chip.halt{background:var(--loss);color:#fff}
+.chip.live{background:var(--brand-green);color:#1C0A21}
 .tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 @media (max-width:760px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:429px){.tiles{grid-template-columns:minmax(0,1fr)}}
@@ -596,7 +597,7 @@ renderQS();
 
 // ---- render
 function renderAll(flash){ syncAccount(); renderTiles(flash); renderFindings(); renderThemes(); renderStops(); renderDigest(); draw1(); draw2(); draw3(); }
-function setChips(){ $("chips").innerHTML=`<span class="chip">Live</span><span class="chip">Example data</span>`+(halted?`<span class="chip halt">Halted</span>`:""); }
+function setChips(){ $("chips").innerHTML=`<span class="chip live">Live</span><span class="chip">Example data</span>`+(halted?`<span class="chip halt">Halted</span>`:""); }
 $("asof").textContent=`Example data · last close ${wdm(lastDay)}`;
 setChips(); renderWeekList(); renderOrders(); renderAll(false);
 let rz; addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(()=>{draw1();draw2();draw3();},150);});
