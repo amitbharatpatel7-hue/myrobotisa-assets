@@ -21,15 +21,15 @@ jobs:
       - name: Move due issues onto the site
         id: pub
         run: |
-          python3 tools/publish_newsletter.py | tee out.txt
-          if git status --porcelain | grep -q .; then echo "changed=true" >> "$GITHUB_OUTPUT"; fi
+          python3 tools/publish_newsletter.py | tee "$RUNNER_TEMP/out.txt"
+          if [ -n "$(git status --porcelain -- docs/newsletter queue/newsletter)" ]; then echo "changed=true" >> "$GITHUB_OUTPUT"; fi
       - name: Commit
         if: steps.pub.outputs.changed == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A docs/newsletter queue/newsletter
-          git commit -m "Newsletter: $(cat out.txt)"
+          git commit -m "Newsletter: $(cat "$RUNNER_TEMP/out.txt")"
           git push
       - name: Rebuild the site
         if: steps.pub.outputs.changed == 'true'
