@@ -170,6 +170,10 @@
   .side-cta{margin-top:0;padding:16px 12px 4px;border-top:1px solid var(--rule)}
   .side-cta p{margin:0 0 12px;font-size:15px;color:var(--ink)} .side-cta p b{color:var(--green);font-size:22px} .side-cta span{color:var(--muted);font-size:13px}
   .side-cta .btn{display:block;text-align:center;font-size:15px;padding:12px 16px}
+  .nl-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+  .nl-list li{background:var(--deep2);border:1px solid var(--rule);border-radius:14px;padding:12px 14px}
+  .nl-list a{color:var(--ink);font-weight:700;text-decoration:none} .nl-list a:hover{color:var(--green)}
+  .nl-list time{display:block;font-size:12.5px;color:var(--muted);margin:2px 0 4px} .nl-list p{margin:0;font-size:14.5px;color:var(--muted)}
   .side-cta p.side-social{display:flex;justify-content:center;gap:10px;margin:12px 0 2px}
   .side-social a{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;color:var(--muted);border:1px solid var(--rule)}
   .side-social a:hover,.side-social a:focus-visible{color:var(--green);border-color:var(--green)}
@@ -311,6 +315,13 @@
     <p><b>The lesson.</b> We were sending quantities to six decimal places. Trading 212 accepts four. The fix was one line; the real fix was a check that rounds every order to what the exchange accepts before it's sent, and a log line that says what was sent, not just that it failed. That check is now Day 7 of the lessons.</p>
     <p><b>What's new.</b> The site moved to separate pages. The demo has a QuickStart tab. The welcome clip is live on the home page.</p>
     <p class="small" style="margin:12px 0 0">Not financial advice. Capital at risk. Written by people, sent to people who asked for it.</p>
+  </div>
+
+  <div class="card nl-past" id="issues">
+    <p class="small" style="margin:0 0 4px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--green)">Past issues</p>
+    <p style="margin:0 0 12px;color:var(--ink)"><b>Subscribers read every issue a week before it appears here.</b> <a href="#news" style="color:var(--green);font-weight:700">Sign up</a> to get them first.</p>
+    <ol class="nl-list" id="nllist" hidden></ol>
+    <p class="small" id="nlnone" style="margin:0">The first issue reaches subscribers on Thursday 12 November and lands here a week later.</p>
   </div>
 
 
@@ -483,6 +494,18 @@
     });
   }).catch(function(){ meta.textContent="The log isn't available right now. Try again later."; });
 })();
+</script>
+<script>
+  // Past newsletter issues (19 Oct 2026): newsletter/index.json is written by the assets repo's
+  // publish-newsletter workflow, which moves each issue onto the site a week after subscribers get it.
+  (function(){ var L=document.getElementById("nllist"); if(!L) return;
+    fetch("newsletter/index.json",{cache:"no-store"}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(d){
+      var it=(d&&d.issues)||[]; if(!it.length) return;
+      function e(x){ return String(x).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+      L.innerHTML=it.map(function(i){ return '<li><a href="'+e(i.url)+'">'+e(i.title)+'</a><time datetime="'+e(i.sent)+'">Sent '+e(new Date(i.sent+"T12:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"long",year:"numeric"}))+'</time>'+(i.summary?'<p>'+e(i.summary)+'</p>':'')+'</li>'; }).join("");
+      L.hidden=false; var n=document.getElementById("nlnone"); if(n) n.hidden=true;
+    }).catch(function(){});
+  })();
 </script>
 <script>
 (function(){
