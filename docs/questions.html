@@ -135,7 +135,7 @@
   .proof{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:8px}
   .proof li{font-size:15px;color:var(--muted)} .proof b{color:var(--green);font-weight:800;margin-right:4px}
   .get a{color:var(--green);font-weight:700}
-  .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:center;margin:8px 0 12px}
+  .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:center;margin:8px 0 12px} .tour-facts{display:none} @media(min-width:1100px){.tour-facts{display:block;margin:14px 0 10px} .tour-facts li{font-size:15px;color:var(--ink)}}
   @media(min-width:700px){.tour{grid-template-columns:1.2fr 1fr}}
   .tour h2{margin-top:12px}
   .who{display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:start;margin-top:40px} .who img{border-radius:24px;border:3px solid var(--green);width:96px;height:96px} .who h2{margin:0 0 8px} .who p{margin:0 0 10px;color:var(--ink)} .who a{color:var(--green);font-weight:700}
@@ -184,15 +184,16 @@
   /* Desktop (19 Oct 2026): the page was a 760px phone column centred in a wide screen. From 1100px the column
      grows to 1000px, the hero fills it, lists go two-up, and prose keeps a readable measure. */
   @media (min-width:1100px){
-    .wrap{max-width:1000px;padding:0 40px}
-    .hero{grid-template-columns:1.25fr .85fr;gap:40px;padding:36px 0 16px}
-    .hero img{max-width:340px}
-    h1{font-size:clamp(56px,6vw,84px)}
-    .lead,.hero p,.faq details p,.faq details li,.rec>p,.nonews>p,.dayjob p,.who p,.tr p,.tl p,.small{max-width:74ch}
+    .wrap{max-width:880px;padding:0 40px}
+    .hero{grid-template-columns:1.55fr .8fr;gap:36px;padding:36px 0 16px}
+    .hero img{max-width:300px}
+    h1{font-size:clamp(52px,5.4vw,76px)}
     ol.days{grid-template-columns:1fr 1fr;gap:12px 16px}
     .nl-what{columns:1}
     .get>:nth-child(1){grid-row:span 2} .get>:nth-child(4){grid-column:1/-1}
     .side{padding:26px 18px}
+    .vs-wrap table{font-size:16px !important}
+    .tour{grid-template-columns:1.1fr .9fr;gap:32px}
   }
   @media (max-width:1099px){
     .side{width:min(300px,85vw);padding:calc(22px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
@@ -289,7 +290,7 @@
     <li><a href="isa-rules.html">ISA rules</a></li>
     <li><a href="questions.html" class="on" aria-current="page">Questions</a></li>
   </ol>
-  <div class="side-cta"><p><b>£99</b> founding price<br><span>First 100 members, then £199 · free test drive in December</span></p><a class="btn" href="index.html#join">Get the free test drive</a><p class="side-nl">Not ready? <a href="newsletter.html#news">Get the free newsletter</a></p><p class="side-social"><a href="https://www.youtube.com/@myrobotisa" aria-label="My Robot I.S.A. on YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></svg></a><a href="https://www.instagram.com/myrobotisa/" aria-label="My Robot I.S.A. on Instagram" title="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg></a><a href="https://www.tiktok.com/@myrobotisa" aria-label="My Robot I.S.A. on TikTok" title="TikTok"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.8 3.6 4 3.8v3.1a7.2 7.2 0 0 1-4-1.2v6.2A5.9 5.9 0 1 1 10.7 9v3.2a2.8 2.8 0 1 0 2.8 2.8V3h3.1Z"/></svg></a></p></div>
+  <div class="side-cta"><p><b>£99</b> founding price<br><span>First 100 members, then £199 · free test drive in December</span></p><a class="btn" href="index.html#join">Free test drive</a><p class="side-nl">Not ready? <a href="newsletter.html#news">Get the free newsletter</a></p><p class="side-social"><a href="https://www.youtube.com/@myrobotisa" aria-label="My Robot I.S.A. on YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></svg></a><a href="https://www.instagram.com/myrobotisa/" aria-label="My Robot I.S.A. on Instagram" title="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg></a><a href="https://www.tiktok.com/@myrobotisa" aria-label="My Robot I.S.A. on TikTok" title="TikTok"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.8 3.6 4 3.8v3.1a7.2 7.2 0 0 1-4-1.2v6.2A5.9 5.9 0 1 1 10.7 9v3.2a2.8 2.8 0 1 0 2.8 2.8V3h3.1Z"/></svg></a></p></div>
 </nav>
 <button id="scrim" tabindex="-1" aria-hidden="true"></button>
 <button id="menubtn" aria-label="Sections menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
