@@ -12,7 +12,16 @@
 <meta name="apple-mobile-web-app-title" content="My Robot">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.webmanifest">
-<script>if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) document.documentElement.classList.add("app");</script>
+<script>
+// Running as the installed app? Any of: launched from the app's start link (?app=1), an app display mode, or iOS's flag.
+(function () {
+  var q = /[?&]app=1/.test(location.search), mm = function (m) { return window.matchMedia && matchMedia("(display-mode: " + m + ")").matches; };
+  try { if (q) sessionStorage.setItem("mri-app", "1"); } catch (e) {}
+  var app = q || mm("standalone") || mm("fullscreen") || mm("minimal-ui") || mm("window-controls-overlay") || navigator.standalone === true;
+  try { app = app || sessionStorage.getItem("mri-app") === "1"; } catch (e) {}
+  if (app) document.documentElement.classList.add("app");
+})();
+</script>
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
