@@ -139,6 +139,7 @@ aside#side{flex:0 0 240px;position:sticky;top:env(safe-area-inset-top);align-sel
 #installbox b{display:block;color:var(--fg);font-size:13px;margin-bottom:4px}
 #installbtn{margin-top:8px;font:inherit;font-weight:800;font-size:13px;min-height:40px;width:100%;border-radius:12px;border:2px solid var(--brand-green);background:transparent;color:var(--fg);cursor:pointer}
 #installbtn[hidden]{display:none}
+#installbox{transition:border-color .15s,background .15s}#installbox:hover,#installbox:focus-visible{border-color:var(--brand-green);border-style:solid;outline:none;background:rgba(0,232,122,.06)}#installbox:hover #installbtn,#installbox:focus-visible #installbtn{background:var(--brand-green);color:#34003B}
 button:focus-visible,a:focus-visible{outline:2px solid var(--brand-green);outline-offset:2px}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.5)}}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -245,10 +246,10 @@ body.qs-mode header.hero{display:none}
       <a class="back" href="../"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>Back to myrobotisa.com</a>
   </nav>
   <div id="weeks" aria-label="Weeks"></div>
-  <div id="installbox">
+  <div id="installbox" data-install role="button" tabindex="0" aria-label="Put it on your phone, Mac or PC: install the app">
     <b>Put it on your phone, Mac or PC</b>
-    <span id="installhow">iPhone: Share, then Add to Home Screen. Android: menu, then Install app. Mac: in Safari, File, then Add to Dock. Windows: the install icon in Chrome or Edge's address bar.</span>
-    <button id="installbtn" type="button" hidden>Install the app</button>
+    <span id="installhow">Install it like an app: no App Store, nothing to download.</span>
+    <button id="installbtn" type="button" tabindex="-1">Install the app</button>
   </div>
 </aside>
 <button id="scrim" tabindex="-1" aria-hidden="true"></button>
@@ -638,22 +639,9 @@ $("dlg-no").addEventListener("click",()=>dlg.close());
 $("dlg-yes").addEventListener("click",()=>{ setHalt(dlg.dataset.a==="halt"); dlg.close(); });
 setHalt(false);
 
-// install as an app
-let deferred=null;
-addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferred=e; $("installbtn").hidden=false; });
-$("installbtn").addEventListener("click",async()=>{ if(!deferred) return; deferred.prompt(); await deferred.userChoice.catch(()=>{}); deferred=null; $("installbtn").hidden=true; });
-{ // the steps for the device it's opened on (all of them are listed above if this can't tell)
-  const ua=navigator.userAgent, touchMac=/Macintosh/.test(ua)&&navigator.maxTouchPoints>1;
-  const how = /iPhone|iPad|iPod/.test(ua)||touchMac ? "Tap Share, then Add to Home Screen. It opens full screen, like any app."
-    : /Android/.test(ua) ? "Tap the menu (three dots), then Install app or Add to Home screen."
-    : /Macintosh/.test(ua)&&/Safari/.test(ua)&&!/Chrome|Chromium|Edg|Firefox/.test(ua) ? "In Safari: File, then Add to Dock. It opens in its own window, like any Mac app."
-    : /Edg\//.test(ua) ? "Click the install icon in the address bar, or the menu, then Apps, then Install this site as an app."
-    : /Chrome|Chromium/.test(ua) ? "Click the install icon at the right of the address bar, or the menu, then Cast, save and share, then Install page as app."
-    : /Firefox/.test(ua) ? "Firefox can't install sites as apps. Open this page in Chrome, Edge or Safari (Mac) to install it."
-    : null;
-  if (how) $("installhow").textContent = how;
-}
-if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) { $("installhow").textContent="Installed. It opens in its own window, like any app."; }
+// install as an app: the box and button open the shared install kit (one click where the browser allows, else the steps)
+if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) { $("installhow").textContent="Installed. It opens in its own window, like any app."; $("installbtn").textContent="Installed"; }
+else addEventListener("DOMContentLoaded",()=>{ if(!window.MRI_INSTALL) return; const D={iphone:"iPhone or iPad: tap to see the 3 steps.",android:"Android: tap to install.",safari:"Mac: click to add it to your Dock.",chrome:"Click to install it as an app.",edge:"Click to install it as an app."}; $("installhow").textContent=D[MRI_INSTALL.device]||D.chrome; });
 // Make it yours: the visitor's first name on the robot, kept only in this browser
 (function(){
   const box=$("ownername"), form=$("nameform"), eb=$("owner"); if(!box||!form||!eb) return;
@@ -666,5 +654,103 @@ if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) { 
 if (location.hash==="#quickstart") { document.querySelector('#nav button[data-p="quickstart"]').click(); }
 if ("serviceWorker" in navigator && location.protocol==="https:") { navigator.serviceWorker.register("sw.js").catch(()=>{}); }
 </script>
+<!-- INSTALL-KIT: one-click install where the browser allows it, otherwise a dialog with the steps for this device.
+     Any element with data-install opens it. Shared by /demo/ and /members/ (21 Oct 2026). -->
+<style>
+  [data-install]{cursor:pointer}
+  #ik{border:0;padding:0;background:transparent;color:inherit;max-width:min(520px,calc(100vw - 24px));width:100%}
+  #ik::backdrop{background:rgba(20,0,24,.72)}
+  #ik .ik-c{background:#4B1155;border:2px solid #00E87A;border-radius:22px;padding:22px 20px 18px;color:#fff;font-family:Poppins,system-ui,sans-serif;box-shadow:0 18px 50px rgba(0,0,0,.5)}
+  #ik h2{border:0;padding:0;margin:0 0 4px;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:26px;letter-spacing:.02em;text-transform:uppercase;line-height:1.05}
+  #ik h2 i{font-style:normal;color:#00E87A}
+  #ik .ik-sub{margin:0 0 14px;font-size:14px;color:#D9C6DE;line-height:1.5}
+  #ik .ik-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+  #ik .ik-tabs button{font:inherit;font-size:12.5px;font-weight:800;min-height:34px;padding:0 12px;border-radius:999px;border:2px solid #6A3578;background:transparent;color:#fff;cursor:pointer}
+  #ik .ik-tabs button[aria-pressed=true]{background:#00E87A;border-color:#00E87A;color:#34003B}
+  #ik ol{margin:0;padding:0;list-style:none;display:grid;gap:8px;counter-reset:s}
+  #ik li{counter-increment:s;display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;background:#3E0747;border:1px solid #6A3578;border-radius:14px;padding:11px 12px;font-size:14.5px;line-height:1.5}
+  #ik li::before{content:counter(s);display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#00E87A;color:#34003B;font-weight:800;font-size:14px}
+  #ik li b{color:#00E87A}
+  #ik .ik-note{margin:12px 0 0;font-size:12.5px;color:#D9C6DE;line-height:1.5}
+  #ik .ik-row{display:flex;gap:10px;margin-top:16px}
+  #ik .ik-row button{flex:1;font:inherit;font-weight:800;font-size:15px;min-height:46px;border-radius:999px;border:2px solid #00E87A;cursor:pointer}
+  #ik .ik-go{background:#00E87A;color:#34003B} #ik .ik-close{background:transparent;color:#fff}
+  #ik .ik-go[hidden]{display:none}
+</style>
+<dialog id="ik" aria-labelledby="ik-h">
+  <div class="ik-c">
+    <h2 id="ik-h">Put it on your <i>phone, Mac or PC</i></h2>
+    <p class="ik-sub">It installs like an app, with no App Store and nothing to download, and opens in its own window.</p>
+    <div class="ik-tabs" role="group" aria-label="Your device">
+      <button type="button" data-ik="iphone">iPhone / iPad</button>
+      <button type="button" data-ik="android">Android</button>
+      <button type="button" data-ik="safari">Mac (Safari)</button>
+      <button type="button" data-ik="chrome">Chrome</button>
+      <button type="button" data-ik="edge">Edge</button>
+    </div>
+    <ol id="ik-steps"></ol>
+    <p class="ik-note" id="ik-note"></p>
+    <div class="ik-row"><button type="button" class="ik-go" id="ik-go" hidden>Install now</button><button type="button" class="ik-close" id="ik-close">Done</button></div>
+  </div>
+</dialog>
+<script>
+(function () {
+  var STEPS = {
+    iphone: ["Tap the <b>Share</b> button (the square with an arrow), at the bottom of Safari or at the top on iPad", "Scroll down and tap <b>Add to Home Screen</b>", "Tap <b>Add</b>. It's now on your home screen like any app"],
+    android: ["Tap the <b>menu</b> (three dots) at the top right of Chrome", "Tap <b>Install app</b> (or <b>Add to Home screen</b>)", "Tap <b>Install</b>. It's now with your other apps"],
+    safari: ["In the menu bar at the top of the screen, click <b>File</b>", "Click <b>Add to Dock…</b>", "Click <b>Add</b>. It opens from your Dock and Launchpad like any Mac app"],
+    chrome: ["Click the <b>install icon</b> at the right-hand end of the address bar (a screen with a down arrow)", "Click <b>Install</b>", "No icon? Open the <b>menu</b> (three dots), then <b>Cast, save and share</b>, then <b>Install page as app</b>"],
+    edge: ["Click the <b>app icon</b> at the right-hand end of the address bar", "Click <b>Install</b>", "No icon? Open the <b>menu</b> (three dots), then <b>Apps</b>, then <b>Install this site as an app</b>"]
+  };
+  var NOTE = {
+    iphone: "Use Safari: other iPhone browsers may not offer Add to Home Screen.",
+    android: "Works in Chrome, Edge and Samsung Internet.",
+    safari: "Needs macOS Sonoma (14) or later. On older Macs, use Chrome.",
+    chrome: "Works on Mac and Windows. Private (Incognito) windows can't install apps: open a normal window.",
+    edge: "Works on Windows and Mac. InPrivate windows can't install apps: open a normal window."
+  };
+  var ua = navigator.userAgent, touchMac = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+  var dev = /iPhone|iPad|iPod/.test(ua) || touchMac ? "iphone" : /Android/.test(ua) ? "android" : /Edg\//.test(ua) ? "edge"
+    : /Chrome|Chromium|CriOS/.test(ua) ? "chrome" : /Macintosh/.test(ua) && /Safari/.test(ua) ? "safari" : "chrome";
+  var firefox = /Firefox|FxiOS/.test(ua);
+  var dlg = document.getElementById("ik"), deferred = null;
+  var standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  function pick(k) {
+    document.getElementById("ik-steps").innerHTML = STEPS[k].map(function (s) { return "<li><span>" + s + "</span></li>"; }).join("");
+    document.getElementById("ik-note").textContent = (firefox ? "Firefox can't install sites as apps: open this page in Chrome, Edge or Safari. " : "") + NOTE[k];
+    [].forEach.call(dlg.querySelectorAll("[data-ik]"), function (b) { b.setAttribute("aria-pressed", String(b.dataset.ik === k)); });
+  }
+  [].forEach.call(dlg.querySelectorAll("[data-ik]"), function (b) { b.addEventListener("click", function () { pick(b.dataset.ik); }); });
+  function open() {
+    if (standalone) { alertInstalled(); return; }
+    if (deferred) { // the browser can install it in one click: do that straight away
+      deferred.prompt(); deferred.userChoice.finally(function () { deferred = null; }); return;
+    }
+    pick(dev);
+    document.getElementById("ik-go").hidden = true;
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
+  }
+  function alertInstalled() {
+    pick(dev); document.getElementById("ik-steps").innerHTML = "<li><span><b>Already installed.</b> You're using the app right now.</span></li>";
+    document.getElementById("ik-note").textContent = ""; if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
+  }
+  document.getElementById("ik-close").addEventListener("click", function () { dlg.close ? dlg.close() : dlg.removeAttribute("open"); });
+  dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
+  document.getElementById("ik-go").addEventListener("click", function () { if (deferred) { dlg.close(); open(); } });
+  addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferred = e; document.getElementById("ik-go").hidden = false; });
+  addEventListener("appinstalled", function () { deferred = null; standalone = true; });
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest && e.target.closest("[data-install]");
+    if (t) { e.preventDefault(); open(); }
+  });
+  document.addEventListener("keydown", function (e) {
+    var t = e.target.closest && e.target.closest("[data-install]");
+    if (t && t.getAttribute("role") === "button" && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); open(); }
+  });
+  window.MRI_INSTALL = { open: open, device: dev, installed: function () { return standalone; } };
+})();
+</script>
+<!-- /INSTALL-KIT -->
+
 </body>
 </html>
