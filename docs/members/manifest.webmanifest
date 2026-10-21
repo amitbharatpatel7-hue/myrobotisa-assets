@@ -1,6 +1,6 @@
 {
  "name": "My Robot I.S.A. Members",
- "short_name": "My Robot",
+ "short_name": "Robot I.S.A.",
  "id": "/members/",
  "start_url": "/members/?app=1",
  "scope": "/members/",
