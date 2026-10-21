@@ -693,7 +693,7 @@ setHalt(false);
 
 // install as an app: the box and button open the shared install kit (one click where the browser allows, else the steps)
 if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) { $("installhow").textContent="Installed. It opens in its own window, like any app."; $("installbtn").textContent="Installed"; }
-else addEventListener("DOMContentLoaded",()=>{ if(!window.MRI_INSTALL) return; const D={iphone:"iPhone or iPad: tap to see the 3 steps.",android:"Android: tap to install.",safari:"Mac: click to add it to your Dock.",chrome:"Click to install it as an app.",edge:"Click to install it as an app."}; $("installhow").textContent=D[MRI_INSTALL.device]||D.chrome; });
+else addEventListener("DOMContentLoaded",()=>{ if(!window.MRI_INSTALL) return; const D={iphone:"iPhone: tap to see where to tap.",ipad:"iPad: tap to see where to tap.",android:"Android: tap to install.",safari:"Mac: click to add it to your Dock.",chrome:"Click to install it as an app.",edge:"Click to install it as an app."}; $("installhow").textContent=D[MRI_INSTALL.device]||D.chrome; });
 // Make it yours: the visitor's first name on the robot, kept only in this browser
 (function(){
   const box=$("ownername"), form=$("nameform"), eb=$("owner"); if(!box||!form||!eb) return;
@@ -728,13 +728,27 @@ if ("serviceWorker" in navigator && location.protocol==="https:") { navigator.se
   #ik .ik-row button{flex:1;font:inherit;font-weight:800;font-size:15px;min-height:46px;border-radius:999px;border:2px solid #00E87A;cursor:pointer}
   #ik .ik-go{background:#00E87A;color:#34003B} #ik .ik-close{background:transparent;color:#fff}
   #ik .ik-go[hidden]{display:none}
+  /* iPhone and iPad: a bouncing arrow pointing at the button Safari needs you to tap */
+  #ik-coach{position:fixed;z-index:2147483000;display:flex;flex-direction:column;align-items:flex-end;gap:6px;pointer-events:auto;font-family:Poppins,system-ui,sans-serif}
+  #ik-coach[hidden]{display:none}
+  #ik-coach.bottom{right:12px;bottom:calc(10px + env(safe-area-inset-bottom))}
+  #ik-coach.top{right:16px;top:calc(8px + env(safe-area-inset-top));flex-direction:column-reverse}
+  #ik-coach .bubble{max-width:240px;background:#00E87A;color:#34003B;font-weight:800;font-size:15px;line-height:1.35;padding:12px 14px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.45)}
+  #ik-coach .bubble small{display:block;font-weight:600;font-size:12.5px;margin-top:4px}
+  #ik-coach .arrow{width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;margin-right:14px;animation:ikbob 1s ease-in-out infinite}
+  #ik-coach.bottom .arrow{border-top:22px solid #00E87A}
+  #ik-coach.top .arrow{border-bottom:22px solid #00E87A}
+  @keyframes ikbob{50%{transform:translateY(6px)}}
+  #ik-coach.top .arrow{animation-name:ikbobup} @keyframes ikbobup{50%{transform:translateY(-6px)}}
+  @media (prefers-reduced-motion:reduce){#ik-coach .arrow{animation:none}}
 </style>
 <dialog id="ik" aria-labelledby="ik-h">
   <div class="ik-c">
     <h2 id="ik-h">Put it on your <i>phone, Mac or PC</i></h2>
     <p class="ik-sub">It installs like an app, with no App Store and nothing to download, and opens in its own window.</p>
     <div class="ik-tabs" role="group" aria-label="Your device">
-      <button type="button" data-ik="iphone">iPhone / iPad</button>
+      <button type="button" data-ik="iphone">iPhone</button>
+      <button type="button" data-ik="ipad">iPad</button>
       <button type="button" data-ik="android">Android</button>
       <button type="button" data-ik="safari">Mac (Safari)</button>
       <button type="button" data-ik="chrome">Chrome</button>
@@ -742,27 +756,30 @@ if ("serviceWorker" in navigator && location.protocol==="https:") { navigator.se
     </div>
     <ol id="ik-steps"></ol>
     <p class="ik-note" id="ik-note"></p>
-    <div class="ik-row"><button type="button" class="ik-go" id="ik-go" hidden>Install now</button><button type="button" class="ik-close" id="ik-close">Done</button></div>
+    <div class="ik-row"><button type="button" class="ik-go" id="ik-go" hidden>Install now</button><button type="button" class="ik-go" id="ik-show" hidden>Show me where</button><button type="button" class="ik-close" id="ik-close">Done</button></div>
   </div>
 </dialog>
+<div id="ik-coach" role="status" hidden><div class="bubble" id="ik-coach-t"></div><div class="arrow" aria-hidden="true"></div></div>
 <script>
 (function () {
   var STEPS = {
-    iphone: ["Tap the <b>Share</b> button (the square with an arrow), at the bottom of Safari or at the top on iPad", "Scroll down and tap <b>Add to Home Screen</b>", "Tap <b>Add</b>. It's now on your home screen like any app"],
+    iphone: ["Tap the <b>⋯</b> button at the bottom right of Safari, next to the address", "Tap <b>Share</b>", "Scroll down and tap <b>Add to Home Screen</b> (tap <b>View More</b> first if you don't see it), then <b>Add</b>"],
+    ipad: ["Tap the <b>Share</b> button (the square with an arrow) at the top right of Safari", "Scroll down and tap <b>Add to Home Screen</b>", "Tap <b>Add</b>. It's now on your Home Screen like any app"],
     android: ["Tap the <b>menu</b> (three dots) at the top right of Chrome", "Tap <b>Install app</b> (or <b>Add to Home screen</b>)", "Tap <b>Install</b>. It's now with your other apps"],
     safari: ["In the menu bar at the top of the screen, click <b>File</b>", "Click <b>Add to Dock…</b>", "Click <b>Add</b>. It opens from your Dock and Launchpad like any Mac app"],
     chrome: ["Click the <b>install icon</b> at the right-hand end of the address bar (a screen with a down arrow)", "Click <b>Install</b>", "No icon? Open the <b>menu</b> (three dots), then <b>Cast, save and share</b>, then <b>Install page as app</b>"],
     edge: ["Click the <b>app icon</b> at the right-hand end of the address bar", "Click <b>Install</b>", "No icon? Open the <b>menu</b> (three dots), then <b>Apps</b>, then <b>Install this site as an app</b>"]
   };
   var NOTE = {
-    iphone: "Use Safari: other iPhone browsers may not offer Add to Home Screen.",
+    iphone: "Older iPhone, or Safari's tab bar set to Bottom? Tap the Share button (square with an arrow) in the toolbar instead. Use Safari: other browsers may not offer Add to Home Screen.",
+    ipad: "Use Safari: other browsers may not offer Add to Home Screen.",
     android: "Works in Chrome, Edge and Samsung Internet.",
     safari: "Needs macOS Sonoma (14) or later. On older Macs, use Chrome.",
     chrome: "Works on Mac and Windows. Private (Incognito) windows can't install apps: open a normal window.",
     edge: "Works on Windows and Mac. InPrivate windows can't install apps: open a normal window."
   };
   var ua = navigator.userAgent, touchMac = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
-  var dev = /iPhone|iPad|iPod/.test(ua) || touchMac ? "iphone" : /Android/.test(ua) ? "android" : /Edg\//.test(ua) ? "edge"
+  var dev = /iPad/.test(ua) || touchMac ? "ipad" : /iPhone|iPod/.test(ua) ? "iphone" : /Android/.test(ua) ? "android" : /Edg\//.test(ua) ? "edge"
     : /Chrome|Chromium|CriOS/.test(ua) ? "chrome" : /Macintosh/.test(ua) && /Safari/.test(ua) ? "safari" : "chrome";
   var firefox = /Firefox|FxiOS/.test(ua);
   var dlg = document.getElementById("ik"), deferred = null;
@@ -771,7 +788,19 @@ if ("serviceWorker" in navigator && location.protocol==="https:") { navigator.se
     document.getElementById("ik-steps").innerHTML = STEPS[k].map(function (s) { return "<li><span>" + s + "</span></li>"; }).join("");
     document.getElementById("ik-note").textContent = (firefox ? "Firefox can't install sites as apps: open this page in Chrome, Edge or Safari. " : "") + NOTE[k];
     [].forEach.call(dlg.querySelectorAll("[data-ik]"), function (b) { b.setAttribute("aria-pressed", String(b.dataset.ik === k)); });
+    document.getElementById("ik-show").hidden = !(k === dev && (k === "iphone" || k === "ipad"));
   }
+  var coach = document.getElementById("ik-coach"), coachTimer = null;
+  function showCoach() {
+    var pad = dev === "ipad";
+    coach.className = pad ? "top" : "bottom";
+    document.getElementById("ik-coach-t").innerHTML = pad
+      ? "Tap Share up here<small>then Add to Home Screen, then Add</small>"
+      : "Tap ⋯ down here<small>then Share, then Add to Home Screen. Older iPhones: tap Share in the toolbar.</small>";
+    coach.hidden = false; clearTimeout(coachTimer); coachTimer = setTimeout(function () { coach.hidden = true; }, 15000);
+  }
+  coach.addEventListener("click", function () { coach.hidden = true; });
+  document.getElementById("ik-show").addEventListener("click", function () { dlg.close ? dlg.close() : dlg.removeAttribute("open"); showCoach(); });
   [].forEach.call(dlg.querySelectorAll("[data-ik]"), function (b) { b.addEventListener("click", function () { pick(b.dataset.ik); }); });
   function open() {
     if (standalone) { alertInstalled(); return; }
