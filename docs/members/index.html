@@ -148,7 +148,12 @@
   details.fold[open]>summary::before{transform:rotate(45deg)}
   .mem dd .btn.sm{min-height:32px} .notes{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
   .note{background:var(--deep3);border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:14px;padding:12px 14px}
-  .note.new{border-left-color:var(--green)} .note.action{border-left-color:var(--pink-ink)}
+  .msg-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .note{position:relative;transition:border-color .15s,background .15s,opacity .15s}
+  .note.new{border:2px solid var(--green);border-left-width:4px;background:rgba(0,232,122,.07);cursor:pointer;padding-left:30px}
+  .note.new:hover,.note.new:focus-visible{background:rgba(0,232,122,.13);outline:none}
+  .note.new .dot{position:absolute;left:12px;top:17px;width:9px;height:9px;border-radius:50%;background:var(--green)}
+  .note.read{opacity:.72} .note.action.new{border-color:var(--pink-ink)} .note.action.new .dot{background:var(--pink-ink)}
   .note b{display:block;font-size:15px} .note time{display:block;font-size:12px;color:var(--eye);margin:2px 0 6px} .note p{margin:0;font-size:14px;line-height:1.55;color:var(--muted);white-space:pre-line} .note a{display:inline-block;margin-top:8px;font-weight:700;font-size:14px}
   .dash-form{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px} .dash-form input{flex:1 1 220px;min-height:46px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -218,7 +223,7 @@
     </section>
 
     <section class="card msgs" aria-labelledby="h-msg" id="msgs" hidden>
-      <h2 id="h-msg">Messages <span class="count" id="msg-count"></span> <span class="pill p" id="msg-new" hidden></span></h2>
+      <div class="msg-head"><h2 id="h-msg">Messages <span class="count" id="msg-count" aria-label="unread"></span><span class="pill p" id="msg-new" hidden></span></h2><button class="linkbtn" type="button" id="msg-all" hidden>Mark all as read</button></div>
       <ul class="notes" id="notes"></ul>
     </section>
 
@@ -505,26 +510,49 @@
 
 
 
-  // ---- messages from us: news, upcoming changes, things to do. "New" is remembered on this device only.
+  // ---- messages from us: news, upcoming changes, things to do.
+  // Unread ones have a green edge and count towards the number; click one to mark it read (on every device).
+  var NOTES = [], READ = {};
   function loadNotes() {
-    rest("member_notices?select=id,title,body,kind,link_url,link_text,starts_at&order=starts_at.desc&limit=20")
-      .then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
-        if (!rows.length) { $("msgs").hidden = true; return; }
-        var seen = {}; try { seen = JSON.parse(localStorage.getItem("mri-members-seen") || "{}"); } catch (e) {}
-        var fresh = 0;
-        $("notes").innerHTML = rows.map(function (n) {
-          var isNew = !seen[n.id]; if (isNew) fresh++;
-          var when = new Date(n.starts_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
-          return '<li class="note' + (isNew ? " new" : "") + (n.kind === "action" ? " action" : "") + '"><b>' + (n.kind === "action" ? "Action needed: " : "") + esc(n.title) + '</b><time>' + esc(when) + '</time><p>' + esc(n.body) + '</p>' +
-            (n.link_url ? '<a href="' + esc(n.link_url) + '">' + esc(n.link_text || "Find out more") + " →</a>" : "") + "</li>";
-        }).join("");
-        $("msg-new").hidden = !fresh; $("msg-new").textContent = fresh + " new"; $("msg-count").textContent = rows.length;
-        $("msgs").hidden = false;
-        rows.forEach(function (n) { seen[n.id] = 1; }); try { localStorage.setItem("mri-members-seen", JSON.stringify(seen)); } catch (e) {}
-      }).catch(function () {});
+    Promise.all([
+      rest("member_notices?select=id,title,body,kind,link_url,link_text,starts_at&order=starts_at.desc&limit=20").then(function (r) { return r.ok ? r.json() : []; }),
+      rest("member_notice_reads?select=notice_id").then(function (r) { return r.ok ? r.json() : []; })
+    ]).then(function (res) {
+      NOTES = Array.isArray(res[0]) ? res[0] : []; READ = {}; (Array.isArray(res[1]) ? res[1] : []).forEach(function (x) { READ[x.notice_id] = 1; });
+      paintNotes();
+    }).catch(function () {});
   }
-
-  $("les-fold").addEventListener("toggle", function () { this.querySelector(".fold-l").textContent = this.open ? "Hide the lessons" : "Show all 14 lessons"; });
+  function paintNotes() {
+    if (!NOTES.length) { $("msgs").hidden = true; return; }
+    var unread = NOTES.filter(function (n) { return !READ[n.id]; }).length;
+    $("notes").innerHTML = NOTES.map(function (n) {
+      var isNew = !READ[n.id];
+      var when = new Date(n.starts_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+      return '<li class="note' + (isNew ? " new" : " read") + (n.kind === "action" ? " action" : "") + '" data-id="' + n.id + '"' + (isNew ? ' role="button" tabindex="0" title="Mark as read"' : "") + '>' +
+        (isNew ? '<span class="dot" aria-label="Unread"></span>' : "") + '<b>' + (n.kind === "action" ? "Action needed: " : "") + esc(n.title) + '</b><time>' + esc(when) + (isNew ? " · tap to mark as read" : " · read") + '</time><p>' + esc(n.body) + '</p>' +
+        (n.link_url ? '<a href="' + esc(n.link_url) + '">' + esc(n.link_text || "Find out more") + " →</a>" : "") + "</li>";
+    }).join("");
+    $("msg-count").textContent = unread || "";
+    $("msg-new").hidden = true;
+    $("msg-all").hidden = unread < 2;
+    $("msgs").hidden = false;
+  }
+  function markRead(ids) {
+    ids = ids.filter(function (id) { return !READ[id]; }); if (!ids.length) return;
+    ids.forEach(function (id) { READ[id] = 1; }); paintNotes();
+    rest("member_notice_reads?on_conflict=user_id,notice_id", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
+      body: JSON.stringify(ids.map(function (id) { return { user_id: me.user_id, notice_id: id }; })) })
+      .then(function (r) { if (!r.ok) throw 0; })
+      .catch(function () { ids.forEach(function (id) { delete READ[id]; }); paintNotes(); alertOnce("Couldn't mark that as read. Check you're online."); });
+  }
+  $("notes").addEventListener("click", function (e) {
+    if (e.target.closest("a")) { var li0 = e.target.closest(".note"); if (li0) markRead([+li0.dataset.id]); return; }
+    var li = e.target.closest(".note.new"); if (li) markRead([+li.dataset.id]);
+  });
+  $("notes").addEventListener("keydown", function (e) {
+    var li = e.target.closest && e.target.closest(".note.new"); if (li && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); markRead([+li.dataset.id]); }
+  });
+  $("msg-all").addEventListener("click", function () { markRead(NOTES.map(function (n) { return n.id; })); });
   // ---- your first name, for the greeting
   function editName() {
     var dd = $("name-dd");
