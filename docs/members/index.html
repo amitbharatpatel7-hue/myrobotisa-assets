@@ -738,6 +738,17 @@
   }
   addEventListener("hashchange", function () { go(location.hash.slice(1)); });
   go(location.hash.slice(1));
+  // ---- installed app on a computer: ask for a portrait window (about 900 x 1200) on its very first launch only.
+  // Chrome and Edge apps honour it; Safari's Dock apps may ignore it but remember whatever size the member leaves.
+  if (document.documentElement.classList.contains("app") && !/iPhone|iPad|iPod|Android/.test(navigator.userAgent) && navigator.maxTouchPoints < 2) {
+    try {
+      if (!localStorage.getItem("mri-app-sized")) {
+        localStorage.setItem("mri-app-sized", "1");
+        var W = Math.min(900, screen.availWidth), H = Math.min(1200, screen.availHeight);
+        window.resizeTo(W, H); window.moveTo(Math.max(0, (screen.availWidth - W) / 2), Math.max(0, (screen.availHeight - H) / 2));
+      }
+    } catch (e) {}
+  }
   // ---- install as an app: show the steps for this device first
   (function () {
     var ua = navigator.userAgent, touchMac = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
