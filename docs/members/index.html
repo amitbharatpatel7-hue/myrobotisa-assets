@@ -150,10 +150,10 @@
   .note{background:var(--deep3);border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:14px;padding:12px 14px}
   .msg-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .note{position:relative;transition:border-color .15s,background .15s,opacity .15s}
-  .note.new{border:2px solid var(--green);border-left-width:4px;background:rgba(0,232,122,.07);cursor:pointer;padding-left:30px}
-  .note.new:hover,.note.new:focus-visible{background:rgba(0,232,122,.13);outline:none}
+  .note.new{cursor:pointer;padding-left:30px}
+  .note.new:hover,.note.new:focus-visible{background:var(--deep2);outline:none}
   .note.new .dot{position:absolute;left:12px;top:17px;width:9px;height:9px;border-radius:50%;background:var(--green)}
-  .note.read{opacity:.72} .note.action.new{border-color:var(--pink-ink)} .note.action.new .dot{background:var(--pink-ink)}
+  .note.read{opacity:.72} .note.action.new .dot{background:var(--pink-ink)}
   .note b{display:block;font-size:15px} .note time{display:block;font-size:12px;color:var(--eye);margin:2px 0 6px} .note p{margin:0;font-size:14px;line-height:1.55;color:var(--muted);white-space:pre-line} .note a{display:inline-block;margin-top:8px;font-weight:700;font-size:14px}
   .dash-form{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px} .dash-form input{flex:1 1 220px;min-height:46px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
