@@ -256,6 +256,24 @@ body.qs-mode header.hero{display:none}
 .sitehdr .handle{color:var(--muted);font-weight:500;font-size:15px;text-decoration:none}
 .sitehdr .login{display:inline-flex;align-items:center;min-height:34px;padding:0 14px;border:2px solid var(--brand-green);border-radius:999px;color:var(--fg);font-weight:800;font-size:13px;text-decoration:none}
 .sitehdr .login:hover{background:var(--brand-green);color:#1C0A21}
+
+/* weeks in the main area (21 Oct 2026), so the side menu stays short */
+.weeksbar{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;display:grid;gap:12px}
+.wb-head h2{margin:0;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.wb-head p{margin:2px 0 0;font-size:13.5px;color:var(--muted)}
+.weeksbar #weeks{display:grid;gap:10px;padding:0;margin:0;border:0}
+@media (min-width:700px){.weeksbar #weeks{grid-template-columns:auto 1fr;align-items:start;gap:12px 18px}}
+.weeksbar .wgroup{display:contents}
+.weeksbar #weeks h3{margin:10px 0 0;white-space:nowrap}
+.weeksbar .wbtns{display:flex;flex-wrap:wrap;gap:8px}
+.weeksbar #weeks button{display:inline-block;text-align:left;width:auto;min-height:44px;margin:0;padding:7px 14px;border:1px solid var(--line);background:var(--bg);border-radius:12px}
+.weeksbar #weeks button:hover{border-color:var(--brand-green);background:var(--bg)}
+.weeksbar #weeks button[aria-current="page"]{border-color:var(--brand-green);box-shadow:inset 0 0 0 1px var(--brand-green);background:var(--sel)}
+.sitehdr .hdr-r{display:flex;align-items:center;gap:14px}
+.sitehdr .tag{display:inline-block;background:var(--brand-green);color:#1C0A21;font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:6px 12px;white-space:nowrap;text-decoration:none}
+.sitehdr .tag[hidden]{display:none}
+.sitehdr a.tag::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#1C0A21;margin-right:7px;vertical-align:1px;animation:pulse 1.6s ease-in-out infinite}
+@media (max-width:480px){.sitehdr .hdr-r{gap:8px}.sitehdr .t-long{display:none}}
 </style>
 </head>
 <body>
@@ -273,7 +291,6 @@ body.qs-mode header.hero{display:none}
     <button type="button" data-p="reports"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg>Reports</button>
     <button type="button" data-p="controls"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="9" y1="9" x2="9" y2="15"/><line x1="15" y1="9" x2="15" y2="15"/></svg>Controls<span class="soon">SOON</span></button>
       </nav>
-      <div id="weeks" aria-label="Weeks"></div>
     </li>
     <li><a href="../status.html">Nothing to hide</a></li>
     <li><a href="../isa-rules.html">ISA rules</a></li>
@@ -289,7 +306,7 @@ body.qs-mode header.hero{display:none}
 <button id="menubtn" aria-label="Menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
 
 <main class="wrap">
-  <div class="sitehdr"><a class="handle" href="https://www.instagram.com/myrobotisa/">@myrobotisa</a><a class="login" href="../members/">Log in</a></div>
+  <div class="sitehdr"><a class="handle" href="https://www.instagram.com/myrobotisa/">@myrobotisa</a><span class="hdr-r"><a class="login" href="../members/">Log in</a><span class="tag" data-launch><span class="t-long">Launching </span>January 2027</span><a class="tag" data-live href="../#join" hidden>We're live</a></span></div>
   <div class="demo" role="note">Demo with made-up example data. Not a real account, not real investments and not a recommendation. <a href="../#join">Get early access</a></div>
 
   <header class="hero">
@@ -302,6 +319,11 @@ body.qs-mode header.hero{display:none}
       <div class="refreshwrap"><button id="refreshbtn" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span id="refreshlbl">Refresh now</span></button><div id="livemsg" role="status">Showing the last close. Refresh now reads your broker live.</div></div></div>
     <form class="namebox" id="nameform"><label for="ownername">Make it yours:</label><input id="ownername" maxlength="20" autocomplete="given-name" placeholder="Your first name"><button type="submit">Save</button></form>
   </header>
+
+  <section class="weeksbar" aria-labelledby="h-weeks">
+    <div class="wb-head"><h2 id="h-weeks">Week by week</h2><p>Open any week to see that Sunday's proposals, what was approved and what happened.</p></div>
+    <div id="weeks"></div>
+  </section>
 
   <!-- OVERVIEW -->
   <div class="pane" id="p-overview">
@@ -570,7 +592,7 @@ function renderDigest(){
 function renderWeekList(){
   const live=D.weeks.filter(w=>w.kind==="live"), prac=D.weeks.filter(w=>w.kind==="practice");
   const item=(w,now)=>`<button type="button" data-w="${w.id}">Week ${w.n}${now?'<span class="now" style="margin-left:8px">NOW</span>':''}<small>w/c ${wdm(w.start)}</small></button>`;
-  $("weeks").innerHTML=`<h3 class="live">Live</h3>`+live.map((w,i)=>item(w,i===0)).join("")+`<h3>Practice</h3>`+prac.map(w=>item(w,false)).join("");
+  $("weeks").innerHTML=`<div class="wgroup"><h3 class="live">Live</h3><div class="wbtns">`+live.map((w,i)=>item(w,i===0)).join("")+`</div></div><div class="wgroup"><h3>Practice</h3><div class="wbtns">`+prac.map(w=>item(w,false)).join("")+`</div></div>`;
   $("weeks").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>showWeek(b.dataset.w)));
 }
 function signalsReport(w){
@@ -787,5 +809,16 @@ if ("serviceWorker" in navigator && location.protocol==="https:") { navigator.se
 </script>
 <!-- /INSTALL-KIT -->
 
+<script>
+// go-live day: "Launching January 2027" becomes "We're live" by itself (same switch as the rest of the site)
+(function(){
+  var liveTest=/[?&]livetest=1/.test(location.search);
+  function apply(live){ document.querySelectorAll("[data-launch]").forEach(function(e){e.hidden=live;}); document.querySelectorAll("[data-live]").forEach(function(e){e.hidden=!live;}); }
+  if (liveTest) { apply(true); return; }
+  if (!/myrobotisa\.com$/.test(location.hostname)) return;
+  fetch("https://vxnestmhtjotidhzzqbo.supabase.co/rest/v1/rpc/founding_status",{method:"POST",headers:{apikey:"sb_publishable_hjvkAbVw82CKg2rdDZgVcw_XUDbmerV","Content-Type":"application/json"},body:"{}"})
+    .then(function(r){return r.ok?r.json():null;}).then(function(st){ if(st) apply(!!st.sales_open); }).catch(function(){});
+})();
+</script>
 </body>
 </html>
