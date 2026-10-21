@@ -35,7 +35,9 @@
   header{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
   .handle{color:var(--muted);font-weight:500;font-size:15px;text-decoration:none}
   .pw{display:contents}
-  .pf[hidden],.ps[hidden],.places[hidden]{display:none!important}
+  .pf[hidden],.ps[hidden],.places[hidden],.tag[hidden]{display:none!important}
+  a.tag{text-decoration:none} a.tag::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--deep);margin-right:7px;vertical-align:1px;animation:livepulse 1.6s ease-in-out infinite}
+  @keyframes livepulse{50%{opacity:.25}} @media (prefers-reduced-motion:reduce){a.tag::before{animation:none}}
   .places{margin:2px 0 10px;font-weight:800;font-size:15px;color:var(--pink-ink)} .side-cta .places{margin:8px 0 0;font-size:13px}
   .hdr-r{display:flex;align-items:center;gap:14px}
   .login{display:inline-flex;align-items:center;gap:6px;min-height:34px;padding:0 14px;border:2px solid var(--green);border-radius:999px;color:var(--ink);font-weight:800;font-size:13px;text-decoration:none;transition:background .15s,color .15s}
@@ -320,7 +322,7 @@
 <div class="wrap" id="top">
   <header>
     <a class="handle" href="https://www.instagram.com/myrobotisa/">@myrobotisa</a>
-    <span class="hdr-r"><a class="login" href="members/">Log in</a><span class="tag"><span class="t-long">Launching </span>January 2027</span></span>
+    <span class="hdr-r"><a class="login" href="members/">Log in</a><span class="tag" data-launch><span class="t-long">Launching </span>January 2027</span><a class="tag" data-live href="index.html#join" hidden>We're live</a></span>
   </header>
 <main id="main">
   <section class="faq" id="faq">
@@ -625,11 +627,20 @@
 // Founding price, automatically: ask how many of the 100 founding places have sold (counts only, no personal data).
 // At 100 sold every price line switches to £199 by itself; once sales open, "X of 100 founding places left" shows.
 (function(){
-  if (!/myrobotisa\.com$/.test(location.hostname) && !/[?&]pricetest=/.test(location.search)) return;
+  if (!/myrobotisa\.com$/.test(location.hostname) && !/[?&](pricetest|livetest)=/.test(location.search)) return;
   var test = (location.search.match(/[?&]pricetest=(\d+)/) || [])[1];
+  var liveTest = /[?&]livetest=1/.test(location.search);
   function apply(st){
     if (!st) return;
-    var gone = st.left <= 0;
+    var gone = st.left <= 0, live = st.sales_open || liveTest;
+    // go-live day: the header badge changes from "Launching January 2027" to "We're live" by itself
+    document.querySelectorAll("[data-launch]").forEach(function(e){ e.hidden = live; });
+    document.querySelectorAll("[data-live]").forEach(function(e){ e.hidden = !live; });
+    // after the founding 100: an approved £199 version of a clip replaces the £99 one (only where one is set)
+    if (gone) document.querySelectorAll("video[data-std-src]").forEach(function(v){
+      var src = v.querySelector("source"); if (!src || src.getAttribute("src") === v.dataset.stdSrc) return;
+      src.setAttribute("src", v.dataset.stdSrc); if (v.dataset.stdPoster) v.setAttribute("poster", v.dataset.stdPoster); v.load();
+    });
     document.querySelectorAll(".pf").forEach(function(e){ e.hidden = gone; });
     document.querySelectorAll(".ps").forEach(function(e){ e.hidden = !gone; });
     document.querySelectorAll("[data-places]").forEach(function(e){
@@ -637,7 +648,7 @@
       else e.hidden = true;
     });
   }
-  if (test !== undefined) { var n = +test; apply({ total: 100, sold: n, left: Math.max(0, 100 - n), sales_open: n > 0 }); return; }
+  if (test !== undefined || liveTest) { var n = +(test || 0); apply({ total: 100, sold: n, left: Math.max(0, 100 - n), sales_open: n > 0 || liveTest }); return; }
   fetch("https://vxnestmhtjotidhzzqbo.supabase.co/rest/v1/rpc/founding_status", { method: "POST",
     headers: { apikey: "sb_publishable_hjvkAbVw82CKg2rdDZgVcw_XUDbmerV", "Content-Type": "application/json" }, body: "{}" })
     .then(function(r){ return r.ok ? r.json() : null; }).then(apply).catch(function(){});
