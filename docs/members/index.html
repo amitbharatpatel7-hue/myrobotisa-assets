@@ -12,6 +12,7 @@
 <meta name="apple-mobile-web-app-title" content="My Robot">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.webmanifest">
+<script>if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) document.documentElement.classList.add("app");</script>
 <link rel="icon" href="icon-192.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -157,12 +158,19 @@
   .note b{display:block;font-size:15px} .note time{display:block;font-size:12px;color:var(--eye);margin:2px 0 6px} .note p{margin:0;font-size:14px;line-height:1.55;color:var(--muted);white-space:pre-line} .note a{display:inline-block;margin-top:8px;font-weight:700;font-size:14px}
   .dash-form{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px} .dash-form input{flex:1 1 220px;min-height:46px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+  /* installed app: members area only. No site menu, no "install the app" card, no sign-out email in the corner. */
+  .app-only{display:none!important}
+  html.app .app-only{display:flex!important} html.app .site-only{display:none!important}
+  html.app section[aria-labelledby="h-app"]{display:none}
+  @media(min-width:860px){html.app section[aria-labelledby="h-qs"]{grid-column:1/-1} html.app section[aria-labelledby="h-qs"] ol.steps{grid-template-columns:1fr 1fr}}
+  section[aria-labelledby], #msgs, #top{scroll-margin-top:16px}
 </style>
 </head>
 <body>
 <nav class="side" id="side" aria-label="Site">
-  <a class="side-brand" href="../"><img src="icon-192.png" alt=""><span>My Robot <b>I.S.A.</b></span></a>
-  <ol>
+  <a class="side-brand" href="./"><img src="icon-192.png" alt=""><span>My Robot <b>I.S.A.</b></span></a>
+  <ol class="site-only">
     <li><a href="./" class="on" aria-current="page">Members area</a></li>
     <li class="sep">The site</li>
     <li><a href="../">Home</a></li>
@@ -173,11 +181,22 @@
     <li><a href="../isa-rules.html">ISA rules</a></li>
     <li><a href="../questions.html">Questions</a></li>
   </ol>
+  <!-- In the installed app the menu is the members area only (21 Oct 2026) -->
+  <ol class="app-only" id="appnav">
+    <li><a href="#top" class="on">Home</a></li>
+    <li><a href="#msgs">Messages</a></li>
+    <li><a href="#h-qs">Start here</a></li>
+    <li><a href="#h-les">The 14 lessons</a></li>
+    <li><a href="#h-code">Your code</a></li>
+    <li><a href="#h-dash">Your dashboard</a></li>
+    <li><a href="#h-new">New clips</a></li>
+    <li><a href="#h-help">Help and membership</a></li>
+  </ol>
   <div class="side-cta"><p class="side-social"><a href="https://www.youtube.com/@myrobotisa" aria-label="My Robot I.S.A. on YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></svg></a><a href="https://www.instagram.com/myrobotisa/" aria-label="My Robot I.S.A. on Instagram" title="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg></a><a href="https://www.tiktok.com/@myrobotisa" aria-label="My Robot I.S.A. on TikTok" title="TikTok"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.8 3.6 4 3.8v3.1a7.2 7.2 0 0 1-4-1.2v6.2A5.9 5.9 0 1 1 10.7 9v3.2a2.8 2.8 0 1 0 2.8 2.8V3h3.1Z"/></svg></a></p></div>
 </nav>
 <button id="scrim" tabindex="-1" aria-hidden="true"></button>
 <button id="menubtn" aria-label="Sections menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
-<div class="wrap">
+<div class="wrap" id="top">
   <div class="top">
     <a class="brand" href="./"><img src="icon-192.png" alt=""><span><b>My Robot <i>I.S.A.</i></b><small>Members</small></span></a>
     <div class="who" id="who" hidden><span id="whoemail"></span><button class="btn ghost sm" id="signout" type="button">Sign out</button></div>
@@ -663,6 +682,17 @@
     scrim.addEventListener("click", closeMenu);
     side.addEventListener("click", function (e) { if (e.target.closest("a")) closeMenu(); });
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+  })();
+
+  // installed app: highlight the section you're looking at in the members menu
+  if (document.documentElement.classList.contains("app")) (function () {
+    var links = [].slice.call(document.querySelectorAll("#appnav a"));
+    function mark() {
+      var cur = links[0];
+      links.forEach(function (a) { var el = document.querySelector(a.getAttribute("href")); if (el && el.offsetParent !== null && el.getBoundingClientRect().top < 140) cur = a; });
+      links.forEach(function (a) { a.classList.toggle("on", a === cur); });
+    }
+    addEventListener("scroll", mark, { passive: true }); setTimeout(mark, 300);
   })();
   // ---- install as an app: show the steps for this device first
   (function () {
