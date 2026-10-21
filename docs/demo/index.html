@@ -246,8 +246,8 @@ body.qs-mode header.hero{display:none}
   </nav>
   <div id="weeks" aria-label="Weeks"></div>
   <div id="installbox">
-    <b>Put it on your phone</b>
-    <span id="installhow">iPhone: Share, then Add to Home Screen. Android: menu, then Install app.</span>
+    <b>Put it on your phone, Mac or PC</b>
+    <span id="installhow">iPhone: Share, then Add to Home Screen. Android: menu, then Install app. Mac: in Safari, File, then Add to Dock. Windows: the install icon in Chrome or Edge's address bar.</span>
     <button id="installbtn" type="button" hidden>Install the app</button>
   </div>
 </aside>
@@ -526,7 +526,8 @@ function renderOrders(){ $("otable").innerHTML="<table><tr><th>Date</th><th>What
 function renderDigest(){
   const v=total(), prev=D.acct.at(-2), ch=v-prev;
   $("dg-title").textContent=`${ch>=0?"+":"−"}${gbp(Math.abs(ch))} today · ${gbp(v)}`;
-  $("dg-body").innerHTML=`<p><b>Orders:</b> none today. Next proposals Sunday at 7pm (London), to approve by 2pm Monday.</p><p><b>Needs you:</b> nothing.</p><p><b>Checks:</b> broker connected · every order confirmed · ${D.stops.length} stops checked.</p><p class="tag">Example email. Yours comes from your own email key, to your own inbox.</p>`;
+  const bl=Object.values(D.bench).at(-1), sincePct=v/D.start*100-100, lead=sincePct-(bl.us-100);
+  $("dg-body").innerHTML=`<p><b>Since you started:</b> ${v>=D.start?"+":"−"}${gbp(Math.abs(v-D.start))} (${pct(sincePct,1)})${lead>0?`, ${lead.toFixed(1)} points ahead of US large caps`:""}.</p><p><b>Orders:</b> none today. Next proposals Sunday at 7pm (London), to approve by 2pm Monday.</p><p><b>Needs you:</b> nothing.</p><p><b>Checks:</b> broker connected · every order confirmed · ${D.stops.length} stops checked.</p><p class="tag">Example email. Yours comes from your own email key, to your own inbox.</p>`;
 }
 
 // ---- weeks: sidebar list and the weekly view
@@ -579,7 +580,7 @@ const QS=[
   ["Your Trading 212 key, practice account first","8 min",["Turn on the API in Trading 212's practice account and create a key","Paste it into your copy's secrets with the one-line helper. Real orders stay off"]],
   ["Your email key","5 min",["Create a free Resend account and an API key","Paste it in the same way. No domain needed: reports come to your own inbox"]],
   ["Optional extras","5 min",["Error alerts with a free Sentry account","Claude fixing failed runs for you, if you have a Claude subscription"]],
-  ["Install the app on your phone","2 min",["Open your private dashboard link and sign in with the code emailed to you","Share, then Add to Home Screen"]]
+  ["Install the app on your phone, Mac or PC","2 min",["Open your private dashboard link and sign in with the code emailed to you","Phone: Share, then Add to Home Screen. Mac: Safari's File menu, then Add to Dock. PC: Install in Chrome or Edge"]]
 ];
 let qdone=new Set();
 function renderQS(){
@@ -641,7 +642,18 @@ setHalt(false);
 let deferred=null;
 addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); deferred=e; $("installbtn").hidden=false; });
 $("installbtn").addEventListener("click",async()=>{ if(!deferred) return; deferred.prompt(); await deferred.userChoice.catch(()=>{}); deferred=null; $("installbtn").hidden=true; });
-if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) { $("installhow").textContent="Installed. It opens full screen, like any app."; }
+{ // the steps for the device it's opened on (all of them are listed above if this can't tell)
+  const ua=navigator.userAgent, touchMac=/Macintosh/.test(ua)&&navigator.maxTouchPoints>1;
+  const how = /iPhone|iPad|iPod/.test(ua)||touchMac ? "Tap Share, then Add to Home Screen. It opens full screen, like any app."
+    : /Android/.test(ua) ? "Tap the menu (three dots), then Install app or Add to Home screen."
+    : /Macintosh/.test(ua)&&/Safari/.test(ua)&&!/Chrome|Chromium|Edg|Firefox/.test(ua) ? "In Safari: File, then Add to Dock. It opens in its own window, like any Mac app."
+    : /Edg\//.test(ua) ? "Click the install icon in the address bar, or the menu, then Apps, then Install this site as an app."
+    : /Chrome|Chromium/.test(ua) ? "Click the install icon at the right of the address bar, or the menu, then Cast, save and share, then Install page as app."
+    : /Firefox/.test(ua) ? "Firefox can't install sites as apps. Open this page in Chrome, Edge or Safari (Mac) to install it."
+    : null;
+  if (how) $("installhow").textContent = how;
+}
+if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) { $("installhow").textContent="Installed. It opens in its own window, like any app."; }
 // Make it yours: the visitor's first name on the robot, kept only in this browser
 (function(){
   const box=$("ownername"), form=$("nameform"), eb=$("owner"); if(!box||!form||!eb) return;
