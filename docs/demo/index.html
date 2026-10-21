@@ -479,7 +479,7 @@ function renderFindings(){
   if (near.avg < 5) F.push(["p-bad","Close to an exit",`${near.n} is ${near.avg.toFixed(1)}% above its 40-week average`,"A weekly close below that line means Sunday's proposals will include a sell for you to approve."]);
   const th={}; D.holdings.forEach(h=>th[h[3]]=(th[h[3]]||0)+h[4]);
   const hw=((th["Chip makers"]||0)+(th["AI hardware"]||0))/total()*100;
-  if (hw > 30) F.push(["p-warn","Watch","It is one bet, not two",`Chip makers and AI hardware together are ${hw.toFixed(0)}% of the account, so they will tend to rise and fall together. The theme chart below shows the split.`]);
+  if (hw > 30) F.push(["p-info","Watch","It is one bet, not two",`Chip makers and AI hardware together are ${hw.toFixed(0)}% of the account, so they will tend to rise and fall together. The theme chart below shows the split.`]);
   F.push(["p-good","Working","Every order this month landed","The monthly rebalance was marked done only after the broker confirmed all five orders."]);
   F.push(["p-info","Too early",`${weeksOpen()} of 12 weeks: too early to judge`,"A fair read of any system needs months. What five weeks does show is that the machine does what it says."]);
   $("findings").innerHTML=F.map(([c,p,t,b])=>`<div class="f"><span class="pill ${c}">${p}</span><div><b>${esc(t)}</b><p>${esc(b)}</p></div></div>`).join("");
