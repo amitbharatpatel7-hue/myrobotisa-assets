@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#34003B">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="My Robot">
+<meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.webmanifest">
 <script>
@@ -305,7 +305,7 @@
         <ol class="steps" id="qs"></ol>
       </section>
 
-      <section class="card" aria-labelledby="h-app" data-page="help">
+      <section class="card" aria-labelledby="h-app" data-page="home help">
         <h2 id="h-app">Your app, <span class="g">every screen</span></h2>
         <p class="lede">Put this members area, and later your own dashboard, on your phone, Mac or PC. It opens in its own window like any app, with no App Store.</p>
         <div class="devices" id="devices">
@@ -773,7 +773,7 @@
   var PAGES = ["home", "start", "lessons", "code", "dashboard", "mydash", "clips", "help"];
   function go(page) {
     if (PAGES.indexOf(page) < 0) page = "home";
-    document.querySelectorAll("#v-home [data-page]").forEach(function (el) { el.classList.toggle("off", el.dataset.page !== page); });
+    document.querySelectorAll("#v-home [data-page]").forEach(function (el) { el.classList.toggle("off", el.dataset.page.split(" ").indexOf(page) < 0); });
     document.querySelectorAll("[data-go]").forEach(function (a) { var on = a.dataset.go === page; a.classList.toggle("on", on); on ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"); });
     document.querySelector('.mgroup > a').classList.toggle("on", true);
     if (page === "lessons") $("les-fold").open = true;
