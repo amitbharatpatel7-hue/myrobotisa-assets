@@ -399,7 +399,7 @@
   </footer>
 </div>
 
-<script>var V2SRC=(function(){try{var q=new URLSearchParams(location.search).get("src");if(q)sessionStorage.setItem("src",q.slice(0,40));return (q||sessionStorage.getItem("src")||"").slice(0,40)||null;}catch(e){return null;}})();</script>
+<script>var V2SRC=(function(){var u,q=null,h="";try{u=new URLSearchParams(location.search);q=u.get("src")||u.get("utm_source")}catch(e){}if(!q){try{h=new URL(document.referrer).hostname.replace(/^www\./,"")}catch(e){}}var s=(q||(h&&!/(^|\.)myrobotisa\.com$/.test(h)?h:"")||"").replace(/[^\w.-]/g,"").slice(0,40);try{var o=sessionStorage.getItem("src");if(s&&(q||!o))sessionStorage.setItem("src",s);else if(o)s=o}catch(e){}return s||null;})();</script>
 <script>
 (function(){
   // The I.S.A. line: a different meaning every few seconds (one random pick, no rotation, for reduced motion).
