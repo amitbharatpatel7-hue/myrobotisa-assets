@@ -257,19 +257,16 @@ body.qs-mode header.hero{display:none}
 .sitehdr .login{display:inline-flex;align-items:center;min-height:34px;padding:0 14px;border:2px solid var(--brand-green);border-radius:999px;color:var(--fg);font-weight:800;font-size:13px;text-decoration:none}
 .sitehdr .login:hover{background:var(--brand-green);color:#1C0A21}
 
-/* weeks in the main area (21 Oct 2026): one slim row that scrolls sideways as the weeks grow */
-.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
-.weeksbar{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px 10px}
-.weeksbar #weeks{display:flex;align-items:center;gap:6px;overflow-x:auto;padding:0;margin:0;border:0;scrollbar-width:thin}
-.weeksbar .wgroup{display:contents}
-.weeksbar #weeks h3{margin:0 2px 0 6px;font-size:10.5px;white-space:nowrap;flex:none}
-.weeksbar .wbtns{display:contents}
-.weeksbar #weeks button{flex:none;display:inline-flex;align-items:baseline;gap:6px;width:auto;min-height:34px;margin:0;padding:5px 11px;border:1px solid var(--line);background:var(--bg);border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap}
-.weeksbar #weeks button small{display:inline;font-size:11.5px;font-weight:500}
-.weeksbar #weeks button .now{margin:0;font-size:9.5px;padding:1px 6px}
-.weeksbar #weeks button:hover{border-color:var(--brand-green);background:var(--bg)}
-.weeksbar #weeks button[aria-current="page"]{border-color:var(--brand-green);box-shadow:inset 0 0 0 1px var(--brand-green);background:var(--sel)}
-.weeksbar .wgroup+.wgroup h3{margin-left:12px;padding-left:12px;border-left:1px solid var(--line)}
+/* weeks fold in the side menu under "Try the demo", like the real dashboard (21 Oct 2026) */
+.sgroup #weeks{border-top:0;padding-top:4px;margin-top:4px}
+#weeks details.wgrp{margin:2px 0}
+#weeks details.wgrp>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:38px;padding:6px 10px;border-radius:12px;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+#weeks details.wgrp>summary::-webkit-details-marker{display:none}
+#weeks details.wgrp>summary:hover{background:var(--info-bg);color:var(--fg)}
+#weeks details.wgrp>summary::after{content:"";margin-left:auto;width:7px;height:7px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(-45deg);transition:transform .15s}
+#weeks details.wgrp[open]>summary::after{transform:rotate(45deg)}
+#weeks details.wgrp>summary .live::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--brand-green);margin-right:6px;vertical-align:1px;animation:pulse 1.6s ease-in-out infinite}
+#weeks details.wgrp>summary .wn{font-size:11px;letter-spacing:0;padding:1px 7px;border-radius:999px;background:var(--info-bg);color:var(--fg)}
 .sitehdr .hdr-r{display:flex;align-items:center;gap:14px}
 .sitehdr .tag{display:inline-block;background:var(--brand-green);color:#1C0A21;font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:6px 12px;white-space:nowrap;text-decoration:none}
 .sitehdr .tag[hidden]{display:none}
@@ -292,6 +289,7 @@ body.qs-mode header.hero{display:none}
     <button type="button" data-p="reports"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg>Reports</button>
     <button type="button" data-p="controls"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="9" y1="9" x2="9" y2="15"/><line x1="15" y1="9" x2="15" y2="15"/></svg>Controls<span class="soon">SOON</span></button>
       </nav>
+      <div id="weeks" aria-label="Weeks"></div>
     </li>
     <li><a href="../status.html">Nothing to hide</a></li>
     <li><a href="../isa-rules.html">ISA rules</a></li>
@@ -320,11 +318,6 @@ body.qs-mode header.hero{display:none}
       <div class="refreshwrap"><button id="refreshbtn" type="button"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-3-6.7"/><polyline points="21 3 21 9 15 9"/></svg><span id="refreshlbl">Refresh now</span></button><div id="livemsg" role="status">Showing the last close. Refresh now reads your broker live.</div></div></div>
     <form class="namebox" id="nameform"><label for="ownername">Make it yours:</label><input id="ownername" maxlength="20" autocomplete="given-name" placeholder="Your first name"><button type="submit">Save</button></form>
   </header>
-
-  <section class="weeksbar" aria-labelledby="h-weeks">
-    <h2 id="h-weeks" class="vh">Week by week</h2>
-    <div id="weeks"></div>
-  </section>
 
   <!-- OVERVIEW -->
   <div class="pane" id="p-overview">
@@ -486,7 +479,7 @@ function renderFindings(){
   if (near.avg < 5) F.push(["p-bad","Close to an exit",`${near.n} is ${near.avg.toFixed(1)}% above its 40-week average`,"A weekly close below that line means Sunday's proposals will include a sell for you to approve."]);
   const th={}; D.holdings.forEach(h=>th[h[3]]=(th[h[3]]||0)+h[4]);
   const hw=((th["Chip makers"]||0)+(th["AI hardware"]||0))/total()*100;
-  if (hw > 30) F.push(["p-info","Watch","It is one bet, not two",`Chip makers and AI hardware together are ${hw.toFixed(0)}% of the account, so they will tend to rise and fall together. The theme chart below shows the split.`]);
+  if (hw > 30) F.push(["p-warn","Watch","It is one bet, not two",`Chip makers and AI hardware together are ${hw.toFixed(0)}% of the account, so they will tend to rise and fall together. The theme chart below shows the split.`]);
   F.push(["p-good","Working","Every order this month landed","The monthly rebalance was marked done only after the broker confirmed all five orders."]);
   F.push(["p-info","Too early",`${weeksOpen()} of 12 weeks: too early to judge`,"A fair read of any system needs months. What five weeks does show is that the machine does what it says."]);
   $("findings").innerHTML=F.map(([c,p,t,b])=>`<div class="f"><span class="pill ${c}">${p}</span><div><b>${esc(t)}</b><p>${esc(b)}</p></div></div>`).join("");
@@ -592,8 +585,9 @@ function renderDigest(){
 // ---- weeks: sidebar list and the weekly view
 function renderWeekList(){
   const live=D.weeks.filter(w=>w.kind==="live"), prac=D.weeks.filter(w=>w.kind==="practice");
-  const item=(w,now)=>`<button type="button" data-w="${w.id}" title="Week of ${wdm(w.start)}">Week ${w.n}${now?'<span class="now">NOW</span>':''}<small>${wdm(w.start).replace(/^\w+ /,"")}</small></button>`;
-  $("weeks").innerHTML=`<div class="wgroup"><h3 class="live">Live</h3><div class="wbtns">`+live.map((w,i)=>item(w,i===0)).join("")+`</div></div><div class="wgroup"><h3>Practice</h3><div class="wbtns">`+prac.map(w=>item(w,false)).join("")+`</div></div>`;
+  const item=(w,now)=>`<button type="button" data-w="${w.id}">Week ${w.n}${now?'<span class="now" style="margin-left:8px">NOW</span>':''}<small>w/c ${wdm(w.start)}</small></button>`;
+  const grp=(name,cls,list,n)=>`<details class="wgrp"><summary><span${cls}>${name}</span><span class="wn">${n}</span></summary>${list}</details>`;
+  $("weeks").innerHTML=grp("Live",' class="live"',live.map((w,i)=>item(w,i===0)).join(""),live.length)+grp("Practice","",prac.map(w=>item(w,false)).join(""),prac.length);
   $("weeks").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>showWeek(b.dataset.w)));
 }
 function signalsReport(w){
@@ -629,7 +623,7 @@ const PANES=["overview","quickstart","week","orders","reports","controls"];
 function show(p){ PANES.forEach(x=>$("p-"+x).hidden = x!==p); document.body.classList.toggle("qs-mode", p==="quickstart"); }
 function clearSel(){ document.querySelectorAll("#nav button,#weeks button").forEach(b=>b.removeAttribute("aria-current")); }
 function showWeek(id){
-  const w=D.weeks.find(x=>x.id===id); clearSel(); document.querySelector(`#weeks button[data-w="${id}"]`).setAttribute("aria-current","page");
+  const w=D.weeks.find(x=>x.id===id); clearSel(); document.querySelector(`#weeks button[data-w="${id}"]`).setAttribute("aria-current","page"); { const b=document.querySelector(`#weeks button[data-w="${id}"]`), g=b&&b.closest("details"); if(g) g.open=true; }
   $("p-week").innerHTML=weekView(w); show("week"); closeMenu(); scrollTo({top:0});
 }
 
