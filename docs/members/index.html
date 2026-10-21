@@ -315,7 +315,7 @@
         <h2 id="h-app">Your app, <span class="g">every screen</span></h2>
         <p class="lede">Put this members area, and later your own dashboard, on your phone, Mac or PC. It opens in its own window like any app, with no App Store.</p>
         <div class="devices" id="devices">
-          <div class="dev" data-dev="phone" data-install role="button" tabindex="0"><b>Phone</b>iPhone: ⋯, then Share, then Add to Home Screen. Android: menu, then Install app.</div>
+          <div class="dev" data-dev="phone" data-install role="button" tabindex="0"><b>Phone</b>iPhone: the menu button by the address (☰ or ⋯), then Share, then Add to Home Screen. Android: menu, then Install app.</div>
           <div class="dev" data-dev="mac" data-install role="button" tabindex="0"><b>Mac</b>Safari: File, then Add to Dock. Chrome: the install icon in the address bar.</div>
           <div class="dev" data-dev="pc" data-install role="button" tabindex="0"><b>Windows PC</b>Chrome or Edge: the install icon in the address bar, then Install.</div>
         </div>
@@ -847,6 +847,11 @@
   #ik-coach .arrow{width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;margin-right:14px;animation:ikbob 1s ease-in-out infinite}
   #ik-coach.bottom .arrow{border-top:22px solid #00E87A}
   #ik-coach.top .arrow{border-bottom:22px solid #00E87A}
+  /* iOS 27 Safari: the menu (three lines) sits at the left end of the address bar, about 28% across */
+  #ik-coach.bottom.left{right:auto;left:12px;align-items:flex-start}
+  #ik-coach.bottom.left .arrow{margin-right:0;margin-left:max(0px,calc(28vw - 28px))}
+  #ik-coach.bottom.mid{right:auto;left:50%;transform:translateX(-50%);align-items:center}
+  #ik-coach.bottom.mid .arrow{margin-right:0}
   @keyframes ikbob{50%{transform:translateY(6px)}}
   #ik-coach.top .arrow{animation-name:ikbobup} @keyframes ikbobup{50%{transform:translateY(-6px)}}
   @media (prefers-reduced-motion:reduce){#ik-coach .arrow{animation:none}}
@@ -872,7 +877,7 @@
 <script>
 (function () {
   var STEPS = {
-    iphone: ["Tap the <b>⋯</b> button at the bottom right of Safari, next to the address", "Tap <b>Share</b>", "Scroll down and tap <b>Add to Home Screen</b> (tap <b>View More</b> first if you don't see it), then <b>Add</b>"],
+    iphone: null, // set below for this iPhone's Safari
     ipad: ["Tap the <b>Share</b> button (the square with an arrow) at the top right of Safari", "Scroll down and tap <b>Add to Home Screen</b>", "Tap <b>Add</b>. It's now on your Home Screen like any app"],
     android: ["Tap the <b>menu</b> (three dots) at the top right of Chrome", "Tap <b>Install app</b> (or <b>Add to Home screen</b>)", "Tap <b>Install</b>. It's now with your other apps"],
     safari: ["In the menu bar at the top of the screen, click <b>File</b>", "Click <b>Add to Dock…</b>", "Click <b>Add</b>. It opens from your Dock and Launchpad like any Mac app"],
@@ -880,13 +885,22 @@
     edge: ["Click the <b>app icon</b> at the right-hand end of the address bar", "Click <b>Install</b>", "No icon? Open the <b>menu</b> (three dots), then <b>Apps</b>, then <b>Install this site as an app</b>"]
   };
   var NOTE = {
-    iphone: "Older iPhone, or Safari's tab bar set to Bottom? Tap the Share button (square with an arrow) in the toolbar instead. Use Safari: other browsers may not offer Add to Home Screen.",
+    iphone: "Can't see it? Safari's menu button sits by the address: three lines (☰) or ⋯, and on older iPhones a Share button (square with an arrow). Use Safari: other browsers may not offer Add to Home Screen.",
     ipad: "Use Safari: other browsers may not offer Add to Home Screen.",
     android: "Works in Chrome, Edge and Samsung Internet.",
     safari: "Needs macOS Sonoma (14) or later. On older Macs, use Chrome.",
     chrome: "Works on Mac and Windows. Private (Incognito) windows can't install apps: open a normal window.",
     edge: "Works on Windows and Mac. InPrivate windows can't install apps: open a normal window."
   };
+  // Safari's version is in "Version/NN" (iOS 26 and later freeze the "iPhone OS" number, so that can't be used).
+  // Safari 27: menu = three lines at the left of the address bar. Safari 26: ⋯ at the right. Older: Share in the toolbar.
+  var sv = +((navigator.userAgent.match(/Version\/(\d+)/) || [])[1] || 0);
+  var IOS = sv >= 27 ? "lines" : sv === 26 ? "dots" : "share";
+  STEPS.iphone = {
+    lines: ["Tap the <b>☰</b> button (three lines) at the left end of the address bar, at the bottom of Safari", "Tap <b>Share</b>", "Scroll down and tap <b>Add to Home Screen</b>, then <b>Add</b>"],
+    dots: ["Tap the <b>⋯</b> button at the bottom right of Safari, next to the address", "Tap <b>Share</b>", "Scroll down and tap <b>Add to Home Screen</b> (tap <b>View More</b> first if you don't see it), then <b>Add</b>"],
+    share: ["Tap the <b>Share</b> button (a square with an arrow) in Safari's toolbar", "Scroll down and tap <b>Add to Home Screen</b>", "Tap <b>Add</b>. It's now on your Home Screen like any app"]
+  }[IOS];
   var ua = navigator.userAgent, touchMac = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
   var dev = /iPad/.test(ua) || touchMac ? "ipad" : /iPhone|iPod/.test(ua) ? "iphone" : /Android/.test(ua) ? "android" : /Edg\//.test(ua) ? "edge"
     : /Chrome|Chromium|CriOS/.test(ua) ? "chrome" : /Macintosh/.test(ua) && /Safari/.test(ua) ? "safari" : "chrome";
@@ -902,10 +916,12 @@
   var coach = document.getElementById("ik-coach"), coachTimer = null;
   function showCoach() {
     var pad = dev === "ipad";
-    coach.className = pad ? "top" : "bottom";
+    coach.className = pad ? "top" : IOS === "lines" ? "bottom left" : IOS === "share" ? "bottom mid" : "bottom";
     document.getElementById("ik-coach-t").innerHTML = pad
       ? "Tap Share up here<small>then Add to Home Screen, then Add</small>"
-      : "Tap ⋯ down here<small>then Share, then Add to Home Screen. Older iPhones: tap Share in the toolbar.</small>";
+      : IOS === "lines" ? "Tap ☰ down here<small>then Share, then scroll down to Add to Home Screen</small>"
+      : IOS === "share" ? "Tap Share down here<small>then Add to Home Screen, then Add</small>"
+      : "Tap ⋯ down here<small>then Share, then Add to Home Screen</small>";
     coach.hidden = false; clearTimeout(coachTimer); coachTimer = setTimeout(function () { coach.hidden = true; }, 15000);
   }
   coach.addEventListener("click", function () { coach.hidden = true; });
