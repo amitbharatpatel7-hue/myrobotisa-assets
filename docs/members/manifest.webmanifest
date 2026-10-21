@@ -2,7 +2,7 @@
  "name": "My Robot I.S.A. Members",
  "short_name": "My Robot",
  "id": "/members/",
- "start_url": "/members/",
+ "start_url": "/members/?app=1",
  "scope": "/members/",
  "display": "standalone",
  "background_color": "#34003B",
