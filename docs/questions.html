@@ -135,7 +135,7 @@
   .proof{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:8px}
   .proof li{font-size:15px;color:var(--muted)} .proof b{color:var(--green);font-weight:800;margin-right:4px}
   .get a{color:var(--green);font-weight:700}
-  .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:center;margin:8px 0 12px} .tour-facts{display:none} @media(min-width:1100px){.tour-facts{display:block;margin:14px 0 10px} .tour-facts li{font-size:15px;color:var(--ink)}}
+  .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:center;margin:8px 0 12px} .tour-facts{display:block;margin:14px 0 10px} .tour-facts li{font-size:15px;color:var(--ink)}
   @media(min-width:700px){.tour{grid-template-columns:1.2fr 1fr}}
   .tour h2{margin-top:12px}
   .who{display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:start;margin-top:40px} .who img{border-radius:24px;border:3px solid var(--green);width:96px;height:96px} .who h2{margin:0 0 8px} .who p{margin:0 0 10px;color:var(--ink)} .who a{color:var(--green);font-weight:700}
@@ -267,6 +267,18 @@
   .dayjob{margin:34px 0 8px}
   .dayjob .lead{color:var(--ink)}
   .dayjob .small{margin-top:10px}
+  /* The backtest is the hook (Amit, 21 Oct 2026): what it was tested through, and what that saves you. */
+  .tested{margin:30px 0 8px}
+  .tl{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:1fr;gap:0;border-left:3px solid var(--green);margin-left:6px}
+  .tl li{position:relative;padding:8px 0 8px 18px;display:grid;grid-template-columns:72px 1fr;gap:10px;align-items:baseline}
+  .tl li::before{content:"";position:absolute;left:-8.5px;top:15px;width:14px;height:14px;border-radius:50%;background:var(--deep);border:3px solid var(--green)}
+  .tl b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:20px;letter-spacing:.02em;color:var(--green)}
+  .tl span{color:var(--ink);font-size:16px;line-height:1.45}
+  .tested-grid{display:grid;grid-template-columns:1fr;gap:12px;margin:20px 0 12px}
+  .tested-grid div{background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px 16px}
+  .tested-grid b{display:block;font-size:16px;color:var(--ink);margin-bottom:4px}
+  .tested-grid span{color:var(--muted);font-size:15px;line-height:1.5}
+  @media(min-width:900px){.tested-grid{grid-template-columns:repeat(3,1fr)}}
   .road{margin:18px 0 8px;padding:16px 18px;border-left:4px solid var(--pink);background:var(--deep2);border-radius:0 18px 18px 0}
   .road-k{margin:0 0 6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pink-ink)}
   .road p:last-child{margin:0;font-size:16px;line-height:1.55;color:var(--ink)}
@@ -390,6 +402,8 @@
     <h2 class="h3">Your email</h2>
     <p>If you join the waitlist, My Robot I.S.A. (run by Amit Patel) keeps your email address, your Trading 212 answer if you give it (so we can skip steps you've already done), and which link brought you here, to send what you signed up for: the free test drive in December, and word when sales open in January. If you take the test drive, it also keeps which orders you approved there, to run it and improve the product. Sign up for the newsletter alone and you only get the newsletter. That's all it's used for, and it's never sold.</p>
     <p>Your details are stored with Supabase in London, and the emails are sent through Resend. They handle the data only on our behalf, and anything processed outside the UK is covered by UK-approved safeguards. Waitlist details are deleted within 12 months of launch if you don't buy; newsletter subscribers are kept until they unsubscribe. Every email has an unsubscribe link; to see or delete your data, email <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. The lawful basis is your consent, given by ticking the box. If you're unhappy with how your data is handled, you can complain to the Information Commissioner's Office at <a href="https://ico.org.uk/make-a-complaint/">ico.org.uk</a>.</p>
+    <h2 class="h3">Visitor counts</h2>
+    <p>We count visits to this site without cookies and without storing anything that identifies you: each visit is turned into a scrambled code from your IP address and browser, mixed with a random value that is replaced every day, so we can count unique visitors per day but never follow anyone from one day to the next. We also note the page, the site that linked here and whether it's a phone or a computer. Visits sent with "Do Not Track" or "Global Privacy Control" switched on aren't counted.</p>
     <p>My Robot I.S.A. is run by Amit Patel · <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. Not affiliated with Trading 212 or Anthropic.</p>
     <p>© 2026 My Robot I.S.A. · <a href="https://www.youtube.com/@myrobotisa">YouTube</a> · <a href="https://www.instagram.com/myrobotisa/">Instagram</a> · <a href="https://www.tiktok.com/@myrobotisa">TikTok</a></p>
   </footer>
@@ -577,6 +591,23 @@
     meta.textContent = "Last weekly run: " + ld(d.last_run_at) + ". Record since " + new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/London"}).format(new Date(d.first_run_at)) + ". Updated " + ld(d.generated_at) + ".";
     g.hidden=false;
   }).catch(function(){ meta.textContent="The record isn't available right now. Try again later."; });
+})();
+</script>
+<script>
+/* Visitor counter (21 Oct 2026): no cookies, nothing stored in the browser except an owner opt-out.
+   Skipped for Do Not Track / Global Privacy Control, on previews, and after visiting with ?notrack=1. */
+(function(){
+  try {
+    var q = new URLSearchParams(location.search);
+    if (q.get("notrack") === "1") { localStorage.setItem("mri-notrack", "1"); return; }
+    if (q.get("notrack") === "0") localStorage.removeItem("mri-notrack");
+    if (localStorage.getItem("mri-notrack") === "1") return;
+  } catch (e) {}
+  if (navigator.doNotTrack === "1" || navigator.globalPrivacyControl === true) return;
+  if (!/(^|\.)myrobotisa\.com$/.test(location.hostname)) return;
+  var q2 = new URLSearchParams(location.search);
+  var body = JSON.stringify({p: location.pathname, s: q2.get("src") || q2.get("utm_source") || "", r: document.referrer || ""});
+  try { fetch("https://vxnestmhtjotidhzzqbo.supabase.co/functions/v1/site-track", {method: "POST", headers: {"content-type": "text/plain"}, body: body, keepalive: true, mode: "cors", credentials: "omit"}); } catch (e) {}
 })();
 </script>
 </body>
