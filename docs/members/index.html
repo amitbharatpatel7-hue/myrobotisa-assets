@@ -331,7 +331,10 @@
     var token = $("code").value.replace(/\D/g, "");
     if (token.length < 6) { say("The code is the 6 numbers in the email.", false); return; }
     var b = $("b-verify"); b.disabled = true; say("Signing in…", true);
+    // Supabase accepts this code as type "email"; older projects only as "magiclink", so try that if the first is refused.
     auth("verify", { type: "email", email: sentTo, token: token }).then(function (r) {
+      return (r.ok && r.j.access_token) || r.status === 429 ? r : auth("verify", { type: "magiclink", email: sentTo, token: token });
+    }).then(function (r) {
       b.disabled = false;
       if (!r.ok || !r.j.access_token) { say(r.status === 429 ? "Too many tries. Wait a few minutes, then ask for a new code." : "That code didn't work. It may have expired or been used: ask for a new one.", false); return; }
       keep(r.j); say(""); start();
