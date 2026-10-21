@@ -197,6 +197,16 @@
   html.app #menubtn .i-x,html.app #menubtn[aria-expanded="true"] .i-bars{display:none}
   html.app #menubtn[aria-expanded="true"] .i-x{display:block}
   html.app footer{padding-bottom:72px}
+  /* 21 Oct 2026: the member's dashboard shown inside the app, full window. Its own menu is the only one while it's open. */
+  .dashframe{display:none}
+  html.dashview body{overflow:hidden}
+  html.dashview #menubtn,html.dashview #scrim,html.dashview .side{display:none!important}
+  html.dashview .dashframe{display:block!important;position:fixed;inset:0;z-index:40;background:var(--deep);margin:0;padding:0;border:0;border-radius:0;max-width:none}
+  .dashframe iframe{display:block;width:100%;height:100%;border:0;background:var(--deep)}
+  .dashhelp{position:absolute;left:12px;right:12px;top:calc(12px + env(safe-area-inset-top));max-width:560px;margin:0 auto;background:var(--deep2);border:2px solid var(--green);border-radius:18px;padding:14px 16px;box-shadow:0 12px 36px rgba(0,0,0,.45)}
+  .dashhelp[hidden]{display:none}
+  .dashhelp p{margin:0 0 10px;font-size:14.5px;line-height:1.5}
+  .dashhelp .row{display:flex;flex-wrap:wrap;gap:8px;margin:0}
 </style>
 </head>
 <body>
@@ -329,6 +339,14 @@
         <h2 id="h-dash">Your <span class="g">dashboard</span></h2>
         <p class="lede">Holdings, every order and why, the daily report and Approve. It runs on your own free Cloudflare account, behind a login only you can pass, with a read-only broker key.</p>
         <div id="dash-box"></div>
+      </section>
+
+      <section class="dashframe" data-page="mydash" aria-label="My dashboard">
+        <iframe id="dash-frame" title="My dashboard" referrerpolicy="no-referrer"></iframe>
+        <div class="dashhelp" id="dash-help" role="status" hidden>
+          <p><b>Dashboard not showing?</b> It may want you to sign in first. Tap Sign in, sign in in the window that opens, then come back here and tap Try again.</p>
+          <div class="row"><a class="btn" id="dash-signin" target="_blank" rel="noopener">Sign in</a><button class="btn ghost" type="button" id="dash-retry">Try again</button><a class="btn ghost" href="#home">Back to members area</a></div>
+        </div>
       </section>
 
       <section class="card" aria-labelledby="h-new" data-page="clips">
@@ -536,7 +554,7 @@
       "<dt>Updates until</dt><dd>" + esc(fmtDate(m.updates_until)) + "</dd>" +
       "<dt>Member since</dt><dd>" + esc(fmtDate(m.joined_at)) + "</dd>" +
       "<dt>Signed in as</dt><dd style=\"overflow-wrap:anywhere\">" + esc(session.email || m.email) + "</dd>" +
-      "<dt>Dashboard</dt><dd>" + (m.dashboard_url ? '<a class="pill g pill-link" href="' + esc(m.dashboard_url) + '"' + dashTarget() + '>Open my dashboard</a>' : '<a href="#dashboard" style="font-size:14px;font-weight:700">Add your link</a>') + "</dd>";
+      "<dt>Dashboard</dt><dd>" + (m.dashboard_url ? '<a class="pill g pill-link" href="' + esc(dashHref(m.dashboard_url)) + '">Open my dashboard</a>' : '<a href="#dashboard" style="font-size:14px;font-weight:700">Add your link</a>') + "</dd>";
     $("name-edit").addEventListener("click", editName);
     $("code-kv").innerHTML =
       "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : "Arrives in January 2027") + "</b></div>" +
@@ -544,7 +562,7 @@
     $("mem-kv").innerHTML =
       "<div><span>Updates included until</span><b>" + esc(fmtDate(m.updates_until)) + "</b></div>" +
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
-    renderDash(); renderAll(); show("home"); passkeyCard(); loadNotes();
+    renderDash(); renderAll(); show("home"); passkeyCard(); loadNotes(); if (location.hash === "#mydash") dashOpen(false);
     rest("member_progress?select=item,done").then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
       rows.forEach(function (x) { done[x.item] = x.done; }); renderAll();
     }).catch(function () {});
@@ -626,16 +644,38 @@
     });
   }
   // ---- your dashboard: the member's own link (theirs runs on their own Cloudflare account)
-  // In the installed app the dashboard (another address) would open inside the app window under a white address bar
-  // that browsers always add for other sites, so there it opens in its own browser window instead.
+  // In the installed app the dashboard (another address) would open under a white address bar that browsers always add
+  // for other sites, so there it opens in a frame filling the app window instead (#mydash). In a browser tab it opens
+  // in the same tab as before.
   function inApp() { return document.documentElement.classList.contains("app"); }
-  function dashTarget() { return inApp() ? ' target="_blank" rel="noopener"' : ""; }
+  function dashHref(url) { return inApp() ? "#mydash" : url; }
+  var dash = { origin: null, readyAt: 0, timer: null };
+  function dashHelp(on) { $("dash-help").hidden = !on; }
+  function dashArm(ms) { dashHelp(false); clearTimeout(dash.timer); dash.timer = setTimeout(function () { if (Date.now() - dash.readyAt > ms + 1000) dashHelp(true); }, ms); }
+  function dashOpen(reload) {
+    var url = me && me.dashboard_url, f = $("dash-frame");
+    if (!url) { if (me.user_id) location.hash = "dashboard"; return; }
+    try { dash.origin = new URL(url).origin; } catch (e) { location.hash = "dashboard"; return; }
+    $("dash-signin").href = url;
+    if (reload || f.dataset.src !== url) { f.dataset.src = url; dash.readyAt = 0; f.src = url; dashArm(8000); }
+  }
+  // The dashboard says when it has loaded, and asks to come back here from its menu. Only messages from the frame
+  // itself, from the dashboard's own address, count.
+  addEventListener("message", function (e) {
+    var f = $("dash-frame"); if (!f || e.source !== f.contentWindow || e.origin !== dash.origin) return;
+    var t = e.data && e.data.type;
+    if (t === "mri-dash-ready") { dash.readyAt = Date.now(); clearTimeout(dash.timer); dashHelp(false); }
+    else if (t === "mri-dash-home") location.hash = "home";
+  });
+  $("dash-frame").addEventListener("load", function () { if (this.dataset.src && Date.now() - dash.readyAt > 15000) dashArm(3000); });
+  $("dash-retry").addEventListener("click", function () { dashOpen(true); });
+  addEventListener("focus", function () { if (location.hash === "#mydash" && !$("dash-help").hidden) dashOpen(true); });
   function renderDash() {
     var box = $("dash-box"), url = me.dashboard_url;
     if (url) {
       box.innerHTML = '<div class="kv"><div><span>Your dashboard</span><b style="overflow-wrap:anywhere">' + esc(url.replace(/^https:\/\//, "")) + '</b></div><div><span>Who can see it</span><b>Only you</b></div></div>' +
-        '<div class="row"><a class="btn" href="' + esc(url) + '"' + dashTarget() + '>Open my dashboard</a></div>' +
-        '<p class="small" style="margin:12px 0 0">It asks for its own sign-in, which only you can pass. ' + (inApp() ? "It opens in its own browser window, so this app stays as it is." : "Use Back to return here.") + '</p>' +
+        '<div class="row"><a class="btn" href="' + esc(dashHref(url)) + '">Open my dashboard</a></div>' +
+        '<p class="small" style="margin:12px 0 0">It asks for its own sign-in, which only you can pass. ' + (inApp() ? "It opens right here in the app: Members area in its menu brings you back." : "Use Back to return here.") + '</p>' +
         '<p class="small" style="margin:6px 0 0;font-size:12px">Rebuilt your dashboard at a new address? <button class="linkbtn" type="button" id="dash-edit" style="font-size:12px">Update the link</button></p><div id="dash-form-wrap" hidden></div>';
       $("dash-edit").addEventListener("click", function () { var w = $("dash-form-wrap"); w.hidden = false; w.innerHTML = dashForm(url); wireDash(); });
     } else {
@@ -730,7 +770,7 @@
   })();
 
   // ---- one section per page: Home (welcome and messages), Start here, Lessons, Code, Dashboard, Clips, Help
-  var PAGES = ["home", "start", "lessons", "code", "dashboard", "clips", "help"];
+  var PAGES = ["home", "start", "lessons", "code", "dashboard", "mydash", "clips", "help"];
   function go(page) {
     if (PAGES.indexOf(page) < 0) page = "home";
     document.querySelectorAll("#v-home [data-page]").forEach(function (el) { el.classList.toggle("off", el.dataset.page !== page); });
@@ -738,6 +778,8 @@
     document.querySelector('.mgroup > a').classList.toggle("on", true);
     if (page === "lessons") $("les-fold").open = true;
     $("preview").classList.toggle("off", page !== "home");
+    document.documentElement.classList.toggle("dashview", page === "mydash");
+    if (page === "mydash") dashOpen(false);
     window.scrollTo(0, 0);
   }
   addEventListener("hashchange", function () { go(location.hash.slice(1)); });
