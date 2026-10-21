@@ -746,7 +746,7 @@
     loadSB().then(function (sb) { return sb.auth.signInWithPasskey(); }).then(function (r) {
       b.disabled = false;
       var ses = r && r.data && r.data.session;
-      if (!ses) { say("That didn't work. Use the email code instead, then add a passkey again from the members area.", false); return; }
+      if (!ses) { say("No passkey signed in on this device. Use the email code above, then add a passkey in Help and membership so Face ID works next time.", false); return; }
       keep({ access_token: ses.access_token, refresh_token: ses.refresh_token, expires_at: ses.expires_at, expires_in: ses.expires_in, user: ses.user }); say(""); start();
     }).catch(function () { b.disabled = false; say("That didn't work. Use the email code instead.", false); });
   });
