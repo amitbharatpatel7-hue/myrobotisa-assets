@@ -135,7 +135,7 @@
   .proof{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:8px}
   .proof li{font-size:15px;color:var(--muted)} .proof b{color:var(--green);font-weight:800;margin-right:4px}
   .get a{color:var(--green);font-weight:700}
-  .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:center;margin:8px 0 12px} .tour-facts{display:none} @media(min-width:1100px){.tour-facts{display:block;margin:14px 0 10px} .tour-facts li{font-size:15px;color:var(--ink)}}
+  .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:center;margin:8px 0 12px} .tour-facts{display:block;margin:14px 0 10px} .tour-facts li{font-size:15px;color:var(--ink)}
   @media(min-width:700px){.tour{grid-template-columns:1.2fr 1fr}}
   .tour h2{margin-top:12px}
   .who{display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:start;margin-top:40px} .who img{border-radius:24px;border:3px solid var(--green);width:96px;height:96px} .who h2{margin:0 0 8px} .who p{margin:0 0 10px;color:var(--ink)} .who a{color:var(--green);font-weight:700}
@@ -267,6 +267,18 @@
   .dayjob{margin:34px 0 8px}
   .dayjob .lead{color:var(--ink)}
   .dayjob .small{margin-top:10px}
+  /* The backtest is the hook (Amit, 21 Oct 2026): what it was tested through, and what that saves you. */
+  .tested{margin:30px 0 8px}
+  .tl{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:1fr;gap:0;border-left:3px solid var(--green);margin-left:6px}
+  .tl li{position:relative;padding:8px 0 8px 18px;display:grid;grid-template-columns:72px 1fr;gap:10px;align-items:baseline}
+  .tl li::before{content:"";position:absolute;left:-8.5px;top:15px;width:14px;height:14px;border-radius:50%;background:var(--deep);border:3px solid var(--green)}
+  .tl b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:20px;letter-spacing:.02em;color:var(--green)}
+  .tl span{color:var(--ink);font-size:16px;line-height:1.45}
+  .tested-grid{display:grid;grid-template-columns:1fr;gap:12px;margin:20px 0 12px}
+  .tested-grid div{background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px 16px}
+  .tested-grid b{display:block;font-size:16px;color:var(--ink);margin-bottom:4px}
+  .tested-grid span{color:var(--muted);font-size:15px;line-height:1.5}
+  @media(min-width:900px){.tested-grid{grid-template-columns:repeat(3,1fr)}}
   .road{margin:18px 0 8px;padding:16px 18px;border-left:4px solid var(--pink);background:var(--deep2);border-radius:0 18px 18px 0}
   .road-k{margin:0 0 6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pink-ink)}
   .road p:last-child{margin:0;font-size:16px;line-height:1.55;color:var(--ink)}
@@ -274,7 +286,7 @@
   h1.pg{font-size:34px;margin:44px 0 6px;line-height:1.1} h1.pg .p{color:var(--pink)}
   h2.h3{font-family:inherit;text-transform:none;letter-spacing:0;line-height:1.3} footer h2.h3{color:var(--ink);font-size:14px;margin:18px 0 4px} .box h2.h3{margin:0 0 8px;font-size:18px} .box h2.h3 .n{color:var(--green)} .job h2.h3{margin:0;font-family:Anton,Impact,sans-serif;font-size:22px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
 </style>
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://myrobotisa.com/#org","name":"My Robot I.S.A.","url":"https://myrobotisa.com/","logo":"https://myrobotisa.com/avatar.png","email":"hello@myrobotisa.com","sameAs":["https://www.instagram.com/myrobotisa"]},{"@type":"WebSite","@id":"https://myrobotisa.com/#site","url":"https://myrobotisa.com/","name":"My Robot I.S.A.","inLanguage":"en-GB","publisher":{"@id":"https://myrobotisa.com/#org"}},{"@type":"VideoObject","name":"My Robot I.S.A. in 30 seconds","description":"What My Robot I.S.A. is, what it does and what it costs, in Amit's own words.","thumbnailUrl":"https://myrobotisa.com/welcome-poster.jpg","contentUrl":"https://myrobotisa.com/clips/welcome.mp4","uploadDate":"2026-10-18","duration":"PT28S","inLanguage":"en-GB","publisher":{"@id":"https://myrobotisa.com/#org"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://myrobotisa.com/#org","name":"My Robot I.S.A.","url":"https://myrobotisa.com/","logo":"https://myrobotisa.com/avatar.png","email":"hello@myrobotisa.com","sameAs":["https://www.instagram.com/myrobotisa"]},{"@type":"WebSite","@id":"https://myrobotisa.com/#site","url":"https://myrobotisa.com/","name":"My Robot I.S.A.","inLanguage":"en-GB","publisher":{"@id":"https://myrobotisa.com/#org"}},{"@type":"VideoObject","name":"My Robot I.S.A. in 60 seconds","description":"What My Robot I.S.A. is, the six years of real markets it was tested through, how it works each week and what it costs.","thumbnailUrl":"https://myrobotisa.com/tour60-poster.jpg","contentUrl":"https://myrobotisa.com/clips/tour60.mp4","uploadDate":"2026-10-21","duration":"PT55S","inLanguage":"en-GB","publisher":{"@id":"https://myrobotisa.com/#org"}}]}</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -307,7 +319,7 @@
       <p class="line">Investing, explained like a mate would. Not a suit.</p>
       <ul class="proof">
         <li><b>30 minutes</b> to your first paper trade, then 14 days at your own pace</li>
-        <li><b>Tested</b> on weekly market data from January 2020 to September 2026. <a href="questions.html#faq-2020" style="color:var(--green);font-weight:700">Why 2020?</a></li>
+        <li><b>Tested</b> on real market data from 2020 to 2026, through the Covid crash, the 2022 bear market and the 2025 tariff drop. <a href="#tested" style="color:var(--green);font-weight:700">See what it went through</a></li>
         <li><b>Live</b> with the founder's own money, in an ISA</li>
         <li><b>Every L</b> shown on the channel, so you don't repeat it</li>
       </ul>
@@ -346,19 +358,40 @@
     <p class="small" style="margin-top:12px">Not ready to join? <a href="newsletter.html#news" style="color:var(--green);font-weight:700">Just get the free newsletter</a>.</p>
   </div>
 
+  <section class="tested" id="tested">
+    <h2>Six years of real markets. <span class="p">Tested so you don't have to.</span></h2>
+    <p class="lead">Before a single pound went in, the rules were built and tested over hundreds of hours on real weekly market data, from January 2020 to September 2026. Not a calm stretch picked to look good: every kind of market, crashes included.</p>
+    <ol class="tl" aria-label="What the backtest went through">
+      <li><b>2020</b><span>The Covid crash: the fastest fall on record, then a sharp rebound</span></li>
+      <li><b>2021</b><span>The stay-at-home and meme-stock boom</span></li>
+      <li><b>2022</b><span>The bear market, as inflation hit and interest rates rose at the fastest pace in decades</span></li>
+      <li><b>2023</b><span>The banking scare, when Silicon Valley Bank collapsed</span></li>
+      <li><b>2023&ndash;24</b><span>The AI boom</span></li>
+      <li><b>2025</b><span>The April tariff drop</span></li>
+    </ol>
+    <div class="tested-grid">
+      <div><b>Hundreds of hours, done for you</b><span>Gathering the data, writing the rules, testing them, finding where they broke and fixing them. Nobody with a job and a life has time for that.</span></div>
+      <div><b>&pound;99, about a month of a top AI assistant</b><span>One payment for the code, all 14 lessons and 12 months of updates. No monthly fee and no percentage of your money.</span></div>
+      <div><b>Then run with real money</b><span>Our founder runs the same system with his own money, in an ISA, and every L goes on the channel so you don't repeat it.</span></div>
+    </div>
+    <p class="small">A backtest shows how the rules behaved on past data, not how they'll behave next time, and it's no promise of returns. Capital at risk. <a href="questions.html#faq-2020">Why from 2020?</a></p>
+  </section>
+
   <section class="tour" id="tour">
     <div class="tour-text">
-      <h2>See it in <span class="p">30 seconds</span></h2>
-      <p class="lead">What it is, what it does and what it costs, in 28 seconds. Sound on.</p>
+      <h2>See it in <span class="p">60 seconds</span></h2>
+      <p class="lead">What it is, what it was tested through and what it costs, in about a minute. Sound on.</p>
       <ul class="facts tour-facts">
+        <li>Tested on six years of real markets, the Covid crash included</li>
         <li>Every Sunday at 7pm: the week's proposals, with the reason for each</li>
         <li>You tap Approve by 2pm Monday. Under a minute a week</li>
         <li>Your money stays in your own Trading 212 ISA</li>
+        <li>&pound;99 once: no monthly fee, no percentage of your money</li>
       </ul>
       <p class="small">Prefer to poke around yourself? <a href="demo/">Open the dashboard demo</a>.</p>
     </div>
     <div class="tour-video">
-      <video class="clip" controls playsinline preload="metadata" poster="welcome-poster.jpg" width="300" height="533" aria-label="Welcome clip: what My Robot I.S.A. is, in 28 seconds"><source src="clips/welcome.mp4" type="video/mp4">Your browser can't play this clip. <a href="demo/">Open the dashboard demo instead</a>.</video>
+      <video class="clip" controls playsinline preload="metadata" poster="tour60-poster.jpg" width="300" height="533" aria-label="Welcome clip: what My Robot I.S.A. is and what it was tested through, in about a minute"><source src="clips/tour60.mp4" type="video/mp4">Your browser can't play this clip. <a href="demo/">Open the dashboard demo instead</a>.</video>
     </div>
   </section>
 
@@ -402,6 +435,8 @@
     <h3>Your email</h3>
     <p>If you join the waitlist, My Robot I.S.A. (run by Amit Patel) keeps your email address, your Trading 212 answer if you give it (so we can skip steps you've already done), and which link brought you here, to send what you signed up for: the free test drive in December, and word when sales open in January. If you take the test drive, it also keeps which orders you approved there, to run it and improve the product. Sign up for the newsletter alone and you only get the newsletter. That's all it's used for, and it's never sold.</p>
     <p>Your details are stored with Supabase in London, and the emails are sent through Resend. They handle the data only on our behalf, and anything processed outside the UK is covered by UK-approved safeguards. Waitlist details are deleted within 12 months of launch if you don't buy; newsletter subscribers are kept until they unsubscribe. Every email has an unsubscribe link; to see or delete your data, email <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. The lawful basis is your consent, given by ticking the box. If you're unhappy with how your data is handled, you can complain to the Information Commissioner's Office at <a href="https://ico.org.uk/make-a-complaint/">ico.org.uk</a>.</p>
+    <h3>Visitor counts</h3>
+    <p>We count visits to this site without cookies and without storing anything that identifies you: each visit is turned into a scrambled code from your IP address and browser, mixed with a random value that is replaced every day, so we can count unique visitors per day but never follow anyone from one day to the next. We also note the page, the site that linked here and whether it's a phone or a computer. Visits sent with "Do Not Track" or "Global Privacy Control" switched on aren't counted.</p>
     <p>My Robot I.S.A. is run by Amit Patel · <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. Not affiliated with Trading 212 or Anthropic.</p>
     <p>© 2026 My Robot I.S.A. · <a href="https://www.youtube.com/@myrobotisa">YouTube</a> · <a href="https://www.instagram.com/myrobotisa/">Instagram</a> · <a href="https://www.tiktok.com/@myrobotisa">TikTok</a></p>
   </footer>
@@ -590,6 +625,23 @@
     meta.textContent = "Last weekly run: " + ld(d.last_run_at) + ". Record since " + new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/London"}).format(new Date(d.first_run_at)) + ". Updated " + ld(d.generated_at) + ".";
     g.hidden=false;
   }).catch(function(){ meta.textContent="The record isn't available right now. Try again later."; });
+})();
+</script>
+<script>
+/* Visitor counter (21 Oct 2026): no cookies, nothing stored in the browser except an owner opt-out.
+   Skipped for Do Not Track / Global Privacy Control, on previews, and after visiting with ?notrack=1. */
+(function(){
+  try {
+    var q = new URLSearchParams(location.search);
+    if (q.get("notrack") === "1") { localStorage.setItem("mri-notrack", "1"); return; }
+    if (q.get("notrack") === "0") localStorage.removeItem("mri-notrack");
+    if (localStorage.getItem("mri-notrack") === "1") return;
+  } catch (e) {}
+  if (navigator.doNotTrack === "1" || navigator.globalPrivacyControl === true) return;
+  if (!/(^|\.)myrobotisa\.com$/.test(location.hostname)) return;
+  var q2 = new URLSearchParams(location.search);
+  var body = JSON.stringify({p: location.pathname, s: q2.get("src") || q2.get("utm_source") || "", r: document.referrer || ""});
+  try { fetch("https://vxnestmhtjotidhzzqbo.supabase.co/functions/v1/site-track", {method: "POST", headers: {"content-type": "text/plain"}, body: body, keepalive: true, mode: "cors", credentials: "omit"}); } catch (e) {}
 })();
 </script>
 </body>
