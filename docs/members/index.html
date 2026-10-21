@@ -178,6 +178,12 @@
   /* one section per page (22 Oct 2026) */
   #v-home .off{display:none!important}
   .grid>section{grid-column:1/-1}
+  /* 21 Oct 2026 (Amit: "stretched"): a page that is one card reads as a centred column, not a full-width strip,
+     and its buttons size to their label instead of filling the row. Start here and Lessons keep two columns. */
+  @media(min-width:700px){
+    html[data-pg="code"] .grid>section,html[data-pg="dashboard"] .grid>section,html[data-pg="clips"] .grid>section,html[data-pg="help"] .grid>section{width:100%;max-width:760px;justify-self:center}
+    .row .btn{flex:0 1 auto;min-width:220px}
+  }
   .side ol .sub{list-style:none;margin:4px 0 6px 12px;padding:0 0 0 12px;border-left:1px solid var(--rule);display:flex;flex-direction:column;gap:2px}
   .side ol .sub a{padding:7px 10px;font-size:14px}
   .side ol .sub a.on{border-left-color:var(--green)}
@@ -553,7 +559,7 @@
       "<dt>Status</dt><dd>" + (lapsed ? '<span class="pill a">Updates ended</span>' : '<span class="pill g">Active</span>') + "</dd>" +
       "<dt>Updates until</dt><dd>" + esc(fmtDate(m.updates_until)) + "</dd>" +
       "<dt>Member since</dt><dd>" + esc(fmtDate(m.joined_at)) + "</dd>" +
-      "<dt>Signed in as</dt><dd style=\"overflow-wrap:anywhere\">" + esc(session.email || m.email) + "</dd>" +
+      "<dt>Signed in as</dt><dd style=\"overflow-wrap:break-word\">" + esc(session.email || m.email).replace("@", "<wbr>@") + "</dd>" +
       "<dt>Dashboard</dt><dd>" + (m.dashboard_url ? '<a class="pill g pill-link" href="' + esc(dashHref(m.dashboard_url)) + '">Open my dashboard</a>' : '<a href="#dashboard" style="font-size:14px;font-weight:700">Add your link</a>') + "</dd>";
     $("name-edit").addEventListener("click", editName);
     $("code-kv").innerHTML =
@@ -778,7 +784,7 @@
     document.querySelector('.mgroup > a').classList.toggle("on", true);
     if (page === "lessons") $("les-fold").open = true;
     $("preview").classList.toggle("off", page !== "home");
-    document.documentElement.classList.toggle("dashview", page === "mydash");
+    document.documentElement.classList.toggle("dashview", page === "mydash"); document.documentElement.dataset.pg = page;
     if (page === "mydash") dashOpen(false);
     window.scrollTo(0, 0);
   }
