@@ -257,18 +257,19 @@ body.qs-mode header.hero{display:none}
 .sitehdr .login{display:inline-flex;align-items:center;min-height:34px;padding:0 14px;border:2px solid var(--brand-green);border-radius:999px;color:var(--fg);font-weight:800;font-size:13px;text-decoration:none}
 .sitehdr .login:hover{background:var(--brand-green);color:#1C0A21}
 
-/* weeks in the main area (21 Oct 2026), so the side menu stays short */
-.weeksbar{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;display:grid;gap:12px}
-.wb-head h2{margin:0;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
-.wb-head p{margin:2px 0 0;font-size:13.5px;color:var(--muted)}
-.weeksbar #weeks{display:grid;gap:10px;padding:0;margin:0;border:0}
-@media (min-width:700px){.weeksbar #weeks{grid-template-columns:auto 1fr;align-items:start;gap:12px 18px}}
+/* weeks in the main area (21 Oct 2026): one slim row that scrolls sideways as the weeks grow */
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.weeksbar{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px 10px}
+.weeksbar #weeks{display:flex;align-items:center;gap:6px;overflow-x:auto;padding:0;margin:0;border:0;scrollbar-width:thin}
 .weeksbar .wgroup{display:contents}
-.weeksbar #weeks h3{margin:10px 0 0;white-space:nowrap}
-.weeksbar .wbtns{display:flex;flex-wrap:wrap;gap:8px}
-.weeksbar #weeks button{display:inline-block;text-align:left;width:auto;min-height:44px;margin:0;padding:7px 14px;border:1px solid var(--line);background:var(--bg);border-radius:12px}
+.weeksbar #weeks h3{margin:0 2px 0 6px;font-size:10.5px;white-space:nowrap;flex:none}
+.weeksbar .wbtns{display:contents}
+.weeksbar #weeks button{flex:none;display:inline-flex;align-items:baseline;gap:6px;width:auto;min-height:34px;margin:0;padding:5px 11px;border:1px solid var(--line);background:var(--bg);border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap}
+.weeksbar #weeks button small{display:inline;font-size:11.5px;font-weight:500}
+.weeksbar #weeks button .now{margin:0;font-size:9.5px;padding:1px 6px}
 .weeksbar #weeks button:hover{border-color:var(--brand-green);background:var(--bg)}
 .weeksbar #weeks button[aria-current="page"]{border-color:var(--brand-green);box-shadow:inset 0 0 0 1px var(--brand-green);background:var(--sel)}
+.weeksbar .wgroup+.wgroup h3{margin-left:12px;padding-left:12px;border-left:1px solid var(--line)}
 .sitehdr .hdr-r{display:flex;align-items:center;gap:14px}
 .sitehdr .tag{display:inline-block;background:var(--brand-green);color:#1C0A21;font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:6px 12px;white-space:nowrap;text-decoration:none}
 .sitehdr .tag[hidden]{display:none}
@@ -321,7 +322,7 @@ body.qs-mode header.hero{display:none}
   </header>
 
   <section class="weeksbar" aria-labelledby="h-weeks">
-    <div class="wb-head"><h2 id="h-weeks">Week by week</h2><p>Open any week to see that Sunday's proposals, what was approved and what happened.</p></div>
+    <h2 id="h-weeks" class="vh">Week by week</h2>
     <div id="weeks"></div>
   </section>
 
@@ -591,7 +592,7 @@ function renderDigest(){
 // ---- weeks: sidebar list and the weekly view
 function renderWeekList(){
   const live=D.weeks.filter(w=>w.kind==="live"), prac=D.weeks.filter(w=>w.kind==="practice");
-  const item=(w,now)=>`<button type="button" data-w="${w.id}">Week ${w.n}${now?'<span class="now" style="margin-left:8px">NOW</span>':''}<small>w/c ${wdm(w.start)}</small></button>`;
+  const item=(w,now)=>`<button type="button" data-w="${w.id}" title="Week of ${wdm(w.start)}">Week ${w.n}${now?'<span class="now">NOW</span>':''}<small>${wdm(w.start).replace(/^\w+ /,"")}</small></button>`;
   $("weeks").innerHTML=`<div class="wgroup"><h3 class="live">Live</h3><div class="wbtns">`+live.map((w,i)=>item(w,i===0)).join("")+`</div></div><div class="wgroup"><h3>Practice</h3><div class="wbtns">`+prac.map(w=>item(w,false)).join("")+`</div></div>`;
   $("weeks").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>showWeek(b.dataset.w)));
 }
