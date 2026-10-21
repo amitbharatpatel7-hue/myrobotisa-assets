@@ -536,7 +536,7 @@
       "<dt>Updates until</dt><dd>" + esc(fmtDate(m.updates_until)) + "</dd>" +
       "<dt>Member since</dt><dd>" + esc(fmtDate(m.joined_at)) + "</dd>" +
       "<dt>Signed in as</dt><dd style=\"overflow-wrap:anywhere\">" + esc(session.email || m.email) + "</dd>" +
-      "<dt>Dashboard</dt><dd>" + (m.dashboard_url ? '<a class="pill g pill-link" href="' + esc(m.dashboard_url) + '">Open my dashboard</a>' : '<a href="#dashboard" style="font-size:14px;font-weight:700">Add your link</a>') + "</dd>";
+      "<dt>Dashboard</dt><dd>" + (m.dashboard_url ? '<a class="pill g pill-link" href="' + esc(m.dashboard_url) + '"' + dashTarget() + '>Open my dashboard</a>' : '<a href="#dashboard" style="font-size:14px;font-weight:700">Add your link</a>') + "</dd>";
     $("name-edit").addEventListener("click", editName);
     $("code-kv").innerHTML =
       "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : "Arrives in January 2027") + "</b></div>" +
@@ -626,12 +626,16 @@
     });
   }
   // ---- your dashboard: the member's own link (theirs runs on their own Cloudflare account)
+  // In the installed app the dashboard (another address) would open inside the app window under a white address bar
+  // that browsers always add for other sites, so there it opens in its own browser window instead.
+  function inApp() { return document.documentElement.classList.contains("app"); }
+  function dashTarget() { return inApp() ? ' target="_blank" rel="noopener"' : ""; }
   function renderDash() {
     var box = $("dash-box"), url = me.dashboard_url;
     if (url) {
       box.innerHTML = '<div class="kv"><div><span>Your dashboard</span><b style="overflow-wrap:anywhere">' + esc(url.replace(/^https:\/\//, "")) + '</b></div><div><span>Who can see it</span><b>Only you</b></div></div>' +
-        '<div class="row"><a class="btn" href="' + esc(url) + '">Open my dashboard</a></div>' +
-        '<p class="small" style="margin:12px 0 0">It asks for its own sign-in, which only you can pass. Use Back to return here.</p>' +
+        '<div class="row"><a class="btn" href="' + esc(url) + '"' + dashTarget() + '>Open my dashboard</a></div>' +
+        '<p class="small" style="margin:12px 0 0">It asks for its own sign-in, which only you can pass. ' + (inApp() ? "It opens in its own browser window, so this app stays as it is." : "Use Back to return here.") + '</p>' +
         '<p class="small" style="margin:6px 0 0;font-size:12px">Rebuilt your dashboard at a new address? <button class="linkbtn" type="button" id="dash-edit" style="font-size:12px">Update the link</button></p><div id="dash-form-wrap" hidden></div>';
       $("dash-edit").addEventListener("click", function () { var w = $("dash-form-wrap"); w.hidden = false; w.innerHTML = dashForm(url); wireDash(); });
     } else {
