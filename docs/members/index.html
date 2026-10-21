@@ -140,7 +140,13 @@
   /* passkeys and dashboard link */
   .or{display:flex;align-items:center;gap:10px;margin:18px 0 0;color:var(--muted);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
   .or::before,.or::after{content:"";flex:1;height:1px;background:var(--rule)}
-  .msgs{margin:0 0 16px} .notes{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+  .msgs{margin:0 0 16px}
+  .count{display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 7px;border-radius:999px;background:var(--green);color:var(--deep);font-family:Poppins,system-ui,sans-serif;font-size:13px;font-weight:800;vertical-align:4px;letter-spacing:0}
+  .count:empty{display:none}
+  details.fold{margin-top:12px} details.fold>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:14px;color:var(--green);min-height:36px}
+  details.fold>summary::-webkit-details-marker{display:none} details.fold>summary::before{content:'';width:8px;height:8px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(-45deg);transition:transform .15s}
+  details.fold[open]>summary::before{transform:rotate(45deg)}
+  .mem dd .btn.sm{min-height:32px} .notes{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
   .note{background:var(--deep3);border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:14px;padding:12px 14px}
   .note.new{border-left-color:var(--green)} .note.action{border-left-color:var(--pink-ink)}
   .note b{display:block;font-size:15px} .note time{display:block;font-size:12px;color:var(--eye);margin:2px 0 6px} .note p{margin:0;font-size:14px;line-height:1.55;color:var(--muted);white-space:pre-line} .note a{display:inline-block;margin-top:8px;font-weight:700;font-size:14px}
@@ -212,7 +218,7 @@
     </section>
 
     <section class="card msgs" aria-labelledby="h-msg" id="msgs" hidden>
-      <h2 id="h-msg">Messages <span class="pill p" id="msg-new" hidden></span></h2>
+      <h2 id="h-msg">Messages <span class="count" id="msg-count"></span> <span class="pill p" id="msg-new" hidden></span></h2>
       <ul class="notes" id="notes"></ul>
     </section>
 
@@ -243,7 +249,9 @@
         <p class="lede">About 30 minutes a day: what every part of the code does and why, then making it yours with Claude. Each one is the long version of a fix you've seen on the channel.</p>
         <div class="bar" aria-hidden="true"><i id="les-bar"></i></div>
         <p class="small" id="les-count"></p>
-        <ol class="lessons" id="lessons"></ol>
+        <details class="fold" id="les-fold"><summary><span class="fold-l">Show all 14 lessons</span></summary>
+          <ol class="lessons" id="lessons"></ol>
+        </details>
       </section>
 
       <section class="card" aria-labelledby="h-code">
@@ -463,7 +471,8 @@
       "<dt>Status</dt><dd>" + (lapsed ? '<span class="pill a">Updates ended</span>' : '<span class="pill g">Active</span>') + "</dd>" +
       "<dt>Updates until</dt><dd>" + esc(fmtDate(m.updates_until)) + "</dd>" +
       "<dt>Member since</dt><dd>" + esc(fmtDate(m.joined_at)) + "</dd>" +
-      "<dt>Signed in as</dt><dd style=\"overflow-wrap:anywhere\">" + esc(session.email || m.email) + "</dd>";
+      "<dt>Signed in as</dt><dd style=\"overflow-wrap:anywhere\">" + esc(session.email || m.email) + "</dd>" +
+      "<dt>Dashboard</dt><dd>" + (m.dashboard_url ? '<a class="btn sm" href="' + esc(m.dashboard_url) + '">Open my dashboard</a>' : '<a href="#h-dash" style="font-size:14px;font-weight:700">Add your link</a>') + "</dd>";
     $("name-edit").addEventListener("click", editName);
     $("code-kv").innerHTML =
       "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : "Arrives in January 2027") + "</b></div>" +
@@ -509,11 +518,13 @@
           return '<li class="note' + (isNew ? " new" : "") + (n.kind === "action" ? " action" : "") + '"><b>' + (n.kind === "action" ? "Action needed: " : "") + esc(n.title) + '</b><time>' + esc(when) + '</time><p>' + esc(n.body) + '</p>' +
             (n.link_url ? '<a href="' + esc(n.link_url) + '">' + esc(n.link_text || "Find out more") + " →</a>" : "") + "</li>";
         }).join("");
-        $("msg-new").hidden = !fresh; $("msg-new").textContent = fresh + " new";
+        $("msg-new").hidden = !fresh; $("msg-new").textContent = fresh + " new"; $("msg-count").textContent = rows.length;
         $("msgs").hidden = false;
         rows.forEach(function (n) { seen[n.id] = 1; }); try { localStorage.setItem("mri-members-seen", JSON.stringify(seen)); } catch (e) {}
       }).catch(function () {});
   }
+
+  $("les-fold").addEventListener("toggle", function () { this.querySelector(".fold-l").textContent = this.open ? "Hide the lessons" : "Show all 14 lessons"; });
   // ---- your first name, for the greeting
   function editName() {
     var dd = $("name-dd");
