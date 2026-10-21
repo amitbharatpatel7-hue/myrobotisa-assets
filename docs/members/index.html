@@ -146,7 +146,7 @@
   details.fold{margin-top:12px} details.fold>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:14px;color:var(--green);min-height:36px}
   details.fold>summary::-webkit-details-marker{display:none} details.fold>summary::before{content:'';width:8px;height:8px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(-45deg);transition:transform .15s}
   details.fold[open]>summary::before{transform:rotate(45deg)}
-  .mem dd .btn.sm{min-height:32px} .notes{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+  .pill-link{text-decoration:none;transition:background .15s,color .15s,box-shadow .15s} .pill-link:hover,.pill-link:focus-visible{background:var(--ink);border-color:var(--ink);color:var(--deep);outline:none} .notes{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
   .note{background:var(--deep3);border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:14px;padding:12px 14px}
   .msg-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .note{position:relative;transition:border-color .15s,background .15s,opacity .15s}
@@ -477,7 +477,7 @@
       "<dt>Updates until</dt><dd>" + esc(fmtDate(m.updates_until)) + "</dd>" +
       "<dt>Member since</dt><dd>" + esc(fmtDate(m.joined_at)) + "</dd>" +
       "<dt>Signed in as</dt><dd style=\"overflow-wrap:anywhere\">" + esc(session.email || m.email) + "</dd>" +
-      "<dt>Dashboard</dt><dd>" + (m.dashboard_url ? '<a class="btn sm" href="' + esc(m.dashboard_url) + '">Open my dashboard</a>' : '<a href="#h-dash" style="font-size:14px;font-weight:700">Add your link</a>') + "</dd>";
+      "<dt>Dashboard</dt><dd>" + (m.dashboard_url ? '<a class="pill g pill-link" href="' + esc(m.dashboard_url) + '">Open my dashboard</a>' : '<a href="#h-dash" style="font-size:14px;font-weight:700">Add your link</a>') + "</dd>";
     $("name-edit").addEventListener("click", editName);
     $("code-kv").innerHTML =
       "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : "Arrives in January 2027") + "</b></div>" +
