@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Members · My Robot I.S.A.</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
+<meta name="theme-color" content="#34003B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="My Robot">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --deep:#34003B; --deep2:#4B1155; --deep3:#3E0747; --rule:#6A3578; --green:#00E87A; --pink:#EA00AB;
+    --ink:#FFFFFF; --pink-ink:#FF5CCB; --muted:#BFA6C6; --eye:#9B7FA6; --amber:#FFC24B;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--deep);color:var(--ink);font-family:Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+  body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+  a{color:var(--green)}
+  [hidden]{display:none!important}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 16px 48px}
+  .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0}
+  .brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
+  .brand img{width:40px;height:40px;border-radius:11px;border:2px solid var(--green)}
+  .brand b{white-space:nowrap;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:22px;letter-spacing:.02em;text-transform:uppercase;line-height:1}
+  .brand b i{font-style:normal;color:var(--green)}
+  .brand small{display:block;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+  .who{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);min-width:0}
+  .who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:38vw}
+  @media(max-width:600px){.who span{display:none}.brand b{font-size:20px}}
+  h1,h2{font-family:Anton,Impact,sans-serif;font-weight:400;letter-spacing:.02em;text-transform:uppercase;line-height:1.05;margin:0}
+  h1{font-size:clamp(34px,6vw,52px)} h1 .g,h2 .g{color:var(--green)} h1 .p,h2 .p{color:var(--pink-ink)}
+  h2{font-size:24px;margin-bottom:6px}
+  .lede{color:var(--muted);font-size:15px;line-height:1.55;margin:6px 0 0}
+  .small{font-size:13px;color:var(--muted);line-height:1.5}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:999px;border:2px solid var(--green);background:var(--green);color:var(--deep);font:inherit;font-weight:800;font-size:15px;text-decoration:none;cursor:pointer;transition:transform .12s,background .12s,color .12s}
+  .btn:hover{transform:translateY(-1px)} .btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+  .btn.ghost{background:transparent;color:var(--ink)} .btn.ghost:hover{border-color:var(--green);color:var(--green)}
+  .btn.sm{min-height:36px;padding:0 14px;font-size:13px}
+  .btn[disabled],.btn[aria-disabled=true]{opacity:.55;cursor:not-allowed;transform:none}
+  .card{background:var(--deep2);border:1px solid var(--rule);border-radius:20px;padding:20px}
+  .pill{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;padding:4px 10px;background:var(--deep);border:1px solid var(--rule);color:var(--muted);white-space:nowrap}
+  .pill.g{background:var(--green);border-color:var(--green);color:var(--deep)}
+  .pill.p{border-color:var(--pink-ink);color:var(--pink-ink)}
+  .pill.a{border-color:var(--amber);color:var(--amber)}
+
+  /* sign in */
+  .signin{max-width:460px;margin:6vh auto 0}
+  .signin .card{padding:26px 22px}
+  label.f{display:block;font-weight:700;font-size:14px;margin:18px 0 8px}
+  input.t{width:100%;min-height:50px;border-radius:14px;border:2px solid var(--rule);background:var(--deep);color:var(--ink);font:inherit;font-size:16px;padding:0 14px}
+  input.t:focus{outline:none;border-color:var(--green)}
+  input.code{font-family:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;font-size:28px;letter-spacing:.3em;text-align:center}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px} .row .btn{flex:1 1 auto}
+  .msg{min-height:22px;margin-top:12px;font-size:14px;line-height:1.5} .msg.err{color:var(--pink-ink)} .msg.ok{color:var(--green)}
+  .linkbtn{background:none;border:0;color:var(--green);font:inherit;font-weight:700;font-size:14px;cursor:pointer;padding:0;text-decoration:underline}
+
+  /* home */
+  .preview{display:flex;gap:10px;align-items:flex-start;border:1px dashed var(--amber);border-radius:14px;padding:12px 14px;margin:0 0 18px;font-size:14px;line-height:1.5;color:var(--ink)}
+  .preview b{color:var(--amber)}
+  .hello{display:grid;gap:18px;align-items:end;margin:6px 0 22px}
+  @media(min-width:860px){.hello{grid-template-columns:1.3fr 1fr}}
+  .mem{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center}
+  .mem dt{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)} .mem dd{margin:0;font-weight:600}
+  .grid{display:grid;gap:16px}
+  @media(min-width:860px){.grid{grid-template-columns:1fr 1fr}.grid .wide{grid-column:1/-1}}
+  .bar{height:10px;border-radius:999px;background:var(--deep);border:1px solid var(--rule);overflow:hidden;margin:12px 0 4px}
+  .bar i{display:block;height:100%;width:0;background:var(--green);border-radius:999px;transition:width .3s}
+  ol.steps,ol.lessons{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+  .item{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;background:var(--deep3);border:1px solid var(--rule);border-radius:14px;padding:12px 14px;transition:border-color .12s,background .12s}
+  .item:hover{border-color:var(--green)}
+  .item.done{border-color:rgba(0,232,122,.55);background:rgba(0,232,122,.07)}
+  .item .n{font-family:Anton,Impact,sans-serif;font-size:20px;color:var(--green);min-width:30px;text-align:center}
+  .item b{display:block;font-size:15px} .item span{display:block;font-size:13px;color:var(--muted);line-height:1.45;margin-top:2px}
+  .item span.pill{display:table;font-size:10.5px;margin-top:8px;color:var(--muted)} .item span.pill.g{color:var(--deep)} .item span.pill.a{color:var(--amber)}
+  @media(min-width:860px){ol.lessons{grid-template-columns:1fr 1fr}}
+  .tick{appearance:none;-webkit-appearance:none;width:26px;height:26px;border-radius:8px;border:2px solid var(--rule);background:var(--deep);cursor:pointer;display:grid;place-items:center;margin:0}
+  .tick:hover{border-color:var(--green)} .tick:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  .tick:checked{background:var(--green);border-color:var(--green)}
+  .tick:checked::after{content:"";width:7px;height:13px;border:solid var(--deep);border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+  .kv{display:grid;gap:10px;margin-top:12px}
+  .kv div{display:flex;justify-content:space-between;gap:12px;align-items:center;background:var(--deep3);border:1px solid var(--rule);border-radius:14px;padding:12px 14px;font-size:14px}
+  .kv div b{font-weight:700}
+  .devices{display:grid;gap:10px;margin-top:12px}
+  @media(min-width:600px){.devices{grid-template-columns:repeat(3,1fr)}}
+  .dev{background:var(--deep3);border:1px solid var(--rule);border-radius:14px;padding:12px 14px;font-size:13px;line-height:1.5;color:var(--muted)}
+  .dev b{display:block;color:var(--ink);font-size:14px;margin-bottom:4px} .dev.here{border-color:var(--green)}
+  .dev.here b::after{content:" · this device";color:var(--green);font-weight:700;font-size:12px}
+  .clips{display:grid;gap:8px;margin-top:12px}
+  .clips a{display:flex;justify-content:space-between;gap:10px;align-items:center;background:var(--deep3);border:1px solid var(--rule);border-radius:14px;padding:12px 14px;color:var(--ink);text-decoration:none;font-size:14px;font-weight:600}
+  .clips a:hover{border-color:var(--green);color:var(--green)}
+  footer{margin-top:28px;font-size:12px;color:var(--eye);line-height:1.6}
+  footer a{color:var(--muted)}
+  .spin{display:inline-block;width:16px;height:16px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:sp .8s linear infinite;vertical-align:-3px}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="brand" href="./"><img src="icon-192.png" alt=""><span><b>My Robot <i>I.S.A.</i></b><small>Members</small></span></a>
+    <div class="who" id="who" hidden><span id="whoemail"></span><button class="btn ghost sm" id="signout" type="button">Sign out</button></div>
+  </div>
+
+  <!-- SIGN IN -->
+  <main id="v-signin" class="signin" hidden>
+    <div class="card">
+      <h1>Sign <span class="g">in</span></h1>
+      <p class="lede" id="si-lede">Members only. We'll email you a 6-digit code: no password to remember.</p>
+      <form id="f-email" novalidate>
+        <label class="f" for="email">Your email</label>
+        <input class="t" type="email" id="email" autocomplete="email" inputmode="email" placeholder="you@email.com" required>
+        <div class="row"><button class="btn" type="submit" id="b-send">Email me a code</button></div>
+      </form>
+      <form id="f-code" novalidate hidden>
+        <label class="f" for="code">The code from your email</label>
+        <input class="t code" type="text" id="code" autocomplete="one-time-code" inputmode="numeric" pattern="[0-9 ]*" maxlength="11" placeholder="••••••" required>
+        <div class="row"><button class="btn" type="submit" id="b-verify">Sign in</button></div>
+        <p class="small" style="margin:12px 0 0">Sent to <b id="sentto"></b>. <button class="linkbtn" type="button" id="b-back">Use a different email</button> · <button class="linkbtn" type="button" id="b-resend">Send a new code</button></p>
+      </form>
+      <div class="msg" id="si-msg" role="status" aria-live="polite"></div>
+    </div>
+    <p class="small" style="text-align:center;margin-top:16px">Not a member yet? <a href="../#join" style="font-weight:700">Get the free test drive</a> · <a href="../">myrobotisa.com</a></p>
+  </main>
+
+  <!-- HOME -->
+  <main id="v-home" hidden>
+    <div class="preview" id="preview"><span><b>Early preview.</b> The lessons, QuickStart videos and the code open when sales start in January 2027. Ticks you make here are saved to your account, so you can try it on your phone and your Mac and see them follow you.</span></div>
+
+    <section class="hello">
+      <div>
+        <h1 id="hi">Welcome <span class="g">back</span></h1>
+        <p class="lede">Your lessons, your copy of the code, your app and your membership, in one place.</p>
+      </div>
+      <div class="card">
+        <dl class="mem" id="mem"></dl>
+      </div>
+    </section>
+
+    <div class="grid">
+      <section class="card" aria-labelledby="h-qs">
+        <h2 id="h-qs">Start <span class="g">here</span></h2>
+        <p class="lede">The QuickStart: your first paper trade in about 30 minutes. A short video for each step.</p>
+        <div class="bar" aria-hidden="true"><i id="qs-bar"></i></div>
+        <p class="small" id="qs-count"></p>
+        <ol class="steps" id="qs"></ol>
+      </section>
+
+      <section class="card" aria-labelledby="h-app">
+        <h2 id="h-app">Your app, <span class="g">every screen</span></h2>
+        <p class="lede">Put this members area, and later your own dashboard, on your phone, Mac or PC. It opens in its own window like any app, with no App Store.</p>
+        <div class="devices" id="devices">
+          <div class="dev" data-dev="phone"><b>Phone</b>iPhone: Share, then Add to Home Screen. Android: menu, then Install app.</div>
+          <div class="dev" data-dev="mac"><b>Mac</b>Safari: File, then Add to Dock. Chrome: the install icon in the address bar.</div>
+          <div class="dev" data-dev="pc"><b>Windows PC</b>Chrome or Edge: the install icon in the address bar, then Install.</div>
+        </div>
+        <div class="row"><button class="btn" id="b-install" type="button" hidden>Install the app</button></div>
+        <p class="small" id="installed" hidden style="margin:12px 0 0;color:var(--green);font-weight:700">You're using the installed app.</p>
+        <p class="small" style="margin:12px 0 0">Signing in inside the app uses the same emailed code: the app keeps its own sign-in, separate from your browser.</p>
+      </section>
+
+      <section class="card wide" aria-labelledby="h-les">
+        <h2 id="h-les">The 14 <span class="p">lessons</span></h2>
+        <p class="lede">About 30 minutes a day: what every part of the code does and why, then making it yours with Claude. Each one is the long version of a fix you've seen on the channel.</p>
+        <div class="bar" aria-hidden="true"><i id="les-bar"></i></div>
+        <p class="small" id="les-count"></p>
+        <ol class="lessons" id="lessons"></ol>
+      </section>
+
+      <section class="card" aria-labelledby="h-code">
+        <h2 id="h-code">Your copy of <span class="g">the code</span></h2>
+        <p class="lede">Delivered as an invite to your own private GitHub repo, never a zip file. Updates arrive there for as long as your membership includes them.</p>
+        <div class="kv" id="code-kv"></div>
+        <div class="row"><a class="btn ghost" aria-disabled="true" id="b-repo">Open my repo</a></div>
+      </section>
+
+      <section class="card" aria-labelledby="h-dash">
+        <h2 id="h-dash">Your <span class="g">dashboard</span></h2>
+        <p class="lede">Holdings, every order and why, the daily report and Approve. It runs on your own free Cloudflare account, behind a login only you can pass, with a read-only broker key.</p>
+        <div class="kv">
+          <div><span>Set up</span><b>QuickStart step 6</b></div>
+          <div><span>Who can see it</span><b>Only you</b></div>
+        </div>
+        <div class="row"><a class="btn ghost" href="../demo/">See the demo</a></div>
+      </section>
+
+      <section class="card" aria-labelledby="h-new">
+        <h2 id="h-new">New <span class="p">clips</span> and tutorials</h2>
+        <p class="lede">Members-only walkthroughs land here as they're made. Until then, every L is on the channel.</p>
+        <div class="clips">
+          <a href="https://www.youtube.com/@myrobotisa" target="_blank" rel="noopener">YouTube <span aria-hidden="true">↗</span></a>
+          <a href="https://www.instagram.com/myrobotisa/" target="_blank" rel="noopener">Instagram <span aria-hidden="true">↗</span></a>
+          <a href="https://www.tiktok.com/@myrobotisa" target="_blank" rel="noopener">TikTok <span aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+
+      <section class="card" aria-labelledby="h-help">
+        <h2 id="h-help">Help and <span class="g">your membership</span></h2>
+        <p class="lede">Stuck? Email us: setup questions get an instant answer, anything else a reply within two working days. Buyers also get a members-only space to share fixes.</p>
+        <div class="kv" id="mem-kv"></div>
+        <div class="row"><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=Members%20area">Email support</a><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button></div>
+        <p class="small" style="margin:12px 0 0">You keep every lesson and video released while your updates are included, and the version of the code you had. Renewing is optional and never automatic.</p>
+      </section>
+    </div>
+
+    <footer>
+      My Robot I.S.A. is software and a course, not financial advice. Investing puts your capital at risk.
+      · <a href="../">myrobotisa.com</a> · <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>
+    </footer>
+  </main>
+
+  <!-- LOADING / NOT A MEMBER -->
+  <main id="v-wait" class="signin"><p class="small" style="text-align:center"><span class="spin"></span>&nbsp; Loading…</p></main>
+  <main id="v-nomem" class="signin" hidden>
+    <div class="card">
+      <h1>Not a <span class="p">member</span> yet</h1>
+      <p class="lede">You're signed in as <b id="nm-email"></b>, but that email isn't on a membership. Bought with a different email? Sign out and use that one.</p>
+      <div class="row"><a class="btn" href="../#join">Get the free test drive</a><button class="btn ghost" type="button" id="nm-out">Sign out</button></div>
+    </div>
+  </main>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var SB = "https://vxnestmhtjotidhzzqbo.supabase.co";
+  var KEY = "sb_publishable_hjvkAbVw82CKg2rdDZgVcw_XUDbmerV"; // publishable: row-level security decides what a signed-in member can read
+  var STORE = "mri-members-session";
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+  var fmtDate = function (d) { return d ? new Date(d + (d.length === 10 ? "T12:00:00Z" : "")).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "—"; };
+
+  var QS = [
+    ["Copy the code", "3 min", "Create a free GitHub account, then press Use this template to make your own private copy."],
+    ["Your Trading 212 key, practice account first", "8 min", "Turn on the API in Trading 212's practice account, create a key and paste it into your copy's secrets. Real orders stay off."],
+    ["Your email key", "5 min", "A free Resend account and an API key. No domain needed: reports come to your own inbox."],
+    ["Run the setup check", "5 min", "It lists anything missing in plain words, then makes your first paper trade and sends your first report."],
+    ["Optional extras", "5 min", "Error alerts with a free Sentry account, and Claude fixing failed runs if you have a Claude subscription."],
+    ["Your app on your phone, Mac or PC", "10 min", "A free Cloudflare account and a read-only broker key. Then add it to your home screen or Dock."]
+  ];
+  var LESSONS = [
+    ["Rules, not tips", "What a robot ISA is and isn't; writing rules down so a machine can follow them"],
+    ["Get it running", "Your copy of the code, set up with Claude, making its first paper trade"],
+    ["Data you can trust", "Prices, gaps and the quiet errors that ruin everything after them"],
+    ["Make it yours", "Changing rules, limits and what it trades: settings file first, then code"],
+    ["Backtest honestly", "No hindsight, no peeking: testing your own rules fairly before any real money"],
+    ["Paper money first", "A practice account that behaves like the real thing"],
+    ["The plumbing", "Orders, rounding and the exchange's rules (the six-decimal L)"],
+    ["Done means it happened", "Confirming an order landed before calling the job done"],
+    ["Make it explain itself", "Logs that give the reason, not just a red cross"],
+    ["Keys and secrets", "Storing them safely (the line break that broke thirteen runs)"],
+    ["It runs while you sleep", "Scheduling, alerts and a daily digest you'll read"],
+    ["Limits and an off switch", "Position limits, sanity checks, stopping everything in one move"],
+    ["Small and real", "Moving from paper to real money carefully"],
+    ["Keep an honest record", "Reviewing wins and Ls without fooling yourself"]
+  ];
+  var PLAN = { founding: "Founding member", standard: "Member", owner: "Owner (test account)", test: "Test account" };
+
+  // ---- session (kept in this browser or app only; it's the sign-in itself, nothing else)
+  function load() { try { return JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) { return null; } }
+  function save(s) { try { localStorage.setItem(STORE, JSON.stringify(s)); } catch (e) {} }
+  function clear() { try { localStorage.removeItem(STORE); } catch (e) {} }
+  var session = load();
+
+  function auth(path, body, token) {
+    var h = { apikey: KEY, "Content-Type": "application/json" };
+    if (token) h.Authorization = "Bearer " + token;
+    return fetch(SB + "/auth/v1/" + path, { method: "POST", headers: h, body: JSON.stringify(body || {}) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, status: r.status, j: j }; }); });
+  }
+  function keep(j) {
+    session = { access_token: j.access_token, refresh_token: j.refresh_token, expires_at: j.expires_at || (Math.floor(Date.now() / 1000) + (j.expires_in || 3600)), email: (j.user && j.user.email) || (session && session.email) };
+    save(session); return session;
+  }
+  function fresh() {
+    if (!session) return Promise.resolve(null);
+    if (session.expires_at - 60 > Date.now() / 1000) return Promise.resolve(session);
+    return auth("token?grant_type=refresh_token", { refresh_token: session.refresh_token }).then(function (r) {
+      if (r.ok && r.j.access_token) return keep(r.j);
+      if (r.status >= 400 && r.status < 500) { clear(); session = null; }
+      return session;
+    }).catch(function () { return session; });
+  }
+  function rest(path, opts) {
+    return fresh().then(function (s) {
+      if (!s) throw new Error("signed out");
+      opts = opts || {};
+      var h = Object.assign({ apikey: KEY, Authorization: "Bearer " + s.access_token, "Content-Type": "application/json" }, opts.headers || {});
+      return fetch(SB + "/rest/v1/" + path, { method: opts.method || "GET", headers: h, body: opts.body });
+    });
+  }
+
+  // ---- views
+  function show(v) { ["signin", "home", "wait", "nomem"].forEach(function (k) { $("v-" + k).hidden = k !== v; }); $("who").hidden = !(v === "home" || v === "nomem"); }
+  function say(t, ok) { var m = $("si-msg"); m.textContent = t || ""; m.className = "msg " + (t ? (ok ? "ok" : "err") : ""); }
+
+  // ---- sign in
+  var sentTo = "";
+  function sendCode(email) {
+    var b = $("b-send"); b.disabled = true; say("Sending…", true);
+    return fetch(SB + "/functions/v1/members-login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email }) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (r) {
+        b.disabled = false;
+        if (!r.ok) { say(r.j.message || "That didn't work. Try again in a minute.", false); return; }
+        sentTo = email; $("sentto").textContent = email; $("f-email").hidden = true; $("f-code").hidden = false;
+        say(r.j.message || "Check your email for the code.", true); $("code").value = ""; $("code").focus();
+      })
+      .catch(function () { b.disabled = false; say("No connection. Check you're online and try again.", false); });
+  }
+  $("f-email").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = $("email").value.trim().toLowerCase();
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { say("That email doesn't look right.", false); return; }
+    sendCode(email);
+  });
+  $("b-resend").addEventListener("click", function () { if (sentTo) { $("f-email").hidden = false; $("f-code").hidden = true; sendCode(sentTo); } });
+  $("b-back").addEventListener("click", function () { $("f-email").hidden = false; $("f-code").hidden = true; say(""); $("email").focus(); });
+  $("f-code").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var token = $("code").value.replace(/\D/g, "");
+    if (token.length < 6) { say("The code is the 6 numbers in the email.", false); return; }
+    var b = $("b-verify"); b.disabled = true; say("Signing in…", true);
+    auth("verify", { type: "email", email: sentTo, token: token }).then(function (r) {
+      b.disabled = false;
+      if (!r.ok || !r.j.access_token) { say(r.status === 429 ? "Too many tries. Wait a few minutes, then ask for a new code." : "That code didn't work. It may have expired or been used: ask for a new one.", false); return; }
+      keep(r.j); say(""); start();
+    }).catch(function () { b.disabled = false; say("No connection. Check you're online and try again.", false); });
+  });
+  function signOut() {
+    var s = session; clear(); session = null;
+    if (s) auth("logout", {}, s.access_token).catch(function () {});
+    $("f-email").hidden = false; $("f-code").hidden = true; say(""); show("signin");
+  }
+  $("signout").addEventListener("click", signOut); $("nm-out").addEventListener("click", signOut);
+
+  // ---- home
+  var done = {};
+  function renderList(el, rows, prefix, extra) {
+    el.innerHTML = rows.map(function (r, i) {
+      var id = prefix + ":" + (i + 1), on = !!done[id];
+      return '<li class="item' + (on ? " done" : "") + '"><span class="n">' + (i + 1) + '</span><span><b>' + esc(r[0]) + '</b><span>' + esc(r[r.length - 1]) + (extra ? extra(i) : "") +
+        '</span></span><input class="tick" type="checkbox" data-id="' + id + '"' + (on ? " checked" : "") + ' aria-label="Mark ' + esc(prefix === "qs" ? "step " : "day ") + (i + 1) + ' done"></li>';
+    }).join("");
+  }
+  function counts() {
+    var q = QS.filter(function (_, i) { return done["qs:" + (i + 1)]; }).length, l = LESSONS.filter(function (_, i) { return done["day:" + (i + 1)]; }).length;
+    $("qs-bar").style.width = (q / QS.length * 100) + "%"; $("les-bar").style.width = (l / LESSONS.length * 100) + "%";
+    $("qs-count").textContent = q === QS.length ? "All done. Your robot is running on paper money." : q + " of " + QS.length + " steps done";
+    $("les-count").textContent = l + " of 14 lessons done";
+  }
+  function renderAll() {
+    renderList($("qs"), QS, "qs", function (i) { return ' <span class="pill">' + QS[i][1] + "</span>"; });
+    renderList($("lessons"), LESSONS, "day", function (i) { return i === 0 ? ' <span class="pill g">Free to watch</span>' : ' <span class="pill a">Opens January 2027</span>'; });
+    counts();
+  }
+  document.addEventListener("change", function (e) {
+    var t = e.target; if (!t.classList || !t.classList.contains("tick")) return;
+    var id = t.dataset.id, on = t.checked; done[id] = on; t.closest(".item").classList.toggle("done", on); counts();
+    rest("member_progress?on_conflict=user_id,item", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
+      body: JSON.stringify({ user_id: me.user_id, item: id, done: on, updated_at: new Date().toISOString() }) })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); })
+      .catch(function () { done[id] = !on; t.checked = !on; t.closest(".item").classList.toggle("done", !on); counts(); alertOnce("Couldn't save that tick. Check you're online."); });
+  });
+  var alerted = false; function alertOnce(m) { if (alerted) return; alerted = true; var p = $("preview"); p.insertAdjacentHTML("afterend", '<div class="preview" style="border-color:var(--pink-ink)"><b style="color:var(--pink-ink)">' + esc(m) + "</b></div>"); }
+
+  var me = {};
+  function home(m, uid) {
+    me = m; me.user_id = uid;
+    $("whoemail").textContent = session.email || m.email;
+    var first = (PLAN[m.plan] || "Member");
+    $("hi").innerHTML = m.plan === "founding" ? 'Welcome, <span class="g">founding member</span>' : 'Welcome <span class="g">back</span>';
+    var lapsed = m.status !== "active";
+    $("mem").innerHTML =
+      "<dt>Membership</dt><dd>" + esc(first) + "</dd>" +
+      "<dt>Status</dt><dd>" + (lapsed ? '<span class="pill a">Updates ended</span>' : '<span class="pill g">Active</span>') + "</dd>" +
+      "<dt>Updates until</dt><dd>" + esc(fmtDate(m.updates_until)) + "</dd>" +
+      "<dt>Member since</dt><dd>" + esc(fmtDate(m.joined_at)) + "</dd>" +
+      "<dt>Signed in as</dt><dd style=\"overflow-wrap:anywhere\">" + esc(session.email || m.email) + "</dd>";
+    $("code-kv").innerHTML =
+      "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : "Arrives in January 2027") + "</b></div>" +
+      "<div><span>Version</span><b>" + (m.repo_invited_at ? "Latest" : "Preview") + "</b></div>";
+    $("mem-kv").innerHTML =
+      "<div><span>Updates included until</span><b>" + esc(fmtDate(m.updates_until)) + "</b></div>" +
+      "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
+    renderAll(); show("home");
+    rest("member_progress?select=item,done").then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
+      rows.forEach(function (x) { done[x.item] = x.done; }); renderAll();
+    }).catch(function () {});
+  }
+
+  function start() {
+    if (!session) { show("signin"); return; }
+    show("wait");
+    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at").then(function (r) {
+      if (r.status === 401) { clear(); session = null; show("signin"); say("Your sign-in ran out. Ask for a new code.", false); return; }
+      return r.json().then(function (rows) {
+        var uid = null; try { uid = JSON.parse(atob(session.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub; } catch (e) {}
+        if (!rows || !rows.length) { $("nm-email").textContent = session.email || ""; $("whoemail").textContent = session.email || ""; show("nomem"); return; }
+        home(rows[0], uid);
+      });
+    }).catch(function (e) {
+      if (String(e && e.message) === "signed out") { show("signin"); return; }
+      show("signin"); say("Couldn't reach the members area. Check you're online and try again.", false);
+    });
+  }
+
+  // ---- install as an app: show the steps for this device first
+  (function () {
+    var ua = navigator.userAgent, touchMac = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+    var dev = /iPhone|iPad|iPod|Android/.test(ua) || touchMac ? "phone" : /Macintosh/.test(ua) ? "mac" : /Windows/.test(ua) ? "pc" : null;
+    if (dev) { var el = document.querySelector('.dev[data-dev="' + dev + '"]'); if (el) { el.classList.add("here"); el.parentNode.insertBefore(el, el.parentNode.firstChild); } }
+    var standalone = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+    if (standalone) { $("installed").hidden = false; }
+    var deferred = null;
+    addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferred = e; $("b-install").hidden = false; });
+    $("b-install").addEventListener("click", function () { if (!deferred) return; deferred.prompt(); deferred.userChoice.finally(function () { deferred = null; $("b-install").hidden = true; }); });
+    addEventListener("appinstalled", function () { $("b-install").hidden = true; });
+    if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});
+  })();
+
+  start();
+})();
+</script>
+</body>
+</html>
