@@ -103,10 +103,65 @@
   footer a{color:var(--muted)}
   .spin{display:inline-block;width:16px;height:16px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:sp .8s linear infinite;vertical-align:-3px}
   @keyframes sp{to{transform:rotate(360deg)}}
+
+  /* Site side menu, same as myrobotisa.com (21 Oct 2026) */
+  body.menu-open{overflow:hidden}
+  .side{display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;width:250px;padding:26px 18px;border-right:1px solid var(--rule);background:var(--deep);overflow-y:auto;z-index:20}
+  .side-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);font-family:Anton,Impact,sans-serif;font-size:20px;letter-spacing:.02em;text-transform:uppercase;margin:0 6px 22px}
+  .side-brand img{width:38px;height:38px;border-radius:10px;border:2px solid var(--green)}
+  .side-brand b{color:var(--pink);font-weight:400}
+  .side ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+  .side ol a{display:block;padding:10px 12px;border-radius:12px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:500;border-left:3px solid transparent}
+  .side ol a:hover{color:var(--ink);background:var(--deep2)}
+  .side ol a.on{color:var(--ink);background:var(--deep2);border-left-color:var(--green)}
+  .side ol li.sep{margin:10px 12px 4px;padding-top:10px;border-top:1px solid var(--rule);font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--eye)}
+  .side-cta{margin-top:auto;padding:16px 12px 4px;border-top:1px solid var(--rule)}
+  .side-cta p.side-social{display:flex;justify-content:center;gap:10px;margin:4px 0 2px}
+  .side-social a{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;color:var(--muted);border:1px solid var(--rule);transition:color .15s,border-color .15s,box-shadow .15s,transform .15s}
+  .side-social a:hover,.side-social a:focus-visible,.side-social a:active{color:var(--green);border-color:var(--green);box-shadow:0 0 0 1px var(--green);background:var(--deep2);transform:translateY(-1px)}
+  #menubtn,#scrim{display:none}
+  @media (min-width:1100px){ body{padding-left:250px} .top .brand{visibility:hidden} }
+  @media (max-width:1099px){
+    .side{width:min(300px,85vw);padding:calc(22px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
+      transform:translateX(-105%);visibility:hidden;transition:transform .2s ease,visibility 0s .2s;z-index:30}
+    .side-cta{padding-bottom:72px}
+    .side.open{transform:none;visibility:visible;transition:transform .2s ease}
+    #scrim{position:fixed;z-index:25;inset:0;background:rgba(0,0,0,.5);border:0;border-radius:0;padding:0}
+    #scrim.open{display:block}
+    #menubtn{display:flex;align-items:center;justify-content:center;position:fixed;z-index:35;width:48px;height:48px;border-radius:50%;
+      left:calc(16px + env(safe-area-inset-left));bottom:calc(16px + env(safe-area-inset-bottom));
+      border:2px solid var(--green);background:var(--deep);color:var(--ink);cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.35);padding:0;font-size:0}
+    #menubtn svg{flex:none}
+    #menubtn .i-x,#menubtn[aria-expanded="true"] .i-bars{display:none}
+    #menubtn[aria-expanded="true"] .i-x{display:block}
+    footer{padding-bottom:72px}
+  }
+  @media (prefers-reduced-motion:reduce){.side,.side.open{transition:none}}
+  /* passkeys and dashboard link */
+  .or{display:flex;align-items:center;gap:10px;margin:18px 0 0;color:var(--muted);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+  .or::before,.or::after{content:"";flex:1;height:1px;background:var(--rule)}
+  .dash-form{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px} .dash-form input{flex:1 1 220px;min-height:46px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
+<nav class="side" id="side" aria-label="Site">
+  <a class="side-brand" href="../"><img src="icon-192.png" alt=""><span>My Robot <b>I.S.A.</b></span></a>
+  <ol>
+    <li><a href="./" class="on" aria-current="page">Members area</a></li>
+    <li class="sep">The site</li>
+    <li><a href="../">Home</a></li>
+    <li><a href="../how-it-works.html">How it works</a></li>
+    <li><a href="../what-you-get.html">What you get</a></li>
+    <li><a href="../demo/">Try the demo</a></li>
+    <li><a href="../status.html">Nothing to hide</a></li>
+    <li><a href="../isa-rules.html">ISA rules</a></li>
+    <li><a href="../questions.html">Questions</a></li>
+  </ol>
+  <div class="side-cta"><p class="side-social"><a href="https://www.youtube.com/@myrobotisa" aria-label="My Robot I.S.A. on YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></svg></a><a href="https://www.instagram.com/myrobotisa/" aria-label="My Robot I.S.A. on Instagram" title="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg></a><a href="https://www.tiktok.com/@myrobotisa" aria-label="My Robot I.S.A. on TikTok" title="TikTok"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.8 3.6 4 3.8v3.1a7.2 7.2 0 0 1-4-1.2v6.2A5.9 5.9 0 1 1 10.7 9v3.2a2.8 2.8 0 1 0 2.8 2.8V3h3.1Z"/></svg></a></p></div>
+</nav>
+<button id="scrim" tabindex="-1" aria-hidden="true"></button>
+<button id="menubtn" aria-label="Sections menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
 <div class="wrap">
   <div class="top">
     <a class="brand" href="./"><img src="icon-192.png" alt=""><span><b>My Robot <i>I.S.A.</i></b><small>Members</small></span></a>
@@ -129,6 +184,10 @@
         <div class="row"><button class="btn" type="submit" id="b-verify">Sign in</button></div>
         <p class="small" style="margin:12px 0 0">Sent to <b id="sentto"></b>. <button class="linkbtn" type="button" id="b-back">Use a different email</button> · <button class="linkbtn" type="button" id="b-resend">Send a new code</button></p>
       </form>
+      <div id="pk-signin" hidden>
+        <p class="or">or</p>
+        <div class="row"><button class="btn ghost" type="button" id="b-pk">Sign in with Face ID, Touch ID or Windows Hello</button></div>
+      </div>
       <div class="msg" id="si-msg" role="status" aria-live="polite"></div>
     </div>
     <p class="small" style="text-align:center;margin-top:16px">Not a member yet? <a href="../#join" style="font-weight:700">Get the free test drive</a> · <a href="../">myrobotisa.com</a></p>
@@ -188,11 +247,7 @@
       <section class="card" aria-labelledby="h-dash">
         <h2 id="h-dash">Your <span class="g">dashboard</span></h2>
         <p class="lede">Holdings, every order and why, the daily report and Approve. It runs on your own free Cloudflare account, behind a login only you can pass, with a read-only broker key.</p>
-        <div class="kv">
-          <div><span>Set up</span><b>QuickStart step 6</b></div>
-          <div><span>Who can see it</span><b>Only you</b></div>
-        </div>
-        <div class="row"><a class="btn ghost" href="../demo/">See the demo</a></div>
+        <div id="dash-box"></div>
       </section>
 
       <section class="card" aria-labelledby="h-new">
@@ -211,6 +266,13 @@
         <div class="kv" id="mem-kv"></div>
         <div class="row"><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=Members%20area">Email support</a><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button></div>
         <p class="small" style="margin:12px 0 0">You keep every lesson and video released while your updates are included, and the version of the code you had. Renewing is optional and never automatic.</p>
+      </section>
+      <section class="card wide" aria-labelledby="h-pk" id="pk-card" hidden>
+        <h2 id="h-pk">Faster <span class="g">sign-in</span></h2>
+        <p class="lede">Add a passkey and next time you sign in with Face ID, Touch ID or Windows Hello: no email, no code. The email code always works too.</p>
+        <div class="kv"><div><span>Passkeys on your account</span><b id="pk-count">—</b></div></div>
+        <div class="row"><button class="btn" type="button" id="b-pk-add">Add a passkey on this device</button></div>
+        <p class="small" id="pk-msg" style="margin:12px 0 0" role="status" aria-live="polite"></p>
       </section>
     </div>
 
@@ -397,7 +459,7 @@
     $("mem-kv").innerHTML =
       "<div><span>Updates included until</span><b>" + esc(fmtDate(m.updates_until)) + "</b></div>" +
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
-    renderAll(); show("home");
+    renderDash(); renderAll(); show("home"); passkeyCard();
     rest("member_progress?select=item,done").then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
       rows.forEach(function (x) { done[x.item] = x.done; }); renderAll();
     }).catch(function () {});
@@ -406,7 +468,7 @@
   function start() {
     if (!session) { show("signin"); return; }
     show("wait");
-    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at").then(function (r) {
+    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url").then(function (r) {
       if (r.status === 401) { clear(); session = null; show("signin"); say("Your sign-in ran out. Ask for a new code.", false); return; }
       return r.json().then(function (rows) {
         var uid = null; try { uid = JSON.parse(atob(session.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub; } catch (e) {}
@@ -419,6 +481,105 @@
     });
   }
 
+
+  // ---- your dashboard: the member's own link (theirs runs on their own Cloudflare account)
+  function renderDash() {
+    var box = $("dash-box"), url = me.dashboard_url;
+    if (url) {
+      box.innerHTML = '<div class="kv"><div><span>Your dashboard</span><b style="overflow-wrap:anywhere">' + esc(url.replace(/^https:\/\//, "")) + '</b></div><div><span>Who can see it</span><b>Only you</b></div></div>' +
+        '<div class="row"><a class="btn" href="' + esc(url) + '" target="_blank" rel="noopener">Open my dashboard</a><a class="btn ghost" href="../demo/">See the demo</a></div>' +
+        '<p class="small" style="margin:12px 0 0">It opens in its own tab or window and asks for its own sign-in. <button class="linkbtn" type="button" id="dash-edit">Change the link</button></p><div id="dash-form-wrap" hidden></div>';
+      $("dash-edit").addEventListener("click", function () { var w = $("dash-form-wrap"); w.hidden = false; w.innerHTML = dashForm(url); wireDash(); });
+    } else {
+      box.innerHTML = '<div class="kv"><div><span>Set up</span><b>QuickStart step 6</b></div><div><span>Who can see it</span><b>Only you</b></div></div>' +
+        '<p class="small" style="margin:12px 0 0">Set it up already? Save its address here and it opens from this page.</p>' + dashForm("") +
+        '<div class="row"><a class="btn ghost" href="../demo/">See the demo</a></div>';
+      wireDash();
+    }
+  }
+  function dashForm(v) {
+    return '<form class="dash-form" id="dash-form" novalidate><input class="t" id="dash-url" type="url" inputmode="url" autocomplete="url" placeholder="your-dashboard.pages.dev" value="' + esc(v) + '" aria-label="Your dashboard address"><button class="btn" type="submit">Save</button></form><p class="small" id="dash-msg" role="status" aria-live="polite"></p>';
+  }
+  function wireDash() {
+    var f = $("dash-form"); if (!f) return;
+    f.addEventListener("submit", function (e) {
+      e.preventDefault();
+      rest("rpc/set_my_dashboard", { method: "POST", body: JSON.stringify({ p_url: $("dash-url").value }) })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (r) {
+          if (!r.ok) { $("dash-msg").textContent = (r.j && r.j.message) || "Couldn't save that link."; return; }
+          me.dashboard_url = r.j || null; renderDash();
+        }).catch(function () { $("dash-msg").textContent = "Couldn't save that link. Check you're online."; });
+    });
+  }
+
+  // ---- passkeys (Face ID / Touch ID / Windows Hello). Shown only when switched on in Supabase and the device supports it.
+  // Uses Supabase's own library (hosted here) for the WebAuthn steps; the email code always works as well.
+  var PK = { on: false, sb: null };
+  var pkSupported = !!(window.PublicKeyCredential && navigator.credentials && navigator.credentials.get);
+  function loadSB() {
+    if (PK.sb) return Promise.resolve(PK.sb);
+    return new Promise(function (ok, bad) {
+      var sc = document.createElement("script"); sc.src = "supabase-2.118.0.js"; sc.onerror = bad;
+      sc.onload = function () {
+        PK.sb = window.supabase.createClient(SB, KEY, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false, experimental: { passkey: true } } });
+        ok(PK.sb);
+      };
+      document.head.appendChild(sc);
+    });
+  }
+  function bridge() { // give the library our session, and keep any refreshed tokens it hands back
+    return fresh().then(function (s) {
+      return loadSB().then(function (sb) {
+        return sb.auth.setSession({ access_token: s.access_token, refresh_token: s.refresh_token }).then(function (r) {
+          var ns = r && r.data && r.data.session; if (ns && ns.refresh_token !== s.refresh_token) keep(ns); return sb;
+        });
+      });
+    });
+  }
+  function passkeyCard() {
+    if (!PK.on || !pkSupported) return;
+    $("pk-card").hidden = false;
+    bridge().then(function (sb) { return sb.auth.passkey.list(); }).then(function (r) {
+      var n = (r && r.data && r.data.length) || 0; $("pk-count").textContent = n ? n + (n === 1 ? " passkey" : " passkeys") : "None yet";
+      if (n) $("b-pk-add").textContent = "Add one on another device";
+    }).catch(function () { $("pk-count").textContent = "—"; });
+  }
+  $("b-pk-add").addEventListener("click", function () {
+    var b = this; b.disabled = true; $("pk-msg").textContent = "Follow the prompt on your device…";
+    bridge().then(function (sb) { return sb.auth.registerPasskey(); }).then(function (r) {
+      b.disabled = false;
+      if (r && r.error) { $("pk-msg").textContent = /exists/.test(r.error.code || r.error.message || "") ? "This device already has a passkey for your account." : "No passkey added. You can try again any time."; return; }
+      $("pk-msg").textContent = "Done. Next time, choose the Face ID / Touch ID button on the sign-in page."; passkeyCard();
+    }).catch(function () { b.disabled = false; $("pk-msg").textContent = "No passkey added. You can try again any time."; });
+  });
+  $("b-pk").addEventListener("click", function () {
+    var b = this; b.disabled = true; say("Follow the prompt on your device…", true);
+    loadSB().then(function (sb) { return sb.auth.signInWithPasskey(); }).then(function (r) {
+      b.disabled = false;
+      var ses = r && r.data && r.data.session;
+      if (!ses) { say("That didn't work. Use the email code instead, then add a passkey again from the members area.", false); return; }
+      keep({ access_token: ses.access_token, refresh_token: ses.refresh_token, expires_at: ses.expires_at, expires_in: ses.expires_in, user: ses.user }); say(""); start();
+    }).catch(function () { b.disabled = false; say("That didn't work. Use the email code instead.", false); });
+  });
+  fetch(SB + "/auth/v1/settings", { headers: { apikey: KEY } }).then(function (r) { return r.json(); }).then(function (j) {
+    PK.on = !!j.passkeys_enabled;
+    var ua = navigator.userAgent, apple = /iPhone|iPad|Macintosh/.test(ua), win = /Windows/.test(ua);
+    $("b-pk").textContent = apple ? "Sign in with Face ID or Touch ID" : win ? "Sign in with Windows Hello" : "Sign in with a passkey";
+    $("b-pk-add").textContent = apple ? "Add Face ID / Touch ID on this device" : win ? "Add Windows Hello on this device" : "Add a passkey on this device";
+    if (PK.on && pkSupported) { $("pk-signin").hidden = false; if (!$("v-home").hidden) passkeyCard(); }
+  }).catch(function () {});
+
+  // ---- the site's side menu (drawer on phones)
+  (function () {
+    var side = $("side"), scrim = $("scrim"), menu = $("menubtn");
+    function openMenu() { side.classList.add("open"); scrim.classList.add("open"); menu.setAttribute("aria-expanded", "true"); document.body.classList.add("menu-open"); }
+    function closeMenu() { side.classList.remove("open"); scrim.classList.remove("open"); menu.setAttribute("aria-expanded", "false"); document.body.classList.remove("menu-open"); }
+    menu.addEventListener("click", function () { side.classList.contains("open") ? closeMenu() : openMenu(); });
+    scrim.addEventListener("click", closeMenu);
+    side.addEventListener("click", function (e) { if (e.target.closest("a")) closeMenu(); });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
+  })();
   // ---- install as an app: show the steps for this device first
   (function () {
     var ua = navigator.userAgent, touchMac = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
