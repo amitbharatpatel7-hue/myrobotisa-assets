@@ -445,13 +445,13 @@
     var email=document.getElementById("nemail").value.trim();
     if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ say("That email doesn't look right.",false); return; }
     if(!document.getElementById("nconsent").checked){ say("Tick the box so we're allowed to email you.",false); return; }
-    if(document.getElementById("nwebsite").value){ say("You're in. The next newsletter lands in your inbox.",true); f.reset(); return; }
+    if(document.getElementById("nwebsite").value){ say("You're in. A welcome email from hello@myrobotisa.com is on its way. Not in your inbox in a few minutes? Check junk or spam and mark it Not junk.",true); f.reset(); return; }
     if(!live){ say("Preview only: nothing was saved.",true); return; }
     b.disabled=true; say("Adding you…",true);
     fetch("https://vxnestmhtjotidhzzqbo.supabase.co/rest/v1/rpc/join_newsletter",{method:"POST",headers:{"apikey":"sb_publishable_hjvkAbVw82CKg2rdDZgVcw_XUDbmerV","Content-Type":"application/json"},
       body:JSON.stringify({p_email:email.toLowerCase(),p_consent:true,p_source:V2SRC}), signal:(window.AbortSignal&&AbortSignal.timeout)?AbortSignal.timeout(15000):undefined})
       .then(function(r){ return r.ok?r.json():Promise.reject(r.status); })
-      .then(function(res){ if(res==="ok"){ say("You're in. The next newsletter lands in your inbox.",true); f.reset(); } else say("Something's not right with that email.",false); })
+      .then(function(res){ if(res==="ok"){ say("You're in. A welcome email from hello@myrobotisa.com is on its way. Not in your inbox in a few minutes? Check junk or spam and mark it Not junk.",true); f.reset(); } else say("Something's not right with that email.",false); })
       .catch(function(){ say("Something went wrong. Try again in a minute.",false); })
       .then(function(){ b.disabled=false; });
   });
@@ -469,7 +469,7 @@
   f.addEventListener("submit", function(e){
     e.preventDefault();
     var email = document.getElementById("email").value.trim().toLowerCase();
-    if (document.getElementById("website").value) { say("You're on the list. Check your inbox when we open.", true); return; }
+    if (document.getElementById("website").value) { say("You're on the list. A welcome email from hello@myrobotisa.com is on its way. Not in your inbox in a few minutes? Check junk or spam and mark it Not junk, so your December test drive reaches you.", true); return; }
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { say("That email doesn't look right.", false); return; }
     if (!document.getElementById("consent").checked) { say("Tick the box so we're allowed to email you.", false); return; }
     if (!live) { say("Preview only: nothing was saved.", true); return; }
@@ -478,7 +478,7 @@
       body: JSON.stringify({ p_email: email, p_consent: true, p_source: src || null, p_experience: null, p_broker: (f.querySelector('input[name=brk]:checked')||{}).value || null, p_newsletter: false, p_country: 'uk' }), signal: (window.AbortSignal && AbortSignal.timeout) ? AbortSignal.timeout(15000) : undefined })
       .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
       .then(function(res){
-        if (res === "ok") { say("You're on the list. Your free test drive arrives in December, and we'll tell you when sales open in January.", true); f.reset(); }
+        if (res === "ok") { say("You're on the list. A welcome email from hello@myrobotisa.com is on its way. Not in your inbox in a few minutes? Check junk or spam and mark it Not junk, so your December test drive reaches you.", true); f.reset(); }
         else if (res === "invalid_email") say("That email doesn't look right.", false);
         else if (res === "consent_required") say("Tick the box so we're allowed to email you.", false);
         else say("Something went wrong. Try again in a minute.", false);
