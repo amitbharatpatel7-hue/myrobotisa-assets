@@ -151,6 +151,12 @@
   .or{display:flex;align-items:center;gap:10px;margin:18px 0 0;color:var(--muted);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
   .or::before,.or::after{content:"";flex:1;height:1px;background:var(--rule)}
   .msgs{margin:0 0 16px}
+  /* 21 Oct 2026: nudge to add a passkey, on Home until the member has one (or taps Not now: back in 30 days) */
+  .pknudge{margin:0 0 16px;display:flex;gap:16px;align-items:flex-start;border:2px solid var(--green)}
+  .pknudge[hidden]{display:none}
+  .pkn-ico{flex:0 0 auto;display:grid;place-items:center;width:48px;height:48px;border-radius:14px;background:var(--green);color:var(--deep)}
+  .pkn-body{flex:1;min-width:0} .pknudge h2{margin-top:2px}
+  @media(max-width:480px){.pkn-ico{display:none}}
   .count{display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 7px;border-radius:999px;background:var(--green);color:var(--deep);font-family:Poppins,system-ui,sans-serif;font-size:13px;font-weight:800;vertical-align:4px;letter-spacing:0}
   .count:empty{display:none}
   details.fold{margin-top:12px} details.fold>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:14px;color:var(--green);min-height:36px}
@@ -294,6 +300,16 @@
       </div>
       <div class="card">
         <dl class="mem" id="mem"></dl>
+      </div>
+    </section>
+
+    <section class="card pknudge" aria-labelledby="h-pkn" id="pk-nudge" data-page="home" hidden>
+      <div class="pkn-ico" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H5a2 2 0 0 0-2 2v2M17 3h2a2 2 0 0 1 2 2v2M7 21H5a2 2 0 0 1-2-2v-2M17 21h2a2 2 0 0 0 2-2v-2"/><path d="M9 9v1M15 9v1M12 9v4h-1M9 16c1.7 1.3 4.3 1.3 6 0"/></svg></div>
+      <div class="pkn-body">
+        <h2 id="h-pkn">Sign in faster <span class="g">next time</span></h2>
+        <p class="lede">Add a passkey and you sign in with <b id="pkn-how">Face ID or Touch ID</b>: no email, no code to copy. It takes about ten seconds.</p>
+        <div class="row"><button class="btn" type="button" id="b-pkn">Add a passkey</button><button class="btn ghost" type="button" id="b-pkn-later">Not now</button></div>
+        <p class="small" id="pkn-msg" style="margin:10px 0 0" role="status" aria-live="polite"></p>
       </div>
     </section>
 
@@ -737,16 +753,28 @@
     bridge().then(function (sb) { return sb.auth.passkey.list(); }).then(function (r) {
       var n = (r && r.data && r.data.length) || 0; $("pk-count").textContent = n ? n + (n === 1 ? " passkey" : " passkeys") : "None yet";
       if (n) $("b-pk-add").textContent = "Add one on another device";
+      // Home nudge: only while the account has no passkey at all (one on any device is enough to stop asking).
+      var ua = navigator.userAgent;
+      $("pkn-how").textContent = /Windows/.test(ua) ? "Windows Hello" : /Android/.test(ua) ? "your fingerprint or face" : "Face ID or Touch ID";
+      if (!n && !pkSnoozed()) $("pk-nudge").hidden = false;
+      else if (n && $("pkn-msg").textContent.indexOf("Done") !== 0) $("pk-nudge").hidden = true;
     }).catch(function () { $("pk-count").textContent = "—"; });
   }
-  $("b-pk-add").addEventListener("click", function () {
-    var b = this; b.disabled = true; $("pk-msg").textContent = "Follow the prompt on your device…";
+  function addPasskey(b, msg) {
+    b.disabled = true; msg.textContent = "Follow the prompt on your device…";
     bridge().then(function (sb) { return sb.auth.registerPasskey(); }).then(function (r) {
       b.disabled = false;
-      if (r && r.error) { $("pk-msg").textContent = /exists/.test(r.error.code || r.error.message || "") ? "This device already has a passkey for your account." : "No passkey added. You can try again any time."; return; }
-      $("pk-msg").textContent = "Done. Next time, choose the Face ID / Touch ID button on the sign-in page."; passkeyCard();
-    }).catch(function () { b.disabled = false; $("pk-msg").textContent = "No passkey added. You can try again any time."; });
+      if (r && r.error) { msg.textContent = /exists/.test(r.error.code || r.error.message || "") ? "This device already has a passkey for your account." : "No passkey added. You can try again any time."; return; }
+      msg.textContent = "Done. Next time, choose the Face ID / Touch ID button on the sign-in page."; passkeyCard();
+    }).catch(function () { b.disabled = false; msg.textContent = "No passkey added. You can try again any time."; });
+  }
+  $("b-pk-add").addEventListener("click", function () { addPasskey(this, $("pk-msg")); });
+  $("b-pkn").addEventListener("click", function () { addPasskey(this, $("pkn-msg")); });
+  $("b-pkn-later").addEventListener("click", function () {
+    try { localStorage.setItem("mri-pk-later", String(Date.now())); } catch (e) {}
+    $("pk-nudge").hidden = true;
   });
+  function pkSnoozed() { try { return Date.now() - (+localStorage.getItem("mri-pk-later") || 0) < 30 * 864e5; } catch (e) { return false; } }
   $("b-pk").addEventListener("click", function () {
     var b = this; b.disabled = true; say("Follow the prompt on your device…", true);
     loadSB().then(function (sb) { return sb.auth.signInWithPasskey(); }).then(function (r) {
