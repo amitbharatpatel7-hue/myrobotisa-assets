@@ -232,6 +232,7 @@
         <li><a href="#code" data-go="code">Your code</a></li>
         <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
         <li><a href="#clips" data-go="clips">New clips</a></li>
+        <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
         <li><a href="#help" data-go="help">Help and membership</a></li>
       </ol>
     </li>
@@ -252,7 +253,8 @@
     <li><a href="#code" data-go="code">Your code</a></li>
     <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
     <li><a href="#clips" data-go="clips">New clips</a></li>
-    <li><a href="#help" data-go="help">Help and membership</a></li>
+    <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
+        <li><a href="#help" data-go="help">Help and membership</a></li>
   </ol>
   <div class="side-cta"><p class="side-social"><a href="https://www.youtube.com/@myrobotisa" aria-label="My Robot I.S.A. on YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></svg></a><a href="https://www.instagram.com/myrobotisa/" aria-label="My Robot I.S.A. on Instagram" title="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg></a><a href="https://www.tiktok.com/@myrobotisa" aria-label="My Robot I.S.A. on TikTok" title="TikTok"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.8 3.6 4 3.8v3.1a7.2 7.2 0 0 1-4-1.2v6.2A5.9 5.9 0 1 1 10.7 9v3.2a2.8 2.8 0 1 0 2.8 2.8V3h3.1Z"/></svg></a></p></div>
 </nav>
@@ -283,6 +285,7 @@
       <div id="pk-signin" hidden>
         <p class="or">or</p>
         <div class="row"><button class="btn ghost" type="button" id="b-pk">Sign in with Face ID, Touch ID or Windows Hello</button></div>
+        <p class="small" id="pk-signin-note" style="margin:10px 0 0;text-align:center" hidden>Works once you've added a passkey on this device, or saved one to iCloud Keychain or Google Password Manager.</p>
       </div>
       <div class="msg" id="si-msg" role="status" aria-live="polite"></div>
     </div>
@@ -388,12 +391,15 @@
         <div class="row"><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=Members%20area">Email support</a><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button></div>
         <p class="small" style="margin:12px 0 0">You keep every lesson and video released while your updates are included, and the version of the code you had. Renewing is optional and never automatic.</p>
       </section>
-      <section class="card wide" aria-labelledby="h-pk" id="pk-card" data-page="help" hidden>
+      <section class="card wide" aria-labelledby="h-pk" id="pk-card" data-page="passkeys">
         <h2 id="h-pk">Faster <span class="g">sign-in</span></h2>
         <p class="lede">Add a passkey and next time you sign in with Face ID, Touch ID or Windows Hello: no email, no code. The email code always works too.</p>
-        <div class="kv"><div><span>Passkeys on your account</span><b id="pk-count">—</b></div></div>
+        <div class="kv" id="pk-list"><div><span>Passkeys on your account</span><b id="pk-count">—</b></div></div>
+        <p class="small" id="pk-here" hidden style="margin:12px 0 0;color:var(--green);font-weight:700">This device is already set up. You only need to add a passkey here again if you removed it.</p>
         <div class="row"><button class="btn" type="button" id="b-pk-add">Add a passkey on this device</button></div>
         <p class="small" id="pk-msg" style="margin:12px 0 0" role="status" aria-live="polite"></p>
+        <p class="small" id="pk-tip" style="margin:12px 0 0"></p>
+        <p class="small" id="pk-unsupported" hidden style="margin:12px 0 0">This browser can't save passkeys. Use Safari, Chrome or Edge, or keep signing in with the emailed code.</p>
       </section>
     </div>
 
@@ -747,12 +753,36 @@
       });
     });
   }
+  // 22 Oct 2026: which device each passkey is on, so nobody adds the same one twice. Each new passkey is named
+  // after the device and browser it was made on ("Mac · Edge app"); this browser remembers it has one (mri-pk-here).
+  function deviceLabel() {
+    var u = navigator.userAgent, touch = navigator.maxTouchPoints > 1;
+    var dev = /iPhone/.test(u) ? "iPhone" : /iPad/.test(u) || (/Macintosh/.test(u) && touch) ? "iPad" : /Macintosh/.test(u) ? "Mac" : /Android/.test(u) ? "Android" : /Windows/.test(u) ? "Windows PC" : "Computer";
+    var br = /Edg\//.test(u) ? "Edge" : /CriOS|Chrome/.test(u) ? "Chrome" : /Firefox|FxiOS/.test(u) ? "Firefox" : /Safari/.test(u) ? "Safari" : "";
+    return dev + (br ? " · " + br : "") + (document.documentElement.classList.contains("app") ? " app" : "");
+  }
+  function pkHere(v) { try { if (v != null) localStorage.setItem("mri-pk-here", v ? "1" : ""); return localStorage.getItem("mri-pk-here") === "1"; } catch (e) { return false; } }
+  function pkDay(iso) { return iso ? new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""; }
+  function pkTip() {
+    var u = navigator.userAgent;
+    $("pk-tip").textContent = /Macintosh/.test(u) && navigator.maxTouchPoints < 2 && /Edg\/|Chrome/.test(u)
+      ? "Using Edge or Chrome on a Mac? When the box appears, choose \u201cSave another way\u201d, then iCloud Keychain, so the same passkey also works on your iPhone and iPad."
+      : /iPhone|iPad|Macintosh/.test(u) ? "On Apple devices passkeys are saved to iCloud Keychain, so one added here also works on your other Apple devices signed in to the same Apple Account."
+      : /Android/.test(u) ? "On Android passkeys are saved to Google Password Manager, so they also work in Chrome on your other devices." : "";
+  }
   function passkeyCard() {
-    if (!PK.on || !pkSupported) return;
-    $("pk-card").hidden = false;
+    if (!pkSupported) { $("pk-unsupported").hidden = false; $("b-pk-add").hidden = true; return; }
+    if (!PK.on) return;
+    pkTip(); $("pk-here").hidden = !pkHere();
     bridge().then(function (sb) { return sb.auth.passkey.list(); }).then(function (r) {
-      var n = (r && r.data && r.data.length) || 0; $("pk-count").textContent = n ? n + (n === 1 ? " passkey" : " passkeys") : "None yet";
-      if (n) $("b-pk-add").textContent = "Add one on another device";
+      var list = (r && Array.isArray(r.data)) ? r.data : [], n = list.length;
+      $("pk-list").innerHTML = n ? list.map(function (p) {
+        var id = esc(p.id || p.passkey_id || ""), name = esc(p.friendly_name || "Passkey");
+        return '<div><span>' + name + '<br><small style="color:var(--muted)">Added ' + esc(pkDay(p.created_at)) + (p.last_used_at ? " \u00b7 last used " + esc(pkDay(p.last_used_at)) : "") + '</small></span>' +
+          (id ? '<button class="linkbtn pk-del" type="button" data-id="' + id + '">Remove</button>' : "") + '</div>';
+      }).join("") : '<div><span>Passkeys on your account</span><b>None yet</b></div>';
+      $("pk-list").querySelectorAll(".pk-del").forEach(function (b) { b.addEventListener("click", function () { removePasskey(b); }); });
+      if (n) $("b-pk-add").textContent = pkHere() ? "Add again on this device" : "Add one on this device too";
       // Home nudge: only while the account has no passkey at all (one on any device is enough to stop asking).
       var ua = navigator.userAgent;
       $("pkn-how").textContent = /Windows/.test(ua) ? "Windows Hello" : /Android/.test(ua) ? "your fingerprint or face" : "Face ID or Touch ID";
@@ -762,11 +792,33 @@
   }
   function addPasskey(b, msg) {
     b.disabled = true; msg.textContent = "Follow the prompt on your device…";
-    bridge().then(function (sb) { return sb.auth.registerPasskey(); }).then(function (r) {
+    var sbRef;
+    bridge().then(function (sb) { sbRef = sb; return sb.auth.registerPasskey(); }).then(function (r) {
       b.disabled = false;
-      if (r && r.error) { msg.textContent = /exists/.test(r.error.code || r.error.message || "") ? "This device already has a passkey for your account." : "No passkey added. You can try again any time."; return; }
-      msg.textContent = "Done. Next time, choose the Face ID / Touch ID button on the sign-in page."; passkeyCard();
+      if (r && r.error) {
+        var dup = /exists|InvalidState|excluded|already/i.test((r.error.code || "") + " " + (r.error.message || "") + " " + (r.error.name || ""));
+        if (dup) pkHere(true);
+        msg.textContent = dup ? "This device already has a passkey for your account, so you're all set." : "No passkey added. You can try again any time.";
+        passkeyCard(); return;
+      }
+      pkHere(true);
+      msg.textContent = "Done. Next time, choose the Face ID / Touch ID button on the sign-in page.";
+      // Name the new passkey after this device, so the list shows where each one lives.
+      return sbRef.auth.passkey.list().then(function (l) {
+        var items = (l && Array.isArray(l.data)) ? l.data.slice() : [];
+        items.sort(function (a, z) { return String(z.created_at || "").localeCompare(String(a.created_at || "")); });
+        var p = items[0];
+        if (p && (p.id || p.passkey_id)) return sbRef.auth.passkey.update({ passkeyId: p.id || p.passkey_id, friendlyName: deviceLabel() });
+      }).catch(function () {}).then(passkeyCard);
     }).catch(function () { b.disabled = false; msg.textContent = "No passkey added. You can try again any time."; });
+  }
+  function removePasskey(b) {
+    if (b.dataset.sure !== "1") { b.dataset.sure = "1"; b.textContent = "Tap again to remove"; setTimeout(function () { b.dataset.sure = ""; b.textContent = "Remove"; }, 4000); return; }
+    b.disabled = true;
+    bridge().then(function (sb) { return sb.auth.passkey.delete({ passkeyId: b.dataset.id }); }).then(function (r) {
+      if (r && r.error) { $("pk-msg").textContent = "Couldn't remove it just now. Try again in a minute."; b.disabled = false; return; }
+      $("pk-msg").textContent = "Removed. Also delete it from your device's passwords if you like (Settings, then Passwords)."; pkHere(false); passkeyCard();
+    }).catch(function () { $("pk-msg").textContent = "Couldn't remove it just now."; b.disabled = false; });
   }
   $("b-pk-add").addEventListener("click", function () { addPasskey(this, $("pk-msg")); });
   $("b-pkn").addEventListener("click", function () { addPasskey(this, $("pkn-msg")); });
@@ -780,7 +832,8 @@
     loadSB().then(function (sb) { return sb.auth.signInWithPasskey(); }).then(function (r) {
       b.disabled = false;
       var ses = r && r.data && r.data.session;
-      if (!ses) { say("No passkey signed in on this device. Use the email code above, then add a passkey in Help and membership so Face ID works next time.", false); return; }
+      if (!ses) { say("No passkey for this account on this device yet. Sign in with the email code above, then add one in Faster sign-in (in the menu). A passkey made in Edge or Chrome on a Mac only works on that Mac unless it was saved to iCloud Keychain.", false); return; }
+      pkHere(true);
       keep({ access_token: ses.access_token, refresh_token: ses.refresh_token, expires_at: ses.expires_at, expires_in: ses.expires_in, user: ses.user }); say(""); start();
     }).catch(function () { b.disabled = false; say("That didn't work. Use the email code instead.", false); });
   });
@@ -789,7 +842,7 @@
     var ua = navigator.userAgent, apple = /iPhone|iPad|Macintosh/.test(ua), win = /Windows/.test(ua);
     $("b-pk").textContent = apple ? "Sign in with Face ID or Touch ID" : win ? "Sign in with Windows Hello" : "Sign in with a passkey";
     $("b-pk-add").textContent = apple ? "Add Face ID / Touch ID on this device" : win ? "Add Windows Hello on this device" : "Add a passkey on this device";
-    if (PK.on && pkSupported) { $("pk-signin").hidden = false; if (!$("v-home").hidden) passkeyCard(); }
+    if (PK.on && pkSupported) { $("pk-signin").hidden = false; $("pk-signin-note").hidden = pkHere(); if (!$("v-home").hidden) passkeyCard(); }
   }).catch(function () {});
 
   // ---- the site's side menu (drawer on phones)
@@ -804,7 +857,7 @@
   })();
 
   // ---- one section per page: Home (welcome and messages), Start here, Lessons, Code, Dashboard, Clips, Help
-  var PAGES = ["home", "start", "lessons", "code", "dashboard", "mydash", "clips", "help"];
+  var PAGES = ["home", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help"];
   function go(page) {
     if (PAGES.indexOf(page) < 0) page = "home";
     document.querySelectorAll("#v-home [data-page]").forEach(function (el) { el.classList.toggle("off", el.dataset.page.split(" ").indexOf(page) < 0); });
