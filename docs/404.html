@@ -6,6 +6,15 @@
 <title>Page not found · My Robot I.S.A.</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="/avatar.png">
+<script>
+// Short links typed by hand (myrobotisa.com/TikTok, /Insta, /YouTube...): forward with the right source tag.
+// /tt /ig /yt /li have their own pages; this catches other spellings and capitals (22 Oct 2026).
+(function () {
+  var m = { tt: "tt", tiktok: "tt", ig: "ig", insta: "ig", instagram: "ig", yt: "yt", youtube: "yt", li: "li", linkedin: "li" };
+  var k = location.pathname.replace(/^\/+|\/+$/g, "").toLowerCase();
+  if (m[k]) location.replace("/?src=" + m[k] + location.hash);
+})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
 <style>
