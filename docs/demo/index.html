@@ -6,6 +6,7 @@
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#34003B">
+<meta name="mri-version" content="16">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -705,6 +706,51 @@ else addEventListener("DOMContentLoaded",()=>{ if(!window.MRI_INSTALL) return; c
 })();
 if (location.hash==="#quickstart") { document.querySelector('#nav button[data-p="quickstart"]').click(); }
 if ("serviceWorker" in navigator && location.protocol==="https:") { navigator.serviceWorker.register("sw.js").catch(()=>{}); }
+  // ---- updates (22 Oct 2026, same as the members app): the page knows its own version (meta mri-version) and checks version.json when it
+  // opens, when it comes back into view and every 30 minutes. If a newer one is live it reloads straight away,
+  // unless you're mid-typing or a dialog is open, in which case it offers an "Update now" bar instead.
+  (function () {
+    var mine = (document.querySelector('meta[name="mri-version"]') || {}).content;
+    if (!mine) return;
+    var bar = null, checking = false;
+    var vl = document.getElementById("app-version"); if (vl) vl.textContent = "App version " + mine;
+    function busy() {
+      var a = document.activeElement;
+      return (a && /INPUT|TEXTAREA|SELECT/.test(a.tagName) && a.value) || document.querySelector("dialog[open]") ||
+        (document.documentElement.classList.contains("dashview"));
+    }
+    function note(text, button) {
+      if (!bar) {
+        bar = document.createElement("div"); bar.id = "upd-bar"; bar.setAttribute("role", "status");
+        bar.style.cssText = "position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom));z-index:60;display:flex;gap:12px;align-items:center;" +
+          "background:#00E87A;color:#34003B;font:800 14px Poppins,system-ui,sans-serif;padding:10px 14px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.45);max-width:calc(100vw - 24px)";
+        document.body.appendChild(bar);
+      }
+      bar.innerHTML = "<span>" + text + "</span>" + (button ? '<button type="button" style="font:inherit;border:0;border-radius:999px;padding:7px 12px;background:#34003B;color:#fff;cursor:pointer">' + button + "</button>" : "");
+      var b = bar.querySelector("button"); if (b) b.onclick = apply;
+    }
+    function apply() { note("Updating to the latest version\u2026"); setTimeout(function () { location.reload(); }, 700); }
+    function check() {
+      if (checking || document.visibilityState === "hidden") return; checking = true;
+      fetch("version.json?_=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+        checking = false;
+        if (!j || !j.version || String(j.version) === mine) return;
+        try { navigator.serviceWorker && navigator.serviceWorker.getRegistration().then(function (g) { if (g) g.update(); }); } catch (e) {}
+        var tried = ""; try { tried = sessionStorage.getItem("mri-upd") || ""; } catch (e) {}
+        if (busy() || tried === String(j.version)) { note("A new version is ready", "Update now"); return; } // no reload loops
+        try { sessionStorage.setItem("mri-upd", String(j.version)); } catch (e) {}
+        apply();
+      }).catch(function () {
+        checking = false;
+        // Couldn't reach the site (offline, or a work network blocking it): say so, so an old copy isn't a mystery.
+        note(navigator.onLine === false ? "You're offline: this is the last saved copy" : "Can't reach myrobotisa.com from this network: this is the last saved copy");
+      });
+    }
+    setTimeout(check, 1200);
+    document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") check(); });
+    addEventListener("focus", check);
+    setInterval(check, 30 * 60 * 1000);
+  })();
 </script>
 <!-- INSTALL-KIT: one-click install where the browser allows it, otherwise a dialog with the steps for this device.
      Any element with data-install opens it. Shared by /demo/ and /members/ (21 Oct 2026). -->
