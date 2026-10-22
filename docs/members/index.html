@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="34">
+<meta name="mri-version" content="35">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -129,7 +129,6 @@
   .side ol a{display:block;padding:10px 12px;border-radius:12px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:500;border-left:3px solid transparent}
   .side ol a:hover{color:var(--ink);background:var(--deep2)}
   .side ol a.on{color:var(--ink);background:var(--deep2);border-left-color:var(--green)}
-  .side ol a .ext{float:right;opacity:.55;font-size:13px}
   .side ol li.sep{margin:10px 12px 4px;padding-top:10px;border-top:1px solid var(--rule);font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--eye)}
   .side-cta{margin-top:auto;padding:16px 12px 4px;border-top:1px solid var(--rule)}
   .side-cta p.side-social{display:flex;justify-content:center;gap:10px;margin:4px 0 2px}
@@ -269,10 +268,10 @@
         <li><a href="#help" data-go="help">Help and membership</a></li>
       </ol>
     </li>
-    <!-- 22 Oct 2026 (Amit): just Home and Questions, in a new tab so the members area stays open -->
+    <!-- 22 Oct 2026 (Amit): just Home and Questions. Same tab: the site pages show this Members area group too while you're signed in. -->
     <li class="sep">The site</li>
-    <li><a href="../" target="_blank" rel="noopener">Home <span class="ext" aria-hidden="true">&#8599;</span></a></li>
-    <li><a href="../questions.html" target="_blank" rel="noopener">Questions <span class="ext" aria-hidden="true">&#8599;</span></a></li>
+    <li><a href="../">Home</a></li>
+    <li><a href="../questions.html">Questions</a></li>
   </ol>
   <!-- In the installed app the menu is the members area only (21 Oct 2026) -->
   <ol class="app-only" id="appnav">
@@ -463,7 +462,7 @@
   </main>
 </div>
 
-<script src="guides.js?v=34"></script>
+<script src="guides.js?v=35"></script>
 <script>
 (function () {
   "use strict";
