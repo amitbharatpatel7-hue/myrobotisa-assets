@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="31">
+<meta name="mri-version" content="32">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -210,7 +210,17 @@
   .side ol .sub{list-style:none;margin:4px 0 6px 12px;padding:0 0 0 12px;border-left:1px solid var(--rule);display:flex;flex-direction:column;gap:2px}
   .side ol .sub a{padding:7px 10px;font-size:14px}
   .side ol .sub a.on{border-left-color:var(--green)}
-  .mgroup>a.on{font-weight:700}
+  .mgroup .grp-h>a.on{font-weight:700}
+  /* 22 Oct 2026: "Members area" folds its pages away, same chevron as the demo's Live / Practice */
+  .grp-h{display:flex;align-items:stretch;gap:2px} .grp-h>a{flex:1;min-width:0}
+  .grp-t{appearance:none;border:0;background:none;cursor:pointer;width:38px;display:grid;place-items:center;border-radius:12px;color:var(--muted);padding:0}
+  .grp-t:hover{color:var(--ink);background:var(--deep2)}
+  .grp-t::after{content:"";width:7px;height:7px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px);transition:transform .15s}
+  .grp-t[aria-expanded="false"]::after{transform:rotate(-45deg)}
+  .mgroup.closed>.sub{display:none}
+  /* 22 Oct 2026: lesson videos, shown only to accounts with preview_videos on (owner preview before launch) */
+  .gd-video{margin:0 0 18px} .gd-video video{display:block;width:100%;aspect-ratio:16/9;border-radius:14px;background:#000;border:1px solid var(--rule)}
+  .gd-video p{margin:8px 0 0}
 
   /* installed app (22 Oct 2026, owner's choice): menu hidden behind the round button at every width, content full width */
   html.app body{padding-left:0}
@@ -242,8 +252,8 @@
 <nav class="side" id="side" aria-label="Site">
   <a class="side-brand" href="./"><img src="icon-192.png" alt=""><span>My Robot <b>I.S.A.</b></span></a>
   <ol class="site-only">
-    <li class="mgroup"><a href="#home" data-go="home" class="on" aria-current="page">Members area</a>
-      <ol class="sub">
+    <li class="mgroup" id="mgroup"><div class="grp-h"><a href="#home" data-go="home" class="on" aria-current="page">Members area</a><button type="button" class="grp-t" id="mgroup-t" aria-expanded="true" aria-controls="mgroup-sub" aria-label="Hide the members pages"></button></div>
+      <ol class="sub" id="mgroup-sub">
         <li><a href="#start" data-go="start">Start here</a></li>
         <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
         <li><a href="#code" data-go="code">Your code</a></li>
@@ -376,6 +386,7 @@
         <p class="lede" id="gd-lede">One step at a time. Tick each one as you go; your place is saved to your account.</p>
         <div class="gd-bar" aria-hidden="true"><i id="gd-bar"></i></div>
         <p class="small" id="gd-count"></p>
+        <div id="gd-video" hidden></div>
         <div id="gd-step"></div>
         <details class="fold gd-all" id="gd-all"><summary><span class="fold-l">Show all steps</span></summary><ol id="gd-list"></ol></details>
       </section>
@@ -619,16 +630,16 @@
     $("mem-kv").innerHTML =
       "<div><span>Updates included until</span><b>" + esc(fmtDate(m.updates_until)) + "</b></div>" +
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
-    renderDash(); renderAll(); show("home"); passkeyCard(); loadNotes(); if (location.hash === "#mydash") dashOpen(false);
+    renderDash(); renderAll(); show("home"); if (gcur.id) guideVideo(gcur.id); passkeyCard(); loadNotes(); if (location.hash === "#mydash") dashOpen(false);
     rest("member_progress?select=item,done").then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
-      rows.forEach(function (x) { done[x.item] = x.done; }); renderAll(); if (gcur.id) guideRender();
+      rows.forEach(function (x) { done[x.item] = x.done; }); renderAll(); if (gcur.id) { guideVideo(gcur.id); guideRender(); }
     }).catch(function () {});
   }
 
   function start() {
     if (!session) { show("signin"); return; }
     show("wait");
-    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url,first_name,founding_no").then(function (r) {
+    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url,first_name,founding_no,preview_videos").then(function (r) {
       if (r.status === 401) { clear(); session = null; show("signin"); say("Your sign-in ran out. Ask for a new code.", false); return; }
       return r.json().then(function (rows) {
         var uid = null; try { uid = JSON.parse(atob(session.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub; } catch (e) {}
@@ -920,8 +931,22 @@
     rest("member_progress?on_conflict=user_id,item", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
       body: JSON.stringify({ user_id: me.user_id, item: id, done: on, updated_at: new Date().toISOString() }) }).catch(function () {});
   }
+  // Lesson videos (22 Oct 2026): rendered from the same scripts as the guides. Shown only when the member row has preview_videos on;
+  // the folder name is unlisted. Proper gated hosting (Cloudflare Stream) is the launch to-do.
+  var VIDEO_DIR = "video-7b085e8e0a/", VIDEOS = { "qs-1": "qs-01-copy-the-code", "qs-2": "qs-02-broker-key", "qs-3": "qs-03-email-key", "qs-4": "qs-04-setup-check", "qs-5": "qs-05-optional-extras", "qs-6": "qs-06-your-app",
+    "day-1": "day-01-rules-not-tips", "day-2": "day-02-get-it-running", "day-3": "day-03-data-you-can-trust", "day-4": "day-04-make-it-yours", "day-5": "day-05-backtest-honestly", "day-6": "day-06-paper-money-first", "day-7": "day-07-the-plumbing",
+    "day-8": "day-08-done-means-it-happened", "day-9": "day-09-make-it-explain-itself", "day-10": "day-10-keys-and-secrets", "day-11": "day-11-it-runs-while-you-sleep", "day-12": "day-12-limits-and-an-off-switch", "day-13": "day-13-small-and-real", "day-14": "day-14-keep-an-honest-record" };
+  function guideVideo(id) {
+    var box = $("gd-video"), slug = VIDEOS[id];
+    if (!box) return;
+    if (!me.preview_videos || !slug) { box.hidden = true; box.innerHTML = ""; return; }
+    box.hidden = false;
+    box.innerHTML = '<div class="gd-video"><video controls preload="metadata" playsinline src="' + VIDEO_DIR + slug + '.mp4"></video>' +
+      '<p class="small">Watch first, then do the steps below. <span style="color:var(--eye)">Owner preview: only your account sees the videos for now.</span></p></div>';
+  }
   function guideOpen(id) {
     var g = GUIDES[id]; if (!g) return;
+    guideVideo(id);
     var first = 0; for (var i = 0; i < g.steps.length; i++) { if (!done[gkey(id, i)]) { first = i; break; } first = g.steps.length - 1; }
     var complete = g.steps.every(function (_, i) { return done[gkey(id, i)]; });
     gcur = { id: id, n: gcur.id === id ? gcur.n : first, celebrate: complete };
@@ -983,13 +1008,21 @@
     if (page === "guide") { if (!window.GUIDES || !GUIDES[gid]) { page = "start"; } else { guideOpen(gid); } }
     document.querySelectorAll("#v-home [data-page]").forEach(function (el) { el.classList.toggle("off", el.dataset.page.split(" ").indexOf(page) < 0); });
     document.querySelectorAll("[data-go]").forEach(function (a) { var on = a.dataset.go === page; a.classList.toggle("on", on); on ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"); });
-    document.querySelector('.mgroup > a').classList.toggle("on", true);
+    document.querySelector('.mgroup .grp-h > a').classList.toggle("on", true);
     if (page === "lessons") $("les-fold").open = true;
     $("preview").classList.toggle("off", page !== "home");
     document.documentElement.classList.toggle("dashview", page === "mydash"); document.documentElement.dataset.pg = page;
     if (page === "mydash") dashOpen(false);
     window.scrollTo(0, 0);
   }
+  // Fold the members pages away under "Members area" (22 Oct 2026). Open by default, remembered in this browser.
+  (function () {
+    var li = $("mgroup"), t = $("mgroup-t"); if (!li || !t) return;
+    var open = true; try { open = localStorage.getItem("mri-members-side") !== "closed"; } catch (e) {}
+    function set(o) { open = o; li.classList.toggle("closed", !o); t.setAttribute("aria-expanded", String(o)); t.setAttribute("aria-label", (o ? "Hide" : "Show") + " the members pages"); try { localStorage.setItem("mri-members-side", o ? "open" : "closed"); } catch (e) {} }
+    set(open);
+    t.addEventListener("click", function (e) { e.preventDefault(); set(!open); });
+  })();
   addEventListener("hashchange", function () { go(location.hash.slice(1)); });
   go(location.hash.slice(1));
   // ---- installed app on a computer: ask for a portrait window (about 900 x 1200) on its very first launch only.
