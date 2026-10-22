@@ -177,6 +177,11 @@
   .side ol a{display:block;padding:10px 12px;border-radius:12px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:500;border-left:3px solid transparent}
   .side ol a:hover{color:var(--ink);background:var(--deep2)}
   .side ol a.on{color:var(--ink);background:var(--deep2);border-left-color:var(--green)}
+  /* 22 Oct 2026: a signed-in member's menu group, shown above the site pages (see make_pages.nav) */
+  .side ol.mnav{margin-bottom:6px} .side .mgroup>a{font-weight:700}
+  .side .sub{list-style:none;margin:4px 0 6px 12px;padding:0 0 0 12px;border-left:1px solid var(--rule);display:flex;flex-direction:column;gap:2px}
+  .side .sub a{padding:7px 10px;font-size:14px}
+  .side li.sep{margin:10px 12px 4px;padding-top:10px;border-top:1px solid var(--rule);font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--pink-ink)}
   .side-follow{margin:auto 12px 0;padding:10px 0 4px;font-size:13px;color:var(--muted)} .side-follow a{color:var(--green);font-weight:700}
   .side-cta{margin-top:0;padding:16px 12px 4px;border-top:1px solid var(--rule)}
   .side-cta p{margin:0 0 12px;font-size:15px;color:var(--ink)} .side-cta p b{color:var(--green);font-size:22px} .side-cta span{color:var(--muted);font-size:13px}
@@ -305,6 +310,20 @@
 <div class="preview" id="preview" hidden>Preview. The form doesn't save anything until the page is live on myrobotisa.com.</div>
 <nav class="side" id="side" aria-label="Sections">
   <a class="side-brand" href="#top"><img src="avatar.png" alt=""><span>My Robot <b>I.S.A.</b></span></a>
+  <ol class="mnav" id="mnav" hidden>
+    <li class="mgroup"><a href="members/#home">Members area</a>
+      <ol class="sub">
+        <li><a href="members/#start">Start here</a></li>
+        <li><a href="members/#lessons">The 14 lessons</a></li>
+        <li><a href="members/#code">Your code</a></li>
+        <li><a href="members/#dashboard">Your dashboard</a></li>
+        <li><a href="members/#clips">New clips</a></li>
+        <li><a href="members/#passkeys">Faster sign-in</a></li>
+        <li><a href="members/#help">Help and membership</a></li>
+      </ol>
+    </li>
+    <li class="sep">The site</li>
+  </ol>
   <ol>
     <li><a href="index.html" class="on" aria-current="page">Home</a></li>
     <li><a href="how-it-works.html">How it works</a></li>
@@ -651,6 +670,11 @@
     headers: { apikey: "sb_publishable_hjvkAbVw82CKg2rdDZgVcw_XUDbmerV", "Content-Type": "application/json" }, body: "{}" })
     .then(function(r){ return r.ok ? r.json() : null; }).then(apply).catch(function(){});
 })();
+</script>
+<script>
+// 22 Oct 2026: signed-in members see their Members area group in the side menu and "Members area" instead of "Log in".
+(function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
+var g=document.getElementById("mnav");if(g)g.hidden=false;var l=document.querySelector("a.login");if(l){l.textContent="Members area";l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
 </script>
 </body>
 </html>
