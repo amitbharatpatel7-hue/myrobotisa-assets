@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="17">
+<meta name="mri-version" content="18">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -236,10 +236,18 @@ body.qs-mode header.hero{display:none}
 .sbrand img{width:38px;height:38px;border-radius:10px;border:2px solid var(--brand-green)}
 .sbrand b{color:var(--pink);font-weight:400}
 .snav{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
-.snav>li>a{display:block;padding:10px 12px;border-radius:12px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:500;border-left:3px solid transparent}
-.snav>li>a:hover{color:var(--fg);background:var(--card)}
-.snav>li>a.on{color:var(--fg);background:var(--card);border-left-color:var(--brand-green);font-weight:700}
+.snav>li>a,.snav .grp-h>a{display:block;padding:10px 12px;border-radius:12px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:500;border-left:3px solid transparent}
+.snav>li>a:hover,.snav .grp-h>a:hover{color:var(--fg);background:var(--card)}
+.snav>li>a.on,.snav .grp-h>a.on{color:var(--fg);background:var(--card);border-left-color:var(--brand-green);font-weight:700}
 .sgroup{margin-bottom:6px}
+/* 22 Oct 2026: the group header folds its pages away, same chevron as Live / Practice */
+.grp-h{display:flex;align-items:stretch;gap:2px}
+.grp-h>a{flex:1;min-width:0}
+.grp-t{appearance:none;border:0;background:none;cursor:pointer;width:38px;display:grid;place-items:center;border-radius:12px;color:var(--muted);padding:0}
+.grp-t:hover{color:var(--fg);background:var(--card)}
+.grp-t::after{content:"";width:7px;height:7px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px);transition:transform .15s}
+.grp-t[aria-expanded="false"]::after{transform:rotate(-45deg)}
+.sgroup.closed #demo-sub{display:none}
 .sgroup #nav{gap:2px;padding:6px 0 0 14px;border-top:0;margin-left:10px;border-left:1px solid var(--line)}
 .sgroup #nav button{min-height:38px;font-size:14px;font-weight:600;padding:6px 10px}
 .sgroup #weeks{margin-left:10px;padding-left:14px;border-left:1px solid var(--line)}
@@ -283,7 +291,8 @@ body.qs-mode header.hero{display:none}
     <li><a href="../">Home</a></li>
     <li><a href="../how-it-works.html">How it works</a></li>
     <li><a href="../what-you-get.html">What you get</a></li>
-    <li class="sgroup"><a href="./" class="on" aria-current="page">Try the demo</a>
+    <li class="sgroup" id="demogrp"><div class="grp-h"><a href="./" class="on" aria-current="page">Try the demo</a><button type="button" class="grp-t" id="demogrp-t" aria-expanded="true" aria-controls="demo-sub" aria-label="Hide the demo pages"></button></div>
+      <div id="demo-sub">
       <nav id="nav" aria-label="Demo pages"><button type="button" data-p="overview" aria-current="page"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>Overview</button>
     <button type="button" data-p="quickstart"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>QuickStart</button>
     <button type="button" data-p="orders"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Orders</button>
@@ -291,6 +300,7 @@ body.qs-mode header.hero{display:none}
     <button type="button" data-p="controls"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="9" y1="9" x2="9" y2="15"/><line x1="15" y1="9" x2="15" y2="15"/></svg>Controls<span class="soon">SOON</span></button>
       </nav>
       <div id="weeks" aria-label="Weeks"></div>
+      </div>
     </li>
     <li><a href="../status.html">Nothing to hide</a></li>
     <li><a href="../isa-rules.html">ISA rules</a></li>
@@ -706,6 +716,14 @@ else addEventListener("DOMContentLoaded",()=>{ if(!window.MRI_INSTALL) return; c
   let n=""; try{ n=clean(localStorage.getItem("mri-name")); }catch(e){}
   box.value=n; paint(n);
   form.addEventListener("submit",e=>{ e.preventDefault(); const v=clean(box.value); box.value=v; try{ v?localStorage.setItem("mri-name",v):localStorage.removeItem("mri-name"); }catch(e){} paint(v); });
+})();
+// Fold the demo pages away under "Try the demo" (22 Oct 2026). Open by default, remembered in this browser.
+(function(){
+  const li=$("demogrp"), t=$("demogrp-t"); if(!li||!t) return;
+  let open=true; try{ open=localStorage.getItem("mri-demo-side")!=="closed"; }catch(e){}
+  const set=o=>{ open=o; li.classList.toggle("closed",!o); t.setAttribute("aria-expanded",String(o)); t.setAttribute("aria-label",(o?"Hide":"Show")+" the demo pages"); try{ localStorage.setItem("mri-demo-side",o?"open":"closed"); }catch(e){} };
+  set(open);
+  t.addEventListener("click",e=>{ e.preventDefault(); set(!open); });
 })();
 if (location.hash==="#quickstart") { document.querySelector('#nav button[data-p="quickstart"]').click(); }
 if ("serviceWorker" in navigator && location.protocol==="https:") { navigator.serviceWorker.register("sw.js").catch(()=>{}); }
