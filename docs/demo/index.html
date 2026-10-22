@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="16">
+<meta name="mri-version" content="17">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -590,6 +590,9 @@ function renderWeekList(){
   const grp=(name,cls,list,n)=>`<details class="wgrp"><summary><span${cls}>${name}</span><span class="wn">${n}</span></summary>${list}</details>`;
   $("weeks").innerHTML=grp("Live",' class="live"',live.map((w,i)=>item(w,i===0)).join(""),live.length)+grp("Practice","",prac.map(w=>item(w,false)).join(""),prac.length);
   $("weeks").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>showWeek(b.dataset.w)));
+  // Toggle the folds ourselves (22 Oct 2026: a member could collapse Live/Practice and not get it back in Edge), and start with Live open.
+  $("weeks").querySelectorAll("details.wgrp>summary").forEach(sm=>sm.addEventListener("click",e=>{ e.preventDefault(); const d=sm.parentElement; d.open=!d.open; }));
+  const first=$("weeks").querySelector("details.wgrp"); if(first) first.open=true;
 }
 function signalsReport(w){
   const top=D.ranking.slice(0,5).map(r=>r[0]);
