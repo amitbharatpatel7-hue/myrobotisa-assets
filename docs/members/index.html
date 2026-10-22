@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="29">
+<meta name="mri-version" content="30">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -371,7 +371,7 @@
       </section>
 
       <section class="card wide" aria-labelledby="h-gd" data-page="guide" id="guide">
-        <p class="small" style="margin:0 0 8px"><a href="#start" id="gd-back-start" data-go="start">&larr; Start here</a> &nbsp;·&nbsp; <a href="#lessons" data-go="lessons">The 14 lessons</a></p>
+        <p class="small" style="margin:0 0 8px"><a href="#start" id="gd-back-start" data-go="start">&larr; Start here</a> &nbsp;·&nbsp; <a href="#lessons" id="gd-other" data-go="lessons">The 14 lessons</a></p>
         <div class="gd-head"><span class="kind" id="gd-kind"></span><h2 id="h-gd" style="margin:0">Step by step</h2><span class="small" id="gd-mins"></span></div>
         <p class="lede" id="gd-lede">One step at a time. Tick each one as you go; your place is saved to your account.</p>
         <div class="gd-bar" aria-hidden="true"><i id="gd-bar"></i></div>
@@ -448,7 +448,7 @@
   </main>
 </div>
 
-<script src="guides.js?v=29"></script>
+<script src="guides.js?v=30"></script>
 <script>
 (function () {
   "use strict";
@@ -470,14 +470,14 @@
   var LESSONS = [
     ["Rules, not tips", "What a robot ISA is and isn't; writing rules down so a machine can follow them"],
     ["Get it running", "Your copy of the code, set up with Claude, making its first paper trade"],
-    ["Data you can trust", "Prices, gaps and the quiet errors that ruin everything after them"],
+    ["Data you can trust", "Where the prices come from, and how the robot makes sure every number is real"],
     ["Make it yours", "Changing rules, limits and what it trades: settings file first, then code"],
     ["Backtest honestly", "No hindsight, no peeking: testing your own rules fairly before any real money"],
     ["Paper money first", "A practice account that behaves like the real thing"],
     ["The plumbing", "Orders, rounding and the exchange's rules (the six-decimal L)"],
     ["Done means it happened", "Confirming an order landed before calling the job done"],
-    ["Make it explain itself", "Logs that give the reason, not just a red cross"],
-    ["Keys and secrets", "Storing them safely (the line break that broke thirteen runs)"],
+    ["Make it explain itself", "Logs that give the reason and what to do, and a review that's allowed to say red"],
+    ["Keys and secrets", "The five keys, what each can do, and four habits that keep them safe"],
     ["It runs while you sleep", "Scheduling, alerts and a daily digest you'll read"],
     ["Limits and an off switch", "Position limits, sanity checks, stopping everything in one move"],
     ["Small and real", "Moving from paper to real money carefully"],
@@ -921,9 +921,11 @@
   function guideOpen(id) {
     var g = GUIDES[id]; if (!g) return;
     var first = 0; for (var i = 0; i < g.steps.length; i++) { if (!done[gkey(id, i)]) { first = i; break; } first = g.steps.length - 1; }
-    gcur = { id: id, n: gcur.id === id ? gcur.n : first };
+    var complete = g.steps.every(function (_, i) { return done[gkey(id, i)]; });
+    gcur = { id: id, n: gcur.id === id ? gcur.n : first, celebrate: complete };
     $("gd-kind").textContent = g.kind; $("h-gd").textContent = g.title; $("gd-mins").textContent = "about " + g.mins + " min";
-    $("gd-back-start").textContent = id.indexOf("qs-") === 0 ? "\u2190 Start here" : "\u2190 The 14 lessons"; $("gd-back-start").href = id.indexOf("qs-") === 0 ? "#start" : "#lessons";
+    var isQs = id.indexOf("qs-") === 0; $("gd-back-start").textContent = isQs ? "\u2190 Start here" : "\u2190 The 14 lessons"; $("gd-back-start").href = isQs ? "#start" : "#lessons";
+    var other = $("gd-other"); other.textContent = isQs ? "The 14 lessons" : "Start here"; other.href = isQs ? "#lessons" : "#start"; other.dataset.go = isQs ? "lessons" : "start";
     guideRender();
   }
   function guideRender() {
@@ -932,6 +934,16 @@
     $("gd-bar").style.width = (ticked / total * 100) + "%";
     $("gd-count").textContent = ticked === total ? "All " + total + " steps done." : ticked + " of " + total + " steps done";
     var isDone = !!done[gkey(id, n)];
+    var ORDER = ["qs-1","qs-2","qs-3","qs-4","qs-5","qs-6","day-1","day-2","day-3","day-4","day-5","day-6","day-7","day-8","day-9","day-10","day-11","day-12","day-13","day-14"];
+    var nextId = ORDER[ORDER.indexOf(id) + 1], nextG = nextId && GUIDES[nextId], backHref = id.indexOf("qs-") === 0 ? "#start" : "#lessons", backLabel = id.indexOf("qs-") === 0 ? "Back to Start here" : "Back to all lessons";
+    if (ticked === total && gcur.celebrate) {
+      $("gd-step").innerHTML = '<div class="gd-step gd-done"><div class="sn" style="color:var(--green)">All ' + total + ' steps done</div><h3>' + esc(g.kind) + ' finished &#10003;</h3>' +
+        '<p>' + (nextG ? 'Up next: <b>' + esc(nextG.kind) + ' &middot; ' + esc(nextG.title) + '</b> (about ' + nextG.mins + ' min).' : 'That was the last one. You own a robot that runs by written rules. Everything else is patience.') + '</p>' +
+        '<div class="gd-nav">' + (nextG ? '<a class="btn done-btn" href="#guide/' + nextId + '">' + (nextId === "day-1" ? "Start the lessons" : "Next: " + esc(nextG.title)) + ' &rarr;</a>' : "") +
+        '<a class="btn ghost" href="' + backHref + '">' + backLabel + '</a><button class="btn ghost sm" type="button" data-gd="review">Review the steps</button></div></div>';
+      $("gd-list").innerHTML = g.steps.map(function (x, i) { return '<li class="done" data-gd-go="' + i + '"><span class="k">&#10003;</span><span>' + esc(x.t) + '</span></li>'; }).join("");
+      return;
+    }
     $("gd-step").innerHTML = '<div class="gd-step' + (isDone ? " gd-done" : "") + '">' +
       '<div class="sn">Step ' + (n + 1) + ' of ' + total + (isDone ? ' &middot; <span style="color:var(--green)">done</span>' : "") + '</div>' +
       '<h3>' + esc(st.t) + '</h3><p>' + esc(st.d) + '</p>' +
@@ -949,12 +961,13 @@
   document.addEventListener("click", function (e) {
     var b = e.target.closest("[data-gd]"), li = e.target.closest("[data-gd-go]"), z = e.target.closest("[data-zoom]");
     if (z) { var o = document.createElement("div"); o.className = "gd-zoom"; o.innerHTML = '<img src="' + z.getAttribute("src") + '" alt="">'; o.addEventListener("click", function () { o.remove(); }); document.body.appendChild(o); return; }
-    if (li) { gcur.n = +li.dataset.gdGo; guideRender(); window.scrollTo(0, 0); return; }
+    if (li) { gcur.n = +li.dataset.gdGo; gcur.celebrate = false; guideRender(); window.scrollTo(0, 0); return; }
     if (!b || !gcur.id) return;
     var id = gcur.id, g = GUIDES[id], a = b.dataset.gd;
     if (a === "back") { gcur.n = Math.max(0, gcur.n - 1); }
     else if (a === "next") { gsave(gkey(id, gcur.n), true); gcur.n = Math.min(g.steps.length - 1, gcur.n + 1); }
-    else if (a === "finish") { gsave(gkey(id, gcur.n), true); var all = g.steps.every(function (_, i) { return done[gkey(id, i)]; }); if (all) { var lid = id.replace("qs-", "qs:").replace("day-", "day:"); if (!done[lid]) { done[lid] = true; gsave(lid, true); } renderAll(); } }
+    else if (a === "finish") { gsave(gkey(id, gcur.n), true); var all = g.steps.every(function (_, i) { return done[gkey(id, i)]; }); if (all) { gcur.celebrate = true; var lid = id.replace("qs-", "qs:").replace("day-", "day:"); if (!done[lid]) { done[lid] = true; gsave(lid, true); } renderAll(); } }
+    else if (a === "review") { gcur.celebrate = false; gcur.n = 0; }
     else if (a === "untick") { gsave(gkey(id, gcur.n), false); }
     guideRender(); window.scrollTo(0, 0);
   });
