@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="26">
+<meta name="mri-version" content="27">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -163,6 +163,20 @@
   details.fold{margin-top:12px} details.fold>summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:14px;color:var(--green);min-height:36px}
   details.fold>summary::-webkit-details-marker{display:none} details.fold>summary::before{content:'';width:8px;height:8px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(-45deg);transition:transform .15s}
   details.fold[open]>summary::before{transform:rotate(45deg)}
+  /* step-by-step guides */
+  .gd-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;margin-bottom:6px} .gd-head .kind{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
+  .gd-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.1);margin:10px 0 4px;overflow:hidden} .gd-bar i{display:block;height:100%;background:var(--green);border-radius:3px;transition:width .3s}
+  .gd-step{background:var(--deep3);border:1px solid var(--rule);border-radius:16px;padding:16px;margin-top:12px}
+  .gd-step .sn{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)} .gd-step h3{margin:4px 0 8px;font-size:20px;line-height:1.25}
+  .gd-step p{margin:0 0 10px;font-size:15px;line-height:1.55;color:var(--ink)}
+  .gd-shot{display:block;width:100%;border-radius:12px;border:1px solid var(--rule);background:#000;margin:6px 0 12px;cursor:zoom-in}
+  .gd-stuck{margin:8px 0 0} .gd-stuck>summary{font-size:14px;color:var(--amber)} .gd-stuck p{color:var(--muted);font-size:14px;margin-top:6px}
+  .gd-nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px} .gd-nav .btn{flex:1 1 auto} .gd-nav .btn.done-btn{border-color:var(--green);background:var(--green);color:var(--deep)}
+  .gd-all{margin-top:14px} .gd-all ol{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px} .gd-all li{display:flex;gap:10px;align-items:baseline;font-size:14px;color:var(--muted);cursor:pointer;padding:6px 8px;border-radius:10px}
+  .gd-all li:hover{background:rgba(255,255,255,.05)} .gd-all li.on{color:var(--ink);font-weight:700} .gd-all li.done .k{color:var(--green)} .gd-all .k{font-family:Anton,Impact,sans-serif;font-size:16px;color:var(--rule);min-width:22px}
+  .gd-done{border-color:rgba(0,232,122,.55);background:rgba(0,232,122,.07)}
+  .gd-zoom{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;cursor:zoom-out} .gd-zoom img{max-width:100%;max-height:100%;border-radius:10px}
+  .item .gd-link{display:inline-block;margin-top:4px;font-size:13px;font-weight:700;color:var(--green)}
   .pill-link{text-decoration:none;transition:background .15s,color .15s,box-shadow .15s} .pill-link:hover,.pill-link:focus-visible{background:var(--ink);border-color:var(--ink);color:var(--deep);outline:none} .notes{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
   .note{background:var(--deep3);border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:14px;padding:12px 14px}
   .msg-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -356,6 +370,16 @@
         </details>
       </section>
 
+      <section class="card wide" aria-labelledby="h-gd" data-page="guide" id="guide">
+        <p class="small" style="margin:0 0 8px"><a href="#start" id="gd-back-start" data-go="start">&larr; Start here</a> &nbsp;·&nbsp; <a href="#lessons" data-go="lessons">The 14 lessons</a></p>
+        <div class="gd-head"><span class="kind" id="gd-kind"></span><h2 id="h-gd" style="margin:0">Step by step</h2><span class="small" id="gd-mins"></span></div>
+        <p class="lede" id="gd-lede">One step at a time. Tick each one as you go; your place is saved to your account.</p>
+        <div class="gd-bar" aria-hidden="true"><i id="gd-bar"></i></div>
+        <p class="small" id="gd-count"></p>
+        <div id="gd-step"></div>
+        <details class="fold gd-all" id="gd-all"><summary><span class="fold-l">Show all steps</span></summary><ol id="gd-list"></ol></details>
+      </section>
+
       <section class="card" aria-labelledby="h-code" data-page="code">
         <h2 id="h-code">Your copy of <span class="g">the code</span></h2>
         <p class="lede">Delivered as an invite to your own private GitHub repo, never a zip file. Updates arrive there for as long as your membership includes them.</p>
@@ -424,6 +448,7 @@
   </main>
 </div>
 
+<script src="guides.js?v=27"></script>
 <script>
 (function () {
   "use strict";
@@ -557,8 +582,8 @@
     $("les-count").textContent = l + " of 14 lessons done";
   }
   function renderAll() {
-    renderList($("qs"), QS, "qs", function (i) { return ' <span class="pill">' + QS[i][1] + "</span>"; });
-    renderList($("lessons"), LESSONS, "day", function (i) { return i === 0 ? ' <span class="pill g">Free to watch</span>' : ' <span class="pill a">Opens January 2027</span>'; });
+    renderList($("qs"), QS, "qs", function (i) { return ' <span class="pill">' + QS[i][1] + '</span><br><a class="gd-link" href="#guide/qs-' + (i + 1) + '">Step by step &rarr;</a>'; });
+    renderList($("lessons"), LESSONS, "day", function (i) { return (i === 0 ? ' <span class="pill g">Free to watch</span>' : ' <span class="pill a">Opens January 2027</span>') + '<br><a class="gd-link" href="#guide/day-' + (i + 1) + '">Step by step &rarr;</a>'; });
     counts();
   }
   document.addEventListener("change", function (e) {
@@ -596,7 +621,7 @@
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
     renderDash(); renderAll(); show("home"); passkeyCard(); loadNotes(); if (location.hash === "#mydash") dashOpen(false);
     rest("member_progress?select=item,done").then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
-      rows.forEach(function (x) { done[x.item] = x.done; }); renderAll();
+      rows.forEach(function (x) { done[x.item] = x.done; }); renderAll(); if (gcur.id) guideRender();
     }).catch(function () {});
   }
 
@@ -884,10 +909,63 @@
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeMenu(); });
   })();
 
+  // ---- step-by-step guides (22 Oct 2026): one step per card, ticks saved as g:<guide>:<n> in member_progress
+  var gcur = { id: null, n: 0 };
+  function gkey(id, n) { return "g:" + id + ":" + (n + 1); }
+  function gsave(id, on) {
+    done[id] = on;
+    if (!me.user_id) return;
+    rest("member_progress?on_conflict=user_id,item", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
+      body: JSON.stringify({ user_id: me.user_id, item: id, done: on, updated_at: new Date().toISOString() }) }).catch(function () {});
+  }
+  function guideOpen(id) {
+    var g = GUIDES[id]; if (!g) return;
+    var first = 0; for (var i = 0; i < g.steps.length; i++) { if (!done[gkey(id, i)]) { first = i; break; } first = g.steps.length - 1; }
+    gcur = { id: id, n: gcur.id === id ? gcur.n : first };
+    $("gd-kind").textContent = g.kind; $("h-gd").textContent = g.title; $("gd-mins").textContent = "about " + g.mins + " min";
+    $("gd-back-start").textContent = id.indexOf("qs-") === 0 ? "\u2190 Start here" : "\u2190 The 14 lessons"; $("gd-back-start").href = id.indexOf("qs-") === 0 ? "#start" : "#lessons";
+    guideRender();
+  }
+  function guideRender() {
+    var id = gcur.id, g = GUIDES[id], n = gcur.n, st = g.steps[n], total = g.steps.length;
+    var ticked = g.steps.filter(function (_, i) { return done[gkey(id, i)]; }).length;
+    $("gd-bar").style.width = (ticked / total * 100) + "%";
+    $("gd-count").textContent = ticked === total ? "All " + total + " steps done." : ticked + " of " + total + " steps done";
+    var isDone = !!done[gkey(id, n)];
+    $("gd-step").innerHTML = '<div class="gd-step' + (isDone ? " gd-done" : "") + '">' +
+      '<div class="sn">Step ' + (n + 1) + ' of ' + total + (isDone ? ' &middot; <span style="color:var(--green)">done</span>' : "") + '</div>' +
+      '<h3>' + esc(st.t) + '</h3><p>' + esc(st.d) + '</p>' +
+      (st.img ? '<img class="gd-shot" src="guide/' + esc(st.img) + '" alt="What the screen looks like at this step" loading="lazy" data-zoom>' : "") +
+      (st.stuck ? '<details class="fold gd-stuck"><summary><span class="fold-l">Stuck? Doesn\'t look like that?</span></summary><p>' + esc(st.stuck) + '</p></details>' : "") +
+      '<div class="gd-nav">' + (n > 0 ? '<button class="btn ghost" type="button" data-gd="back">&larr; Back</button>' : "") +
+      (n < total - 1 ? '<button class="btn done-btn" type="button" data-gd="next">' + (isDone ? "Next &rarr;" : "Done, next &rarr;") + '</button>'
+                     : '<button class="btn done-btn" type="button" data-gd="finish">' + (isDone ? "Finished" : "Done &#10003;") + '</button>') +
+      (isDone ? '<button class="btn ghost sm" type="button" data-gd="untick">Untick</button>' : "") + '</div></div>';
+    $("gd-list").innerHTML = g.steps.map(function (x, i) {
+      var d = !!done[gkey(id, i)];
+      return '<li class="' + (i === n ? "on " : "") + (d ? "done" : "") + '" data-gd-go="' + i + '"><span class="k">' + (d ? "&#10003;" : (i + 1)) + '</span><span>' + esc(x.t) + '</span></li>';
+    }).join("");
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-gd]"), li = e.target.closest("[data-gd-go]"), z = e.target.closest("[data-zoom]");
+    if (z) { var o = document.createElement("div"); o.className = "gd-zoom"; o.innerHTML = '<img src="' + z.getAttribute("src") + '" alt="">'; o.addEventListener("click", function () { o.remove(); }); document.body.appendChild(o); return; }
+    if (li) { gcur.n = +li.dataset.gdGo; guideRender(); window.scrollTo(0, 0); return; }
+    if (!b || !gcur.id) return;
+    var id = gcur.id, g = GUIDES[id], a = b.dataset.gd;
+    if (a === "back") { gcur.n = Math.max(0, gcur.n - 1); }
+    else if (a === "next") { gsave(gkey(id, gcur.n), true); gcur.n = Math.min(g.steps.length - 1, gcur.n + 1); }
+    else if (a === "finish") { gsave(gkey(id, gcur.n), true); var all = g.steps.every(function (_, i) { return done[gkey(id, i)]; }); if (all) { var lid = id.replace("qs-", "qs:").replace("day-", "day:"); if (!done[lid]) { done[lid] = true; gsave(lid, true); } renderAll(); } }
+    else if (a === "untick") { gsave(gkey(id, gcur.n), false); }
+    guideRender(); window.scrollTo(0, 0);
+  });
+
   // ---- one section per page: Home (welcome and messages), Start here, Lessons, Code, Dashboard, Clips, Help
-  var PAGES = ["home", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help"];
+  var PAGES = ["home", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help", "guide"];
   function go(page) {
+    var gid = null;
+    if (page.indexOf("guide/") === 0) { gid = page.slice(6); page = "guide"; }
     if (PAGES.indexOf(page) < 0) page = "home";
+    if (page === "guide") { if (!window.GUIDES || !GUIDES[gid]) { page = "start"; } else { guideOpen(gid); } }
     document.querySelectorAll("#v-home [data-page]").forEach(function (el) { el.classList.toggle("off", el.dataset.page.split(" ").indexOf(page) < 0); });
     document.querySelectorAll("[data-go]").forEach(function (a) { var on = a.dataset.go === page; a.classList.toggle("on", on); on ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"); });
     document.querySelector('.mgroup > a').classList.toggle("on", true);
