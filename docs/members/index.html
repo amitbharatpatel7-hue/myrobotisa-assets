@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="33">
+<meta name="mri-version" content="34">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -226,6 +226,7 @@
   /* 22 Oct 2026: lesson videos, shown only to accounts with preview_videos on (owner preview before launch) */
   .gd-video{margin:0 0 18px} .gd-video video{display:block;width:100%;aspect-ratio:16/9;border-radius:14px;background:#000;border:1px solid var(--rule)}
   .gd-video p{margin:8px 0 0}
+  .gd-tips ul{margin:10px 0 0;padding-left:20px;color:var(--muted)} .gd-tips li{margin:6px 0;line-height:1.5}
 
   /* installed app (22 Oct 2026, owner's choice): menu hidden behind the round button at every width, content full width */
   html.app body{padding-left:0}
@@ -391,6 +392,7 @@
         <div id="gd-video" hidden></div>
         <div id="gd-step"></div>
         <details class="fold gd-all" id="gd-all"><summary><span class="fold-l">Show all steps</span></summary><ol id="gd-list"></ol></details>
+        <details class="fold gd-tips" id="gd-tips" hidden><summary><span class="fold-l">Tips for this one</span></summary><ul id="gd-tiplist"></ul></details>
       </section>
 
       <section class="card" aria-labelledby="h-code" data-page="code">
@@ -461,7 +463,7 @@
   </main>
 </div>
 
-<script src="guides.js?v=31"></script>
+<script src="guides.js?v=34"></script>
 <script>
 (function () {
   "use strict";
@@ -961,6 +963,7 @@
   function guideOpen(id) {
     var g = GUIDES[id]; if (!g) return;
     guideVideo(id);
+    var tb = $("gd-tips"); if (tb) { tb.hidden = !(g.tips && g.tips.length); $("gd-tiplist").innerHTML = (g.tips || []).map(function (t) { return "<li>" + esc(t) + "</li>"; }).join(""); }
     var first = 0; for (var i = 0; i < g.steps.length; i++) { if (!done[gkey(id, i)]) { first = i; break; } first = g.steps.length - 1; }
     var complete = g.steps.every(function (_, i) { return done[gkey(id, i)]; });
     gcur = { id: id, n: gcur.id === id ? gcur.n : first, celebrate: complete };
