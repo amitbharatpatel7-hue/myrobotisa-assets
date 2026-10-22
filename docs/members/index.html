@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="30">
+<meta name="mri-version" content="31">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -448,7 +448,7 @@
   </main>
 </div>
 
-<script src="guides.js?v=30"></script>
+<script src="guides.js?v=31"></script>
 <script>
 (function () {
   "use strict";
@@ -828,7 +828,9 @@
     if (!PK.on) return;
     pkTip(); $("pk-here").hidden = !pkHere();
     bridge().then(function (sb) { return sb.auth.passkey.list(); }).then(function (r) {
-      var list = (r && Array.isArray(r.data)) ? r.data : [], n = list.length;
+      // 22 Oct 2026: a failed list is "unknown", never "none" (Amit saw the nudge straight after signing in with his passkey).
+      if (!r || !Array.isArray(r.data)) { $("pk-count").textContent = "\u2014"; $("pk-nudge").hidden = true; return; }
+      var list = r.data, n = list.length;
       $("pk-list").innerHTML = n ? list.map(function (p) {
         var id = esc(p.id || p.passkey_id || ""), name = esc(p.friendly_name || "Passkey");
         return '<div><span>' + name + '<br><small style="color:var(--muted)">Added ' + esc(pkDay(p.created_at)) + (p.last_used_at ? " \u00b7 last used " + esc(pkDay(p.last_used_at)) : "") + '</small></span>' +
@@ -839,7 +841,7 @@
       // Home nudge: only while the account has no passkey at all (one on any device is enough to stop asking).
       var ua = navigator.userAgent;
       $("pkn-how").textContent = /Windows/.test(ua) ? "Windows Hello" : /Android/.test(ua) ? "your fingerprint or face" : "Face ID or Touch ID";
-      if (!n && !pkSnoozed()) $("pk-nudge").hidden = false;
+      if (!n && !pkSnoozed() && !pkHere()) $("pk-nudge").hidden = false;
       else if (n && $("pkn-msg").textContent.indexOf("Done") !== 0) $("pk-nudge").hidden = true;
     }).catch(function () { $("pk-count").textContent = "—"; });
   }
