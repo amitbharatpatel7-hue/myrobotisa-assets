@@ -147,19 +147,14 @@
   .proof{list-style:none;padding:0;margin:18px 0 0;display:grid;gap:8px}
   .proof li{font-size:15px;color:var(--muted)} .proof b{color:var(--green);font-weight:800;margin-right:4px}
   .get a{color:var(--green);font-weight:700}
-  .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:center;margin:8px 0 12px} .tour-facts{display:block;margin:14px 0 10px} .tour-facts li{font-size:15px;color:var(--ink)}
-  @media(min-width:700px){.tour{grid-template-columns:1.2fr 1fr}}
+  .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;margin:8px 0 12px} .tour-facts{display:block;margin:14px 0 10px} .tour-facts li{font-size:15px;color:var(--ink)}
   .tour h2{margin-top:12px}
   .who{display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:start;margin-top:40px} .who img{border-radius:24px;border:3px solid var(--green);width:96px;height:96px} .who h2{margin:0 0 8px} .who p{margin:0 0 10px;color:var(--ink)} .who a{color:var(--green);font-weight:700}
   @media (max-width:480px){.who{grid-template-columns:1fr} .who img{width:72px;height:72px}}
   .tour a{color:var(--green);font-weight:700}
-  .tour-video{position:relative;justify-self:center;width:100%;max-width:300px}
-  .tour-video video{display:block;width:100%;aspect-ratio:9/16;border-radius:22px;border:3px solid var(--green);background:var(--deep2);object-fit:cover}
+  .tour-video{position:relative;width:100%;max-width:900px}
+  .tour-video video{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:18px;border:3px solid var(--green);background:var(--deep2)}
   .tour-video video:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
-  .lesson1{margin:8px 0 12px} .lesson1 h2{margin-top:12px}
-  .lesson1-video{margin:16px 0 12px} .lesson1-video video{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:18px;border:3px solid var(--green);background:var(--deep2)}
-  .lesson1-video video:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
-  .lesson1 a{color:var(--green);font-weight:700}
   .soonbadge{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:var(--deep);color:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700;white-space:nowrap}
   .free{display:inline-block;margin-left:6px;padding:2px 8px;border-radius:999px;background:var(--green);color:var(--deep);font-size:11px;font-weight:800;letter-spacing:.06em;vertical-align:middle}
   .preview{background:var(--pink-bg);color:#fff;text-align:center;font-weight:700;font-size:13px;padding:8px 12px}
@@ -210,7 +205,6 @@
     .get>:nth-child(1){grid-row:span 2} .get>:nth-child(4){grid-column:1/-1}
     .side{padding:26px 18px}
     .vs-wrap table{font-size:16px !important}
-    .tour{grid-template-columns:1.1fr .9fr;gap:32px}
   }
   @media (max-width:1099px){
     .side{width:min(300px,85vw);padding:calc(22px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
@@ -336,7 +330,8 @@
       <li><b>It proposes, you approve.</b> Nothing reaches your broker until you tap Approve. Trading 212 has confirmed in writing that this is allowed. <a href="questions.html#faq-t212" style="color:var(--green);font-weight:700">Details</a></li>
       <li><b>Paper money first.</b> Going live is a deliberate switch. Order checks, logging and an off switch are built in.</li>
       <li><b>A moonshot pot.</b> A small slice for the breakouts it spots or your own pick, with a capped size and an exit rule set in advance.</li>
-      <li><b>Your own app, on your phone, Mac or PC.</b> Holdings, every order and why, a daily email and an alert when anything fails. Behind your own login; the app uses a read-only broker key, and placing orders uses a separate key you control. <a href="demo/">Try the demo</a></li>
+      <li><b>Your own app, on your phone, Mac or PC.</b> Holdings, every order and why, and an alert when anything fails. Behind your own login; the app uses a read-only broker key, and placing orders uses a separate key you control. <a href="demo/">Try the demo</a></li>
+      <li><b>A daily digest, every evening.</b> One screen in your inbox after the US close: account value, how the day and the week went, cash sitting idle, room before the halt, open positions, pending or rejected orders with the broker's reason, and a one-line "needs you" that is usually "nothing". The Sunday proposals and the Monday reminders are separate emails, so the digest is the only one you read for pleasure.</li>
       <li><b>Trading 212, ISA or Invest.</b> More brokers to come: let us cook, and we'll serve them once they're tested. 12 months of updates included.</li>
     </ul></div>
     <div class="box"><h2 class="h3"><span class="n">2.</span> The 14 lessons</h2><ul>
