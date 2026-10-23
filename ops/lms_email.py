@@ -103,8 +103,9 @@ def pill(label: str, kind: str = "muted") -> str:
             f'font-family:{FONT_STACK};white-space:nowrap;">{esc(label)}</span>')
 
 
-def eyebrow(text: str, color: str = GREEN) -> str:
-    return (f'<div style="color:{color};font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;'
+def eyebrow(text: str, color: str = PINK) -> str:
+    # v2.3 (23 Oct 2026, Amit): the eyebrow is I.S.A. pink, the same shade as the wordmark; 13px so it reads on plum.
+    return (f'<div style="color:{color};font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;'
             f'margin:0 0 8px;font-family:{FONT_STACK};">{esc(text)}</div>')
 
 
