@@ -177,6 +177,9 @@
   .side ol a{display:block;padding:10px 12px;border-radius:12px;color:var(--muted);text-decoration:none;font-size:15px;font-weight:500;border-left:3px solid transparent}
   .side ol a:hover{color:var(--ink);background:var(--deep2)}
   .side ol a.on{color:var(--ink);background:var(--deep2);border-left-color:var(--green)}
+  /* 23 Oct 2026: page marks beside the page heading (make_pages MARKS) */
+  .pghead{display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:center;margin-top:40px} .pghead .pgmark{width:96px;height:96px;border-radius:24px;border:3px solid var(--green);background:var(--deep)} .pghead h1.pg{margin:0}
+  @media (max-width:480px){.pghead{grid-template-columns:72px 1fr;gap:14px} .pghead .pgmark{width:72px;height:72px;border-radius:18px}}
   /* 22 Oct 2026: a signed-in member's menu group, shown above the site pages (see make_pages.nav) */
   .side ol.mnav{margin-bottom:6px} .side .mgroup>a{font-weight:700}
   .side .sub{list-style:none;margin:4px 0 6px 12px;padding:0 0 0 12px;border-left:1px solid var(--rule);display:flex;flex-direction:column;gap:2px}
@@ -309,20 +312,6 @@
 <div class="preview" id="preview" hidden>Preview. The form doesn't save anything until the page is live on myrobotisa.com.</div>
 <nav class="side" id="side" aria-label="Sections">
   <a class="side-brand" href="#top"><img src="avatar.png" alt=""><span>My Robot <b>I.S.A.</b></span></a>
-  <ol class="mnav" id="mnav" hidden>
-    <li class="mgroup"><a href="members/#home">Members area</a>
-      <ol class="sub">
-        <li><a href="members/#start">Start here</a></li>
-        <li><a href="members/#lessons">The 14 lessons</a></li>
-        <li><a href="members/#code">Your code</a></li>
-        <li><a href="members/#dashboard">Your dashboard</a></li>
-        <li><a href="members/#clips">New clips</a></li>
-        <li><a href="members/#passkeys">Faster sign-in</a></li>
-        <li><a href="members/#help">Help and membership</a></li>
-      </ol>
-    </li>
-    <li class="sep">The site</li>
-  </ol>
   <ol>
     <li><a href="index.html">Home</a></li>
     <li><a href="how-it-works.html" class="on" aria-current="page">How it works</a></li>
@@ -343,7 +332,7 @@
   </header>
 <main id="main">
   <section class="nonews" id="nonews">
-    <h1 class="pg">It doesn't read <span class="p">the news</span></h1>
+    <div class="pghead"><img class="pgmark" src="marks/how-it-works.png" alt="" width="96" height="96"><h1 class="pg">It doesn't read <span class="p">the news</span></h1></div>
     <p class="lead">It doesn't have an inbox. Your robot ISA never opens a newsletter, a press release or a tip. Every Sunday it pulls the week's prices, applies the same rules it was tested on, and at 7pm its proposed orders land in your inbox. You approve by 2pm on Monday; approved orders go straight to Trading 212 and fill when the market opens. The only research it ever did was the backtest, on years of data, before a pound moved. Nothing anyone emails you at 7pm can change its mind.</p>
     <ul class="nonews-stats" aria-label="What the robot reads">
       <li><b>0</b>newsletters read</li>
@@ -663,9 +652,9 @@
 })();
 </script>
 <script>
-// 22 Oct 2026: signed-in members see their Members area group in the side menu and "Members area" instead of "Log in".
+// 22 Oct 2026: signed-in members see "Members area" instead of "Log in" in the header (the side menu stays the site's; Amit, 23 Oct).
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
-var g=document.getElementById("mnav");if(g)g.hidden=false;var l=document.querySelector("a.login");if(l){l.textContent="Members area";l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
+var l=document.querySelector("a.login");if(l){l.textContent="Members area";l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
 </script>
 </body>
 </html>
