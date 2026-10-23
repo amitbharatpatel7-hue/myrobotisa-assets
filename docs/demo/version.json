@@ -1,1 +1,1 @@
-{"version": "25", "note": "Bump together with <meta name=\"mri-version\"> in index.html and the cache name in sw.js (bump_members.py does all three)."}
+{"version": "26", "note": "Bump together with <meta name=\"mri-version\"> in index.html and the cache name in sw.js (bump_members.py does all three)."}
