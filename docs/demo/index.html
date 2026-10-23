@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="26">
+<meta name="mri-version" content="27">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -301,6 +301,16 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
 .tl-from{font-size:13px;color:#D9C6DE} .tl-from b{color:#fff}
 .tl-fw{overflow:hidden;background:#34003B}
 #tl-f{display:block;width:100%;height:900px;border:0;background:#34003B;transform-origin:0 0}
+.tl-act{padding:14px 16px;background:#14402C;border-bottom:1px solid rgba(0,232,122,.35);color:#fff;font-size:14px;line-height:1.45}
+.tl-act b{display:block;font-size:15px;margin-bottom:2px}
+.tl-act .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.tl-act button{font:800 13.5px Poppins,var(--body);border-radius:999px;padding:9px 16px;cursor:pointer;border:2px solid #00E87A;background:#00E87A;color:#34003B}
+.tl-act button.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.6)}
+.tl-act .tl-demo{display:block;margin-top:6px;font-size:12px;color:#BFE9D3}
+.tl-you.done .tl-card{border-style:solid;border-color:var(--brand-green);background:var(--sel)}
+.tl-you.done .tl-tag{background:#00E87A;color:#34003B}
+.tl-flash{animation:tlf 1.6s ease}
+@keyframes tlf{0%,100%{box-shadow:0 0 0 0 rgba(0,232,122,0)}30%{box-shadow:0 0 0 6px rgba(0,232,122,.55)}}
 .tl-note{text-align:center;margin:16px auto 4px;max-width:640px}
 @media (max-width:820px){
   .tl{grid-template-columns:minmax(0,1fr);gap:16px;padding-left:0}
@@ -443,6 +453,7 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
       </ol>
       <div class="tl-view" id="tl-view" aria-live="polite">
         <div class="tl-vh"><span class="tl-tag t-green" id="tl-vtag">Sunday, 7pm</span><span class="tl-from"><b>My Robot I.S.A.</b> to you</span></div>
+        <div class="tl-act" id="tl-act" hidden></div>
         <div class="tl-fw" id="tl-fw"><iframe id="tl-f" src="../emails/plan.html" title="Example email: Sunday 7pm, orders to approve" scrolling="no"></iframe></div>
       </div>
       <p class="tag tl-note">Each email pops up on your lock screen like any other alert. Prefer fewer emails? Switch to once a week, and you'll still hear straight away if anything needs you. Example emails with made-up figures. Yours come from your own email key, to your own inbox.</p>
@@ -972,7 +983,28 @@ var fw=document.getElementById("tl-fw");
 function fit(){var w=fw.clientWidth;if(!w)return;var k=w<375?w/375:1;/* narrow screens: lay the email out at phone width (375px) and scale it to fit */
 f.style.width=k<1?"375px":"100%";f.style.transform=k<1?"scale("+k+")":"none";
 try{var d=f.contentDocument;if(d&&d.documentElement){f.style.height="300px";var h=Math.max(300,d.documentElement.scrollHeight);f.style.height=h+"px";fw.style.height=Math.ceil(h*k)+"px";}}catch(e){}}
-f.addEventListener("load",function(){try{f.contentDocument.querySelectorAll("a[href]").forEach(function(x){x.target="_top";});}catch(e){}fit();setTimeout(fit,400);});var lw=0;if("ResizeObserver" in window){new ResizeObserver(function(){if(view.offsetWidth!==lw){lw=view.offsetWidth;fit();}}).observe(view);}else{window.addEventListener("resize",fit);}
+var act=document.getElementById("tl-act"),approved=false;
+function panel(html){act.innerHTML=html;act.hidden=false;fit();}
+function pickMail(k){var b=tl.querySelector('button[data-mail="'+k+'"]');if(b)b.click();}
+function markApproved(){try{var d=f.contentDocument;d.querySelectorAll("span").forEach(function(x){if(/waiting for you/i.test(x.textContent)){x.textContent="Approved";x.style.color="#00E87A";x.style.background="#14402C";x.style.backgroundColor="#14402C";}});}catch(e){}}
+function approveSheet(){
+  if(approved){panel('<b>Already approved</b>Your 3 orders went to Trading 212 and fill when the market opens.<div class="row"><button type="button" data-go="digest">See an evening digest</button></div><span class="tl-demo">Demo: nothing is really sent.</span>');return;}
+  panel('<b>Approve this week\'s 3 orders?</b>Buy Fund B, sell Stock C, buy Stock F. Each has its reason in the email below.<div class="row"><button type="button" data-go="approve">Approve all 3</button><button type="button" class="ghost" data-go="later">Not now</button></div><span class="tl-demo">Demo: nothing is really sent.</span>');}
+act.addEventListener("click",function(e){var g=e.target.closest("button[data-go]");if(!g)return;var k=g.dataset.go;
+  if(k==="approve"){approved=true;markApproved();var y=tl.querySelector(".tl-you");if(y){y.classList.add("done");var st=y.querySelector("strong");if(st){st.textContent="Approved ✓";st.parentNode.lastChild.textContent="3 orders sent to Trading 212. They fill when the market opens.";}var tg=y.querySelector(".tl-tag");if(tg)tg.textContent="Monday, 08:14";var c=y.querySelector(".tl-card");if(c){c.classList.remove("tl-flash");void c.offsetWidth;c.classList.add("tl-flash");}}
+    panel('<b>Approved ✓</b>3 orders sent to Trading 212. They fill when the market opens, and that evening\'s digest tells you how it went.<div class="row"><button type="button" data-go="digest">See an evening digest</button></div><span class="tl-demo">Demo: nothing is really sent.</span>');}
+  else if(k==="later"){panel('<b>No problem</b>Nothing is placed until you approve. You get reminders at 07:30 and 12:00 on Monday.<span class="tl-demo">Demo: nothing is really sent.</span>');}
+  else if(k==="digest"){pickMail("good-day");}});
+function wire(){var d;try{d=f.contentDocument;}catch(e){return;}if(!d||d.__mri||!d.body)return;d.__mri=1;
+  if(approved&&/plan\.html/.test(f.src))markApproved();
+  d.querySelectorAll("a[href]").forEach(function(x){x.addEventListener("click",function(e){e.preventDefault();var t=(x.textContent||"").toLowerCase();
+    if(t.indexOf("approve")>-1){approveSheet();view.scrollIntoView({behavior:"smooth",block:"start"});}
+    else if(t.indexOf("reason")>-1){var tb=d.querySelector("table[bgcolor='#3E0A47']")||d.querySelector("th");if(tb){var k=fw.clientWidth<375?fw.clientWidth/375:1;var top=f.getBoundingClientRect().top+scrollY+tb.getBoundingClientRect().top*k-90;scrollTo({top:top,behavior:"smooth"});tb.style.outline="3px solid #00E87A";tb.style.outlineOffset="3px";setTimeout(function(){tb.style.outline="";},1800);}}
+    else if(t.indexOf("open my app")>-1){var o=document.querySelector('#nav button[data-p="overview"]');if(o){o.click();scrollTo({top:0,behavior:"smooth"});}}
+    else{panel('<b>This is the demo</b>In your own copy, this link opens your app or settings.');}
+  });});}
+f.addEventListener("load",function(){act.hidden=true;wire();fit();setTimeout(fit,400);});
+try{if(f.contentDocument&&f.contentDocument.readyState==="complete"&&/emails\//.test(f.contentDocument.URL))wire();}catch(e){}var lw=0;if("ResizeObserver" in window){new ResizeObserver(function(){if(view.offsetWidth!==lw){lw=view.offsetWidth;fit();}}).observe(view);}else{window.addEventListener("resize",fit);}
 tl.querySelectorAll("button[data-mail]").forEach(function(b){b.addEventListener("click",function(){
   tl.querySelectorAll("button[data-mail]").forEach(function(x){var on=x===b;x.setAttribute("aria-pressed",String(on));var g=x.querySelector(".tl-go");if(g)g.textContent=on?"Showing the email below":"Show the email";});
   f.src="../emails/"+b.dataset.mail+".html";f.title="Example email: "+b.querySelector("strong").textContent;
