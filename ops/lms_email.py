@@ -66,8 +66,12 @@ MONO_STACK = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
 MRI_LOGO = "https://myrobotisa.com/avatar.png"
 MRI_BRAND = ("R", "My Robot", "I.S.A.", MRI_LOGO)
 SBH_BRAND = ("S", "Stock Boom", "Hunter", "https://myrobotisa.com/email/sbh.png")
-MOODS = {"up": "https://myrobotisa.com/email/robot-up.png", "steady": "https://myrobotisa.com/email/robot-steady.png",
-         "flat": "https://myrobotisa.com/email/robot-flat.png"}
+# v2.4 (23 Oct 2026, approved by Amit): six robot moods, one per kind of day. "steady"/"flat" stay as aliases so older
+# callers keep working; the original robot-steady.png / robot-flat.png images stay on the site for emails already sent.
+_E = "https://myrobotisa.com/email/"
+MOODS = {"up": _E + "robot-up.png", "milestone": _E + "robot-milestone.png", "calm": _E + "robot-calm.png",
+         "quiet": _E + "robot-quiet.png", "yourturn": _E + "robot-yourturn.png", "paused": _E + "robot-paused.png"}
+MOODS["steady"], MOODS["flat"] = MOODS["calm"], MOODS["quiet"]
 
 PILL_COLORS = {
     "green": (GREEN_FG, GREEN_BG),
@@ -182,11 +186,67 @@ def _days(days) -> str:
     return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;"><tr>{"".join(cells)}</tr></table>'
 
 
+def _spark(sp: dict) -> str:
+    """v2.4 (23 Oct 2026, approved by Amit): the pot over time as a row of thin bars built from table cells
+    (no images, so it shows in every mail app). Latest bar green, the rest soft plum; start and end labelled beneath."""
+    vals = [float(v) for v in sp["values"]]
+    lo, hi = min(vals), max(vals); rng = (hi - lo) or 1.0
+    cells = []
+    for i, v in enumerate(vals):
+        h = 10 + round((v - lo) / rng * 50)
+        c = GREEN if i == len(vals) - 1 else "#7A3A86"
+        cells.append(f'<td valign="bottom" style="padding:0 1px;height:62px;"><div style="height:{h}px;line-height:{h}px;font-size:1px;'
+                     f'background:{c};background-color:{c};border-radius:3px 3px 0 0;">&nbsp;</div></td>')
+    labels = (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>'
+              f'<td style="padding-top:6px;font-size:12px;color:{MUTED};font-family:{FONT_STACK};">{esc(sp.get("start", ""))}</td>'
+              f'<td align="right" style="padding-top:6px;font-size:12px;font-weight:800;color:{GREEN};font-family:{FONT_STACK};">{esc(sp.get("end", ""))}</td></tr></table>')
+    return (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;"><tr>{"".join(cells)}</tr></table>'
+            + labels)
+
+
+def _did(items) -> str:
+    """v2.4: "What the robot did" as short ticked lines, so a member sees the work in one glance."""
+    rows = "".join(f'<tr><td valign="top" style="width:22px;padding:4px 0;font-size:15px;font-weight:900;color:{GREEN};font-family:{FONT_STACK};">&#10003;</td>'
+                   f'<td style="padding:4px 0;font-size:15px;line-height:1.5;color:{INK};font-family:{FONT_STACK};">{_segments(t)}</td></tr>' for t in items)
+    return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{rows}</table>'
+
+
+def _milestone(m: dict) -> str:
+    """v2.4: a milestone card body: big green figure, one warm line, and a pill row of what got them there."""
+    big = (f'<div style="font-family:{HEAD_STACK};font-size:44px;line-height:1;letter-spacing:.01em;text-transform:uppercase;'
+           f'color:{GREEN};margin:2px 0 10px;">{esc(m["big"])}</div>')
+    pills = _pill_row(m["pills"]).replace("letter-spacing:.06em;", f"letter-spacing:.06em;border:1px solid {GREEN};") if m.get("pills") else ""
+    return big + _prose(m.get("prose", "")) + pills
+
+
 def mood_for(change: float | None) -> str:
-    """Robot for the headline: arms up on a gain, a calm thumbs-up on a dip, a steady face when flat or unknown."""
+    """Robot for the headline: arms up on a gain, shield-and-tick on a dip, cup of tea when flat or unknown."""
     if change is None or abs(change) < 0.005:
-        return MOODS["flat"]
-    return MOODS["up"] if change > 0 else MOODS["steady"]
+        return MOODS["quiet"]
+    return MOODS["up"] if change > 0 else MOODS["calm"]
+
+
+def scenario(change: float | None, paused: bool = False, to_approve: int = 0, milestone: str | None = None) -> dict:
+    """v2.4: one template, six kinds of day. Picks, in priority order, paused > your turn > milestone > good day > calm dip
+    > quiet day, and returns what changes with it: key, robot image, headline tone ("up" = green) and the lead card's job.
+    Everything else in the email (holdings, checks, room before the halt, week strip, trend) stays where members expect it."""
+    if paused:
+        key = "paused"
+    elif to_approve:
+        key = "yourturn"
+    elif milestone:
+        key = "milestone"
+    elif change is not None and change > 0.005:
+        key = "up"
+    elif change is not None and change < -0.005:
+        key = "calm"
+    else:
+        key = "quiet"
+    lead = {"paused": "why it paused, that your money is safe, and the one thing to do",
+            "yourturn": "the orders waiting for you and the deadline",
+            "milestone": "the milestone card", "up": "what the robot did today",
+            "calm": "a quieter day: the rules held, still ahead since the start", "quiet": "nothing happened, nothing to do"}[key]
+    return {"key": key, "robot": MOODS[key], "tone": "up" if key in ("up", "milestone") else None, "lead": lead}
 
 
 def _block_body(block: dict) -> str:
@@ -194,6 +254,12 @@ def _block_body(block: dict) -> str:
 
 
 def _block_body_inner(block: dict) -> str:
+    if "spark" in block:
+        return _spark(block["spark"]) + ('<div style="height:12px;line-height:12px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
+    if "did" in block:
+        return _did(block["did"])
+    if "milestone" in block:
+        return _milestone(block["milestone"])
     if "days" in block:
         return _days(block["days"]) + ('<div style="height:14px;line-height:14px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
     if "table" in block:
@@ -228,6 +294,10 @@ def button(label: str, url: str, primary: bool = True) -> str:
 
 
 def _block_html(block: dict) -> str:
+    if "milestone" in block:
+        inner = section(block.get("heading", ""), _block_body(block), block.get("status"))
+        return (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(GREEN_BG)}'
+                f'border-radius:{CARD_RADIUS}px;margin:0 0 14px;border:2px solid {GREEN};">{inner}</table>')
     return panel(section(block.get("heading", ""), _block_body(block), block.get("status")), block.get("accent", False))
 
 
