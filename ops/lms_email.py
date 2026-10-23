@@ -12,7 +12,7 @@ including the internal ones to me, and flag (Internal) in the subject"):
     `bgcolor` attribute as well as the inline background longhand, so Apple Mail and Outlook leave the colours alone;
   * `subject()` prefixes "(Internal) " unless `internal=False` — only emails to members or customers pass False.
 
-v2.5 (23 Oct 2026, approved by Amit) — additive only, every v2.4 call renders byte-for-byte the same except SBH_BRAND:
+v2.5 (23 Oct 2026, approved by Amit) — additive: the same cards as v2.4, plus (v2.5.1) the green tag now sits at the right edge:
   * render(..., badge="Setup check") replaces the green INTERNAL pill's text (the email type: Health, Setup check, ...);
   * a block can carry `checks` [(status, name, note)] (ok = green tick, bad = amber cross, off = muted dash) and
     `link` (label, url) for one green text link under the card;
@@ -354,14 +354,15 @@ def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
     if stacked and suffix:
         suffix_html = '<br><span style="color:%s">%s</span>' % (PINK, esc(suffix))
     brand_row = (
-        f'<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 16px;"><tr>'
+        # v2.5.1 (Amit, 23 Oct 2026): the green tag (Internal / Health / Setup check) sits at the right, lined up with the card's edge.
+        f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 16px;"><tr>'
         + (f'<td width="40" height="40" style="width:40px;height:40px;"><img src="{esc(logo)}" width="40" height="40" alt="" '
            f'style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {GREEN};"></td>' if logo else
            f'<td width="34" height="34" align="center" {_bg(GREEN)}border-radius:9px;color:{ON_GREEN};font-weight:900;'
            f'font-size:16px;font-family:{FONT_STACK};">{esc(tile)}</td>') +
         f'<td style="padding-left:10px;font-family:{HEAD_STACK};font-size:{20 if stacked else 22}px;{"line-height:1.02;" if stacked else ""}letter-spacing:.02em;text-transform:uppercase;'
         f'color:{INK};{"white-space:nowrap;" if stacked else ""}">{esc(word)}{suffix_html}</td>'
-        + (f'<td style="padding-left:10px;vertical-align:middle;"><span style="display:inline-block;padding:5px {10 if badge and len(badge) > 10 else 12}px;border-radius:999px;'
+        + (f'<td align="right" style="padding-left:10px;vertical-align:middle;text-align:right;white-space:nowrap;"><span style="display:inline-block;padding:5px {10 if badge and len(badge) > 10 else 12}px;border-radius:999px;'
            f'background:{GREEN};background-color:{GREEN};color:{ON_GREEN};font-size:{11 if badge and len(badge) > 10 else 12}px;font-weight:900;letter-spacing:{".07em" if badge and len(badge) > 10 else ".14em"};'
            f'text-transform:uppercase;font-family:{FONT_STACK};{"white-space:nowrap;" if badge else ""}">{esc(badge or "Internal")}</span></td>' if (internal or badge) else "") +
         f'</tr></table>')
