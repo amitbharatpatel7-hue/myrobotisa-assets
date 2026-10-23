@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="21">
+<meta name="mri-version" content="22">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -176,31 +176,19 @@ dialog::backdrop{background:rgba(0,0,0,.5)}
 dialog h3{margin:0 0 6px;font-size:18px}
 dialog p{margin:0 0 16px;color:var(--muted);font-size:14px}
 dialog .row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
-/* 23 Oct 2026: the digest in the members' email theme v2 (Night), shown in Mail on an iPhone; scroll inside the phone */
-.iph{width:340px;max-width:100%;margin:6px 0 0;border-radius:52px;background:#1b1b1d;padding:10px;box-shadow:inset 0 0 0 2px #3a3a3c,0 18px 40px rgba(0,0,0,.4)}
-.iph-scr{position:relative;border-radius:43px;overflow:hidden;background:#000;height:640px;display:flex;flex-direction:column}
-.iph-status{display:flex;justify-content:space-between;align-items:center;padding:14px 26px 4px 34px;color:#fff;font:600 15px 'Helvetica Neue',Helvetica,Arial,sans-serif} .iph-r{display:flex;gap:6px;align-items:center}
-.iph-nav{padding:6px 14px;color:#0A84FF;font:16px 'Helvetica Neue',Helvetica,Arial,sans-serif}
-.iph-hdr{padding:4px 14px 10px;border-bottom:1px solid #2c2c2e;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
-.iph-from{display:flex;align-items:center;gap:9px;color:#fff;font-weight:600;font-size:14px} .iph-from img{width:34px;height:34px;border-radius:50%;border:1.5px solid #00E87A} .iph-from div{flex:1} .iph-from small{display:block;color:#8e8e93;font-weight:400;font-size:12px} .iph-from time{color:#8e8e93;font-size:12px;font-weight:400;align-self:flex-start}
-.iph-subj{color:#fff;font-weight:700;font-size:14.5px;line-height:1.3;margin-top:8px}
-.iph-body{flex:1;overflow-y:auto;background:#34003B;-webkit-overflow-scrolling:touch}
-.iph-home{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:120px;height:4px;border-radius:3px;background:#fff}
-.digest{background:#34003B;padding:14px 12px 26px;color:#fff;font-family:Poppins,system-ui,sans-serif}
-.dg-brand{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-family:Anton,Impact,sans-serif;font-size:19px;text-transform:uppercase;letter-spacing:.02em}
-.dg-brand img{width:34px;height:34px;border-radius:9px;border:2px solid #00E87A} .dg-brand i{font-style:normal;color:#EA00AB}
-.dg-card{background:#4B1155;border-radius:16px;padding:16px 18px;margin:0 0 10px} .dg-card.acc{border-left:4px solid #00E87A}
-.dg-head{display:grid;grid-template-columns:1fr 70px;gap:10px;align-items:center}
-.dg-eye{color:#EA00AB;font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin:0 0 6px}
-.dg-big{font-family:Anton,Impact,sans-serif;font-size:24px;line-height:1.05;text-transform:uppercase;margin:0 0 6px} .dg-big.up{color:#00E87A}
-.dg-sub{font-size:13.5px;color:#D9C6DE;margin:0} .dg-sub b{color:#00E87A}
-.dg-head img{width:70px;height:70px}
-.dg-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 8px}
-.dg-row h4{margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:17px;text-transform:uppercase;letter-spacing:.02em}
-.dg-pill{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 10px;color:#00E87A;background:#14402C;white-space:nowrap}
-.dg-card p{margin:0;font-size:14px;line-height:1.55}
-.dg-did{list-style:none;margin:0;padding:0} .dg-did li{position:relative;padding-left:22px;font-size:14px;line-height:1.5;margin:3px 0} .dg-did li::before{content:"\2713";position:absolute;left:0;color:#00E87A;font-weight:900}
-.digest .tag{color:#D9C6DE;font-size:12px;margin:8px 4px 0}
+/* 23 Oct 2026 (Amit): the real emails in a flat cartoon phone, like How it works on the site; scroll inside the phone */
+.inbox{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;margin-top:12px}
+.inbox-pick{display:grid;gap:10px;align-content:start}
+.inbox-pick button{text-align:left;font:inherit;color:var(--fg);background:var(--card2,rgba(255,255,255,.04));border:2px solid var(--line);border-radius:16px;padding:12px 14px;cursor:pointer}
+.inbox-pick button b{display:block;font-size:15px;margin-bottom:3px} .inbox-pick button span{display:block;font-size:13.5px;line-height:1.45;color:var(--muted)}
+.inbox-pick button[aria-selected="true"]{border-color:var(--brand-green);background:#14402C} .inbox-pick button[aria-selected="true"] b{color:var(--brand-green)}
+.cphone{position:relative;justify-self:center;width:340px;max-width:100%;border:4px solid var(--brand-green);border-radius:46px;padding:30px 12px 34px;background:#34003B;margin-bottom:22px}
+.cphone-cam{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:64px;height:9px;border:3px solid var(--brand-green);border-radius:9px}
+.cphone::after{content:"";position:absolute;bottom:13px;left:50%;transform:translateX(-50%);width:84px;height:5px;border-radius:5px;background:var(--brand-green)}
+.cphone-scr{position:relative;width:302px;max-width:100%;height:560px;border-radius:26px;overflow:hidden;border:3px solid var(--brand-green);background:#34003B}
+.cphone-scr iframe{display:block;width:375px;height:696px;border:0;background:#34003B;transform:scale(.8053);transform-origin:0 0}
+.cphone-hint{position:absolute;left:0;right:0;bottom:-26px;text-align:center;margin:0;font-size:12px;color:var(--muted)}
+@media (min-width:900px){.inbox{grid-template-columns:1fr 340px;gap:30px}}
 /* quickstart */
 .qbar{height:8px;border-radius:999px;background:var(--grid);overflow:hidden;margin:4px 0 6px}
 .qbar i{display:block;height:100%;width:0;background:var(--brand-green);transition:width .3s}
@@ -426,14 +414,19 @@ body.qs-mode header.hero{display:none}
   <!-- REPORTS -->
   <div class="pane" id="p-reports" hidden>
     <section class="card">
-      <h2>Today's digest</h2>
-      <p class="lede">The same summary lands in your inbox every evening. The weekly proposals arrive at 7pm on Sunday, to approve by 2pm Monday (open any week in the menu to see one).</p>
-      <div class="iph" aria-label="The evening email, as it looks in Mail on an iPhone"><div class="iph-scr">
-        <div class="iph-status"><span>9:41</span><span class="iph-r"><svg width="17" height="11" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#fff"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#fff"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#fff"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#fff"/></svg><svg width="24" height="12" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#fff" stroke-opacity=".45"/><rect x="2" y="2" width="17" height="9" rx="2" fill="#fff"/></svg></span></div>
-        <div class="iph-nav"><span>&#8249; Inbox</span></div>
-        <div class="iph-hdr"><div class="iph-from"><img src="../avatar.png" alt=""><div>My Robot I.S.A.<small>To: You</small></div><time>21:32</time></div><div class="iph-subj" id="dg-subj"></div></div>
-        <div class="iph-body"><div class="digest" id="dg"></div></div>
-        <div class="iph-home"></div></div></div>
+      <h2>Your emails</h2>
+      <p class="lede">One short email every evening (or once a week, if you prefer), and the week's plan at 7pm on Sunday. These are the real emails; pick one to read it in the phone.</p>
+      <div class="inbox">
+        <div class="inbox-pick" role="tablist" aria-label="Example emails">
+          <button type="button" role="tab" aria-selected="true" data-mail="good-day"><b>Every evening</b><span>How the day went, what the robot did, and whether anything needs you. Most days: nothing.</span></button>
+          <button type="button" role="tab" aria-selected="false" data-mail="plan"><b>Sunday, 7pm</b><span>The week's plan, with the reason for each order. Tap Approve by 2pm Monday.</span></button>
+          <button type="button" role="tab" aria-selected="false" data-mail="calm-dip"><b>A down day</b><span>Said plainly, next to the good news that's true. Nothing to do.</span></button>
+          <p class="tag">Example emails with made-up figures. Yours come from your own email key, to your own inbox.</p>
+        </div>
+        <div class="cphone"><span class="cphone-cam" aria-hidden="true"></span>
+          <div class="cphone-scr"><iframe id="inbox-f" src="../emails/good-day.html" title="Example evening email" loading="lazy"></iframe></div>
+          <p class="cphone-hint" aria-hidden="true">Scroll inside the phone</p></div>
+      </div>
     </section>
   </div>
 
@@ -612,18 +605,9 @@ const ordRow=o=>`<tr><td>${wdm(o[0])}</td><td><b>${esc(o[1])}</b></td><td>${o[2]
 function renderOrders(){ $("otable").innerHTML="<table><tr><th>Date</th><th>What</th><th>Size</th><th>Result</th><th>Why</th></tr>"+D.orders.map(ordRow).join("")+"</table>"; }
 function renderDigest(){
   const v=total(), prev=D.acct.at(-2), ch=v-prev;
-  const up=ch>0.005, down=ch<-0.005, mood=up?"up":down?"calm":"quiet", since=v-D.start;
-  const bl=Object.values(D.bench).at(-1), sincePct=v/D.start*100-100, lead=sincePct-(bl.us-100);
-  $("dg-subj").textContent=`[My Robot I.S.A. · Daily] ${ch>=0?"+":"−"}${gbp(Math.abs(ch))} today`;
-  $("dg").innerHTML=`<div class="dg-brand"><img src="../avatar.png" alt=""><span>My Robot <i>I.S.A.</i></span></div>
-    <div class="dg-card"><div class="dg-head"><div><p class="dg-eye">Your robot · this evening</p>
-      <p class="dg-big${up?" up":""}">${ch>=0?"+":"−"}${gbp(Math.abs(ch))} today</p>
-      <p class="dg-sub">${gbp(v)} in your ISA · ${since>=0?`<b>${down?"still ":""}up ${gbp(since)} since you started</b>`:`${gbp(Math.abs(since))} below where you started`}</p></div>
-      <img src="../email/robot-${mood}.png" alt=""></div></div>
-    <div class="dg-card acc"><div class="dg-row"><h4>Does it need you?</h4><span class="dg-pill">Nothing to do</span></div><p>Nothing today. Next plan: Sunday at 7pm (London), to approve by 2pm Monday.</p></div>
-    <div class="dg-card"><div class="dg-row"><h4>What the robot did</h4></div><ul class="dg-did"><li>Checked ${D.stops.length} safety stops: all in place</li><li>Every order confirmed by the broker</li>${lead>0?`<li>${lead.toFixed(1)} points ahead of US large caps since the start</li>`:""}</ul></div>
-    <div class="dg-card"><div class="dg-row"><h4>Is anything wrong?</h4><span class="dg-pill">All good</span></div><p>Broker connected, every order confirmed.</p></div>
-    <p class="tag">Example email. Yours comes from your own email key, to your own inbox.</p>`;
+  const box=document.querySelector(".inbox"); if(!box||box.dataset.wired) return; box.dataset.wired="1";
+  box.querySelectorAll("[data-mail]").forEach(b=>b.addEventListener("click",()=>{ box.querySelectorAll("[data-mail]").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+    const f=$("inbox-f"); f.src="../emails/"+b.dataset.mail+".html"; f.title="Example email: "+b.querySelector("b").textContent; }));
 }
 
 // ---- weeks: sidebar list and the weekly view
