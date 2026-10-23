@@ -150,8 +150,8 @@
   .get a{color:var(--green);font-weight:700}
   .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;margin:8px 0 12px} .tour-facts{display:block;margin:14px 0 10px} .tour-facts li{font-size:15px;color:var(--ink)}
   .tour h2{margin-top:12px}
-  /* 23 Oct 2026 (Amit): the real emails in a flat, cartoon phone (drawn like the robot icon), scrollable, four to pick from */
-  .inbox{display:grid;grid-template-columns:1fr;gap:22px;margin:20px 0 10px;align-items:start}
+  /* 23 Oct 2026 (Amit): the real emails in a flat, cartoon phone (drawn like the robot icon), scrollable. Two to pick from (Amit, 23 Oct: just the approvals email and the daily digest) */
+  .inbox{display:grid;grid-template-columns:1fr;gap:22px;margin:20px 0 48px;align-items:start}
   .inbox-pick{display:grid;gap:10px;align-content:start}
   .inbox-pick button{text-align:left;font:inherit;color:var(--ink);background:var(--deep2);border:2px solid var(--rule);border-radius:16px;padding:12px 14px;cursor:pointer}
   .inbox-pick button b{display:block;font-size:16px;margin-bottom:3px} .inbox-pick button span{display:block;font-size:14px;line-height:1.45;color:var(--muted)}
@@ -373,7 +373,7 @@
   </header>
 <main id="main">
   <section class="nonews" id="nonews">
-    <div class="pghead"><img class="pgmark" src="marks/how-it-works.png" alt="" width="96" height="96"><h1 class="pg">It doesn't read <span class="p">the news</span></h1></div>
+    <div class="pghead"><img class="pgmark" src="marks/how-it-works.png?v=2" alt="" width="96" height="96"><h1 class="pg">It doesn't read <span class="p">the news</span></h1></div>
     <p class="lead">It doesn't have an inbox. Your robot ISA never opens a newsletter, a press release or a tip. Every Sunday it pulls the week's prices, applies the same rules it was tested on, and at 7pm its proposed orders land in your inbox. You approve by 2pm on Monday; approved orders go straight to Trading 212 and fill when the market opens. The only research it ever did was the backtest, on years of data, before a pound moved. Nothing anyone emails you at 7pm can change its mind.</p>
     <ul class="nonews-stats" aria-label="What the robot reads">
       <li><b>0</b>newsletters read</li>
@@ -423,8 +423,6 @@
       <div class="inbox-pick" role="tablist" aria-label="Example emails">
         <button type="button" role="tab" aria-selected="true" data-mail="plan"><b>Sunday, 7pm: your turn</b><span>The week's plan, with the reason for each order. Read it, tap Approve. Nothing is placed until you do.</span></button>
         <button type="button" role="tab" aria-selected="false" data-mail="good-day"><b>Every evening: how it went</b><span>What the robot did, how your pot is doing, and whether anything needs you. Most days: nothing.</span></button>
-        <button type="button" role="tab" aria-selected="false" data-mail="calm-dip"><b>A down day</b><span>Said plainly, never in alarming red, next to the good news that's true. The rules held; nothing to do.</span></button>
-        <button type="button" role="tab" aria-selected="false" data-mail="milestone"><b>A milestone</b><span>Your first £100, your first month, ten orders with no rejections. Small wins, marked once.</span></button>
         <p class="small">Prefer fewer emails? Switch to once a week, and you'll still hear straight away if anything needs you. Example emails with made-up figures.</p>
       </div>
       <div class="cphone" aria-live="polite"><span class="cphone-cam" aria-hidden="true"></span>
