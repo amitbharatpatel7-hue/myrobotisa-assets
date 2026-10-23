@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="40">
+<meta name="mri-version" content="41">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -341,7 +341,7 @@
       <p class="lede" id="si-lede">Members only. We'll email you a 6-digit code: no password to remember.</p>
       <form id="f-email" novalidate>
         <label class="f" for="email">Your email</label>
-        <input class="t" type="email" id="email" autocomplete="email" inputmode="email" placeholder="you@email.com" required>
+        <input class="t" type="email" id="email" autocomplete="username webauthn" inputmode="email" placeholder="you@email.com" required>
         <div class="row"><button class="btn" type="submit" id="b-send">Email me a code</button></div>
       </form>
       <form id="f-code" novalidate hidden>
@@ -353,7 +353,6 @@
       <div id="pk-signin" hidden>
         <p class="or">or</p>
         <div class="row"><button class="btn ghost" type="button" id="b-pk">Sign in with Face ID, Touch ID or Windows Hello</button></div>
-        <p class="small" id="pk-signin-note" style="margin:10px 0 0;text-align:center" hidden>Works once you've added a passkey on this device, or saved one to iCloud Keychain or Google Password Manager.</p>
       </div>
       <div class="msg" id="si-msg" role="status" aria-live="polite"></div>
     </div>
@@ -598,7 +597,7 @@
   }
 
   // ---- views
-  function show(v) { ["signin", "home", "wait", "nomem"].forEach(function (k) { $("v-" + k).hidden = k !== v; }); $("who").hidden = !(v === "home" || v === "nomem"); }
+  function show(v) { ["signin", "home", "wait", "nomem"].forEach(function (k) { $("v-" + k).hidden = k !== v; }); $("who").hidden = !(v === "home" || v === "nomem"); if (typeof PK === "object" && PK) pkSigninUI(); }
   function say(t, ok) { var m = $("si-msg"); m.textContent = t || ""; m.className = "msg " + (t ? (ok ? "ok" : "err") : ""); }
 
   // ---- sign in
@@ -634,13 +633,13 @@
     }).then(function (r) {
       b.disabled = false;
       if (!r.ok || !r.j.access_token) { say(r.status === 429 ? "Too many tries. Wait a few minutes, then ask for a new code." : "That code didn't work. It may have expired or been used: ask for a new one.", false); return; }
-      keep(r.j); say(""); start();
+      keep(r.j); say(""); PK.viaCode = true; start();
     }).catch(function () { b.disabled = false; say("No connection. Check you're online and try again.", false); });
   });
   function signOut() {
     var s = session; clear(); session = null;
     if (s) auth("logout", {}, s.access_token).catch(function () {});
-    $("f-email").hidden = false; $("f-code").hidden = true; say(""); show("signin");
+    $("f-email").hidden = false; $("f-code").hidden = true; say(""); show("signin"); PK.viaCode = false; pkSigninUI();
   }
   $("signout").addEventListener("click", signOut); $("nm-out").addEventListener("click", signOut);
 
@@ -735,7 +734,7 @@
       rest("member_notices?select=id,title,body,kind,link_url,link_text,starts_at&order=starts_at.desc&limit=20").then(function (r) { return r.ok ? r.json() : []; }),
       rest("member_notice_reads?select=notice_id").then(function (r) { return r.ok ? r.json() : []; })
     ]).then(function (res) {
-      NOTES = renewalNotes().concat(Array.isArray(res[0]) ? res[0] : []); READ = {}; (Array.isArray(res[1]) ? res[1] : []).forEach(function (x) { READ[x.notice_id] = 1; });
+      NOTES = pkNote().concat(renewalNotes()).concat(Array.isArray(res[0]) ? res[0] : []); READ = {}; (Array.isArray(res[1]) ? res[1] : []).forEach(function (x) { READ[x.notice_id] = 1; });
       localRead().forEach(function (id) { READ[id] = 1; });
       paintNotes();
     }).catch(function () {});
@@ -747,6 +746,17 @@
     var a = []; try { a = JSON.parse(localStorage.getItem("mri-read-local") || "[]"); } catch (e) {}
     if (add) { a = a.concat(add).filter(function (v, i, x) { return x.indexOf(v) === i; }).slice(-50); try { localStorage.setItem("mri-read-local", JSON.stringify(a)); } catch (e) {} }
     return a;
+  }
+  // 23 Oct 2026 (Amit): until this device has a passkey, Messages suggests one (easier and safer). Worked out here, read
+  // state on this device, and it disappears by itself once a passkey is added or used here.
+  function pkNote() {
+    if (!PK.on || !pkSupported || pkHere()) return [];
+    var at; try { at = +localStorage.getItem("mri-pk-note-at"); if (!at) { at = Date.now(); localStorage.setItem("mri-pk-note-at", String(at)); } } catch (e) { at = Date.now(); }
+    var ua = navigator.userAgent, dev = deviceLabel().split(" \u00b7 ")[0].replace(/^Computer$/, "computer"), how = /Windows/.test(ua) ? "Windows Hello" : /Android/.test(ua) ? "your fingerprint or face" : /iPhone|iPad/.test(ua) ? "Face ID" : "Touch ID";
+    return [{ id: "pk-setup-" + dev.toLowerCase().replace(/\W+/g, "-"), kind: "news", starts_at: new Date(at).toISOString(),
+      title: "Sign in with " + how + " on this " + dev,
+      body: "Easier: one glance or touch, no email to wait for and no code to copy. Safer: a passkey only works on myrobotisa.com, so a fake site can't trick you into handing it over, and there's no code for anyone to intercept. It takes about ten seconds.",
+      link_url: "#passkeys", link_text: "Set it up" }];
   }
   function renewalNotes() {
     if (!me || !me.updates_until || me.plan === "owner") return [];
@@ -789,8 +799,8 @@
   function markRead(ids) {
     ids = ids.filter(function (id) { return !READ[id]; }); if (!ids.length) return;
     ids.forEach(function (id) { READ[id] = 1; }); paintNotes();
-    var local = ids.filter(function (id) { return /^renew-/.test(String(id)); }); if (local.length) localRead(local);
-    ids = ids.filter(function (id) { return !/^renew-/.test(String(id)); }).map(Number); if (!ids.length) return;
+    var local = ids.filter(function (id) { return /^(renew|pk)-/.test(String(id)); }); if (local.length) localRead(local);
+    ids = ids.filter(function (id) { return !/^(renew|pk)-/.test(String(id)); }).map(Number); if (!ids.length) return;
     rest("member_notice_reads?on_conflict=user_id,notice_id", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
       body: JSON.stringify(ids.map(function (id) { return { user_id: me.user_id, notice_id: id }; })) })
       .then(function (r) { if (!r.ok) throw 0; })
@@ -936,7 +946,9 @@
       // Home nudge: only while the account has no passkey at all (one on any device is enough to stop asking).
       var ua = navigator.userAgent;
       $("pkn-how").textContent = /Windows/.test(ua) ? "Windows Hello" : /Android/.test(ua) ? "your fingerprint or face" : "Face ID or Touch ID";
-      if (!n && !pkSnoozed() && !pkHere()) $("pk-nudge").hidden = false;
+      var dev = deviceLabel().split(" \u00b7 ")[0].replace(/^Computer$/, "computer");
+      if (n && PK.viaCode) $("h-pkn").innerHTML = 'Use ' + esc($("pkn-how").textContent) + ' on this <span class="g">' + esc(dev) + '</span>';
+      if (!pkSnoozed() && !pkHere() && (!n || PK.viaCode)) $("pk-nudge").hidden = false;
       else if (n && $("pkn-msg").textContent.indexOf("Done") !== 0) $("pk-nudge").hidden = true;
     }).catch(function () { $("pk-count").textContent = "—"; });
   }
@@ -951,7 +963,7 @@
         msg.textContent = dup ? "This device already has a passkey for your account, so you're all set." : "No passkey added. You can try again any time.";
         passkeyCard(); return;
       }
-      pkHere(true);
+      pkHere(true); loadNotes();
       msg.textContent = "Done. Next time, choose the Face ID / Touch ID button on the sign-in page.";
       // Name the new passkey after this device, so the list shows where each one lives.
       return sbRef.auth.passkey.list().then(function (l) {
@@ -976,13 +988,41 @@
     try { localStorage.setItem("mri-pk-later", String(Date.now())); } catch (e) {}
     $("pk-nudge").hidden = true;
   });
+  // 23 Oct 2026 (Amit): don't show "Sign in with Face ID" to a device that has never set one up: on an iPhone with no
+  // passkey it opens Apple's "scan a QR code / security key" sheet, which is confusing. Here the button only appears once
+  // this device has added or used a passkey. Anywhere else, the email box quietly offers a saved passkey (iCloud Keychain,
+  // Google) in the keyboard bar if there is one, and shows nothing if not ("conditional mediation": never a pop-up).
+  var pkAutoCtl = null, pkAutoTimer = 0, pkAutoTries = 0;
+  function pkSigninUI() {
+    var on = PK.on && pkSupported;
+    $("pk-signin").hidden = !(on && pkHere());
+    if (on && !session && !$("v-signin").hidden) pkAuto(); else pkAutoStop();
+  }
+  function pkAutoStop() { clearTimeout(pkAutoTimer); if (pkAutoCtl) { var c = pkAutoCtl; pkAutoCtl = null; try { c.abort(); } catch (e) {} } }
+  function pkAuto() {
+    if (pkAutoCtl || session || pkAutoTries > 30) return;
+    var PKC = window.PublicKeyCredential;
+    if (!PKC || !PKC.isConditionalMediationAvailable) return;
+    PKC.isConditionalMediationAvailable().then(function (ok) {
+      if (!ok || pkAutoCtl || session) return;
+      var ctl = pkAutoCtl = new AbortController(); pkAutoTries++;
+      clearTimeout(pkAutoTimer); pkAutoTimer = setTimeout(function () { pkAutoStop(); pkAuto(); }, 240000); // fresh challenge every 4 minutes
+      loadSB().then(function (sb) { return sb.auth.signInWithPasskey({ options: { mediation: "conditional", signal: ctl.signal } }); }).then(function (r) {
+        if (pkAutoCtl !== ctl) return; // stopped or replaced
+        pkAutoCtl = null; clearTimeout(pkAutoTimer);
+        var ses = r && r.data && r.data.session;
+        if (!ses) { if (!session && !$("v-signin").hidden) pkAutoTimer = setTimeout(pkAuto, 1500); return; }
+        pkHere(true); keep({ access_token: ses.access_token, refresh_token: ses.refresh_token, expires_at: ses.expires_at, expires_in: ses.expires_in, user: ses.user }); say(""); start();
+      }).catch(function () { if (pkAutoCtl === ctl) pkAutoCtl = null; });
+    }).catch(function () {});
+  }
   function pkSnoozed() { try { return Date.now() - (+localStorage.getItem("mri-pk-later") || 0) < 30 * 864e5; } catch (e) { return false; } }
   $("b-pk").addEventListener("click", function () {
-    var b = this; b.disabled = true; say("Follow the prompt on your device…", true);
+    var b = this; b.disabled = true; say("Follow the prompt on your device…", true); pkAutoStop();
     loadSB().then(function (sb) { return sb.auth.signInWithPasskey(); }).then(function (r) {
       b.disabled = false;
       var ses = r && r.data && r.data.session;
-      if (!ses) { say("No passkey for this account on this device yet. Sign in with the email code above, then add one in Faster sign-in (in the menu). A passkey made in Edge or Chrome on a Mac only works on that Mac unless it was saved to iCloud Keychain.", false); return; }
+      if (!ses) { pkHere(false); pkSigninUI(); say("This device doesn't have a passkey for your account any more. Sign in with the email code, then you can add one again in Faster sign-in.", false); return; }
       pkHere(true);
       keep({ access_token: ses.access_token, refresh_token: ses.refresh_token, expires_at: ses.expires_at, expires_in: ses.expires_in, user: ses.user }); say(""); start();
     }).catch(function () { b.disabled = false; say("That didn't work. Use the email code instead.", false); });
@@ -992,7 +1032,7 @@
     var ua = navigator.userAgent, apple = /iPhone|iPad|Macintosh/.test(ua), win = /Windows/.test(ua);
     $("b-pk").textContent = apple ? "Sign in with Face ID or Touch ID" : win ? "Sign in with Windows Hello" : "Sign in with a passkey";
     $("b-pk-add").textContent = apple ? "Add Face ID / Touch ID on this device" : win ? "Add Windows Hello on this device" : "Add a passkey on this device";
-    if (PK.on && pkSupported) { $("pk-signin").hidden = false; $("pk-signin-note").hidden = pkHere(); if (!$("v-home").hidden) passkeyCard(); }
+    pkSigninUI(); if (PK.on && pkSupported && !$("v-home").hidden) { passkeyCard(); loadNotes(); }
   }).catch(function () {});
 
   // ---- the site's side menu (drawer on phones)
