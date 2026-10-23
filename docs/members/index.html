@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="42">
+<meta name="mri-version" content="43">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -290,6 +290,28 @@
   .dashhelp[hidden]{display:none}
   .dashhelp p{margin:0 0 10px;font-size:14.5px;line-height:1.5}
   .dashhelp .row{display:flex;flex-wrap:wrap;gap:8px;margin:0}
+
+  /* 23 Oct 2026: "Set up my robot", the automated QuickStart (preview accounts first) */
+  .su-steps{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:12px;counter-reset:su}
+  .su-step{counter-increment:su;background:var(--deep2);border:1px solid var(--rule);border-radius:18px;padding:16px 18px}
+  .su-step.done{border-color:var(--green)} .su-step.locked{opacity:.55}
+  .su-h{display:flex;align-items:center;gap:12px;justify-content:space-between}
+  .su-h b{display:flex;align-items:center;gap:10px;font-size:17px}
+  .su-h b::before{content:counter(su);display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--deep);border:2px solid var(--green);color:var(--green);font-size:14px;flex:none}
+  .su-step.done .su-h b::before{content:"\2713";background:var(--green);color:var(--deep)}
+  .su-step p{margin:8px 0 0;color:var(--muted);font-size:14.5px;line-height:1.5}
+  .su-step details{margin-top:10px} .su-step summary{cursor:pointer;color:var(--green);font-weight:700;font-size:14px}
+  .su-step details ol{margin:8px 0 0;padding-left:20px;color:var(--ink);font-size:14px;line-height:1.55}
+  .su-seg{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+  .su-seg button{flex:1 1 120px;min-height:46px;border-radius:14px;border:2px solid var(--rule);background:var(--deep);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+  .su-seg button[aria-pressed="true"]{border-color:var(--green);background:#14402C;color:var(--green)}
+  .su-seg small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+  .su-lock{display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding:12px 14px;border-radius:14px;background:var(--deep);border:1px solid var(--rule);font-size:13.5px;color:var(--muted)} .su-lock b{color:var(--ink)}
+  .su-log{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
+  .su-log li{display:flex;gap:10px;align-items:center;font-size:15px} .su-log li i{width:22px;height:22px;border-radius:50%;flex:none;border:2px solid var(--rule)}
+  .su-log li.run i{border-color:var(--green);border-top-color:transparent;animation:suspin .8s linear infinite} .su-log li.ok i{background:var(--green);border-color:var(--green)} .su-log li.bad i{background:var(--pink-ink);border-color:var(--pink-ink)}
+  @keyframes suspin{to{transform:rotate(360deg)}} @media (prefers-reduced-motion:reduce){.su-log li.run i{animation:none}}
+  .su-done{margin-top:16px;padding:18px;border-radius:18px;background:#14402C;border:2px solid var(--green)} .su-done h3{margin:0 0 6px;font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;font-size:26px;color:var(--green)}
 </style>
 </head>
 <body>
@@ -298,6 +320,7 @@
   <ol class="site-only">
     <li class="mgroup" id="mgroup"><div class="grp-h"><a href="#home" data-go="home" class="on" aria-current="page">Members area</a><button type="button" class="grp-t" id="mgroup-t" aria-expanded="true" aria-controls="mgroup-sub" aria-label="Hide the members pages"></button></div>
       <ol class="sub" id="mgroup-sub">
+        <li class="pv-only" hidden><a href="#setup" data-go="setup">Set up my robot <span class="pill g" style="margin-left:4px;padding:2px 7px;font-size:10px">New</span></a></li>
         <li><a href="#start" data-go="start">Start here</a></li>
         <li><a href="#code" data-go="code">Your code</a></li>
         <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
@@ -315,6 +338,7 @@
   <!-- In the installed app the menu is the members area only (21 Oct 2026) -->
   <ol class="app-only" id="appnav">
     <li><a href="#home" data-go="home" class="on">Home</a></li>
+    <li class="pv-only" hidden><a href="#setup" data-go="setup">Set up my robot</a></li>
     <li><a href="#start" data-go="start">Start here</a></li>
     <li><a href="#code" data-go="code">Your code</a></li>
     <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
@@ -494,6 +518,43 @@
         <div class="row"><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=Members%20area">Email support</a><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button></div>
         <p class="small" style="margin:12px 0 0">You keep every lesson and video released while your updates are included, and the version of the code you had. Renewing is optional and never automatic.</p>
       </section>
+      <section class="card wide" aria-labelledby="h-su" id="su-card" data-page="setup">
+        <h2 id="h-su">Set up <span class="g">my robot</span></h2>
+        <p class="lede">About ten minutes, and no typing into GitHub. You bring two keys; this page builds your copy, locks the keys away, switches on the schedule and runs the setup check. Then you watch it work on paper money, and the lessons explain what you just built.</p>
+        <div class="su-lock" role="note"><span aria-hidden="true">&#128274;</span><span><b>Your keys never touch our servers.</b> They go from this page straight into your own GitHub, locked with GitHub's encryption so only your copy of the code can read them. We can't see them. The GitHub connection is used for this setup and forgotten when you close the page.</span></div>
+        <ol class="su-steps">
+          <li class="su-step" id="su1"><div class="su-h"><b>Connect GitHub</b><span class="pill" id="su1-st">To do</span></div>
+            <p>GitHub is the free website that keeps your copy of the code and runs it on a schedule. No account yet? <a href="https://github.com/signup" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">Make one free</a> with this email, then come back.</p>
+            <div class="row"><button class="btn" type="button" id="su-gh">Connect GitHub</button></div>
+            <p class="small" id="su1-msg" role="status" aria-live="polite"></p></li>
+          <li class="su-step locked" id="su2"><div class="su-h"><b>Your Trading 212 practice key</b><span class="pill" id="su2-st">To do</span></div>
+            <p>Practice account first: no real money until Lesson 13.</p>
+            <details><summary>Where do I find this?</summary><ol><li>Open Trading 212, tap your account at the top and choose <b>Switch to Practice</b>.</li><li>Settings &rarr; API (Beta) &rarr; Generate key. Tick Account data, Portfolio, Metadata, History, Orders and Pies.</li><li>It shows a key and a secret once. Copy each one straight into the boxes below.</li></ol></details>
+            <label class="f" for="su-tk">API key</label><input class="t" id="su-tk" type="password" autocomplete="off" spellcheck="false">
+            <label class="f" for="su-ts">API secret</label><input class="t" id="su-ts" type="password" autocomplete="off" spellcheck="false"></li>
+          <li class="su-step locked" id="su3"><div class="su-h"><b>Your email key</b><span class="pill" id="su3-st">To do</span></div>
+            <p>So your robot can email you its plan and how it's doing.</p>
+            <details><summary>Where do I find this?</summary><ol><li>Sign up free at <a href="https://resend.com/signup" target="_blank" rel="noopener" style="color:var(--green)">resend.com</a> with the inbox you want the emails in, and confirm the email it sends.</li><li>API Keys &rarr; Create. Sending access is enough. Copy the key (it starts with re_).</li></ol></details>
+            <label class="f" for="su-rk">Resend key</label><input class="t" id="su-rk" type="password" autocomplete="off" spellcheck="false" placeholder="re_...">
+            <label class="f" for="su-to">Send my emails to</label><input class="t" id="su-to" type="email" autocomplete="email">
+            <p class="small">Must be the address you signed up to Resend with.</p></li>
+          <li class="su-step locked" id="su4"><div class="su-h"><b>Your choices</b><span class="pill g" id="su4-st">Set</span></div>
+            <p>Both can be changed later.</p>
+            <label class="f">How bold?</label>
+            <div class="su-seg" data-k="risk"><button type="button" data-v="cautious" aria-pressed="false">Cautious<small>smaller bold slice</small></button><button type="button" data-v="balanced" aria-pressed="true">Balanced<small>the default</small></button><button type="button" data-v="adventurous" aria-pressed="false">Adventurous<small>bigger bold slice</small></button></div>
+            <label class="f">How often should it email you?</label>
+            <div class="su-seg" data-k="freq"><button type="button" data-v="daily" aria-pressed="true">Every day<small>the default</small></button><button type="button" data-v="weekly" aria-pressed="false">Once a week<small>Fridays, plus anything that needs you</small></button></div>
+            <label class="f" for="su-name">Name for your copy</label><input class="t" id="su-name" value="my-robot-isa" autocomplete="off" spellcheck="false"></li>
+          <li class="su-step locked" id="su5"><div class="su-h"><b>Build my robot</b><span class="pill" id="su5-st">Ready when you are</span></div>
+            <div class="row"><button class="btn" type="button" id="su-go" disabled>Build my robot</button></div>
+            <ul class="su-log" id="su-log" aria-live="polite"></ul>
+            <div class="su-done" id="su-done" hidden><h3>Your robot is running</h3><p style="margin:0 0 12px">On paper money. The setup check email is on its way to you. Next: ask for its first weekly plan, then tap Approve in the email.</p>
+              <div class="row"><button class="btn" type="button" id="su-plan">Get my first weekly plan</button><a class="btn ghost" id="su-repo" target="_blank" rel="noopener">See my copy on GitHub</a></div>
+              <p class="small" id="su-plan-msg" role="status" aria-live="polite"></p></div></li>
+        </ol>
+        <p class="small" style="margin-top:14px">Prefer to do it by hand, or want to see each step? The <a href="#guide/qs-1" style="color:var(--green);font-weight:700">step-by-step QuickStart</a> does the same thing.</p>
+      </section>
+
       <section class="card wide" aria-labelledby="h-pk" id="pk-card" data-page="passkeys">
         <h2 id="h-pk">Faster <span class="g">sign-in</span></h2>
         <p class="lede">Add a passkey and next time you sign in with Face ID, Touch ID or Windows Hello: no email, no code. The email code always works too.</p>
@@ -524,6 +585,7 @@
   </main>
 </div>
 
+<script src="mri-seal.js" defer></script>
 <script src="guides.js?v=40"></script>
 <script>
 (function () {
@@ -700,6 +762,7 @@
     $("mem-kv").innerHTML =
       "<div><span>Updates included until</span><b>" + esc(fmtDate(m.updates_until)) + "</b></div>" +
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
+    document.querySelectorAll(".pv-only").forEach(function (el) { el.hidden = !m.preview_videos; });
     renderDash(); renderAll(); show("home"); if (gcur.id) guideVideo(gcur.id); passkeyCard(); loadNotes(); if (location.hash === "#mydash") dashOpen(false);
     rest("member_progress?select=item,done").then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
       rows.forEach(function (x) { done[x.item] = x.done; }); renderAll(); paintBench(); if (gcur.id) { guideVideo(gcur.id); guideRender(); }
@@ -1034,6 +1097,122 @@
     pkSigninUI(); if (PK.on && pkSupported && !$("v-home").hidden) { passkeyCard(); loadNotes(); }
   }).catch(function () {});
 
+
+  // ---- Set up my robot (23 Oct 2026): the QuickStart done for the member. Everything runs in their browser against
+  // GitHub's own API; github-oauth only swaps GitHub's one-time code for their token. Keys are sealed to their repo's
+  // public key here (mri-seal.js: libsodium sealed box) before they leave the page.
+  var SU = { tok: null, login: "", cfg: null, risk: "balanced", freq: "daily", busy: false };
+  var SU_TEMPLATE = "amitbharatpatel7-hue/my-robot-isa-template"; // created before launch; members are invited to it
+  function gh(path, opt) {
+    opt = opt || {};
+    return fetch("https://api.github.com" + path, { method: opt.method || "GET", headers: { Authorization: "Bearer " + SU.tok, Accept: "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28" }, body: opt.body ? JSON.stringify(opt.body) : undefined })
+      .then(function (r) { return r.text().then(function (t) { var j = null; try { j = t ? JSON.parse(t) : null; } catch (e) {} return { ok: r.ok, status: r.status, j: j }; }); });
+  }
+  function suFn(method, body) {
+    return fresh().then(function (s) {
+      return fetch(SB + "/functions/v1/github-oauth", { method: method, headers: { apikey: KEY, Authorization: "Bearer " + s.access_token, "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); });
+    });
+  }
+  function suState(n, txt, done) { var st = $("su" + n + "-st"); st.textContent = txt; st.className = "pill" + (done ? " g" : ""); $("su" + n).classList.toggle("done", !!done); }
+  function suUnlock() { [2, 3, 4, 5].forEach(function (n) { $("su" + n).classList.toggle("locked", !SU.tok); }); suCheck(); }
+  function suCheck() {
+    var t212 = $("su-tk").value.trim().length > 10 && $("su-ts").value.trim().length > 10;
+    var mail = /^re_[A-Za-z0-9_]{10,}$/.test($("su-rk").value.trim()) && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($("su-to").value.trim());
+    var name = /^[A-Za-z0-9._-]{1,90}$/.test($("su-name").value.trim());
+    suState(2, t212 ? "Ready" : "To do", t212); suState(3, mail ? "Ready" : "To do", mail);
+    $("su-go").disabled = !(SU.tok && t212 && mail && name) || SU.busy;
+  }
+  var suReady = false;
+  function suInit() {
+    if (!$("su-to").value && me && me.email) $("su-to").value = me.email;
+    if (suReady) return; suReady = true;
+    ["su-tk", "su-ts", "su-rk", "su-to", "su-name"].forEach(function (id) { $(id).addEventListener("input", suCheck); });
+    document.querySelectorAll(".su-seg").forEach(function (g) {
+      g.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return;
+        g.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); SU[g.dataset.k] = b.dataset.v; });
+    });
+    suFn("GET").then(function (r) {
+      SU.cfg = r.j || {};
+      if (!SU.cfg.configured) { $("su-gh").disabled = true; $("su1-msg").textContent = "Coming soon: the GitHub connection switches on before launch. You can look through the steps now."; }
+    }).catch(function () {});
+    $("su-gh").addEventListener("click", function () {
+      if (!SU.cfg || !SU.cfg.client_id) return;
+      var state = Math.random().toString(36).slice(2) + Date.now().toString(36);
+      try { sessionStorage.setItem("mri-gh-state", state); } catch (e) {}
+      location.href = "https://github.com/login/oauth/authorize?client_id=" + encodeURIComponent(SU.cfg.client_id) + "&scope=" + encodeURIComponent("repo workflow") +
+        "&state=" + state + "&allow_signup=true&redirect_uri=" + encodeURIComponent(location.origin + location.pathname + "?gh=1");
+    });
+    $("su-go").addEventListener("click", suBuild);
+    $("su-plan").addEventListener("click", suPlan);
+    suUnlock();
+  }
+  // back from GitHub: swap the code for a token (kept in memory only) and clean the address bar
+  (function () {
+    var q = new URLSearchParams(location.search); if (!q.get("gh") || !q.get("code")) return;
+    var code = q.get("code"), state = q.get("state"), want = ""; try { want = sessionStorage.getItem("mri-gh-state") || ""; sessionStorage.removeItem("mri-gh-state"); } catch (e) {}
+    history.replaceState(null, "", location.pathname + "#setup");
+    var tries = 0;
+    (function wait() { // the session loads asynchronously; wait for it before calling the function
+      if (typeof session === "undefined" || !session) { if (tries++ < 40) setTimeout(wait, 250); return; }
+      suInit();
+      if (!state || state !== want) { $("su1-msg").textContent = "That GitHub sign-in didn't match this page. Press Connect GitHub again."; return; }
+      $("su1-msg").textContent = "Connecting…";
+      suFn("POST", { code: code }).then(function (r) {
+        if (!r.ok || !r.j.access_token) { $("su1-msg").textContent = (r.j && r.j.error) || "That didn't work. Press Connect GitHub again."; return; }
+        SU.tok = r.j.access_token;
+        return gh("/user").then(function (u) { SU.login = u.j && u.j.login || ""; suState(1, "Connected", true); $("su1-msg").textContent = "Connected as @" + SU.login + "."; $("su-gh").hidden = true; suUnlock(); });
+      }).catch(function () { $("su1-msg").textContent = "No connection. Check you're online and try again."; });
+    })();
+  })();
+  function suLog(txt) { var li = document.createElement("li"); li.className = "run"; li.innerHTML = "<i></i><span></span>"; li.lastChild.textContent = txt; $("su-log").appendChild(li);
+    return { ok: function (t) { li.className = "ok"; if (t) li.lastChild.textContent = t; }, bad: function (t) { li.className = "bad"; li.lastChild.textContent = t; } }; }
+  function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  function suFail(step, msg) { step.bad(msg); SU.busy = false; suCheck(); suState(5, "Stopped", false); throw new Error("stop"); }
+  async function suBuild() {
+    if (SU.busy) return; SU.busy = true; $("su-go").disabled = true; $("su-log").innerHTML = ""; suState(5, "Building…", false);
+    var name = $("su-name").value.trim(), owner = SU.login, full = owner + "/" + name;
+    var vals = { T212_API_KEY: $("su-tk").value.trim(), T212_API_SECRET: $("su-ts").value.trim(), RESEND_API_KEY: $("su-rk").value.trim() };
+    try {
+      var a = suLog("Creating your private copy of the code");
+      var g = await gh("/repos/" + SU_TEMPLATE + "/generate", { method: "POST", body: { owner: owner, name: name, private: true, description: "My Robot I.S.A." } });
+      if (g.status === 404) suFail(a, "Your copy can't be made yet: the robot's code opens to members in January 2027.");
+      if (g.status === 422) { var ex = await gh("/repos/" + full); if (!ex.ok) suFail(a, "That name is taken on your GitHub. Change the name in step 4 and try again."); a.ok("Using your existing copy, " + name); }
+      else if (!g.ok) suFail(a, "GitHub said no (" + g.status + "). Try again in a minute.");
+      else a.ok("Created your private copy, " + name);
+      var w = suLog("Waiting for GitHub to finish copying");
+      for (var i = 0; i < 30; i++) { var c = await gh("/repos/" + full + "/contents/.github/workflows/setup-check.yml"); if (c.ok) break; await sleep(2000); if (i === 29) suFail(w, "GitHub is taking a while. Wait a minute and press Build again."); }
+      w.ok("Copy ready");
+      var k = suLog("Locking your keys into your copy");
+      var pk = await gh("/repos/" + full + "/actions/secrets/public-key"); if (!pk.ok) suFail(k, "Couldn't read your copy's lock. Try again.");
+      for (var n in vals) { var put = await gh("/repos/" + full + "/actions/secrets/" + n, { method: "PUT", body: { encrypted_value: window.mriSeal(pk.j.key, vals[n]), key_id: pk.j.key_id } }); if (!put.ok) suFail(k, "Couldn't save " + n + ". Try again."); }
+      $("su-tk").value = $("su-ts").value = $("su-rk").value = ""; vals = null;
+      k.ok("Keys locked in (3 of 3). They've been cleared from this page.");
+      var v = suLog("Saving your choices");
+      var vars = { T212_ENV: "practice", NOTIFY_TO: $("su-to").value.trim(), RISK_PROFILE: SU.risk, DIGEST_FREQUENCY: SU.freq };
+      for (var vn in vars) { var cr = await gh("/repos/" + full + "/actions/variables", { method: "POST", body: { name: vn, value: vars[vn] } });
+        if (cr.status === 409) cr = await gh("/repos/" + full + "/actions/variables/" + vn, { method: "PATCH", body: { name: vn, value: vars[vn] } });
+        if (!cr.ok) suFail(v, "Couldn't save " + vn + ". Try again."); }
+      v.ok("Practice account, " + SU.risk + ", emails " + (SU.freq === "weekly" ? "once a week" : "every day"));
+      var s = suLog("Running the setup check");
+      var since = new Date(Date.now() - 60000).toISOString();
+      var d = await gh("/repos/" + full + "/actions/workflows/setup-check.yml/dispatches", { method: "POST", body: { ref: "main" } }); if (!d.ok) suFail(s, "Couldn't start the setup check. Open Actions on your copy and run Setup check.");
+      var run = null;
+      for (var t = 0; t < 60; t++) { await sleep(5000); var rs = await gh("/repos/" + full + "/actions/workflows/setup-check.yml/runs?per_page=1&created=>" + since);
+        run = rs.j && rs.j.workflow_runs && rs.j.workflow_runs[0]; if (run && run.status === "completed") break; }
+      if (!run || run.status !== "completed") { s.ok("Setup check is still running: the email will tell you the result."); }
+      else if (run.conclusion === "success") s.ok("Setup check passed: all green");
+      else suFail(s, "The setup check found something. Its email says exactly which key and what to do; fix it, then press Build again.");
+      $("su-repo").href = "https://github.com/" + full; $("su-done").hidden = false; suState(5, "Done", true); SU.busy = false; SU.full = full;
+    } catch (e) { if (e.message !== "stop") { SU.busy = false; suCheck(); } }
+  }
+  async function suPlan() {
+    if (!SU.full) return; var b = $("su-plan"); b.disabled = true; $("su-plan-msg").textContent = "Asking your robot for its plan…";
+    var d = await gh("/repos/" + SU.full + "/actions/workflows/weekly-signals.yml/dispatches", { method: "POST", body: { ref: "main" } });
+    $("su-plan-msg").textContent = d.ok ? "On its way: the plan lands in your inbox in a few minutes. Open it and tap Approve: that's your first paper trade." : "Couldn't start it. Open Actions on your copy and run Weekly signals.";
+    if (!d.ok) b.disabled = false;
+  }
+
   // ---- the site's side menu (drawer on phones)
   (function () {
     var side = $("side"), scrim = $("scrim"), menu = $("menubtn");
@@ -1154,7 +1333,7 @@
   });
 
   // ---- one section per page: Home (welcome and messages), Start here, Lessons, Code, Dashboard, Clips, Help
-  var PAGES = ["home", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help", "guide", "questions"];
+  var PAGES = ["home", "setup", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help", "guide", "questions"];
   // Questions (23 Oct 2026): the public Questions page, shown inside the members area so the members menu stays put. Fetched once.
   var faqLoaded = false;
   function loadFaq() {
@@ -1177,6 +1356,7 @@
     document.querySelector('.mgroup .grp-h > a').classList.toggle("on", true);
     if (page === "lessons") $("les-fold").open = true;
     if (page === "questions") loadFaq();
+    if (page === "setup") suInit();
     if (page === "clips") { paintBench(); loadWants(); document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = "0"; }); setTimeout(function () { document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = b.dataset.w; }); }, 60); }
     $("preview").classList.toggle("off", page !== "home");
     document.documentElement.classList.toggle("dashview", page === "mydash"); document.documentElement.dataset.pg = page;
