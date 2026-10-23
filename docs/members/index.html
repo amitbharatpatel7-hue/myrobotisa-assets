@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="44">
+<meta name="mri-version" content="45">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -291,6 +291,8 @@
   .dashhelp p{margin:0 0 10px;font-size:14.5px;line-height:1.5}
   .dashhelp .row{display:flex;flex-wrap:wrap;gap:8px;margin:0}
 
+  .su-promo{display:block;margin:14px 0 4px;padding:14px 16px;border-radius:16px;background:#14402C;border:2px solid var(--green);color:var(--ink);text-decoration:none}
+  .su-promo b{display:block;color:var(--green);font-size:16px;margin-bottom:3px} .su-promo span{font-size:14px;color:var(--ink)} .su-promo:hover{transform:translateY(-1px)}
   /* 23 Oct 2026: "Set up my robot", the automated QuickStart (preview accounts first) */
   .su-steps{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:12px;counter-reset:su}
   .su-step{counter-increment:su;background:var(--deep2);border:1px solid var(--rule);border-radius:18px;padding:16px 18px}
@@ -416,6 +418,7 @@
       <section class="card" aria-labelledby="h-qs" data-page="start">
         <h2 id="h-qs">Start <span class="g">here</span></h2>
         <p class="lede">The QuickStart: your first paper trade in about 30 minutes. A short video for each step.</p>
+        <a class="su-promo pv-only" hidden href="#setup" data-go="setup"><b>Short on time? Let us do steps 1 to 4 for you</b><span>Set up my robot builds your copy, locks in your keys and runs the setup check in about 10 minutes. Then come back here for steps 5 and 6.</span></a>
         <div class="bar" aria-hidden="true"><i id="qs-bar"></i></div>
         <p class="small" id="qs-count"></p>
         <ol class="steps" id="qs"></ol>
@@ -1179,7 +1182,12 @@
       var a = suLog("Creating your private copy of the code");
       var g = await gh("/repos/" + SU_TEMPLATE + "/generate", { method: "POST", body: { owner: owner, name: name, private: true, description: "My Robot I.S.A." } });
       if (g.status === 404) suFail(a, "Your copy can't be made yet: the robot's code opens to members in January 2027.");
-      if (g.status === 422) { var ex = await gh("/repos/" + full); if (!ex.ok) suFail(a, "That name is taken on your GitHub. Change the name in step 4 and try again."); a.ok("Using your existing copy, " + name); }
+      // 422 = the name exists. Only carry on into a repo this page made from the robot's template; never write keys or
+      // settings into any other repo the member owns.
+      if (g.status === 422) { var ex = await gh("/repos/" + full);
+        var ours = ex.ok && ex.j && ex.j.template_repository && ex.j.template_repository.full_name === SU_TEMPLATE;
+        if (!ours) suFail(a, "You already have a repository called " + name + " on GitHub. Change the name in step 4 (for example my-robot-isa-2) and press Build again.");
+        a.ok("Using your existing copy, " + name); }
       else if (!g.ok) suFail(a, "GitHub said no (" + g.status + "). Try again in a minute.");
       else a.ok("Created your private copy, " + name);
       var w = suLog("Waiting for GitHub to finish copying");
