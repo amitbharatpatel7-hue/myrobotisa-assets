@@ -12,6 +12,13 @@ including the internal ones to me, and flag (Internal) in the subject"):
     `bgcolor` attribute as well as the inline background longhand, so Apple Mail and Outlook leave the colours alone;
   * `subject()` prefixes "(Internal) " unless `internal=False` — only emails to members or customers pass False.
 
+v2.5 (23 Oct 2026, approved by Amit) — additive only, every v2.4 call renders byte-for-byte the same except SBH_BRAND:
+  * render(..., badge="Setup check") replaces the green INTERNAL pill's text (the email type: Health, Setup check, ...);
+  * a block can carry `checks` [(status, name, note)] (ok = green tick, bad = amber cross, off = muted dash) and
+    `link` (label, url) for one green text link under the card;
+  * SBH_BRAND is the Stock Boom Hunter robot (S.B.H. tag) with a two-line STOCK BOOM / HUNTER wordmark, and its emails
+    use the S.B.H.-tagged mood robots automatically (MOODS_SBH, myrobotisa.com/email/sbh/).
+
 Public surface (unchanged from v1, two optional additions):
 
     render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand=None, buttons=None, mood=None)
@@ -65,13 +72,16 @@ MONO_STACK = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
 
 MRI_LOGO = "https://myrobotisa.com/avatar.png"
 MRI_BRAND = ("R", "My Robot", "I.S.A.", MRI_LOGO)
-SBH_BRAND = ("S", "Stock Boom", "Hunter", "https://myrobotisa.com/email/sbh.png")
+SBH_BRAND = ("S", "Stock Boom", "Hunter", "https://myrobotisa.com/email/sbh-robot.png")  # v2.5 (23 Oct 2026): the robot mark in the I.S.A. style, S.B.H. tag
 # v2.4 (23 Oct 2026, approved by Amit): six robot moods, one per kind of day. "steady"/"flat" stay as aliases so older
 # callers keep working; the original robot-steady.png / robot-flat.png images stay on the site for emails already sent.
 _E = "https://myrobotisa.com/email/"
 MOODS = {"up": _E + "robot-up.png", "milestone": _E + "robot-milestone.png", "calm": _E + "robot-calm.png",
          "quiet": _E + "robot-quiet.png", "yourturn": _E + "robot-yourturn.png", "paused": _E + "robot-paused.png"}
 MOODS["steady"], MOODS["flat"] = MOODS["calm"], MOODS["quiet"]
+# v2.5 (23 Oct 2026): Stock Boom Hunter emails use the same robots with an S.B.H. tag (myrobotisa.com/email/sbh/);
+# render() swaps them in automatically whenever the brand is SBH_BRAND.
+MOODS_SBH = {k: v.replace(_E, _E + "sbh/") for k, v in MOODS.items()}
 
 PILL_COLORS = {
     "green": (GREEN_FG, GREEN_BG),
@@ -219,6 +229,26 @@ def _milestone(m: dict) -> str:
     return big + _prose(m.get("prose", "")) + pills
 
 
+def _checks(rows) -> str:
+    """v2.5 (23 Oct 2026, for the setup check and health emails): one row per check, a mark then the name and a short note.
+    status ok = green tick, bad = amber cross (owner mail only; member mail never shows red), off = muted dash."""
+    marks = {"ok": ("&#10003;", GREEN), "bad": ("&#10007;", AMBER_FG), "off": ("&ndash;", MUTED)}
+    out = []
+    for status, name, note in rows:
+        m, c = marks.get(status, marks["off"])
+        out.append(f'<tr><td valign="top" style="width:24px;padding:6px 0;font-size:15px;font-weight:900;color:{c};font-family:{FONT_STACK};">{m}</td>'
+                   f'<td style="padding:6px 0;font-size:15px;line-height:1.4;color:{INK};font-family:{FONT_STACK};"><b>{esc(name)}</b>'
+                   + (f'<br><span style="font-size:13px;color:{MUTED};">{esc(note)}</span>' if note else "") + '</td></tr>')
+    return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{"".join(out)}</table>'
+
+
+def _link(link) -> str:
+    """v2.5: a block can end with one green text link: ("Open the run", url)."""
+    label, url = link
+    return (f'<div style="margin-top:8px;"><a href="{esc(url)}" style="font-size:14px;font-weight:800;color:{GREEN};'
+            f'text-decoration:none;font-family:{FONT_STACK};">{esc(label)} &rarr;</a></div>')
+
+
 def mood_for(change: float | None) -> str:
     """Robot for the headline: arms up on a gain, shield-and-tick on a dip, cup of tea when flat or unknown."""
     if change is None or abs(change) < 0.005:
@@ -250,12 +280,15 @@ def scenario(change: float | None, paused: bool = False, to_approve: int = 0, mi
 
 
 def _block_body(block: dict) -> str:
-    return _block_body_inner(block) + (_more(block["more"]) if block.get("more") else "")
+    return (_block_body_inner(block) + (_more(block["more"]) if block.get("more") else "")
+            + (_link(block["link"]) if block.get("link") else ""))
 
 
 def _block_body_inner(block: dict) -> str:
     if "spark" in block:
         return _spark(block["spark"]) + ('<div style="height:12px;line-height:12px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
+    if "checks" in block:
+        return _checks(block["checks"]) + ('<div style="height:8px;line-height:8px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
     if "did" in block:
         return _did(block["did"])
     if "milestone" in block:
@@ -308,22 +341,29 @@ def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
            buttons: list[tuple] | None = None,
            mood: str | None = None,
            internal: bool = True,
-           tone: str | None = None) -> str:
+           tone: str | None = None,
+           badge: str | None = None) -> str:
+    # v2.5: badge overrides the green pill's text (default "Internal"), e.g. "Stock Boom Hunter" on the engine's own emails.
     b = tuple(brand) if brand else ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, "")
     tile, word, suffix = b[0], b[1], b[2]
+    if mood and len(b) > 3 and str(b[3]).endswith("sbh-robot.png") and mood.startswith(_E) and "/sbh/" not in mood:
+        mood = mood.replace(_E, _E + "sbh/")
     logo = b[3] if len(b) > 3 else None
     suffix_html = ' <span style="color:%s">%s</span>' % (PINK, esc(suffix)) if suffix else ""
+    stacked = len(word + suffix) > 14   # v2.5: a long name (Stock Boom Hunter) stacks into a two-line lockup, so the badge still fits on a phone
+    if stacked and suffix:
+        suffix_html = '<br><span style="color:%s">%s</span>' % (PINK, esc(suffix))
     brand_row = (
         f'<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 16px;"><tr>'
         + (f'<td width="40" height="40" style="width:40px;height:40px;"><img src="{esc(logo)}" width="40" height="40" alt="" '
            f'style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {GREEN};"></td>' if logo else
            f'<td width="34" height="34" align="center" {_bg(GREEN)}border-radius:9px;color:{ON_GREEN};font-weight:900;'
            f'font-size:16px;font-family:{FONT_STACK};">{esc(tile)}</td>') +
-        f'<td style="padding-left:10px;font-family:{HEAD_STACK};font-size:22px;letter-spacing:.02em;text-transform:uppercase;'
-        f'color:{INK};">{esc(word)}{suffix_html}</td>'
-        + (f'<td style="padding-left:10px;vertical-align:middle;"><span style="display:inline-block;padding:5px 12px;border-radius:999px;'
-           f'background:{GREEN};background-color:{GREEN};color:{ON_GREEN};font-size:12px;font-weight:900;letter-spacing:.14em;'
-           f'text-transform:uppercase;font-family:{FONT_STACK};">Internal</span></td>' if internal else "") +
+        f'<td style="padding-left:10px;font-family:{HEAD_STACK};font-size:{20 if stacked else 22}px;{"line-height:1.02;" if stacked else ""}letter-spacing:.02em;text-transform:uppercase;'
+        f'color:{INK};{"white-space:nowrap;" if stacked else ""}">{esc(word)}{suffix_html}</td>'
+        + (f'<td style="padding-left:10px;vertical-align:middle;"><span style="display:inline-block;padding:5px {10 if badge and len(badge) > 10 else 12}px;border-radius:999px;'
+           f'background:{GREEN};background-color:{GREEN};color:{ON_GREEN};font-size:{11 if badge and len(badge) > 10 else 12}px;font-weight:900;letter-spacing:{".07em" if badge and len(badge) > 10 else ".14em"};'
+           f'text-transform:uppercase;font-family:{FONT_STACK};{"white-space:nowrap;" if badge else ""}">{esc(badge or "Internal")}</span></td>' if (internal or badge) else "") +
         f'</tr></table>')
     mood_td = (f'<td width="96" align="right" style="width:96px;padding:14px 18px 14px 0;vertical-align:middle;">'
                f'<img src="{esc(mood)}" width="96" height="96" alt="" style="display:block;width:96px;height:96px;"></td>') if mood else ""
@@ -367,7 +407,7 @@ def subject(project: str, type_: str, detail: str, internal: bool = True) -> str
 def _demo_member() -> str:
     return render(
         title="+£12.00 today",
-        eyebrow_text="Your robot · Thursday 23 October",
+        eyebrow_text="Your robot · Thursday 22 October",
         subtitle=["£5,260.00 in your ISA · ", ("up £260.00 since you started", "gain"), " (example figures)"],
         tone="up",
         brand=MRI_BRAND,
