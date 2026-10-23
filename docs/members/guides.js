@@ -14,14 +14,14 @@ window.GUIDES = {
     { t: "Switch the Trading 212 app to Practice", d: "Open the Trading 212 app (or trading212.com). Tap your account at the top and choose Switch to Practice. Everything in this course happens there until Day 13, so you can't lose a penny while you learn.", img: "t212-api.png", stuck: "Can't see Practice? It's under the account switcher at the top of the app. It may ask you to set it up first: say yes, it's pretend money." },
     { t: "Settings → API → create a key", d: "Settings, then API (Beta), then Generate (or Create) a key. Accept the warning about third-party apps. It asks what the key may do: tick Account data, Portfolio, Metadata and both Orders boxes (read and execute). Leave History, Pies and Personal details unticked. If it asks about IP access, leave it unrestricted: GitHub's computers change address.", img: "t212-api.png", stuck: "No API option? Update the app, or do it at trading212.com: Settings → API (Beta) is in both. Make sure you're on the Practice account: each account has its own keys." },
     { t: "Copy the key and the secret", d: "It shows two things once: a key and a secret. Copy each one straight from the app. Don't paste them anywhere in between (a note, a message, a terminal): that's how a line break sneaks in.", stuck: "Closed it before copying? Delete that key and make a new one. Keys are free." },
-    { t: "Add them to your copy on GitHub", d: "On GitHub open your repository, then the Settings tab (on a phone it's under the ⋯ menu). In the left-hand list: Secrets and variables → Actions → New repository secret. Name: T212_API_KEY, Secret: paste the key. Then again: T212_API_SECRET with the secret. Names must match exactly, capitals and underscores included.", img: "gh-new-secret.png", stuck: "Secrets show as hidden after saving: that's right, nobody can read them back, not even you." },
-    { t: "One variable: T212_ENV = practice", d: "Same page, Variables tab → New repository variable. Name: T212_ENV, Value: practice. Variables are plain text; that's fine, this one isn't secret.", img: "gh-new-variable.png" },
+    { t: "Add them to your copy on GitHub", d: "On GitHub open your repository, then the Settings tab (on a phone it's under the ⋯ menu). In the left-hand list: Secrets and variables → Actions → New repository secret. Name: T212_API_KEY, Secret: paste the key. Then again: T212_API_SECRET with the secret. Names must match exactly, capitals and underscores included.", copy: ["T212_API_KEY", "T212_API_SECRET"], img: "gh-new-secret.png", stuck: "Secrets show as hidden after saving: that's right, nobody can read them back, not even you." },
+    { t: "One variable: T212_ENV = practice", d: "Same page, Variables tab → New repository variable. Name: T212_ENV, Value: practice. Variables are plain text; that's fine, this one isn't secret.", copy: ["T212_ENV", "practice"], img: "gh-new-variable.png" },
     { t: "Leave order mode alone", d: "It defaults to approve: the robot proposes, you tap yes. It can't place an order without you. Next, your email key." }
   ], tips: ["Practice money is pretend, but the prices are real.", "A key is like a spare door key that only opens the rooms you ticked.", "Think a key has leaked? Delete it in Trading 212. The robot stops at once and nothing else breaks; make a new one and paste it in.", "Secret or variable? A secret is hidden after saving (keys). A variable can be read back (settings like practice or live)."]},
   "qs-3": { title: "Your email key", kind: "QuickStart step 3", mins: 5, steps: [
     { t: "Make a free Resend account", d: "Resend is the service the robot uses to email you. Sign up at resend.com with the inbox you want the reports in, and click the confirmation email it sends you. The free plan is plenty: the robot sends about two emails a day." },
     { t: "API Keys → Create", d: "In Resend: API Keys, then Create. Name it anything. Permission: Sending access is enough. Copy the key: it's shown once.", img: "resend-key.png" },
-    { t: "Add it to GitHub", d: "Your repository → Settings → Secrets and variables → Actions → New repository secret: RESEND_API_KEY. Then the Variables tab → New repository variable: NOTIFY_TO, set to your own email address.", img: "gh-new-secret.png" },
+    { t: "Add it to GitHub", d: "Your repository → Settings → Secrets and variables → Actions → New repository secret: RESEND_API_KEY. Then the Variables tab → New repository variable: NOTIFY_TO, set to your own email address.", copy: ["RESEND_API_KEY", "NOTIFY_TO"], img: "gh-new-secret.png" },
     { t: "No domain needed", d: "Resend's test sender can only deliver to the address you signed up with, which is why NOTIFY_TO has to be that same address. That's all the robot needs. Next: the setup check, which confirms it all works." }
   ], tips: ["The first email may land in junk: mark it Not junk once and the rest arrive normally.", "The key's name is only for you; call it robot.", "Resend's free plan allows 100 emails a day; the robot sends about two."]},
   "qs-4": { title: "Run the setup check", kind: "QuickStart step 4", mins: 5, steps: [
@@ -32,8 +32,8 @@ window.GUIDES = {
     { t: "Tap Approve", d: "Open that email and tap Approve. That's your first paper trade: placed by the robot, said yes to by you. The orders queue at the practice account and fill when the market opens.", img: "proposals-email.png" }
   ], tips: ["Run workflow does nothing until you press the second green button on the small sheet.", "Every run leaves a log: tap it and read the last lines, they're written in plain English.", "Running the Setup check twice is harmless: it reads, it never trades.", "Orders placed outside market hours queue and fill when London or New York opens."]},
   "qs-5": { title: "Optional extras", kind: "QuickStart step 5", mins: 5, steps: [
-    { t: "Error alerts (Sentry, free)", d: "Make a free account at sentry.io. Settings → Auth Tokens → Create New Token. Add it to GitHub as the secret SENTRY_AUTH_TOKEN (same place as your other secrets). If a run dies in the night you get a message that says where and why." },
-    { t: "Claude fixes failed runs (needs a Claude subscription)", d: "In the Claude app, run claude setup-token and add the result as the secret CLAUDE_CODE_OAUTH_TOKEN. A failed run then gets a fix proposed as a pull request you approve from your phone. It never changes the money settings on its own." },
+    { t: "Error alerts (Sentry, free)", d: "Make a free account at sentry.io. Settings → Auth Tokens → Create New Token. Add it to GitHub as the secret SENTRY_AUTH_TOKEN (same place as your other secrets). If a run dies in the night you get a message that says where and why.", copy: ["SENTRY_AUTH_TOKEN"] },
+    { t: "Claude fixes failed runs (needs a Claude subscription)", d: "In the Claude app (or a terminal with Claude Code installed) run the command below and add the result as the secret CLAUDE_CODE_OAUTH_TOKEN. A failed run then gets a fix proposed as a pull request you approve from your phone. It never changes the money settings on its own.", copy: ["claude setup-token", "CLAUDE_CODE_OAUTH_TOKEN"] },
     { t: "Or skip both for now", d: "The robot runs fine without them. You can add either on any day. Last step: your app on your phone." }
   ], tips: ["Both extras can be switched off later by deleting the secret.", "Claude's token expires now and then; the Failure log tells you when, and you paste a fresh one."]},
   "qs-6": { title: "Your app on your phone, Mac or PC", kind: "QuickStart step 6", mins: 10, steps: [
@@ -50,14 +50,14 @@ window.GUIDES = {
   ], tips: ["You don't need to read code in this course; you need to know what each file is for.", "One file holds the rules. Everything else is plumbing."]},
   "day-2": { title: "Get it running", kind: "Lesson 2", mins: 30, steps: [
     { t: "Watch the lesson", d: "What the pieces of the code are called, why nothing runs on your laptop, and how to ask Claude for help." },
-    { t: "Ask Claude the three questions", d: "Point Claude at your copy and ask: Explain what signals.py does in plain English. Show me where the robot decides to sell. What would happen if I set the satellite slice to zero?" },
+    { t: "Ask Claude the three questions", d: "Point Claude at your copy (paste the repository link) and ask the three questions below. Copy and paste them, one at a time.", copy: ["Explain what signals.py does in plain English, as if I'm new to this.", "Show me where the robot decides to sell, and why.", "What would happen if I set the satellite slice (sat_weight) to zero?"] },
     { t: "Run your first full week", d: "Actions → Weekly signals → Run workflow. Open the email. This time read it before you approve: what it wants to hold, what it wants to sell, and why.", img: "proposals-email.png" },
     { t: "Read the evening email", d: "That evening you get the daily email: value, cash, what's open. Calm is good. Calm is the point.", img: "daily-email.png" }
   ], tips: ["Claude can be the website, the app or Claude Code: any of them can read your copy if you paste its link.", "Say 'in plain English, I'm new to this' and Claude adjusts.", "Approving is a tap on your phone; nothing needs a computer."]},
   "day-3": { title: "Data you can trust", kind: "Lesson 3", mins: 20, steps: [
     { t: "Watch the lesson", d: "Where the prices come from and how the robot makes sure every number is real." },
     { t: "Open the price file", d: "In your copy open the data folder, then prices_weekly.json. Pick the first fund listed under core in universe.json, find its last few weekly prices in the file, and compare them with that fund's chart in the Trading 212 app set to weekly. They should be the same numbers." },
-    { t: "Ask Claude what happens when it's stale", d: "Ask: what happens if this file is three weeks old on a Sunday? Then find the max_data_age_days line in universe.json that makes it so.", img: "gh-edit-universe.png" }
+    { t: "Ask Claude what happens when it's stale", d: "Ask Claude the question below. Then find the max_data_age_days line in universe.json that makes it so.", copy: ["What happens if data/prices_weekly.json is three weeks old on a Sunday morning? Which line in universe.json decides that?"], img: "gh-edit-universe.png" }
   ], tips: ["Weekly closes, not live prices: the robot ignores Monday-to-Thursday noise on purpose.", "Stale data stops the robot. That's a feature, not a fault."]},
   "day-4": { title: "Make it yours", kind: "Lesson 4", mins: 40, steps: [
     { t: "Watch the lesson", d: "universe.json line by line: what each number does, which to leave alone, and how to change the rest safely." },
@@ -67,24 +67,24 @@ window.GUIDES = {
   ], tips: ["Change one number at a time, run the check, then the next.", "The commit message is one line saying why; future you will thank you.", "The validator refuses a bad value rather than guessing what you meant."]},
   "day-5": { title: "Backtest honestly", kind: "Lesson 5", mins: 45, steps: [
     { t: "Watch the lesson", d: "How to test rules on the past, and the three ways people cheat without noticing." },
-    { t: "Run the backtest", d: "Ask Claude, pointed at your copy, to run engine.py and tell you what it found. Nothing to install: Claude runs it and reads the results back. It produces an equity curve (how the pot moved) and a trade list." },
-    { t: "Read the worst run first", d: "How far it fell from a high, and how many months it took to get back. Write both down. Then ask Claude to delete the five best trades and run again." },
+    { t: "Run the backtest", d: "Ask Claude, pointed at your copy, to run engine.py and tell you what it found. Nothing to install: Claude runs it and reads the results back. It produces an equity curve (how the pot moved) and a trade list.", copy: ["Run engine.py on my universe.json and tell me, in plain English: the worst fall from a high, how many months it took to recover, and the number of trades."] },
+    { t: "Read the worst run first", d: "How far it fell from a high, and how many months it took to get back. Write both down. Then ask Claude to delete the five best trades and run again.", copy: ["Remove the five most profitable trades from that backtest and run it again. How much of the result was those five?"] },
     { t: "The honest question", d: "Would you have sat through that worst run, approving on a Monday? If not, the rules are too hot for you, whatever the return says." }
   ], tips: ["A backtest shows what the rules would have done, never what they will do.", "Deleting the best trades is the honesty test: if the result collapses, it was luck."]},
   "day-6": { title: "Paper money first", kind: "Lesson 6", mins: 25, steps: [
     { t: "Watch the lesson", d: "Why the practice account is the best teacher you'll get, what it can't teach, and how long to stay on it." },
     { t: "Match the order history to the ledger", d: "Open the practice order history in the Trading 212 app. Match each order to a line in state/live_state.json in your copy. They should agree exactly.", img: "demo-orders-phone.png" },
     { t: "Anything that doesn't match", d: "That's not a disaster, that's the job. Write it down and ask Claude what happened." }
-  ], tips: ["Four clean practice weeks is the floor, not the ceiling.", "Practice orders fill at real prices with pretend money, so the ledger should match to the penny."]},
+  ], tips: ["Your app's Orders tab (QuickStart 6) shows the same ledger, so you can do this check from your phone.", "Four clean practice weeks is the floor, not the ceiling.", "Practice orders fill at real prices with pretend money, so the ledger should match to the penny."]},
   "day-7": { title: "The plumbing", kind: "Lesson 7", mins: 25, steps: [
     { t: "Watch the lesson", d: "What happens between the robot saying buy and the broker saying done: rounding, minimum sizes, the fund mapping and market hours." },
     { t: "Run Broker check", d: "Actions → Broker check → Run workflow. Read the output: every fund in your core and the UK line it maps to.", img: "gh-actions-setup.png" },
-    { t: "Ask Claude where it rounds", d: "Ask: show me where the robot rounds a quantity, and what happens if the exchange changes its rule to two decimals. The answer should point at one function." }
+    { t: "Ask Claude where it rounds", d: "Ask Claude the question below. The answer should point at one function.", copy: ["Show me where the robot rounds an order quantity, and what would happen if the exchange changed its rule to two decimal places."] }
   ], tips: ["Minimum sizes and rounding are why a £10 order can become £9.80.", "Broker check only reads; run it whenever you're curious."]},
   "day-8": { title: "Done means it happened", kind: "Lesson 8", mins: 25, steps: [
     { t: "Watch the lesson", d: "The difference between sending an order and knowing it filled." },
     { t: "Open the ledger", d: "state/live_state.json in your copy. Find last week's orders and match each one to the broker app's history." },
-    { t: "Follow a rejection", d: "Ask Claude: what happens in fills.py if the broker says rejected? Follow the answer to where the email gets written.", img: "daily-email-pending.png" }
+    { t: "Follow a rejection", d: "Ask Claude the question below, then follow the answer to where the email gets written.", copy: ["What happens in fills.py if the broker says an order was rejected? Where does the email about it get written?"], img: "daily-email-pending.png" }
   ], tips: ["Pending isn't failed: an order placed outside hours waits for the market to open.", "Rejected comes with the broker's own reason, in the email."]},
   "day-9": { title: "Make it explain itself", kind: "Lesson 9", mins: 20, steps: [
     { t: "Watch the lesson", d: "Logs that tell you the reason, not just that something needs you." },
@@ -98,23 +98,23 @@ window.GUIDES = {
   ], tips: ["Five keys: broker (robot), broker (dashboard, read only), Resend, Sentry, Claude.", "Rotate in this order: new key, paste, test, delete the old one.", "Never paste a key into a chat, a note or a message, not even to yourself."]},
   "day-11": { title: "It runs while you sleep", kind: "Lesson 11", mins: 20, steps: [
     { t: "Watch the lesson", d: "The schedule, the reminders, and the one email a day worth reading." },
-    { t: "Translate the schedule", d: "Open the .github/workflows folder and ask Claude to translate every cron line to UK time in one go." },
+    { t: "Translate the schedule", d: "Open the .github/workflows folder and ask Claude to translate every cron line to UK time in one go.", copy: ["List every cron schedule in .github/workflows and translate each one to UK time, allowing for British Summer Time."] },
     { t: "An inbox rule", d: "In your email app, file the daily email into a folder and let only the Sunday plan and anything with rejected or halt in the subject through to your alerts.", img: "daily-email-full.png" }
-  ], tips: ["Cron times are UTC: in British Summer Time add an hour.", "One email a day is worth reading: the evening one. The rest can be filed."]},
+  ], tips: ["Check on the robot in your app (QuickStart 6), not in the broker app: it shows what the robot did and why, in one place, and never tempts you to tap a trade.", "Cron times are UTC: in British Summer Time add an hour.", "One email a day is worth reading: the evening one. The rest can be filed."]},
   "day-12": { title: "Limits and an off switch", kind: "Lesson 12", mins: 15, steps: [
     { t: "Watch the lesson", d: "The rules that keep you in control whatever the market does, and how to stop everything from your phone." },
     { t: "Test the switch: halt", d: "Actions → Halt trading → Run workflow → halt. Check the HALT file appears in your copy. The go-live gate checks that you've done this.", img: "gh-halt.png" },
     { t: "Then resume", d: "Run it again with resume. The file goes. Nothing was sold either way." },
     { t: "Write down today's room before the halt", d: "It's the one line in the evening email that matters.", img: "daily-email-full.png" }
-  ], tips: ["Halt costs nothing, and a week off never hurt a rule.", "Halt stops new orders. It never sells anything."]},
+  ], tips: ["Room before the halt is on your app's Overview too, so you can glance at it without opening the email.", "Halt costs nothing, and a week off never hurt a rule.", "Halt stops new orders. It never sells anything."]},
   "day-13": { title: "Small and real", kind: "Lesson 13", mins: 20, steps: [
     { t: "Watch the lesson", d: "The gate you have to pass before real money, the switch itself, and how small to start. The decision is yours." },
-    { t: "Run the gate", d: "Run ops/golive.py, or ask Claude to run it, and read the five lines. Fail or skipped is a to-do list, not a verdict." },
+    { t: "Run the gate", d: "Run ops/golive.py, or ask Claude to run it, and read the five lines. Fail or skipped is a to-do list, not a verdict.", copy: ["python ops/golive.py", "Run ops/golive.py and explain each of the five lines to me in plain English."] },
     { t: "All pass? Wait a week anyway", d: "The gate doesn't expire. If and when you choose to go live: a live key with the same scopes, the same two secrets, T212_ENV set to live, and smaller than you think.", img: "t212-api.png" }
   ], tips: ["The gate reads your own records; it can't be argued with, only passed.", "Start smaller than you think. You can top up later.", "Live key: same boxes ticked, the same two secrets, T212_ENV set to live."]},
   "day-14": { title: "Keep an honest record", kind: "Lesson 14", mins: 30, steps: [
     { t: "Watch the lesson", d: "How to review what the robot did without fooling yourself." },
-    { t: "Build your monthly review", d: "Ask Claude for a one-page monthly review from the three files: worst run, satellite hit rate, idle cash, rejections, and one line per week from the signals reports. Save it as a template in your copy." },
+    { t: "Build your monthly review", d: "Ask Claude for a one-page monthly review from the three files: worst run, satellite hit rate, idle cash, rejections, and one line per week from the signals reports. Save it as a template in your copy.", copy: ["Write me a one-page monthly review from state/live_state.json, the daily snapshots and the signals folder: worst run, satellite hit rate, idle cash, rejections, and one line per week. Save it as docs/monthly-review.md so I can rerun it."] },
     { t: "Run it on the first of every month", d: "Three questions: did it follow the rules, did the plumbing work, would I still choose this risk profile? Only the third can lead to a change, and only after four weeks." }
   ], tips: ["Four weeks before changing a rule, and one change at a time.", "The review is three questions, not a spreadsheet."]}
 };
