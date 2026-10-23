@@ -14,7 +14,7 @@ including the internal ones to me, and flag (Internal) in the subject"):
 
 Public surface (unchanged from v1, two optional additions):
 
-    render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand=None, buttons=None)
+    render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand=None, buttons=None, mood=None)
     subject(project, type_, detail, internal=True)
     london(ts=None)
 
@@ -22,7 +22,10 @@ Public surface (unchanged from v1, two optional additions):
 `table` ({"headers": [...], "rows": [[...]]}), `pills` (list of str or (label, kind)), or `kv` (list of (label, value)).
 A block may set `accent: True` to draw it with a green left rule (use for the one thing that needs the reader).
 `kind` for a pill is green / amber / red / muted. `buttons` is a list of (label, url, primary_bool) shown under the cards.
-`brand` is (tile_letter, wordmark, pink_suffix), default derived from eyebrow_text.
+`brand` is (tile_letter, wordmark, pink_suffix[, logo_url]); with a logo_url the tile is that image (the website's mark), else a green
+tile with the letter. `mood` is an image URL shown beside the headline (the robot moods live at myrobotisa.com/email/robot-*.png;
+use `mood_for(change)`). A block may carry `more: {"summary": "Show the funds", "items": [...]}`: a show/hide list (<details>, which
+Apple Mail opens and closes; Gmail ignores the tag and simply shows the list).
 
     python3 ops/lms_email.py --demo   # writes sample emails to files
 """
@@ -57,6 +60,11 @@ PANEL_RADIUS = 14
 FONT_STACK = "Poppins, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
 HEAD_STACK = "Impact, 'Anton', 'Arial Narrow Bold', 'Helvetica Neue Condensed Bold', sans-serif"
 MONO_STACK = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+
+MRI_LOGO = "https://myrobotisa.com/avatar.png"
+MRI_BRAND = ("R", "My Robot", "I.S.A.", MRI_LOGO)
+MOODS = {"up": "https://myrobotisa.com/email/robot-up.png", "steady": "https://myrobotisa.com/email/robot-steady.png",
+         "flat": "https://myrobotisa.com/email/robot-flat.png"}
 
 PILL_COLORS = {
     "green": (GREEN_FG, GREEN_BG),
@@ -134,7 +142,26 @@ def _kv(pairs) -> str:
     return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{rows}</table>'
 
 
+def _more(more: dict) -> str:
+    items = "".join(f'<li style="margin:4px 0;font-size:14px;line-height:1.5;color:{INK};font-family:{FONT_STACK};">{esc(i)}</li>'
+                    for i in more.get("items", []))
+    return (f'<details style="margin-top:10px;"><summary style="cursor:pointer;font-size:13px;font-weight:800;color:{GREEN};'
+            f'font-family:{FONT_STACK};list-style:none;">&#9656; {esc(more.get("summary", "Show more"))}</summary>'
+            f'<ul style="margin:8px 0 0;padding-left:18px;">{items}</ul></details>')
+
+
+def mood_for(change: float | None) -> str:
+    """Robot for the headline: arms up on a gain, a calm thumbs-up on a dip, a steady face when flat or unknown."""
+    if change is None or abs(change) < 0.005:
+        return MOODS["flat"]
+    return MOODS["up"] if change > 0 else MOODS["steady"]
+
+
 def _block_body(block: dict) -> str:
+    return _block_body_inner(block) + (_more(block["more"]) if block.get("more") else "")
+
+
+def _block_body_inner(block: dict) -> str:
     if "table" in block:
         return table(block["table"]["headers"], block["table"]["rows"])
     if "pills" in block:
@@ -173,22 +200,29 @@ def _block_html(block: dict) -> str:
 # ---------------------------------------------------------------- public API
 def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
            cta: tuple[str, str] | None = None, footnote: str | None = None,
-           brand: tuple[str, str, str] | None = None,
-           buttons: list[tuple] | None = None) -> str:
-    tile, word, suffix = brand or ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, "")
+           brand: tuple | None = None,
+           buttons: list[tuple] | None = None,
+           mood: str | None = None) -> str:
+    b = tuple(brand) if brand else ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, "")
+    tile, word, suffix = b[0], b[1], b[2]
+    logo = b[3] if len(b) > 3 else None
     suffix_html = ' <span style="color:%s">%s</span>' % (PINK, esc(suffix)) if suffix else ""
     brand_row = (
         f'<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 16px;"><tr>'
-        f'<td width="34" height="34" align="center" {_bg(GREEN)}border-radius:9px;color:{ON_GREEN};font-weight:900;'
-        f'font-size:16px;font-family:{FONT_STACK};">{esc(tile)}</td>'
+        + (f'<td width="40" height="40" style="width:40px;height:40px;"><img src="{esc(logo)}" width="40" height="40" alt="" '
+           f'style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {GREEN};"></td>' if logo else
+           f'<td width="34" height="34" align="center" {_bg(GREEN)}border-radius:9px;color:{ON_GREEN};font-weight:900;'
+           f'font-size:16px;font-family:{FONT_STACK};">{esc(tile)}</td>') +
         f'<td style="padding-left:10px;font-family:{HEAD_STACK};font-size:22px;letter-spacing:.02em;text-transform:uppercase;'
         f'color:{INK};">{esc(word)}{suffix_html}</td>'
         f'</tr></table>')
+    mood_td = (f'<td width="96" align="right" style="width:96px;padding:14px 18px 14px 0;vertical-align:middle;">'
+               f'<img src="{esc(mood)}" width="96" height="96" alt="" style="display:block;width:96px;height:96px;"></td>') if mood else ""
     header = panel(
         f'<tr><td style="padding:24px 26px;">{eyebrow(eyebrow_text)}'
         f'<div style="font-family:{HEAD_STACK};font-size:32px;font-weight:400;letter-spacing:.01em;text-transform:uppercase;'
         f'line-height:1.08;color:{INK};margin:0 0 8px;">{esc(title)}</div>'
-        f'<div style="font-size:14px;color:{MUTED};font-family:{FONT_STACK};">{esc(subtitle)}</div></td></tr>')
+        f'<div style="font-size:14px;color:{MUTED};font-family:{FONT_STACK};">{esc(subtitle)}</div></td>{mood_td}</tr>')
     cards = "".join(_block_html(b) for b in blocks)
     btns = (f'<div style="margin:4px 0 6px;">' + "".join(button(*b) for b in buttons) + "</div>") if buttons else ""
     foot = []
@@ -226,12 +260,16 @@ def _demo_member() -> str:
         title="+£12.00 today",
         eyebrow_text="Your robot · Thursday 23 October",
         subtitle="£5,260.00 in your ISA · up £260.00 since you started (example figures)",
-        brand=("R", "My Robot", "I.S.A."),
+        brand=MRI_BRAND,
+        mood=mood_for(12.0),
         blocks=[
             {"heading": "Does it need you?", "status": ("Nothing to do", "green"), "accent": True,
              "prose": ["Nothing today. Next plan: Sunday at 7pm, to approve by 2pm Monday."]},
             {"heading": "What it's holding", "kv": [("Steady funds (core)", "4 funds"), ("Bolder slice (satellite)", "2 shares"),
-                                                    ("Cash not invested", "£124.50")]},
+                                                    ("Cash not invested", "£124.50")],
+             "more": {"summary": "Show what's in each", "items": [
+                 "Steady funds: Fund A · world, Fund B · world, Fund D · bonds, Fund E · gold",
+                 "Bolder slice: Stock E · storage, Stock F · power", "Names are made up for this example."]}},
             {"heading": "Is anything wrong?", "status": ("All good", "green"),
              "prose": ["All checks passed: broker connected, every order confirmed, 6 safety stops checked."]},
             {"heading": "Room before the halt", "status": ("19.2%", "muted"),
