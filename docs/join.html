@@ -149,8 +149,17 @@
   .get a{color:var(--green);font-weight:700}
   .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;margin:8px 0 12px} .tour-facts{display:block;margin:14px 0 10px} .tour-facts li{font-size:15px;color:var(--ink)}
   .tour h2{margin-top:12px}
+  /* 23 Oct 2026 (Amit: "a few people have asked: so what is this?"): a three-step answer straight under the ISA box */
+  .what{margin:8px 0 30px} .what h2{margin-top:12px}
+  .what-steps{list-style:none;padding:0;margin:16px 0 12px;display:grid;gap:12px;counter-reset:w}
+  .what-steps li{counter-increment:w;background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px 16px}
+  .what-steps b{display:flex;align-items:center;gap:10px;color:var(--green);font-weight:800;font-size:16px;margin-bottom:6px}
+  .what-steps b::before{content:counter(w);display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--green);color:var(--deep);font-size:14px;flex:none}
+  .what-steps span{display:block;color:var(--ink);font-size:15px;line-height:1.5}
+  .what-not{font-size:14px;color:var(--muted);margin:0} .what-not b{color:var(--ink)} .what-not a{color:var(--green);font-weight:700}
+  @media (min-width:900px){ .what-steps{grid-template-columns:repeat(3,1fr)} }
   /* 23 Oct 2026 (Amit, option A): on wider screens the clip sits beside the text instead of filling the width; phones stack as before */
-  @media (min-width:980px){ .tour{grid-template-columns:1fr 1.15fr;gap:36px;align-items:center} .tour-video{max-width:none} }
+  @media (min-width:980px){ .tour{grid-template-columns:1.15fr 1fr;gap:36px;align-items:start} .tour-video{max-width:none;margin-top:14px} }
   .who{display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:start;margin-top:40px} .who img{border-radius:24px;border:3px solid var(--green);width:96px;height:96px} .who h2{margin:0 0 8px} .who p{margin:0 0 10px;color:var(--ink)} .who a{color:var(--green);font-weight:700}
   @media (max-width:480px){.who{grid-template-columns:1fr} .who img{width:72px;height:72px}}
   .tour a{color:var(--green);font-weight:700}
@@ -220,8 +229,9 @@
   /* 23 Oct 2026 (Amit: "compare to bbc.co.uk, the main page fills more of the screen"): on big screens the column keeps
      growing like a news site's (BBC's runs ~1240px), while running text keeps a readable line length. */
   @media (min-width:1600px){ .wrap{max-width:1180px} .tour-video{max-width:none} .hero img{max-width:340px} }
-  @media (min-width:1900px){ .wrap{max-width:1320px} .hero{grid-template-columns:1.7fr .8fr} }
-  @media (min-width:1600px){ main p:not(.v2-next):not(.places), main li, .lead{max-width:78ch} main .get p, main .get li, main ol.days li, main .faq p, main .faq li{max-width:none} }
+  /* 23 Oct 2026 (Amit: at full screen the sections below the fold looked ragged): the column stops at 1180px, and text runs
+     to the same right edge as the cards and boxes instead of stopping short at a narrower measure. */
+  @media (min-width:1600px){ main p, main li, .lead{font-size:16px} .hero .line{font-size:17px} }
   @media (max-width:1099px){
     .side{width:min(300px,85vw);padding:calc(22px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
       transform:translateX(-105%);visibility:hidden;transition:transform .2s ease,visibility 0s .2s;z-index:30}
