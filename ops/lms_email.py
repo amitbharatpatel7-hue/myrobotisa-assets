@@ -1,34 +1,30 @@
-"""Last Man Standing house style — the shared email theme for every project.
+"""The shared email theme for every project — v2 "Night" (23 Oct 2026).
 
-Single source of truth for the HTML all of the automated emails use:
-Points Per Pound, Clipped Daily, Last Man Standing and the ops tasks.
-It lives in this repo because ppp-assets is the only PUBLIC repo in the
-estate — a scheduled task fetches with no credentials, so a raw URL in
-any of the private code repos returns 404 and the module never loads.
+Single source of truth for the HTML all of the automated emails use: My Robot I.S.A., Stock Boom Hunter, Points Per Pound,
+Clipped Daily, Last Man Standing and the ops tasks. It lives in this PUBLIC repo because a scheduled task fetches with no
+credentials, so a raw URL in any of the private code repos returns 404 and the module never loads.
 
-The theme is brand-neutral: `eyebrow_text` is what names the project
-("POINTS PER POUND", "CLIPPED DAILY", ...), so one palette carries all
-of them and they read as one system.
-No third-party dependencies and no network, so the script or scheduled task
-sending an email can fetch this file raw and import it directly.
+v2 (Amit, 23 Oct 2026: "Sample D — I like, it's more in keeping with our theme ... change all emails to this theme,
+including the internal ones to me, and flag (Internal) in the subject"):
+  * deep purple page, plum cards, white text, green accents, a brand tile + wordmark above the first card, uppercase
+    condensed headings (Impact on Apple/Windows, falling back to Arial Narrow Bold);
+  * dark-mode safe: `color-scheme: light only` declared in both metas and in :root, and every coloured block carries a
+    `bgcolor` attribute as well as the inline background longhand, so Apple Mail and Outlook leave the colours alone;
+  * `subject()` prefixes "(Internal) " unless `internal=False` — only emails to members or customers pass False.
 
-Modelled on send_email.py in stock-boom-hunter: same theme tokens and the
-same small helper vocabulary (esc, pill, eyebrow, section, panel, table) —
-but this module knows nothing about signals or trading, only presentation.
+Public surface (unchanged from v1, two optional additions):
 
-Public surface:
-
-    render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None)
-    subject(project, type_, detail)
+    render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand=None, buttons=None)
+    subject(project, type_, detail, internal=True)
     london(ts=None)
 
-`blocks` is a list of dicts, each rendered as one white card: a heading,
-an optional status pill, and one of `prose` (a string or list of strings),
-`table` (`{"headers": [...], "rows": [[...]]}`), or `pills` (a list of
-strings or (label, kind) pairs). `kind` for a pill is one of
-green/amber/red/muted.
+`blocks` is a list of dicts, each one card: `heading`, optional `status` (label, kind), and one of `prose` (str or list),
+`table` ({"headers": [...], "rows": [[...]]}), `pills` (list of str or (label, kind)), or `kv` (list of (label, value)).
+A block may set `accent: True` to draw it with a green left rule (use for the one thing that needs the reader).
+`kind` for a pill is green / amber / red / muted. `buttons` is a list of (label, url, primary_bool) shown under the cards.
+`brand` is (tile_letter, wordmark, pink_suffix), default derived from eyebrow_text.
 
-    python3 ops/lms_email.py --demo   # writes a sample digest to a file
+    python3 ops/lms_email.py --demo   # writes sample emails to files
 """
 from __future__ import annotations
 
@@ -40,39 +36,39 @@ from zoneinfo import ZoneInfo
 
 LONDON = ZoneInfo("Europe/London")
 
-# ---------------------------------------------------------------- theme
-# Exactly the tokens in stock-boom-hunter/send_email.py, so every project's
-# mail reads as one system.
-PAGE = "#F4F2F6"
-CARD = "#FFFFFF"
-CHROME = "#34003B"
+# ---------------------------------------------------------------- theme (v2 Night)
+PAGE = "#34003B"        # deep purple page
+CARD = "#4B1155"        # plum card
+CARD_DEEP = "#3E0A47"   # inset panels / table header
 GREEN = "#00E87A"
-INK = "#1C0A21"
-MUTED = "#7A6B80"
-HAIRLINE = "#E9E4ED"
-CHROME_SUBTITLE = "#CDBBD6"
-AMBER_FG, AMBER_BG = "#7A4E00", "#FFE9B0"
-RED_FG, RED_BG = "#C8214F", "#FBE3EA"
+PINK = "#EA00AB"
+INK = "#FFFFFF"
+MUTED = "#D9C6DE"
+HAIRLINE = "#5E2468"
+ON_GREEN = "#34003B"
+AMBER_FG, AMBER_BG = "#FFD27A", "#5A3A0E"
+RED_FG, RED_BG = "#FF8FB0", "#5C1236"
+GREEN_FG, GREEN_BG = "#00E87A", "#14402C"
+MUTED_FG, MUTED_BG = "#D9C6DE", "#5A2366"
 
 CARD_RADIUS = 18
 PANEL_RADIUS = 14
 
-FONT_STACK = ("-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, "
-              "Helvetica, Arial, sans-serif")
+FONT_STACK = "Poppins, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+HEAD_STACK = "Impact, 'Anton', 'Arial Narrow Bold', 'Helvetica Neue Condensed Bold', sans-serif"
+MONO_STACK = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
 
 PILL_COLORS = {
-    "green": (INK, GREEN),
+    "green": (GREEN_FG, GREEN_BG),
     "amber": (AMBER_FG, AMBER_BG),
     "red": (RED_FG, RED_BG),
-    "muted": (MUTED, HAIRLINE),
+    "muted": (MUTED_FG, MUTED_BG),
 }
 
 
 # ---------------------------------------------------------------- helpers
 def london(ts: datetime | None = None) -> str:
-    """Render a UTC instant as London local time, zone spelled out, e.g.
-    "15 Sep 2026, 14:10 BST". `ts` defaults to now; naive datetimes are
-    treated as UTC."""
+    """A UTC instant as London local time, zone spelled out, e.g. "15 Sep 2026, 14:10 BST". Naive = UTC."""
     if ts is None:
         ts = datetime.now(timezone.utc)
     elif ts.tzinfo is None:
@@ -84,199 +80,196 @@ def esc(value) -> str:
     return html.escape(str(value), quote=True)
 
 
+def _bg(color: str) -> str:
+    """bgcolor attribute + both background properties: Outlook drops one or the other."""
+    return f'bgcolor="{color}" style="background:{color};background-color:{color};'
+
+
 def pill(label: str, kind: str = "muted") -> str:
     fg, bg = PILL_COLORS.get(kind, PILL_COLORS["muted"])
-    return (f'<span style="display:inline-block;padding:3px 10px;'
-            f'border-radius:999px;font-size:12px;font-weight:600;'
-            f'color:{fg};background:{bg};">{esc(label)}</span>')
+    return (f'<span style="display:inline-block;padding:4px 11px;border-radius:999px;font-size:11px;font-weight:800;'
+            f'letter-spacing:.06em;text-transform:uppercase;color:{fg};background:{bg};background-color:{bg};'
+            f'font-family:{FONT_STACK};white-space:nowrap;">{esc(label)}</span>')
 
 
-def eyebrow(text: str) -> str:
-    return (f'<div style="color:{GREEN};font-size:12px;font-weight:700;'
-            f'letter-spacing:0.08em;text-transform:uppercase;margin:0 0 8px;">'
-            f'{esc(text)}</div>')
+def eyebrow(text: str, color: str = GREEN) -> str:
+    return (f'<div style="color:{color};font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;'
+            f'margin:0 0 8px;font-family:{FONT_STACK};">{esc(text)}</div>')
 
 
 def table(headers: list[str], rows: list[list]) -> str:
     th = "".join(
-        f'<th align="left" style="padding:8px 12px;'
-        f'border-bottom:1px solid {HAIRLINE};font-size:12px;color:{MUTED};'
-        f'text-transform:uppercase;letter-spacing:.04em;">{esc(h)}</th>'
+        f'<th align="left" style="padding:9px 12px;border-bottom:1px solid {HAIRLINE};font-size:11px;color:{MUTED};'
+        f'text-transform:uppercase;letter-spacing:.08em;font-weight:800;font-family:{FONT_STACK};">{esc(h)}</th>'
         for h in headers)
-    body_rows = []
-    for row in rows:
-        tds = "".join(
-            f'<td style="padding:8px 12px;border-bottom:1px solid {HAIRLINE};'
-            f'font-size:14px;color:{INK};">{esc(cell)}</td>' for cell in row)
-        body_rows.append(f"<tr>{tds}</tr>")
-    return (f'<table role="presentation" width="100%" cellpadding="0" '
-            f'cellspacing="0" style="border-collapse:collapse;">'
-            f'<tr>{th}</tr>{"".join(body_rows)}</table>')
+    body = "".join(
+        "<tr>" + "".join(
+            f'<td style="padding:9px 12px;border-bottom:1px solid {HAIRLINE};font-size:14px;color:{INK};'
+            f'font-family:{FONT_STACK};">{esc(c)}</td>' for c in row) + "</tr>"
+        for row in rows)
+    return (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(CARD_DEEP)}'
+            f'border-collapse:separate;border-radius:{PANEL_RADIUS}px;overflow:hidden;"><tr>{th}</tr>{body}</table>')
 
 
 def _pill_row(pills) -> str:
-    spans = []
+    out = []
     for item in pills:
-        if isinstance(item, (tuple, list)):
-            label, kind = item
-        else:
-            label, kind = item, "muted"
-        spans.append(pill(label, kind))
-    return " ".join(spans)
+        label, kind = item if isinstance(item, (tuple, list)) else (item, "muted")
+        out.append(pill(label, kind))
+    return " ".join(out)
 
 
 def _prose(prose) -> str:
-    paragraphs = prose if isinstance(prose, list) else [prose]
-    return "".join(
-        f'<div style="font-size:14px;color:{INK};line-height:1.5;'
-        f'margin:0 0 6px;">{esc(p)}</div>' for p in paragraphs if p)
+    paras = prose if isinstance(prose, list) else [prose]
+    return "".join(f'<p style="margin:0 0 10px;font-size:15px;line-height:1.6;color:{INK};font-family:{FONT_STACK};">'
+                   f'{esc(p)}</p>' for p in paras if p)
+
+
+def _kv(pairs) -> str:
+    rows = "".join(
+        f'<tr><td style="padding:7px 0;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;'
+        f'color:{MUTED};font-family:{FONT_STACK};width:44%;vertical-align:top;">{esc(k)}</td>'
+        f'<td style="padding:7px 0;font-size:15px;font-weight:700;color:{INK};font-family:{FONT_STACK};">{esc(v)}</td></tr>'
+        for k, v in pairs)
+    return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{rows}</table>'
 
 
 def _block_body(block: dict) -> str:
     if "table" in block:
-        t = block["table"]
-        return table(t["headers"], t["rows"])
+        return table(block["table"]["headers"], block["table"]["rows"])
     if "pills" in block:
         return _pill_row(block["pills"])
+    if "kv" in block:
+        return _kv(block["kv"])
     return _prose(block.get("prose", ""))
 
 
 def section(heading: str, body_html: str, status: tuple | None = None) -> str:
-    status_html = pill(*status) if status else ""
-    head = (
-        f'<table role="presentation" width="100%" cellpadding="0" '
-        f'cellspacing="0"><tr>'
-        f'<td style="font-size:15px;font-weight:700;color:{INK};">'
-        f'{esc(heading)}</td>'
-        f'<td align="right">{status_html}</td>'
-        f'</tr></table>')
-    return (f'<tr><td style="padding:20px 24px;">{head}'
-            f'<div style="margin-top:10px;">{body_html}</div></td></tr>')
+    st = pill(*status) if status else ""
+    head = (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>'
+            f'<td style="font-family:{HEAD_STACK};font-size:20px;font-weight:400;letter-spacing:.02em;'
+            f'text-transform:uppercase;color:{INK};line-height:1.15;">{esc(heading)}</td>'
+            f'<td align="right" style="vertical-align:top;">{st}</td></tr></table>')
+    return f'<tr><td style="padding:20px 24px;">{head}<div style="margin-top:12px;">{body_html}</div></td></tr>'
 
 
-def panel(inner_rows_html: str) -> str:
-    return (f'<table role="presentation" width="100%" cellpadding="0" '
-            f'cellspacing="0" bgcolor="{CARD}" style="background:{CARD};'
-        f'background-color:{CARD};'
-            f'border-radius:{PANEL_RADIUS}px;border:1px solid {HAIRLINE};'
-            f'margin:0 0 16px;">{inner_rows_html}</table>')
+def panel(inner_rows_html: str, accent: bool = False) -> str:
+    rule = f"border-left:4px solid {GREEN};" if accent else ""
+    return (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(CARD)}'
+            f'border-radius:{CARD_RADIUS}px;margin:0 0 14px;{rule}">{inner_rows_html}</table>')
+
+
+def button(label: str, url: str, primary: bool = True) -> str:
+    bg, fg, bd = (GREEN, ON_GREEN, GREEN) if primary else ("transparent", INK, INK)
+    return (f'<a href="{esc(url)}" style="display:inline-block;background:{bg};background-color:{bg};color:{fg};'
+            f'border:2px solid {bd};font-weight:800;font-size:14px;text-decoration:none;padding:11px 20px;'
+            f'border-radius:999px;margin:6px 8px 6px 0;font-family:{FONT_STACK};">{esc(label)}</a>')
 
 
 def _block_html(block: dict) -> str:
-    row = section(block.get("heading", ""), _block_body(block),
-                   block.get("status"))
-    return panel(row)
+    return panel(section(block.get("heading", ""), _block_body(block), block.get("status")), block.get("accent", False))
 
 
 # ---------------------------------------------------------------- public API
 def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
-           cta: tuple[str, str] | None = None,
-           footnote: str | None = None) -> str:
-    header = (
-        f'<table role="presentation" width="100%" cellpadding="0" '
-        f'cellspacing="0" bgcolor="{CHROME}" style="background:{CHROME};'
-        f'background-color:{CHROME};'
-        f'border-radius:{CARD_RADIUS}px;margin:0 0 20px;">'
-        f'<tr><td style="padding:28px 28px 24px;">'
-        f'{eyebrow(eyebrow_text)}'
-        f'<div style="font-size:26px;font-weight:800;color:#FFFFFF;'
-        f'margin:0 0 6px;">{esc(title)}</div>'
-        f'<div style="font-size:14px;color:{CHROME_SUBTITLE};">'
-        f'{esc(subtitle)}</div>'
-        f'</td></tr></table>')
-
+           cta: tuple[str, str] | None = None, footnote: str | None = None,
+           brand: tuple[str, str, str] | None = None,
+           buttons: list[tuple] | None = None) -> str:
+    tile, word, suffix = brand or ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, "")
+    suffix_html = ' <span style="color:%s">%s</span>' % (PINK, esc(suffix)) if suffix else ""
+    brand_row = (
+        f'<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 16px;"><tr>'
+        f'<td width="34" height="34" align="center" {_bg(GREEN)}border-radius:9px;color:{ON_GREEN};font-weight:900;'
+        f'font-size:16px;font-family:{FONT_STACK};">{esc(tile)}</td>'
+        f'<td style="padding-left:10px;font-family:{HEAD_STACK};font-size:22px;letter-spacing:.02em;text-transform:uppercase;'
+        f'color:{INK};">{esc(word)}{suffix_html}</td>'
+        f'</tr></table>')
+    header = panel(
+        f'<tr><td style="padding:24px 26px;">{eyebrow(eyebrow_text)}'
+        f'<div style="font-family:{HEAD_STACK};font-size:32px;font-weight:400;letter-spacing:.01em;text-transform:uppercase;'
+        f'line-height:1.08;color:{INK};margin:0 0 8px;">{esc(title)}</div>'
+        f'<div style="font-size:14px;color:{MUTED};font-family:{FONT_STACK};">{esc(subtitle)}</div></td></tr>')
     cards = "".join(_block_html(b) for b in blocks)
-
-    footer_bits = []
+    btns = (f'<div style="margin:4px 0 6px;">' + "".join(button(*b) for b in buttons) + "</div>") if buttons else ""
+    foot = []
     if footnote:
-        footer_bits.append(
-            f'<div style="font-size:13px;color:{MUTED};margin:0 0 10px;">'
-            f'{esc(footnote)}</div>')
+        foot.append(f'<div style="font-size:12px;line-height:1.6;color:{MUTED};margin:0 0 8px;font-family:{FONT_STACK};">{esc(footnote)}</div>')
     if cta:
         label, url = cta
-        footer_bits.append(
-            f'<a href="{esc(url)}" style="display:inline-block;'
-            f'font-size:13px;font-weight:600;color:{CHROME};'
-            f'text-decoration:underline;">{esc(label)}</a>')
-    footer = (
-        f'<table role="presentation" width="100%" cellpadding="0" '
-        f'cellspacing="0" bgcolor="{PAGE}" style="background:{PAGE};'
-        f'background-color:{PAGE};'
-        f'border-radius:{PANEL_RADIUS}px;margin:16px 0 0;">'
-        f'<tr><td style="padding:18px 24px;">{"".join(footer_bits)}'
-        f'</td></tr></table>') if footer_bits else ""
-
-    body = header + cards + footer
-
+        foot.append(f'<a href="{esc(url)}" style="font-size:13px;font-weight:700;color:{GREEN};font-family:{FONT_STACK};">{esc(label)} &rarr;</a>')
+    footer = f'<div style="padding:16px 6px 0;">{"".join(foot)}</div>' if foot else ""
+    body = brand_row + header + cards + btns + footer
     return (
-        '<!doctype html>\n'
-        '<html>\n<head>\n'
-        '<meta charset="utf-8">\n'
+        '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
         '<meta name="color-scheme" content="light only">\n'
         '<meta name="supported-color-schemes" content="light only">\n'
-        '<style>:root{color-scheme:light only}</style>\n'
-        f'<title>{esc(title)}</title>\n'
-        '</head>\n'
-        f'<body bgcolor="{PAGE}" style="margin:0;padding:24px;background:{PAGE};'
-        f'font-family:{FONT_STACK};">\n'
-        '<table role="presentation" width="100%" cellpadding="0" '
-        'cellspacing="0" style="max-width:600px;margin:0 auto;">\n'
-        f'<tr><td>{body}</td></tr>\n'
-        '</table>\n'
-        '</body>\n</html>\n')
+        '<style>:root{color-scheme:light only;supported-color-schemes:light only}'
+        f'@media (prefers-color-scheme: dark){{body,.mri-page{{background:{PAGE} !important;background-color:{PAGE} !important}}}}'
+        '@media only screen and (max-width:480px){.mri-pad{padding:16px 10px !important}}</style>\n'
+        f'<title>{esc(title)}</title>\n</head>\n'
+        f'<body {_bg(PAGE)}margin:0;padding:0;font-family:{FONT_STACK};">\n'
+        f'<table role="presentation" class="mri-page" width="100%" cellpadding="0" cellspacing="0" {_bg(PAGE)}">'
+        f'<tr><td align="center" class="mri-pad" style="padding:28px 16px;">\n'
+        '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;">\n'
+        f'<tr><td>{body}</td></tr>\n</table>\n</td></tr></table>\n</body>\n</html>\n')
 
 
-def subject(project: str, type_: str, detail: str) -> str:
-    return f"[{project} · {type_}] {detail}"
+def subject(project: str, type_: str, detail: str, internal: bool = True) -> str:
+    """'(Internal) [Project · Type] detail' — pass internal=False only for mail to members or customers."""
+    return f"{'(Internal) ' if internal else ''}[{project} · {type_}] {detail}"
 
 
 # ---------------------------------------------------------------- demo/CLI
-def _demo() -> str:
-    blocks = [
-        {
-            "heading": "Drafts waiting for approval",
-            "status": ("4 pending", "amber"),
-            "table": {
-                "headers": ["Episode", "Scheduled", "Status"],
-                "rows": [
-                    ["GW3 — xG overperformers", "Tue 09:00", "Draft"],
-                    ["GW3 — captaincy picks", "Tue 09:00", "Draft"],
-                    ["GW4 preview", "Thu 09:00", "Draft"],
-                    ["Transfer trap of the week", "Thu 09:00", "Draft"],
-                ],
-            },
-        },
-        {
-            "heading": "Email types in use",
-            "pills": [("Content", "green"), ("Autofix", "amber"),
-                      ("Health", "muted"), ("Setup", "muted"),
-                      ("Merges", "red")],
-        },
-    ]
+def _demo_member() -> str:
     return render(
-        title="4 drafts waiting for a look",
-        eyebrow_text="Content",
-        subtitle="Tuesday/Thursday publish digest",
-        blocks=blocks,
-        cta=("Open on GitHub",
-             "https://github.com/amitbharatpatel7-hue/points-per-pound/pulls"),
-        footnote="Approve or edit each draft before the next render window.",
+        title="+£12.00 today",
+        eyebrow_text="Your robot · Thursday 23 October",
+        subtitle="£5,260.00 in your ISA · up £260.00 since you started (example figures)",
+        brand=("R", "My Robot", "I.S.A."),
+        blocks=[
+            {"heading": "Does it need you?", "status": ("Nothing to do", "green"), "accent": True,
+             "prose": ["Nothing today. Next plan: Sunday at 7pm, to approve by 2pm Monday."]},
+            {"heading": "What it's holding", "kv": [("Steady funds (core)", "4 funds"), ("Bolder slice (satellite)", "2 shares"),
+                                                    ("Cash not invested", "£124.50")]},
+            {"heading": "Is anything wrong?", "status": ("All good", "green"),
+             "prose": ["All checks passed: broker connected, every order confirmed, 6 safety stops checked."]},
+            {"heading": "Room before the halt", "status": ("19.2%", "muted"),
+             "prose": ["The robot stops itself if your pot falls below £4,250. You're £1,010 above that."]},
+        ],
+        buttons=[("Open my app", "https://example.com", True)],
+        footnote="Core = the steady funds. Satellite = the small, bolder slice. Software and a course, not financial advice; capital at risk.",
+    )
+
+
+def _demo_owner() -> str:
+    return render(
+        title="2 things need you",
+        eyebrow_text="Stock Boom Hunter · Health",
+        subtitle=f"Daily digest · {london()}",
+        brand=("S", "Stock Boom", "Hunter"),
+        blocks=[
+            {"heading": "Needs you", "status": ("2", "amber"), "accent": True,
+             "table": {"headers": ["What", "Why", "Do"], "rows": [
+                 ["Merge PR #298", "Changes a money setting, so auto-merge held it", "Review on GitHub"],
+                 ["Answer a member", "Pressed 'I still need help' at 21:31 BST", "Reply from hello@"]]}},
+            {"heading": "Robot, today", "status": ("Fine", "green"),
+             "pills": [("P&L sent", "green"), ("4 PRs merged", "green"), ("Crons on time", "green"), ("Minutes 3,512", "amber")]},
+        ],
+        cta=("Open the hub", "https://github.com/amitbharatpatel7-hue/stock-boom-hunter"),
+        footnote="Internal. Only what needs you is above the line; everything else is one row of facts.",
     )
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--demo", action="store_true",
-                     help="write a sample digest to a file")
-    ap.add_argument("--out", default="lms_email_demo.html",
-                     help="output path for --demo (default: %(default)s)")
+    ap.add_argument("--demo", action="store_true", help="write sample emails")
     args = ap.parse_args()
     if not args.demo:
-        ap.print_help()
-        return
-    Path(args.out).write_text(_demo())
-    print(f"wrote {args.out}")
+        ap.print_help(); return
+    Path("lms_email_demo_member.html").write_text(_demo_member())
+    Path("lms_email_demo_owner.html").write_text(_demo_owner())
+    print("wrote lms_email_demo_member.html, lms_email_demo_owner.html")
 
 
 if __name__ == "__main__":
