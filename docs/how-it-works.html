@@ -150,13 +150,20 @@
   .get a{color:var(--green);font-weight:700}
   .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;margin:8px 0 12px} .tour-facts{display:block;margin:14px 0 10px} .tour-facts li{font-size:15px;color:var(--ink)}
   .tour h2{margin-top:12px}
-  /* 23 Oct 2026 (Amit): show the emails on the homepage, phone-framed, top of each email with a soft fade */
-  .mailshots{margin:8px 0 30px} .mailshots h2{margin-top:12px}
-  .mails{display:grid;grid-template-columns:1fr;gap:22px;margin:18px 0 12px;justify-items:center}
-  .mail{margin:0;max-width:290px;width:100%}
-  .mail img{display:block;width:100%;height:auto;filter:drop-shadow(0 18px 30px rgba(0,0,0,.45))}
-  .mail figcaption{margin-top:14px;font-size:15px;line-height:1.5;color:var(--muted)} .mail figcaption b{display:block;color:var(--green);font-weight:800;margin-bottom:2px}
-  @media (min-width:760px){ .mails{grid-template-columns:1fr 1fr;justify-items:start} }
+  /* 23 Oct 2026 (Amit): the real emails in a flat, cartoon phone (drawn like the robot icon), scrollable, four to pick from */
+  .inbox{display:grid;grid-template-columns:1fr;gap:22px;margin:20px 0 10px;align-items:start}
+  .inbox-pick{display:grid;gap:10px;align-content:start}
+  .inbox-pick button{text-align:left;font:inherit;color:var(--ink);background:var(--deep2);border:2px solid var(--rule);border-radius:16px;padding:12px 14px;cursor:pointer}
+  .inbox-pick button b{display:block;font-size:16px;margin-bottom:3px} .inbox-pick button span{display:block;font-size:14px;line-height:1.45;color:var(--muted)}
+  .inbox-pick button[aria-selected="true"]{border-color:var(--green);background:#14402C} .inbox-pick button[aria-selected="true"] b{color:var(--green)}
+  .inbox-pick button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  .cphone{position:relative;justify-self:center;width:340px;max-width:100%;border:4px solid var(--green);border-radius:46px;padding:30px 12px 34px;background:var(--deep)}
+  .cphone-cam{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:64px;height:9px;border:3px solid var(--green);border-radius:9px}
+  .cphone::after{content:"";position:absolute;bottom:13px;left:50%;transform:translateX(-50%);width:84px;height:5px;border-radius:5px;background:var(--green)}
+  .cphone-scr{position:relative;width:302px;height:560px;border-radius:26px;overflow:hidden;border:3px solid var(--green);background:#34003B}
+  .cphone-scr iframe{display:block;width:375px;height:696px;border:0;background:#34003B;transform:scale(.8053);transform-origin:0 0} /* an iPhone-width email (375px), scaled to the drawn screen */
+  .cphone-hint{position:absolute;left:0;right:0;bottom:-30px;text-align:center;margin:0;font-size:12.5px;color:var(--muted)}
+  @media (min-width:860px){ .inbox{grid-template-columns:1fr 340px;gap:36px} }
   /* 23 Oct 2026 (Amit: "a few people have asked: so what is this?"): a three-step answer straight under the ISA box */
   .what{margin:0 0 30px;padding-top:24px} .what h2{margin-top:0}
   .what-steps{list-style:none;padding:0;margin:16px 0 12px;display:grid;gap:12px;counter-reset:w}
@@ -290,6 +297,10 @@
   @media(min-width:640px){.calm-grid{grid-template-columns:1fr 1fr}}
   .calm-grid div{display:grid;grid-template-columns:44px 1fr;grid-template-rows:min-content 1fr;column-gap:12px;align-items:start;align-content:start}
   .calm-grid div>b,.calm-grid div>span{grid-column:2}
+  /* 23 Oct 2026 (Amit: "a lot of text"): What you get, an icon tile per point, static, like the calm section */
+  .get .box ul{list-style:none;padding:0}
+  .get .box li{position:relative;padding-left:46px;margin:10px 0;min-height:34px}
+  .get .gi{position:absolute;left:0;top:1px;display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;background:var(--deep);border:2px solid var(--green);color:var(--green)}
   /* 23 Oct 2026 (Amit): an icon tile per point, static */
   .calm-grid .ci{grid-row:span 2;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:13px;background:var(--deep);border:2px solid var(--green);color:var(--green);transition:transform .2s}
 
@@ -407,13 +418,19 @@
     <p class="lead">You see the stock everyone's talking about at lunchtime. By the time you've finished work it's old news, and you've no time to sit watching charts anyway. So you do nothing, and the ISA allowance sits there.</p>
     <p class="lead">A robot ISA is the other way round. You set the rules once: what it's allowed to buy, how much risk you'll take, when it should sell. Every Sunday at 7pm it puts the week's proposed moves on your phone or computer, the maths already done. You tap approve by 2pm on Monday, with a reminder if you forget. No chart-watching, no chasing, no deciding at midnight.</p>
     <p class="small">Its job is to make sure your plan actually runs, every week, while you get on with your life. It won't catch every runaway stock and it doesn't promise to beat anything, and that's deliberate: a plan you'll stick to beats a hunch you won't. Capital at risk: it can lose money as well as make it.</p>
-    <div class="mails" aria-label="The two emails you get">
-      <figure class="mail"><img src="shots/mail-yourturn.webp" width="414" height="868" loading="lazy" alt="iPhone Mail showing the Sunday 7pm email: three orders to approve by 2pm Monday, each with the reason why">
-        <figcaption><b>Sunday, 7pm: your turn</b>The week's plan, with the reason for each order. Read it, tap Approve. Nothing is placed until you do.</figcaption></figure>
-      <figure class="mail"><img src="shots/mail-goodday.webp" width="414" height="868" loading="lazy" alt="iPhone Mail showing the evening email on a good day: up £12 today, what the robot did, and nothing that needs you">
-        <figcaption><b>Every evening: how it went</b>What the robot did, how your pot is doing, and whether anything needs you. Most days: nothing. Prefer fewer emails? Switch to once a week.</figcaption></figure>
+    <div class="inbox" id="inbox">
+      <div class="inbox-pick" role="tablist" aria-label="Example emails">
+        <button type="button" role="tab" aria-selected="true" data-mail="plan"><b>Sunday, 7pm: your turn</b><span>The week's plan, with the reason for each order. Read it, tap Approve. Nothing is placed until you do.</span></button>
+        <button type="button" role="tab" aria-selected="false" data-mail="good-day"><b>Every evening: how it went</b><span>What the robot did, how your pot is doing, and whether anything needs you. Most days: nothing.</span></button>
+        <button type="button" role="tab" aria-selected="false" data-mail="calm-dip"><b>A down day</b><span>Said plainly, never in alarming red, next to the good news that's true. The rules held; nothing to do.</span></button>
+        <button type="button" role="tab" aria-selected="false" data-mail="milestone"><b>A milestone</b><span>Your first £100, your first month, ten orders with no rejections. Small wins, marked once.</span></button>
+        <p class="small">Prefer fewer emails? Switch to once a week, and you'll still hear straight away if anything needs you. Example emails with made-up figures.</p>
+      </div>
+      <div class="cphone" aria-live="polite"><span class="cphone-cam" aria-hidden="true"></span>
+        <div class="cphone-scr"><iframe id="inbox-f" src="emails/plan.html" title="Example email: Sunday 7pm, orders to approve" loading="lazy"></iframe></div>
+        <p class="cphone-hint" aria-hidden="true">Scroll inside the phone</p>
+      </div>
     </div>
-    <p class="small">Example emails with made-up figures.</p>
   </section>
 
   <div class="road" id="road">
@@ -692,5 +709,10 @@
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
 var l=document.querySelector("a.login");if(l){l.textContent="Members area";l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
 </script>
+<script>/* 23 Oct 2026: How it works, pick an example email to show in the phone */
+(function(){var box=document.getElementById("inbox");if(!box)return;var f=document.getElementById("inbox-f");
+box.querySelectorAll("[data-mail]").forEach(function(b){b.addEventListener("click",function(){
+box.querySelectorAll("[data-mail]").forEach(function(x){x.setAttribute("aria-selected",String(x===b));});
+f.src="emails/"+b.dataset.mail+".html";f.title="Example email: "+b.querySelector("b").textContent;});});})();</script>
 </body>
 </html>
