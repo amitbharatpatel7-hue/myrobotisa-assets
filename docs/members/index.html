@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="45">
+<meta name="mri-version" content="46">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -551,7 +551,7 @@
           <li class="su-step locked" id="su5"><div class="su-h"><b>Build my robot</b><span class="pill" id="su5-st">Ready when you are</span></div>
             <div class="row"><button class="btn" type="button" id="su-go" disabled>Build my robot</button></div>
             <ul class="su-log" id="su-log" aria-live="polite"></ul>
-            <div class="su-done" id="su-done" hidden><h3>Your robot is running</h3><p style="margin:0 0 12px">On paper money. The setup check email is on its way to you. Next: ask for its first weekly plan, then tap Approve in the email.</p>
+            <div class="su-done" id="su-done" hidden><h3>Your robot is running</h3><p style="margin:0 0 12px">On paper money. The setup check email is on its way to you. Next: ask for its first weekly plan, then tap Approve in the email. QuickStart steps 1 to 4 are ticked off in Start here.</p>
               <div class="row"><button class="btn" type="button" id="su-plan">Get my first weekly plan</button><a class="btn ghost" id="su-repo" target="_blank" rel="noopener">See my copy on GitHub</a></div>
               <p class="small" id="su-plan-msg" role="status" aria-live="polite"></p></div></li>
         </ol>
@@ -1216,6 +1216,10 @@
       else if (run.conclusion === "success") s.ok("Setup check passed: all green");
       else suFail(s, "The setup check found something. Its email says exactly which key and what to do; fix it, then press Build again.");
       $("su-repo").href = "https://github.com/" + full; $("su-done").hidden = false; suState(5, "Done", true); SU.busy = false; SU.full = full;
+      // QuickStart steps 1-4 are what this page just did: tick them in Start here (saved to the account like any tick)
+      var now = new Date().toISOString(), rows = [1, 2, 3, 4].map(function (n) { done["qs:" + n] = true; return { user_id: me.user_id, item: "qs:" + n, done: true, updated_at: now }; });
+      renderAll();
+      rest("member_progress?on_conflict=user_id,item", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" }, body: JSON.stringify(rows) }).catch(function () {});
     } catch (e) { if (e.message !== "stop") { SU.busy = false; suCheck(); } }
   }
   async function suPlan() {
