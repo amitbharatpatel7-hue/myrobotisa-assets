@@ -174,7 +174,7 @@ def _days(days) -> str:
         bgc = GREEN_BG if up else MUTED_BG
         fg = GREEN if up else MUTED
         amt = "" if chg is None else (("+" if chg > 0 else "\u2212" if chg < 0 else "") + f"£{abs(chg):,.2f}")
-        cells.append(f'<td align="center" style="padding:0 3px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">'
+        cells.append(f'<td align="center" valign="top" style="padding:0 3px;vertical-align:top;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">'
                      f'<tr><td align="center" {_bg(bgc)}border-radius:10px;padding:8px 2px;font-size:11px;font-weight:800;letter-spacing:.06em;'
                      f'text-transform:uppercase;color:{fg};font-family:{FONT_STACK};">{esc(label)}</td></tr>'
                      f'<tr><td align="center" style="padding-top:6px;font-size:12px;font-weight:700;color:{fg};font-family:{FONT_STACK};">{esc(amt)}</td></tr>'
