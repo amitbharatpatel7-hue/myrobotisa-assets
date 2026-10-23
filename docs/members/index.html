@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="43">
+<meta name="mri-version" content="44">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -1117,8 +1117,10 @@
   function suState(n, txt, done) { var st = $("su" + n + "-st"); st.textContent = txt; st.className = "pill" + (done ? " g" : ""); $("su" + n).classList.toggle("done", !!done); }
   function suUnlock() { [2, 3, 4, 5].forEach(function (n) { $("su" + n).classList.toggle("locked", !SU.tok); }); suCheck(); }
   function suCheck() {
-    var t212 = $("su-tk").value.trim().length > 10 && $("su-ts").value.trim().length > 10;
-    var mail = /^re_[A-Za-z0-9_]{10,}$/.test($("su-rk").value.trim()) && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($("su-to").value.trim());
+    // once the keys are locked into this copy, a retry doesn't need them typed again
+    var saved = !!SU.saved && SU.saved === SU.login + "/" + $("su-name").value.trim() && !$("su-tk").value && !$("su-ts").value && !$("su-rk").value;
+    var t212 = saved || ($("su-tk").value.trim().length > 10 && $("su-ts").value.trim().length > 10);
+    var mail = (saved || /^re_[A-Za-z0-9_]{10,}$/.test($("su-rk").value.trim())) && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($("su-to").value.trim());
     var name = /^[A-Za-z0-9._-]{1,90}$/.test($("su-name").value.trim());
     suState(2, t212 ? "Ready" : "To do", t212); suState(3, mail ? "Ready" : "To do", mail);
     $("su-go").disabled = !(SU.tok && t212 && mail && name) || SU.busy;
@@ -1141,7 +1143,7 @@
       var state = Math.random().toString(36).slice(2) + Date.now().toString(36);
       try { sessionStorage.setItem("mri-gh-state", state); } catch (e) {}
       location.href = "https://github.com/login/oauth/authorize?client_id=" + encodeURIComponent(SU.cfg.client_id) + "&scope=" + encodeURIComponent("repo workflow") +
-        "&state=" + state + "&allow_signup=true&redirect_uri=" + encodeURIComponent(location.origin + location.pathname + "?gh=1");
+        "&state=" + state + "&allow_signup=true"; // no redirect_uri: GitHub returns to the callback registered on the OAuth App
     });
     $("su-go").addEventListener("click", suBuild);
     $("su-plan").addEventListener("click", suPlan);
@@ -1149,7 +1151,7 @@
   }
   // back from GitHub: swap the code for a token (kept in memory only) and clean the address bar
   (function () {
-    var q = new URLSearchParams(location.search); if (!q.get("gh") || !q.get("code")) return;
+    var q = new URLSearchParams(location.search); if (!q.get("code") || !q.get("state")) return;
     var code = q.get("code"), state = q.get("state"), want = ""; try { want = sessionStorage.getItem("mri-gh-state") || ""; sessionStorage.removeItem("mri-gh-state"); } catch (e) {}
     history.replaceState(null, "", location.pathname + "#setup");
     var tries = 0;
@@ -1183,20 +1185,22 @@
       var w = suLog("Waiting for GitHub to finish copying");
       for (var i = 0; i < 30; i++) { var c = await gh("/repos/" + full + "/contents/.github/workflows/setup-check.yml"); if (c.ok) break; await sleep(2000); if (i === 29) suFail(w, "GitHub is taking a while. Wait a minute and press Build again."); }
       w.ok("Copy ready");
+      var reuse = SU.saved === full && !vals.T212_API_KEY && !vals.T212_API_SECRET && !vals.RESEND_API_KEY;
+      if (reuse) { suLog("Keys").ok("Your keys are already locked into " + name); } else {
       var k = suLog("Locking your keys into your copy");
       var pk = await gh("/repos/" + full + "/actions/secrets/public-key"); if (!pk.ok) suFail(k, "Couldn't read your copy's lock. Try again.");
       for (var n in vals) { var put = await gh("/repos/" + full + "/actions/secrets/" + n, { method: "PUT", body: { encrypted_value: window.mriSeal(pk.j.key, vals[n]), key_id: pk.j.key_id } }); if (!put.ok) suFail(k, "Couldn't save " + n + ". Try again."); }
       $("su-tk").value = $("su-ts").value = $("su-rk").value = ""; vals = null;
-      k.ok("Keys locked in (3 of 3). They've been cleared from this page.");
+      k.ok("Keys locked in (3 of 3). They've been cleared from this page."); SU.saved = full; }
       var v = suLog("Saving your choices");
       var vars = { T212_ENV: "practice", NOTIFY_TO: $("su-to").value.trim(), RISK_PROFILE: SU.risk, DIGEST_FREQUENCY: SU.freq };
       for (var vn in vars) { var cr = await gh("/repos/" + full + "/actions/variables", { method: "POST", body: { name: vn, value: vars[vn] } });
         if (cr.status === 409) cr = await gh("/repos/" + full + "/actions/variables/" + vn, { method: "PATCH", body: { name: vn, value: vars[vn] } });
-        if (!cr.ok) suFail(v, "Couldn't save " + vn + ". Try again."); }
+        if (!cr.ok) suFail(v, "Couldn't save your choices just now. Press Build again: your keys are already saved."); }
       v.ok("Practice account, " + SU.risk + ", emails " + (SU.freq === "weekly" ? "once a week" : "every day"));
       var s = suLog("Running the setup check");
       var since = new Date(Date.now() - 60000).toISOString();
-      var d = await gh("/repos/" + full + "/actions/workflows/setup-check.yml/dispatches", { method: "POST", body: { ref: "main" } }); if (!d.ok) suFail(s, "Couldn't start the setup check. Open Actions on your copy and run Setup check.");
+      var d = await gh("/repos/" + full + "/actions/workflows/setup-check.yml/dispatches", { method: "POST", body: { ref: "main" } }); if (!d.ok) suFail(s, "Couldn't start the setup check. Press Build again, or open Actions on your copy and run Setup check.");
       var run = null;
       for (var t = 0; t < 60; t++) { await sleep(5000); var rs = await gh("/repos/" + full + "/actions/workflows/setup-check.yml/runs?per_page=1&created=>" + since);
         run = rs.j && rs.j.workflow_runs && rs.j.workflow_runs[0]; if (run && run.status === "completed") break; }
