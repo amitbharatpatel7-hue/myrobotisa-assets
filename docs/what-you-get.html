@@ -153,10 +153,8 @@
   /* 23 Oct 2026 (Amit): show the emails on the homepage, phone-framed, top of each email with a soft fade */
   .mailshots{margin:8px 0 30px} .mailshots h2{margin-top:12px}
   .mails{display:grid;grid-template-columns:1fr;gap:22px;margin:18px 0 12px;justify-items:center}
-  .mail{margin:0;max-width:330px;width:100%}
-  .mail .phone{position:relative;border-radius:30px;border:3px solid var(--rule);background:#1A0420;padding:8px;max-height:470px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.35)}
-  .mail .phone img{display:block;width:100%;height:auto;border-radius:22px}
-  .mail .phone::after{content:"";position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(rgba(26,4,32,0),#1A0420)}
+  .mail{margin:0;max-width:290px;width:100%}
+  .mail img{display:block;width:100%;height:auto;filter:drop-shadow(0 18px 30px rgba(0,0,0,.45))}
   .mail figcaption{margin-top:14px;font-size:15px;line-height:1.5;color:var(--muted)} .mail figcaption b{display:block;color:var(--green);font-weight:800;margin-bottom:2px}
   @media (min-width:760px){ .mails{grid-template-columns:1fr 1fr;justify-items:start} }
   /* 23 Oct 2026 (Amit: "a few people have asked: so what is this?"): a three-step answer straight under the ISA box */
@@ -231,7 +229,7 @@
     h1{font-size:clamp(52px,5.4vw,76px)}
     ol.days{grid-template-columns:1fr 1fr;gap:12px 16px}
     .nl-what{columns:1}
-    .get>:nth-child(1){grid-row:span 2} .get>:nth-child(4){grid-column:1/-1}
+    .get>:nth-child(1){grid-row:span 2}
     .side{padding:26px 18px}
     .vs-wrap table{font-size:16px !important}
   }
@@ -292,10 +290,9 @@
   @media(min-width:640px){.calm-grid{grid-template-columns:1fr 1fr}}
   .calm-grid div{display:grid;grid-template-columns:44px 1fr;grid-template-rows:min-content 1fr;column-gap:12px;align-items:start;align-content:start}
   .calm-grid div>b,.calm-grid div>span{grid-column:2}
-  /* 23 Oct 2026 (Amit: mini graphics make it more fun): an icon tile per point, with a little hop on hover */
+  /* 23 Oct 2026 (Amit): an icon tile per point, static */
   .calm-grid .ci{grid-row:span 2;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:13px;background:var(--deep);border:2px solid var(--green);color:var(--green);transition:transform .2s}
-  .calm-grid div:hover .ci{transform:translateY(-3px) rotate(-6deg)}
-  @media (prefers-reduced-motion:reduce){.calm-grid div:hover .ci{transform:none}}
+
   .calm-grid b{display:block;color:var(--ink);font-size:16px;margin-bottom:2px}
   .calm-grid span{color:var(--muted);font-size:15px;line-height:1.5}
   .jobs{margin:34px 0 8px}
@@ -381,12 +378,11 @@
       <li><b>Bonus toolkit.</b> The eight tools we run everything on, including Claude (Anthropic's AI assistant), what each costs and what's free. Some have their own costs.</li>
       <li><b>No coding experience needed.</b> Done some coding before? Skip ahead.</li>
     </ul></div>
-    <div class="box"><h2 class="h3"><span class="n">+</span> The QuickStart</h2>
-      <p class="small" style="color:var(--ink);margin:0">Your first paper trade in about 30 minutes: copy the code to GitHub, add your Trading 212 practice key and an email key, run the setup check. A short video for each step. <b>The QuickStart promise:</b> if you can't get to your first paper trade within 60 minutes with our help, email within 14 days of buying and we refund you in full. <a href="demo/#quickstart" style="color:var(--green);font-weight:700">See it in the demo</a></p></div>
-    <div class="box"><h2 class="h3"><span class="n">+</span> On every screen</h2>
-      <p class="small" style="color:var(--ink);margin:0">Your app and your members area install like any app, with no App Store and nothing to download. iPhone and Android: add it to your home screen. Mac: Add to Dock in Safari, or Install in Chrome. Windows PC: Install in Chrome or Edge. One login, the same app everywhere, and it opens in its own window. <a href="demo/" style="color:var(--green);font-weight:700">Try it with the demo</a></p></div>
-    <div class="box"><h2 class="h3"><span class="n">+</span> A helping hand</h2>
-      <p class="small" style="color:var(--ink);margin:0">Stuck? Email. Setup questions get an instant automated answer, anything else a reply from the team within two working days. Plus a buyers-only space to share fixes.</p></div>
+    <div class="box plus"><h2 class="h3"><span class="n">+</span> Also included</h2><ul>
+      <li><b>The QuickStart.</b> Your first paper trade in about 30 minutes: copy the code to GitHub, add your Trading 212 practice key and an email key, run the setup check. A short video for each step. <b>The QuickStart promise:</b> if you can't get to your first paper trade within 60 minutes with our help, email within 14 days of buying and we refund you in full. <a href="demo/#quickstart" style="color:var(--green);font-weight:700">See it in the demo</a></li>
+      <li><b>On every screen.</b> Your app and your members area install like any app, with no App Store and nothing to download. iPhone and Android: add it to your home screen. Mac: Add to Dock in Safari, or Install in Chrome. Windows PC: Install in Chrome or Edge. One login, the same app everywhere, and it opens in its own window. <a href="demo/" style="color:var(--green);font-weight:700">Try it with the demo</a></li>
+      <li><b>A helping hand.</b> Stuck? Email. Setup questions get an instant automated answer, anything else a reply from the team within two working days. Plus a buyers-only space to share fixes.</li>
+    </ul></div>
   </div>
 
   <section class="cmp" id="vs">
