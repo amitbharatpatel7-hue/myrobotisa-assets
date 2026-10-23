@@ -16,7 +16,7 @@ v2.5 (23 Oct 2026, approved by Amit) — additive: the same cards as v2.4, plus 
   * render(..., badge="Setup check") replaces the green INTERNAL pill's text (the email type: Health, Setup check, ...);
   * a block can carry `checks` [(status, name, note)] (ok = green tick, bad = amber cross, off = muted dash) and
     `link` (label, url) for one green text link under the card;
-  * SBH_BRAND is the Stock Boom Hunter robot (S.B.H. tag) with a two-line STOCK BOOM / HUNTER wordmark, and its emails
+  * SBH_BRAND is the Stock Boom Hunter robot (S.B.H. tag) with a one-line STOCK BOOM HUNTER wordmark, and its emails
     use the S.B.H.-tagged mood robots automatically (MOODS_SBH, myrobotisa.com/email/sbh/).
 
 Public surface (unchanged from v1, two optional additions):
@@ -350,9 +350,7 @@ def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
         mood = mood.replace(_E, _E + "sbh/")
     logo = b[3] if len(b) > 3 else None
     suffix_html = ' <span style="color:%s">%s</span>' % (PINK, esc(suffix)) if suffix else ""
-    stacked = len(word + suffix) > 14   # v2.5: a long name (Stock Boom Hunter) stacks into a two-line lockup, so the badge still fits on a phone
-    if stacked and suffix:
-        suffix_html = '<br><span style="color:%s">%s</span>' % (PINK, esc(suffix))
+    stacked = len(word + suffix) > 14   # v2.5.2 (Amit): a long name (Stock Boom Hunter) stays on ONE line, a touch smaller, never wrapping
     brand_row = (
         # v2.5.1 (Amit, 23 Oct 2026): the green tag (Internal / Health / Setup check) sits at the right, lined up with the card's edge.
         f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 16px;"><tr>'
@@ -360,7 +358,7 @@ def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
            f'style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {GREEN};"></td>' if logo else
            f'<td width="34" height="34" align="center" {_bg(GREEN)}border-radius:9px;color:{ON_GREEN};font-weight:900;'
            f'font-size:16px;font-family:{FONT_STACK};">{esc(tile)}</td>') +
-        f'<td style="padding-left:10px;font-family:{HEAD_STACK};font-size:{20 if stacked else 22}px;{"line-height:1.02;" if stacked else ""}letter-spacing:.02em;text-transform:uppercase;'
+        f'<td style="padding-left:10px;font-family:{HEAD_STACK};font-size:{19 if stacked else 22}px;letter-spacing:{"0" if stacked else ".02em"};text-transform:uppercase;'
         f'color:{INK};{"white-space:nowrap;" if stacked else ""}">{esc(word)}{suffix_html}</td>'
         + (f'<td align="right" style="padding-left:10px;vertical-align:middle;text-align:right;white-space:nowrap;"><span style="display:inline-block;padding:5px {10 if badge and len(badge) > 10 else 12}px;border-radius:999px;'
            f'background:{GREEN};background-color:{GREEN};color:{ON_GREEN};font-size:{11 if badge and len(badge) > 10 else 12}px;font-weight:900;letter-spacing:{".07em" if badge and len(badge) > 10 else ".14em"};'
