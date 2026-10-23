@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="39">
+<meta name="mri-version" content="40">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -247,7 +247,11 @@
   .tl-more{margin:4px 0 0} .tl-more>summary{margin-left:6px} .tl-old{margin-top:12px}
   .soc-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:22px;padding-top:16px;border-top:1px solid var(--rule)}
   .soc{display:flex;gap:10px} .soc a{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:14px;transition:transform .15s,box-shadow .15s}
-  .soc a:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.35)} .soc .yt{background:#FF0033} .soc .yt svg path:first-child{fill:#fff} .soc .ig{background:radial-gradient(circle at 30% 110%,#FFDC80 0,#FCAF45 18%,#F77737 32%,#F56040 44%,#FD1D1D 56%,#E1306C 70%,#C13584 82%,#833AB4 100%)} .soc .tt{background:#000;border:1px solid #333}
+  /* 23 Oct 2026 (Amit): keep the bounce, drop the brand colours: theme tiles, white glyphs, green on hover */
+  .soc a{background:var(--deep);border:1px solid var(--rule)} .soc a svg *{fill:#fff;stroke:#fff}
+  .soc a svg rect[fill="none"],.soc a svg circle[fill="none"]{fill:none} .soc .yt svg path:last-child{fill:var(--deep)}
+  .soc a:hover{transform:translateY(-3px) scale(1.05);border-color:var(--green);box-shadow:0 0 0 1px var(--green),0 8px 18px rgba(0,0,0,.35)} .soc a:hover svg *{stroke:var(--green)} .soc a:hover svg path,.soc a:hover svg circle[fill="#fff"]{fill:var(--green)}
+  .soc .tt svg path:not(:last-child){display:none}
   .want{appearance:none;margin-top:12px;border:2px solid var(--green);background:none;color:var(--green);font-weight:800;font-size:13px;border-radius:999px;padding:7px 14px;cursor:pointer;min-height:34px}
   .want.on{background:var(--green);color:var(--deep)} .want.on::before{content:"\2713  "}
   .wn{list-style:none;margin:0;padding:0} .wn li{padding:10px 0;border-top:1px solid var(--rule);line-height:1.5;color:var(--muted)} .wn li b{color:var(--ink)} .wn li time{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--eye);margin-bottom:2px}
@@ -522,7 +526,7 @@
   </main>
 </div>
 
-<script src="guides.js?v=39"></script>
+<script src="guides.js?v=40"></script>
 <script>
 (function () {
   "use strict";
