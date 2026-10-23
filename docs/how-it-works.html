@@ -215,6 +215,11 @@
     .vs-wrap table{font-size:16px !important}
   }
   @media (min-width:1400px){ .wrap{max-width:1000px} }
+  /* 23 Oct 2026 (Amit: "compare to bbc.co.uk, the main page fills more of the screen"): on big screens the column keeps
+     growing like a news site's (BBC's runs ~1240px), while running text keeps a readable line length. */
+  @media (min-width:1600px){ .wrap{max-width:1180px} .tour-video{max-width:none} .hero img{max-width:340px} }
+  @media (min-width:1900px){ .wrap{max-width:1320px} .hero{grid-template-columns:1.7fr .8fr} }
+  @media (min-width:1600px){ main p:not(.v2-next):not(.places), main li, .lead{max-width:78ch} main .get p, main .get li, main ol.days li, main .faq p, main .faq li{max-width:none} }
   @media (max-width:1099px){
     .side{width:min(300px,85vw);padding:calc(22px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
       transform:translateX(-105%);visibility:hidden;transition:transform .2s ease,visibility 0s .2s;z-index:30}
