@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="35">
+<meta name="mri-version" content="36">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -225,6 +225,17 @@
   /* 22 Oct 2026: lesson videos, shown only to accounts with preview_videos on (owner preview before launch) */
   .gd-video{margin:0 0 18px} .gd-video video{display:block;width:100%;aspect-ratio:16/9;border-radius:14px;background:#000;border:1px solid var(--rule)}
   .gd-video p{margin:8px 0 0}
+  .wn{list-style:none;margin:0;padding:0} .wn li{padding:10px 0;border-top:1px solid var(--rule);line-height:1.5;color:var(--muted)} .wn li b{color:var(--ink)} .wn li time{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--eye);margin-bottom:2px}
+  .wn-h{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:22px;letter-spacing:.01em;text-transform:uppercase;margin:22px 0 4px}
+  .faq details{border-top:1px solid var(--rule);padding:14px 0} .faq details:last-of-type{border-bottom:1px solid var(--rule)}
+  .faq summary{cursor:pointer;font-weight:700;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
+  .faq summary::-webkit-details-marker{display:none} .faq summary::after{content:'+';color:var(--green);font-family:Anton,Impact,sans-serif;font-size:24px;line-height:1;flex:none}
+  .faq details[open] summary::after{content:'\2013'} .faq details p{margin:10px 0 0;color:var(--muted);line-height:1.55} .faq details p+p{margin-top:8px} .faq details ul{color:var(--muted);margin:8px 0 0}
+  .faq #faq-body h1{display:none}
+  .gd-copy{display:flex;align-items:center;gap:10px;margin:10px 0 0;background:rgba(0,0,0,.3);border:1px solid var(--rule);border-radius:12px;padding:10px 12px}
+  .gd-copy code{flex:1;min-width:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;color:#E9FFF2;white-space:pre-wrap;word-break:break-word}
+  .gd-copy button{flex:none;appearance:none;border:2px solid var(--green);background:none;color:var(--green);font-weight:800;font-size:13px;border-radius:999px;padding:6px 12px;cursor:pointer;min-height:34px}
+  .gd-copy button.ok{background:var(--green);color:var(--deep)}
   .gd-tips ul{margin:10px 0 0;padding-left:20px;color:var(--muted)} .gd-tips li{margin:6px 0;line-height:1.5}
 
   /* installed app (22 Oct 2026, owner's choice): menu hidden behind the round button at every width, content full width */
@@ -260,10 +271,10 @@
     <li class="mgroup" id="mgroup"><div class="grp-h"><a href="#home" data-go="home" class="on" aria-current="page">Members area</a><button type="button" class="grp-t" id="mgroup-t" aria-expanded="true" aria-controls="mgroup-sub" aria-label="Hide the members pages"></button></div>
       <ol class="sub" id="mgroup-sub">
         <li><a href="#start" data-go="start">Start here</a></li>
-        <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
         <li><a href="#code" data-go="code">Your code</a></li>
+        <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
         <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
-        <li><a href="#clips" data-go="clips">New clips</a></li>
+        <li><a href="#clips" data-go="clips">What's new</a></li>
         <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
         <li><a href="#help" data-go="help">Help and membership</a></li>
       </ol>
@@ -271,16 +282,16 @@
     <!-- 22 Oct 2026 (Amit): just Home and Questions. Same tab: the site pages show this Members area group too while you're signed in. -->
     <li class="sep">The site</li>
     <li><a href="../">Home</a></li>
-    <li><a href="../questions.html">Questions</a></li>
+    <li><a href="#questions" data-go="questions">Questions</a></li>
   </ol>
   <!-- In the installed app the menu is the members area only (21 Oct 2026) -->
   <ol class="app-only" id="appnav">
     <li><a href="#home" data-go="home" class="on">Home</a></li>
     <li><a href="#start" data-go="start">Start here</a></li>
-    <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
     <li><a href="#code" data-go="code">Your code</a></li>
+    <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
     <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
-    <li><a href="#clips" data-go="clips">New clips</a></li>
+    <li><a href="#clips" data-go="clips">What's new</a></li>
     <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
         <li><a href="#help" data-go="help">Help and membership</a></li>
   </ol>
@@ -359,7 +370,7 @@
         <ol class="steps" id="qs"></ol>
       </section>
 
-      <section class="card" aria-labelledby="h-app" data-page="home help">
+      <section class="card" aria-labelledby="h-app" data-page="home">
         <h2 id="h-app">Your app, <span class="g">every screen</span></h2>
         <p class="lede">Put this members area, and later your own dashboard, on your phone, Mac or PC. It opens in its own window like any app, with no App Store.</p>
         <div class="devices" id="devices">
@@ -416,13 +427,33 @@
       </section>
 
       <section class="card" aria-labelledby="h-new" data-page="clips">
-        <h2 id="h-new">New <span class="p">clips</span> and tutorials</h2>
-        <p class="lede">Members-only walkthroughs land here as they're made. Until then, follow along on the channels: what the robot did, what it learned, and what's new.</p>
+        <h2 id="h-new">What's <span class="p">new</span></h2>
+        <p class="lede">New lessons, features and fixes land here first, with the date. Anything that needs you also arrives as a message on Home.</p>
+        <ul class="wn" id="wn-list">
+          <li><time>23 Oct 2026</time><b>Step-by-step guides with tips</b> for every QuickStart step and lesson, with real GitHub and Resend screens.</li>
+          <li><time>22 Oct 2026</time><b>Lesson videos</b> re-cut in the site's own look; the home-page clip now opens with what the robot was tested through.</li>
+          <li><time>22 Oct 2026</time><b>Faster sign-in</b> with Face ID, Touch ID or Windows Hello (passkeys), per device.</li>
+          <li><time>21 Oct 2026</time><b>Members area</b> opened for the free test drive: Start here, the 14 lessons, your dashboard link, messages.</li>
+        </ul>
+        <h3 class="wn-h">What we're working on</h3>
+        <ul class="wn">
+          <li><b>Moonshot pot, second go:</b> a small side pot that picks from Trading 212's own top winners and losers. Backtest first, then a live trial on the founder's account. If it earns its place it gets a lesson and a switch of its own.</li>
+          <li><b>Lesson videos inside each guide</b>, hosted so they play on any connection.</li>
+          <li><b>The daily digest for your copy:</b> the same evening email the founder gets, from your own robot, on by default.</li>
+          <li><b>Checkout and the code invite</b> for January: the template repo, the invite flow and the Dashboard setup job.</li>
+        </ul>
+        <p class="small" style="margin:14px 0 6px">Follow along on the channels: what the robot did, what it learned, and what's new.</p>
         <div class="clips">
           <a href="https://www.youtube.com/@myrobotisa" target="_blank" rel="noopener">YouTube <span aria-hidden="true">↗</span></a>
           <a href="https://www.instagram.com/myrobotisa/" target="_blank" rel="noopener">Instagram <span aria-hidden="true">↗</span></a>
           <a href="https://www.tiktok.com/@myrobotisa" target="_blank" rel="noopener">TikTok <span aria-hidden="true">↗</span></a>
         </div>
+      </section>
+
+      <section class="card wide faq" aria-labelledby="h-faq" data-page="questions" id="faq-page">
+        <h2 id="h-faq">Questions people <span class="p">ask</span></h2>
+        <p class="lede">The same answers as the public Questions page. Not here? <a href="mailto:hello@myrobotisa.com?subject=Question">Email hello@myrobotisa.com</a>, a person answers.</p>
+        <div id="faq-body"><p class="small">Loading…</p></div>
       </section>
 
       <section class="card" aria-labelledby="h-help" data-page="help">
@@ -462,7 +493,7 @@
   </main>
 </div>
 
-<script src="guides.js?v=35"></script>
+<script src="guides.js?v=36"></script>
 <script>
 (function () {
   "use strict";
@@ -596,8 +627,12 @@
     $("les-count").textContent = l + " of 14 lessons done";
   }
   function renderAll() {
-    renderList($("qs"), QS, "qs", function (i) { return ' <span class="pill">' + QS[i][1] + '</span><br><a class="gd-link" href="#guide/qs-' + (i + 1) + '">Step by step &rarr;</a>'; });
-    renderList($("lessons"), LESSONS, "day", function (i) { return (i === 0 ? ' <span class="pill g">Free to watch</span>' : ' <span class="pill a">Opens January 2027</span>') + '<br><a class="gd-link" href="#guide/day-' + (i + 1) + '">Step by step &rarr;</a>'; });
+    renderList($("qs"), QS, "qs", function (i) { var g = window.GUIDES && GUIDES["qs-" + (i + 1)]; return ' <span class="pill">' + QS[i][1] + '</span>' + (g ? ' <span class="small">about ' + g.mins + ' min</span>' : "") + '<br><a class="gd-link" href="#guide/qs-' + (i + 1) + '">Step by step &rarr;</a>'; });
+    renderList($("lessons"), LESSONS, "day", function (i) {
+      var g = window.GUIDES && GUIDES["day-" + (i + 1)], mins = g ? ' <span class="small">about ' + g.mins + ' min</span>' : "";
+      var pill = i === 0 ? ' <span class="pill g">Free to watch</span>' : (me.preview_videos ? ' <span class="pill g">Open (preview)</span>' : ' <span class="pill a">Opens January 2027</span>');
+      return pill + mins + '<br><a class="gd-link" href="#guide/day-' + (i + 1) + '">Step by step &rarr;</a>';
+    });
     counts();
   }
   document.addEventListener("change", function (e) {
@@ -628,8 +663,9 @@
       "<dt>Dashboard</dt><dd>" + (m.dashboard_url ? '<a class="pill g pill-link" href="' + esc(dashHref(m.dashboard_url)) + '">Open my dashboard</a>' : '<a href="#dashboard" style="font-size:14px;font-weight:700">Add your link</a>') + "</dd>";
     $("name-edit").addEventListener("click", editName);
     $("code-kv").innerHTML =
-      "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : "Arrives in January 2027") + "</b></div>" +
+      "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : (m.repo_url ? "Preview account" : "Arrives in January 2027")) + "</b></div>" +
       "<div><span>Version</span><b>" + (m.repo_invited_at ? "Latest" : "Preview") + "</b></div>";
+    var br = $("b-repo"); if (m.repo_url) { br.href = m.repo_url; br.removeAttribute("aria-disabled"); br.target = "_blank"; br.rel = "noopener"; br.classList.remove("ghost"); } else { br.removeAttribute("href"); br.setAttribute("aria-disabled", "true"); }
     $("mem-kv").innerHTML =
       "<div><span>Updates included until</span><b>" + esc(fmtDate(m.updates_until)) + "</b></div>" +
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
@@ -642,7 +678,7 @@
   function start() {
     if (!session) { show("signin"); return; }
     show("wait");
-    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url,first_name,founding_no,preview_videos").then(function (r) {
+    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url,first_name,founding_no,preview_videos,repo_url").then(function (r) {
       if (r.status === 401) { clear(); session = null; show("signin"); say("Your sign-in ran out. Ask for a new code.", false); return; }
       return r.json().then(function (rows) {
         var uid = null; try { uid = JSON.parse(atob(session.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub; } catch (e) {}
@@ -990,6 +1026,7 @@
     $("gd-step").innerHTML = '<div class="gd-step' + (isDone ? " gd-done" : "") + '">' +
       '<div class="sn">Step ' + (n + 1) + ' of ' + total + (isDone ? ' &middot; <span style="color:var(--green)">done</span>' : "") + '</div>' +
       '<h3>' + esc(st.t) + '</h3><p>' + esc(st.d) + '</p>' +
+      (st.copy ? st.copy.map(function (c) { return '<div class="gd-copy"><code>' + esc(c) + '</code><button type="button" data-copy="' + esc(c) + '">Copy</button></div>'; }).join("") : "") +
       (st.img ? '<img class="gd-shot" src="guide/' + esc(st.img) + '" alt="What the screen looks like at this step" loading="lazy" data-zoom>' : "") +
       (st.stuck ? '<details class="fold gd-stuck"><summary><span class="fold-l">Stuck? Doesn\'t look like that?</span></summary><p>' + esc(st.stuck) + '</p></details>' : "") +
       '<div class="gd-nav">' + (n > 0 ? '<button class="btn ghost" type="button" data-gd="back">&larr; Back</button>' : "") +
@@ -1002,6 +1039,8 @@
     }).join("");
   }
   document.addEventListener("click", function (e) {
+    var cp = e.target.closest("[data-copy]");
+    if (cp) { var txt = cp.dataset.copy; (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(function () { cp.textContent = "Copied"; cp.classList.add("ok"); setTimeout(function () { cp.textContent = "Copy"; cp.classList.remove("ok"); }, 1600); }).catch(function () { var r = document.createRange(); r.selectNodeContents(cp.previousElementSibling); var sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); cp.textContent = "Select and copy"; }); return; }
     var b = e.target.closest("[data-gd]"), li = e.target.closest("[data-gd-go]"), z = e.target.closest("[data-zoom]");
     if (z) { var o = document.createElement("div"); o.className = "gd-zoom"; o.innerHTML = '<img src="' + z.getAttribute("src") + '" alt="">'; o.addEventListener("click", function () { o.remove(); }); document.body.appendChild(o); return; }
     if (li) { gcur.n = +li.dataset.gdGo; gcur.celebrate = false; guideRender(); window.scrollTo(0, 0); return; }
@@ -1016,7 +1055,19 @@
   });
 
   // ---- one section per page: Home (welcome and messages), Start here, Lessons, Code, Dashboard, Clips, Help
-  var PAGES = ["home", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help", "guide"];
+  var PAGES = ["home", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help", "guide", "questions"];
+  // Questions (23 Oct 2026): the public Questions page, shown inside the members area so the members menu stays put. Fetched once.
+  var faqLoaded = false;
+  function loadFaq() {
+    if (faqLoaded) return; faqLoaded = true;
+    fetch("../questions.html", { cache: "no-cache" }).then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); }).then(function (html) {
+      var doc = new DOMParser().parseFromString(html, "text/html"), sec = doc.getElementById("faq");
+      if (!sec) throw 0;
+      sec.querySelectorAll("script").forEach(function (x) { x.remove(); });
+      sec.querySelectorAll("a[href]").forEach(function (a) { var h = a.getAttribute("href"); if (/^(https?:|mailto:|#)/.test(h)) return; a.setAttribute("href", "../" + h.replace(/^\.\//, "")); });
+      $("faq-body").innerHTML = sec.innerHTML;
+    }).catch(function () { faqLoaded = false; $("faq-body").innerHTML = '<p class="small">Couldn\'t load the questions just now. <a href="../questions.html">Open the public page</a>.</p>'; });
+  }
   function go(page) {
     var gid = null;
     if (page.indexOf("guide/") === 0) { gid = page.slice(6); page = "guide"; }
@@ -1026,6 +1077,7 @@
     document.querySelectorAll("[data-go]").forEach(function (a) { var on = a.dataset.go === page; a.classList.toggle("on", on); on ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"); });
     document.querySelector('.mgroup .grp-h > a').classList.toggle("on", true);
     if (page === "lessons") $("les-fold").open = true;
+    if (page === "questions") loadFaq();
     $("preview").classList.toggle("off", page !== "home");
     document.documentElement.classList.toggle("dashview", page === "mydash"); document.documentElement.dataset.pg = page;
     if (page === "mydash") dashOpen(false);
