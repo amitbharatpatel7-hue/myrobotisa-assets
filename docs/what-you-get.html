@@ -2,6 +2,7 @@
 <html lang="en-GB">
 <head>
 <meta charset="utf-8">
+<script>/* 23 Oct 2026: GitHub sign-in for Set up my robot lands here if the OAuth callback is the homepage; pass it to the members area */(function(){var q=location.search;if(/[?&]code=/.test(q)&&/[?&]state=/.test(q))location.replace("/members/"+q+"#setup");})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>What's in the kit: code, 14 lessons, dashboard · My Robot I.S.A.</title>
 <meta name="description" content="A scrubbed copy of the Python trading robot, 14 short lessons, a 30-minute QuickStart and your own dashboard. 12 months of updates included; nothing renews automatically.">
@@ -149,8 +150,17 @@
   .get a{color:var(--green);font-weight:700}
   .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;margin:8px 0 12px} .tour-facts{display:block;margin:14px 0 10px} .tour-facts li{font-size:15px;color:var(--ink)}
   .tour h2{margin-top:12px}
+  /* 23 Oct 2026 (Amit): show the emails on the homepage, phone-framed, top of each email with a soft fade */
+  .mailshots{margin:8px 0 30px} .mailshots h2{margin-top:12px}
+  .mails{display:grid;grid-template-columns:1fr;gap:22px;margin:18px 0 12px;justify-items:center}
+  .mail{margin:0;max-width:330px;width:100%}
+  .mail .phone{position:relative;border-radius:30px;border:3px solid var(--rule);background:#1A0420;padding:8px;max-height:470px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.35)}
+  .mail .phone img{display:block;width:100%;height:auto;border-radius:22px}
+  .mail .phone::after{content:"";position:absolute;left:0;right:0;bottom:0;height:90px;background:linear-gradient(rgba(26,4,32,0),#1A0420)}
+  .mail figcaption{margin-top:14px;font-size:15px;line-height:1.5;color:var(--muted)} .mail figcaption b{display:block;color:var(--green);font-weight:800;margin-bottom:2px}
+  @media (min-width:760px){ .mails{grid-template-columns:1fr 1fr;justify-items:start} }
   /* 23 Oct 2026 (Amit: "a few people have asked: so what is this?"): a three-step answer straight under the ISA box */
-  .what{margin:8px 0 30px} .what h2{margin-top:12px}
+  .what{margin:0 0 30px;padding-top:24px} .what h2{margin-top:0}
   .what-steps{list-style:none;padding:0;margin:16px 0 12px;display:grid;gap:12px;counter-reset:w}
   .what-steps li{counter-increment:w;background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px 16px}
   .what-steps b{display:flex;align-items:center;gap:10px;color:var(--green);font-weight:800;font-size:16px;margin-bottom:6px}
@@ -280,7 +290,12 @@
   .calm>p{margin:0 0 4px;color:var(--ink)}
   .calm-grid{display:grid;grid-template-columns:1fr;gap:12px;margin:14px 0 10px}
   @media(min-width:640px){.calm-grid{grid-template-columns:1fr 1fr}}
-  .calm-grid div{border-left:4px solid var(--green);padding:2px 0 2px 12px}
+  .calm-grid div{display:grid;grid-template-columns:44px 1fr;grid-template-rows:min-content 1fr;column-gap:12px;align-items:start;align-content:start}
+  .calm-grid div>b,.calm-grid div>span{grid-column:2}
+  /* 23 Oct 2026 (Amit: mini graphics make it more fun): an icon tile per point, with a little hop on hover */
+  .calm-grid .ci{grid-row:span 2;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:13px;background:var(--deep);border:2px solid var(--green);color:var(--green);transition:transform .2s}
+  .calm-grid div:hover .ci{transform:translateY(-3px) rotate(-6deg)}
+  @media (prefers-reduced-motion:reduce){.calm-grid div:hover .ci{transform:none}}
   .calm-grid b{display:block;color:var(--ink);font-size:16px;margin-bottom:2px}
   .calm-grid span{color:var(--muted);font-size:15px;line-height:1.5}
   .jobs{margin:34px 0 8px}
