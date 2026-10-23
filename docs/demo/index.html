@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="19">
+<meta name="mri-version" content="20">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -176,12 +176,22 @@ dialog::backdrop{background:rgba(0,0,0,.5)}
 dialog h3{margin:0 0 6px;font-size:18px}
 dialog p{margin:0 0 16px;color:var(--muted);font-size:14px}
 dialog .row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
-.digest{border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.digest .h{background:var(--chrome);color:#fff;padding:14px 16px}
-.digest .h small{display:block;color:var(--brand-green);font-weight:800;letter-spacing:.14em;font-size:11px}
-.digest .h b{font-size:18px}
-.digest .b{padding:14px 16px;font-size:14px}
-.digest .b p{margin:0 0 8px}
+/* 23 Oct 2026: the digest in the members' email theme v2 (Night): plum cards, pink eyebrow, a robot for the day */
+.digest{background:#34003B;border-radius:18px;padding:16px;max-width:560px;color:#fff;font-family:Poppins,system-ui,sans-serif}
+.dg-brand{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-family:Anton,Impact,sans-serif;font-size:19px;text-transform:uppercase;letter-spacing:.02em}
+.dg-brand img{width:34px;height:34px;border-radius:9px;border:2px solid #00E87A} .dg-brand i{font-style:normal;color:#EA00AB}
+.dg-card{background:#4B1155;border-radius:16px;padding:16px 18px;margin:0 0 10px} .dg-card.acc{border-left:4px solid #00E87A}
+.dg-head{display:grid;grid-template-columns:1fr 84px;gap:10px;align-items:center}
+.dg-eye{color:#EA00AB;font-size:11.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin:0 0 6px}
+.dg-big{font-family:Anton,Impact,sans-serif;font-size:28px;line-height:1.05;text-transform:uppercase;margin:0 0 6px} .dg-big.up{color:#00E87A}
+.dg-sub{font-size:13.5px;color:#D9C6DE;margin:0} .dg-sub b{color:#00E87A}
+.dg-head img{width:84px;height:84px}
+.dg-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 8px}
+.dg-row h4{margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:17px;text-transform:uppercase;letter-spacing:.02em}
+.dg-pill{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:4px 10px;color:#00E87A;background:#14402C;white-space:nowrap}
+.dg-card p{margin:0;font-size:14px;line-height:1.55}
+.dg-did{list-style:none;margin:0;padding:0} .dg-did li{position:relative;padding-left:22px;font-size:14px;line-height:1.5;margin:3px 0} .dg-did li::before{content:"\2713";position:absolute;left:0;color:#00E87A;font-weight:900}
+.digest .tag{color:#D9C6DE;font-size:12px;margin:8px 4px 0}
 /* quickstart */
 .qbar{height:8px;border-radius:999px;background:var(--grid);overflow:hidden;margin:4px 0 6px}
 .qbar i{display:block;height:100%;width:0;background:var(--brand-green);transition:width .3s}
@@ -409,7 +419,7 @@ body.qs-mode header.hero{display:none}
     <section class="card">
       <h2>Today's digest</h2>
       <p class="lede">The same summary lands in your inbox every evening. The weekly proposals arrive at 7pm on Sunday, to approve by 2pm Monday (open any week in the menu to see one).</p>
-      <div class="digest"><div class="h"><small>MY ROBOT I.S.A. · DAILY</small><b id="dg-title"></b></div><div class="b" id="dg-body"></div></div>
+      <div class="digest" id="dg"></div>
     </section>
   </div>
 
@@ -588,9 +598,17 @@ const ordRow=o=>`<tr><td>${wdm(o[0])}</td><td><b>${esc(o[1])}</b></td><td>${o[2]
 function renderOrders(){ $("otable").innerHTML="<table><tr><th>Date</th><th>What</th><th>Size</th><th>Result</th><th>Why</th></tr>"+D.orders.map(ordRow).join("")+"</table>"; }
 function renderDigest(){
   const v=total(), prev=D.acct.at(-2), ch=v-prev;
-  $("dg-title").textContent=`${ch>=0?"+":"−"}${gbp(Math.abs(ch))} today · ${gbp(v)}`;
+  const up=ch>0.005, down=ch<-0.005, mood=up?"up":down?"calm":"quiet", since=v-D.start;
   const bl=Object.values(D.bench).at(-1), sincePct=v/D.start*100-100, lead=sincePct-(bl.us-100);
-  $("dg-body").innerHTML=`<p><b>Since you started:</b> ${v>=D.start?"+":"−"}${gbp(Math.abs(v-D.start))} (${pct(sincePct,1)})${lead>0?`, ${lead.toFixed(1)} points ahead of US large caps`:""}.</p><p><b>Orders:</b> none today. Next proposals Sunday at 7pm (London), to approve by 2pm Monday.</p><p><b>Needs you:</b> nothing.</p><p><b>Checks:</b> broker connected · every order confirmed · ${D.stops.length} stops checked.</p><p class="tag">Example email. Yours comes from your own email key, to your own inbox.</p>`;
+  $("dg").innerHTML=`<div class="dg-brand"><img src="../avatar.png" alt=""><span>My Robot <i>I.S.A.</i></span></div>
+    <div class="dg-card"><div class="dg-head"><div><p class="dg-eye">Your robot · this evening</p>
+      <p class="dg-big${up?" up":""}">${ch>=0?"+":"−"}${gbp(Math.abs(ch))} today</p>
+      <p class="dg-sub">${gbp(v)} in your ISA · ${since>=0?`<b>${down?"still ":""}up ${gbp(since)} since you started</b>`:`${gbp(Math.abs(since))} below where you started`}</p></div>
+      <img src="../email/robot-${mood}.png" alt=""></div></div>
+    <div class="dg-card acc"><div class="dg-row"><h4>Does it need you?</h4><span class="dg-pill">Nothing to do</span></div><p>Nothing today. Next plan: Sunday at 7pm (London), to approve by 2pm Monday.</p></div>
+    <div class="dg-card"><div class="dg-row"><h4>What the robot did</h4></div><ul class="dg-did"><li>Checked ${D.stops.length} safety stops: all in place</li><li>Every order confirmed by the broker</li>${lead>0?`<li>${lead.toFixed(1)} points ahead of US large caps since the start</li>`:""}</ul></div>
+    <div class="dg-card"><div class="dg-row"><h4>Is anything wrong?</h4><span class="dg-pill">All good</span></div><p>Broker connected, every order confirmed.</p></div>
+    <p class="tag">Example email. Yours comes from your own email key, to your own inbox.</p>`;
 }
 
 // ---- weeks: sidebar list and the weekly view
