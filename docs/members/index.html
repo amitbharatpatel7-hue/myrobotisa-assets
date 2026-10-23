@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="38">
+<meta name="mri-version" content="39">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -240,6 +240,14 @@
   .bch-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px} .bch-pct{font-family:ui-monospace,Menlo,monospace;font-size:13px;color:var(--green);font-weight:800}
   .bch b{display:block;font-size:16px;color:var(--ink)} .bch p{margin:6px 0 10px;color:var(--muted);line-height:1.5;font-size:14px}
   .bar{height:8px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden} .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--green),#7CFFC0);border-radius:999px;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+  .want-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px} .want-row .want{margin-top:0} .want-n{font-size:13px;color:var(--muted)}
+  .bch.pop{animation:bchpop .5s cubic-bezier(.2,1.4,.4,1)} @keyframes bchpop{0%{transform:scale(1)}40%{transform:scale(1.03)}100%{transform:scale(1)}}
+  #mtoast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--green);color:var(--deep);font-weight:800;font-size:14px;padding:12px 18px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:80;max-width:min(92vw,520px);text-align:center}
+  #mtoast.on{opacity:1;transform:translate(-50%,0)}
+  .tl-more{margin:4px 0 0} .tl-more>summary{margin-left:6px} .tl-old{margin-top:12px}
+  .soc-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:22px;padding-top:16px;border-top:1px solid var(--rule)}
+  .soc{display:flex;gap:10px} .soc a{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:14px;transition:transform .15s,box-shadow .15s}
+  .soc a:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(0,0,0,.35)} .soc .yt{background:#FF0033} .soc .yt svg path:first-child{fill:#fff} .soc .ig{background:radial-gradient(circle at 30% 110%,#FFDC80 0,#FCAF45 18%,#F77737 32%,#F56040 44%,#FD1D1D 56%,#E1306C 70%,#C13584 82%,#833AB4 100%)} .soc .tt{background:#000;border:1px solid #333}
   .want{appearance:none;margin-top:12px;border:2px solid var(--green);background:none;color:var(--green);font-weight:800;font-size:13px;border-radius:999px;padding:7px 14px;cursor:pointer;min-height:34px}
   .want.on{background:var(--green);color:var(--deep)} .want.on::before{content:"\2713  "}
   .wn{list-style:none;margin:0;padding:0} .wn li{padding:10px 0;border-top:1px solid var(--rule);line-height:1.5;color:var(--muted)} .wn li b{color:var(--ink)} .wn li time{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--eye);margin-bottom:2px}
@@ -450,21 +458,25 @@
           <li><span class="tl-dot"></span><div><span class="tl-date">23 Oct 2026</span><span class="pill g">New</span><b>Step-by-step guides, with tips</b><p>Every QuickStart step and lesson, one step per card, real GitHub and Resend screens, a Copy button for anything you'd otherwise type.</p><a class="tl-go" href="#start" data-go="start">Open Start here &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">22 Oct 2026</span><b>Lesson videos, re-cut</b><p>All 20 in the site's own look; the home-page clip now opens with what the robot was tested through.</p><a class="tl-go" href="#lessons" data-go="lessons">The 14 lessons &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">22 Oct 2026</span><b>Faster sign-in</b><p>Face ID, Touch ID or Windows Hello, one passkey per device. The email code still works.</p><a class="tl-go" href="#passkeys" data-go="passkeys">Set it up &rarr;</a></div></li>
+        </ol>
+        <details class="fold tl-more" id="wn-more"><summary><span class="fold-l">Show earlier updates</span></summary>
+        <ol class="tl tl-old">
           <li><span class="tl-dot"></span><div><span class="tl-date">21 Oct 2026</span><b>Members area opened</b><p>Start here, the 14 lessons, your dashboard link and messages, for the free test drive.</p></div></li>
         </ol>
+        </details>
         <h3 class="wn-h">On the <span class="g">bench</span></h3>
         <div class="bench" id="bench">
-          <div class="bch" data-want="moonshot"><div class="bch-top"><span class="pill g">In backtest</span><span class="bch-pct">40%</span></div><b>Moonshot pot, second go</b><p>A small side pot that picks from Trading 212's own top winners and losers. Backtest first, then a live trial on the founder's account. Earns its place, gets a lesson and a switch of its own.</p><div class="bar"><i style="width:40%" data-w="40%"></i></div><button class="want" type="button">I want this</button></div>
-          <div class="bch" data-want="video-hosting"><div class="bch-top"><span class="pill p">Building</span><span class="bch-pct">60%</span></div><b>Lesson videos inside each guide</b><p>Hosted so they play on any connection, with chapters you can jump to.</p><div class="bar"><i style="width:60%" data-w="60%"></i></div><button class="want" type="button">I want this</button></div>
-          <div class="bch" data-want="member-digest"><div class="bch-top"><span class="pill p">Building</span><span class="bch-pct">30%</span></div><b>Your daily digest, in plain words</b><p>The same evening email the founder gets, from your own robot: how it's doing, whether it needs you, what it holds, anything wrong. On by default.</p><div class="bar"><i style="width:30%" data-w="30%"></i></div><button class="want" type="button">I want this</button></div>
-          <div class="bch" data-want="checkout"><div class="bch-top"><span class="pill">Planned · January</span><span class="bch-pct">10%</span></div><b>Checkout and the code invite</b><p>The template repo, the invite to your own copy, and the Dashboard setup job that gives you your app address.</p><div class="bar"><i style="width:10%" data-w="10%"></i></div><button class="want" type="button">I want this</button></div>
+          <div class="bch" data-want="moonshot"><div class="bch-top"><span class="pill g">In backtest</span><span class="bch-pct">40%</span></div><b>Moonshot pot, second go</b><p>A small side pot that picks from Trading 212's own top winners and losers. Backtest first, then a live trial on the founder's account. Earns its place, gets a lesson and a switch of its own.</p><div class="bar"><i style="width:40%" data-w="40%"></i></div><div class="want-row"><button class="want" type="button">I want this</button><span class="want-n"></span></div></div>
+          <div class="bch" data-want="video-hosting"><div class="bch-top"><span class="pill p">Building</span><span class="bch-pct">60%</span></div><b>Lesson videos inside each guide</b><p>Hosted so they play on any connection, with chapters you can jump to.</p><div class="bar"><i style="width:60%" data-w="60%"></i></div><div class="want-row"><button class="want" type="button">I want this</button><span class="want-n"></span></div></div>
+          <div class="bch" data-want="member-digest"><div class="bch-top"><span class="pill p">Building</span><span class="bch-pct">30%</span></div><b>Your daily digest, in plain words</b><p>The same evening email the founder gets, from your own robot: how it's doing, whether it needs you, what it holds, anything wrong. On by default.</p><div class="bar"><i style="width:30%" data-w="30%"></i></div><div class="want-row"><button class="want" type="button">I want this</button><span class="want-n"></span></div></div>
+          <div class="bch" data-want="checkout"><div class="bch-top"><span class="pill">Planned · January</span><span class="bch-pct">10%</span></div><b>Checkout and the code invite</b><p>The template repo, the invite to your own copy, and the Dashboard setup job that gives you your app address.</p><div class="bar"><i style="width:10%" data-w="10%"></i></div><div class="want-row"><button class="want" type="button">I want this</button><span class="want-n"></span></div></div>
         </div>
-        <p class="small" style="margin:16px 0 6px">Follow along on the channels: what the robot did, what it learned, and what's new.</p>
-        <div class="clips">
-          <a href="https://www.youtube.com/@myrobotisa" target="_blank" rel="noopener">YouTube <span aria-hidden="true">↗</span></a>
-          <a href="https://www.instagram.com/myrobotisa/" target="_blank" rel="noopener">Instagram <span aria-hidden="true">↗</span></a>
-          <a href="https://www.tiktok.com/@myrobotisa" target="_blank" rel="noopener">TikTok <span aria-hidden="true">↗</span></a>
-        </div>
+        <div class="soc-row"><span class="small">Follow along: what the robot did, what it learned, what's new.</span>
+          <span class="soc">
+            <a class="yt" href="https://www.youtube.com/@myrobotisa" target="_blank" rel="noopener" aria-label="My Robot I.S.A. on YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="#fff" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8Z"/><path fill="#FF0033" d="M10 15V9l5.2 3L10 15Z"/></svg></a>
+            <a class="ig" href="https://www.instagram.com/myrobotisa/" target="_blank" rel="noopener" aria-label="My Robot I.S.A. on Instagram" title="Instagram"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#fff" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="#fff"/></svg></a>
+            <a class="tt" href="https://www.tiktok.com/@myrobotisa" target="_blank" rel="noopener" aria-label="My Robot I.S.A. on TikTok" title="TikTok"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="#25F4EE" d="M15.8 2.4c.4 2.1 1.8 3.6 4 3.8v3.1a7.2 7.2 0 0 1-4-1.2v6.2A5.9 5.9 0 1 1 9.9 8.4v3.2a2.8 2.8 0 1 0 2.8 2.8V2.4h3.1Z" transform="translate(-.6 .4)"/><path fill="#FE2C55" d="M15.8 2.4c.4 2.1 1.8 3.6 4 3.8v3.1a7.2 7.2 0 0 1-4-1.2v6.2A5.9 5.9 0 1 1 9.9 8.4v3.2a2.8 2.8 0 1 0 2.8 2.8V2.4h3.1Z" transform="translate(.6 -.4)"/><path fill="#fff" d="M15.8 2.4c.4 2.1 1.8 3.6 4 3.8v3.1a7.2 7.2 0 0 1-4-1.2v6.2A5.9 5.9 0 1 1 9.9 8.4v3.2a2.8 2.8 0 1 0 2.8 2.8V2.4h3.1Z"/></svg></a>
+          </span></div>
       </section>
 
       <section class="card wide faq" aria-labelledby="h-faq" data-page="questions" id="faq-page">
@@ -510,7 +522,7 @@
   </main>
 </div>
 
-<script src="guides.js?v=38"></script>
+<script src="guides.js?v=39"></script>
 <script>
 (function () {
   "use strict";
@@ -1012,12 +1024,32 @@
     box.innerHTML = '<div class="gd-video"><video controls preload="metadata" playsinline src="' + VIDEO_DIR + slug + '.mp4"></video>' +
       '<p class="small">Watch first, then do the steps below. <span style="color:var(--eye)">Owner preview: only your account sees the videos for now.</span></p></div>';
   }
+  // "I want this" (23 Oct 2026): saved to your account, counted across members (want_counts() returns totals only), with a toast.
+  var WANT = {};
   function paintBench() {
-    document.querySelectorAll("#bench .bch").forEach(function (c) { var on = !!done["want:" + c.dataset.want]; var b = c.querySelector(".want"); b.classList.toggle("on", on); b.textContent = on ? "You want this" : "I want this"; });
+    document.querySelectorAll("#bench .bch").forEach(function (c) {
+      var id = "want:" + c.dataset.want, on = !!done[id], b = c.querySelector(".want"), n = WANT[id] || 0;
+      b.classList.toggle("on", on); b.textContent = on ? "You want this" : "I want this";
+      var others = Math.max(0, n - (on ? 1 : 0));
+      c.querySelector(".want-n").textContent = on ? (others ? "you and " + others + " other" + (others === 1 ? "" : "s") : "you're the first") : (n ? n + " member" + (n === 1 ? "" : "s") + " want this" : "");
+    });
+  }
+  function loadWants() {
+    rest("rpc/want_counts", { method: "POST", body: "{}" }).then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
+      WANT = {}; (rows || []).forEach(function (x) { WANT[x.item] = +x.n; }); paintBench();
+    }).catch(function () {});
+  }
+  function toast(msg) {
+    var t = $("mtoast"); if (!t) { t = document.createElement("div"); t.id = "mtoast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+    t.textContent = msg; t.classList.add("on"); clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove("on"); }, 2600);
   }
   document.addEventListener("click", function (e) {
     var b = e.target.closest("#bench .want"); if (!b) return;
-    var id = "want:" + b.closest(".bch").dataset.want, on = !done[id]; gsave(id, on); paintBench();
+    var c = b.closest(".bch"), id = "want:" + c.dataset.want, on = !done[id];
+    WANT[id] = Math.max(0, (WANT[id] || 0) + (on ? 1 : -1));
+    gsave(id, on); paintBench();
+    c.classList.remove("pop"); void c.offsetWidth; if (on) c.classList.add("pop");
+    toast(on ? "Noted. We'll message you here when \u201c" + c.querySelector("b").textContent + "\u201d ships." : "Vote removed.");
   });
   function guideOpen(id) {
     var g = GUIDES[id]; if (!g) return;
@@ -1102,7 +1134,7 @@
     document.querySelector('.mgroup .grp-h > a').classList.toggle("on", true);
     if (page === "lessons") $("les-fold").open = true;
     if (page === "questions") loadFaq();
-    if (page === "clips") { paintBench(); document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = "0"; }); setTimeout(function () { document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = b.dataset.w; }); }, 60); }
+    if (page === "clips") { paintBench(); loadWants(); document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = "0"; }); setTimeout(function () { document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = b.dataset.w; }); }, 60); }
     $("preview").classList.toggle("off", page !== "home");
     document.documentElement.classList.toggle("dashview", page === "mydash"); document.documentElement.dataset.pg = page;
     if (page === "mydash") dashOpen(false);
