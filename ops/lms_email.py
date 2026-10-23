@@ -22,7 +22,9 @@ Public surface (unchanged from v1, two optional additions):
 `table` ({"headers": [...], "rows": [[...]]}), `pills` (list of str or (label, kind)), or `kv` (list of (label, value)).
 A block may set `accent: True` to draw it with a green left rule (use for the one thing that needs the reader).
 `kind` for a pill is green / amber / red / muted. `buttons` is a list of (label, url, primary_bool) shown under the cards.
-`brand` is (tile_letter, wordmark, pink_suffix[, logo_url]); with a logo_url the tile is that image (the website's mark), else a green
+`tone="up"` turns the headline green (a gain); `subtitle` and prose paragraphs may be lists of strings and (text, "gain")
+pairs so successes read in bold green. A `days` block ([(label, change), ...]) draws a week strip. `internal` (default True) puts a green INTERNAL badge beside the wordmark: pass internal=False for anything a member,
+customer or player receives (same rule as subject()). `brand` is (tile_letter, wordmark, pink_suffix[, logo_url]); with a logo_url the tile is that image (the website's mark), else a green
 tile with the letter. `mood` is an image URL shown beside the headline (the robot moods live at myrobotisa.com/email/robot-*.png;
 use `mood_for(change)`). A block may carry `more: {"summary": "Show the funds", "items": [...]}`: a show/hide list (<details>, which
 Apple Mail opens and closes; Gmail ignores the tag and simply shows the list).
@@ -57,12 +59,13 @@ MUTED_FG, MUTED_BG = "#D9C6DE", "#5A2366"
 CARD_RADIUS = 18
 PANEL_RADIUS = 14
 
-FONT_STACK = "Poppins, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
-HEAD_STACK = "Impact, 'Anton', 'Arial Narrow Bold', 'Helvetica Neue Condensed Bold', sans-serif"
+FONT_STACK = "Poppins,-apple-system,'Segoe UI',Helvetica,Arial,sans-serif"
+HEAD_STACK = "Impact,'Arial Narrow Bold',sans-serif"
 MONO_STACK = "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
 
 MRI_LOGO = "https://myrobotisa.com/avatar.png"
 MRI_BRAND = ("R", "My Robot", "I.S.A.", MRI_LOGO)
+SBH_BRAND = ("S", "Stock Boom", "Hunter", "https://myrobotisa.com/email/sbh.png")
 MOODS = {"up": "https://myrobotisa.com/email/robot-up.png", "steady": "https://myrobotisa.com/email/robot-steady.png",
          "flat": "https://myrobotisa.com/email/robot-flat.png"}
 
@@ -130,7 +133,7 @@ def _pill_row(pills) -> str:
 def _prose(prose) -> str:
     paras = prose if isinstance(prose, list) else [prose]
     return "".join(f'<p style="margin:0 0 10px;font-size:15px;line-height:1.6;color:{INK};font-family:{FONT_STACK};">'
-                   f'{esc(p)}</p>' for p in paras if p)
+                   f'{_segments(p)}</p>' for p in paras if p)
 
 
 def _kv(pairs) -> str:
@@ -150,6 +153,34 @@ def _more(more: dict) -> str:
             f'<ul style="margin:8px 0 0;padding-left:18px;">{items}</ul></details>')
 
 
+def _segments(sub) -> str:
+    """Subtitle as a string, or a list of strings and (text, kind) pairs; kind "gain" is bold green (celebrate every
+    success), "note" is muted. Losses are never red in member mail: say them plainly in the normal colour."""
+    if isinstance(sub, str):
+        return esc(sub)
+    out = []
+    for part in sub:
+        text, kind = part if isinstance(part, (tuple, list)) else (part, "")
+        out.append(f'<span style="color:{GREEN};font-weight:800;">{esc(text)}</span>' if kind == "gain" else esc(text))
+    return "".join(out)
+
+
+def _days(days) -> str:
+    """A week strip: one tile per day, green for an up day, plum for a down or flat day (never red), amount beneath."""
+    cells = []
+    for label, chg in days:
+        up = chg is not None and chg > 0
+        bgc = GREEN_BG if up else MUTED_BG
+        fg = GREEN if up else MUTED
+        amt = "" if chg is None else (("+" if chg > 0 else "\u2212" if chg < 0 else "") + f"£{abs(chg):,.2f}")
+        cells.append(f'<td align="center" style="padding:0 3px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">'
+                     f'<tr><td align="center" {_bg(bgc)}border-radius:10px;padding:8px 2px;font-size:11px;font-weight:800;letter-spacing:.06em;'
+                     f'text-transform:uppercase;color:{fg};font-family:{FONT_STACK};">{esc(label)}</td></tr>'
+                     f'<tr><td align="center" style="padding-top:6px;font-size:12px;font-weight:700;color:{fg};font-family:{FONT_STACK};">{esc(amt)}</td></tr>'
+                     f'</table></td>')
+    return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;"><tr>{"".join(cells)}</tr></table>'
+
+
 def mood_for(change: float | None) -> str:
     """Robot for the headline: arms up on a gain, a calm thumbs-up on a dip, a steady face when flat or unknown."""
     if change is None or abs(change) < 0.005:
@@ -162,6 +193,8 @@ def _block_body(block: dict) -> str:
 
 
 def _block_body_inner(block: dict) -> str:
+    if "days" in block:
+        return _days(block["days"]) + ('<div style="height:14px;line-height:14px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
     if "table" in block:
         return table(block["table"]["headers"], block["table"]["rows"])
     if "pills" in block:
@@ -202,7 +235,9 @@ def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
            cta: tuple[str, str] | None = None, footnote: str | None = None,
            brand: tuple | None = None,
            buttons: list[tuple] | None = None,
-           mood: str | None = None) -> str:
+           mood: str | None = None,
+           internal: bool = True,
+           tone: str | None = None) -> str:
     b = tuple(brand) if brand else ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, "")
     tile, word, suffix = b[0], b[1], b[2]
     logo = b[3] if len(b) > 3 else None
@@ -215,14 +250,17 @@ def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
            f'font-size:16px;font-family:{FONT_STACK};">{esc(tile)}</td>') +
         f'<td style="padding-left:10px;font-family:{HEAD_STACK};font-size:22px;letter-spacing:.02em;text-transform:uppercase;'
         f'color:{INK};">{esc(word)}{suffix_html}</td>'
+        + (f'<td style="padding-left:10px;vertical-align:middle;"><span style="display:inline-block;padding:5px 12px;border-radius:999px;'
+           f'background:{GREEN};background-color:{GREEN};color:{ON_GREEN};font-size:12px;font-weight:900;letter-spacing:.14em;'
+           f'text-transform:uppercase;font-family:{FONT_STACK};">Internal</span></td>' if internal else "") +
         f'</tr></table>')
     mood_td = (f'<td width="96" align="right" style="width:96px;padding:14px 18px 14px 0;vertical-align:middle;">'
                f'<img src="{esc(mood)}" width="96" height="96" alt="" style="display:block;width:96px;height:96px;"></td>') if mood else ""
     header = panel(
         f'<tr><td style="padding:24px 26px;">{eyebrow(eyebrow_text)}'
         f'<div style="font-family:{HEAD_STACK};font-size:32px;font-weight:400;letter-spacing:.01em;text-transform:uppercase;'
-        f'line-height:1.08;color:{INK};margin:0 0 8px;">{esc(title)}</div>'
-        f'<div style="font-size:14px;color:{MUTED};font-family:{FONT_STACK};">{esc(subtitle)}</div></td>{mood_td}</tr>')
+        f'line-height:1.08;color:{GREEN if tone == "up" else INK};margin:0 0 8px;">{esc(title)}</div>'
+        f'<div style="font-size:14px;color:{MUTED};font-family:{FONT_STACK};">{_segments(subtitle)}</div></td>{mood_td}</tr>')
     cards = "".join(_block_html(b) for b in blocks)
     btns = (f'<div style="margin:4px 0 6px;">' + "".join(button(*b) for b in buttons) + "</div>") if buttons else ""
     foot = []
@@ -259,12 +297,17 @@ def _demo_member() -> str:
     return render(
         title="+£12.00 today",
         eyebrow_text="Your robot · Thursday 23 October",
-        subtitle="£5,260.00 in your ISA · up £260.00 since you started (example figures)",
+        subtitle=["£5,260.00 in your ISA · ", ("up £260.00 since you started", "gain"), " (example figures)"],
+        tone="up",
         brand=MRI_BRAND,
         mood=mood_for(12.0),
+        internal=False,
         blocks=[
             {"heading": "Does it need you?", "status": ("Nothing to do", "green"), "accent": True,
              "prose": ["Nothing today. Next plan: Sunday at 7pm, to approve by 2pm Monday."]},
+            {"heading": "Your week so far", "status": ("3 up days", "green"),
+             "days": [("Mon", 8.40), ("Tue", -3.10), ("Wed", 15.75), ("Thu", 12.00), ("Fri", None)],
+             "prose": [["This week: ", ("+£33.05", "gain"), ". Small steps, every one by the rules."]]},
             {"heading": "What it's holding", "kv": [("Steady funds (core)", "4 funds"), ("Bolder slice (satellite)", "2 shares"),
                                                     ("Cash not invested", "£124.50")],
              "more": {"summary": "Show what's in each", "items": [
@@ -285,7 +328,7 @@ def _demo_owner() -> str:
         title="2 things need you",
         eyebrow_text="Stock Boom Hunter · Health",
         subtitle=f"Daily digest · {london()}",
-        brand=("S", "Stock Boom", "Hunter"),
+        brand=SBH_BRAND,
         blocks=[
             {"heading": "Needs you", "status": ("2", "amber"), "accent": True,
              "table": {"headers": ["What", "Why", "Do"], "rows": [
