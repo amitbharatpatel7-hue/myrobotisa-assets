@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="23">
+<meta name="mri-version" content="24">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -177,19 +177,6 @@ dialog h3{margin:0 0 6px;font-size:18px}
 dialog p{margin:0 0 16px;color:var(--muted);font-size:14px}
 dialog .row{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
 /* 23 Oct 2026 (Amit): the real emails in a flat cartoon phone, like How it works on the site; scroll inside the phone */
-.inbox{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;margin-top:12px}
-.inbox-pick{display:grid;gap:10px;align-content:start}
-.inbox-pick button{text-align:left;font:inherit;color:var(--fg);background:var(--card2,rgba(255,255,255,.04));border:2px solid var(--line);border-radius:16px;padding:12px 14px;cursor:pointer}
-.inbox-pick button b{display:block;font-size:15px;margin-bottom:3px} .inbox-pick button span{display:block;font-size:13.5px;line-height:1.45;color:var(--muted)}
-.inbox-pick button[aria-selected="true"]{border-color:var(--brand-green);background:#14402C} .inbox-pick button[aria-selected="true"] b{color:var(--brand-green)}
-.cphone{position:relative;justify-self:center;width:340px;max-width:100%;border:3px solid #8C5A99;border-radius:46px;padding:30px 12px 34px;background:linear-gradient(160deg,#5A1F66,#3E0A47);box-shadow:0 22px 40px rgba(0,0,0,.35);margin-bottom:22px}
-.cphone-cam{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:70px;height:10px;border-radius:9px;background:#2A0630}
-.cphone::before{content:"";position:absolute;left:-7px;top:120px;width:4px;height:46px;border-radius:3px;background:#8C5A99;box-shadow:0 60px 0 #8C5A99,344px 30px 0 #8C5A99}
-  .cphone::after{content:"";position:absolute;bottom:13px;left:50%;transform:translateX(-50%);width:84px;height:5px;border-radius:5px;background:#8C5A99}
-.cphone-scr{position:relative;width:302px;max-width:100%;height:560px;border-radius:26px;overflow:hidden;border:2px solid #2A0630;background:#34003B}
-.cphone-scr iframe{display:block;width:375px;height:696px;border:0;background:#34003B;transform:scale(.8053);transform-origin:0 0}
-.cphone-hint{position:absolute;left:0;right:0;bottom:-26px;text-align:center;margin:0;font-size:12px;color:var(--muted)}
-@media (min-width:900px){.inbox{grid-template-columns:1fr 340px;gap:30px}}
 /* quickstart */
 .qbar{height:8px;border-radius:999px;background:var(--grid);overflow:hidden;margin:4px 0 6px}
 .qbar i{display:block;height:100%;width:0;background:var(--brand-green);transition:width .3s}
@@ -289,6 +276,31 @@ body.qs-mode header.hero{display:none}
 .sitehdr .tag[hidden]{display:none}
 .sitehdr a.tag::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#1C0A21;margin-right:7px;vertical-align:1px;animation:pulse 1.6s ease-in-out infinite}
 @media (max-width:480px){.sitehdr .hdr-r{gap:8px}.sitehdr .t-long{display:none}}
+
+  /* 23 Oct 2026 (Amit: option C with B's glow): two black iPhones, side by side, each scrolls; they swipe sideways on a phone */
+  .duo{position:relative;isolation:isolate;display:flex;justify-content:center;align-items:flex-start;gap:34px;margin:26px 0 10px}
+  .duo::before{content:"";position:absolute;z-index:-1;left:12%;right:12%;top:6%;bottom:22%;border-radius:50%;pointer-events:none;
+    background:radial-gradient(closest-side at 40% 45%,rgba(234,0,171,.50),rgba(234,0,171,.14) 60%,transparent),radial-gradient(closest-side at 72% 75%,rgba(0,232,122,.32),transparent);filter:blur(28px)}
+  .duo-f{margin:0;display:grid;justify-items:center;gap:18px;flex:0 0 auto}
+  .duo-f figcaption{text-align:center;max-width:290px;font-size:14px;line-height:1.45;color:var(--muted)} .duo-f figcaption b{display:block;color:var(--fg);font-size:16px;margin-bottom:2px}
+  .cphone{position:relative;width:332px;border-radius:54px;padding:13px;background:#0A0A0C;box-sizing:border-box;
+    box-shadow:0 0 0 2px #2B2B30,0 0 0 3.5px #050506,0 34px 60px rgba(0,0,0,.55)}
+  .cphone-cam{position:absolute;top:25px;left:50%;transform:translateX(-50%);width:98px;height:29px;border-radius:20px;background:#000;z-index:3}
+  .cphone::before{content:"";position:absolute;left:-4.5px;top:132px;width:3px;height:56px;border-radius:2px;background:#2B2B30;box-shadow:0 72px 0 #2B2B30,337px 38px 0 #2B2B30}
+  .cphone::after{content:"";position:absolute;bottom:21px;left:50%;transform:translateX(-50%);width:112px;height:4.5px;border-radius:5px;background:rgba(255,255,255,.55);z-index:3;pointer-events:none}
+  .cphone-scr{position:relative;width:306px;height:624px;border-radius:42px;overflow:hidden;background:#34003B;padding-top:44px;box-sizing:border-box}
+  .cphone-scr iframe{display:block;width:375px;height:711px;border:0;background:#34003B;transform:scale(.816);transform-origin:0 0} /* an iPhone-width email (375px), scaled to the drawn screen */
+  .sbar{position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:4px 26px 0 30px;box-sizing:border-box;font:600 14.5px -apple-system,'SF Pro Text',Poppins,sans-serif;color:#fff;background:#34003B;z-index:2}
+  .sbar-i{display:flex;gap:6px;align-items:center} .sbar svg{display:block}
+  .duo-note{text-align:center;margin:6px auto 34px;max-width:620px}
+  @media (min-width:900px){ .duo-f:nth-child(2){margin-top:46px} }
+  @media (max-width:760px){
+    .duo{justify-content:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;gap:18px;padding:6px 4px 10px;margin-left:-4px;margin-right:-4px;scrollbar-width:none}
+    .duo::-webkit-scrollbar{display:none}
+    .duo-f{scroll-snap-align:center}
+    .duo::before{left:0;right:0}
+  }
+  @media (max-width:360px){ .cphone{transform:scale(.92);transform-origin:top center;margin-bottom:-50px} }
 </style>
 </head>
 <body>
@@ -416,18 +428,9 @@ body.qs-mode header.hero{display:none}
   <div class="pane" id="p-reports" hidden>
     <section class="card">
       <h2>Your emails</h2>
-      <p class="lede">One short email every evening (or once a week, if you prefer), and the week's plan at 7pm on Sunday. These are the real emails; pick one to read it in the phone.</p>
-      <div class="inbox">
-        <div class="inbox-pick" role="tablist" aria-label="Example emails">
-          <button type="button" role="tab" aria-selected="true" data-mail="good-day"><b>Every evening</b><span>How the day went, what the robot did, and whether anything needs you. Most days: nothing.</span></button>
-          <button type="button" role="tab" aria-selected="false" data-mail="plan"><b>Sunday, 7pm</b><span>The week's plan, with the reason for each order. Tap Approve by 2pm Monday.</span></button>
-          <button type="button" role="tab" aria-selected="false" data-mail="calm-dip"><b>A down day</b><span>Said plainly, next to the good news that's true. Nothing to do.</span></button>
-          <p class="tag">Example emails with made-up figures. Yours come from your own email key, to your own inbox.</p>
-        </div>
-        <div class="cphone"><span class="cphone-cam" aria-hidden="true"></span>
-          <div class="cphone-scr"><iframe id="inbox-f" src="../emails/good-day.html" title="Example evening email" loading="lazy"></iframe></div>
-          <p class="cphone-hint" aria-hidden="true">Scroll inside the phone</p></div>
-      </div>
+      <p class="lede">One short email every evening (or once a week, if you prefer), and the week's plan at 7pm on Sunday. These are the real emails; scroll inside each phone to read it.</p>
+      <div class="duo" id="inbox"><figure class="duo-f"><div class="cphone"><span class="cphone-cam" aria-hidden="true"></span><div class="cphone-scr"><div class="sbar" aria-hidden="true"><span>19:00</span><span class="sbar-i"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#fff"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#fff"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#fff"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#fff"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5l2.4-2.9a3.6 3.6 0 0 0-4.8 0zM3.4 6.3a7 7 0 0 1 9.2 0l1.6-1.9a9.6 9.6 0 0 0-12.4 0zM.1 2.3l1.6 1.9a10.4 10.4 0 0 1 12.6 0l1.6-1.9a12.9 12.9 0 0 0-15.8 0z" fill="#fff"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#fff" opacity=".45"/><rect x="2" y="2" width="17" height="9" rx="2" fill="#fff"/><rect x="24.5" y="4.5" width="1.6" height="4" rx=".8" fill="#fff" opacity=".45"/></svg></span></div><iframe src="../emails/plan.html" title="Example email: Sunday 7pm, orders to approve" loading="lazy"></iframe></div></div><figcaption><b>Sunday, 7pm: your turn</b>The week's plan, with a reason for each order. Tap Approve by 2pm Monday. Nothing is placed until you do.</figcaption></figure><figure class="duo-f"><div class="cphone"><span class="cphone-cam" aria-hidden="true"></span><div class="cphone-scr"><div class="sbar" aria-hidden="true"><span>19:00</span><span class="sbar-i"><svg width="18" height="12" viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#fff"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#fff"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#fff"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#fff"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5l2.4-2.9a3.6 3.6 0 0 0-4.8 0zM3.4 6.3a7 7 0 0 1 9.2 0l1.6-1.9a9.6 9.6 0 0 0-12.4 0zM.1 2.3l1.6 1.9a10.4 10.4 0 0 1 12.6 0l1.6-1.9a12.9 12.9 0 0 0-15.8 0z" fill="#fff"/></svg><svg width="27" height="13" viewBox="0 0 27 13"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="#fff" opacity=".45"/><rect x="2" y="2" width="17" height="9" rx="2" fill="#fff"/><rect x="24.5" y="4.5" width="1.6" height="4" rx=".8" fill="#fff" opacity=".45"/></svg></span></div><iframe src="../emails/good-day.html" title="Example email: every evening, how it went" loading="lazy"></iframe></div></div><figcaption><b>Every evening: how it went</b>What the robot did and how your pot is doing. Most days: nothing needs you.</figcaption></figure></div>
+      <p class="tag duo-note">Scroll inside each phone. Prefer fewer emails? Switch to once a week, and you'll still hear straight away if anything needs you. Example emails with made-up figures. Yours come from your own email key, to your own inbox.</p>
     </section>
   </div>
 
