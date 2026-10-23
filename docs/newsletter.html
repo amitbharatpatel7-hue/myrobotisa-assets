@@ -149,6 +149,8 @@
   .get a{color:var(--green);font-weight:700}
   .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;margin:8px 0 12px} .tour-facts{display:block;margin:14px 0 10px} .tour-facts li{font-size:15px;color:var(--ink)}
   .tour h2{margin-top:12px}
+  /* 23 Oct 2026 (Amit, option A): on wider screens the clip sits beside the text instead of filling the width; phones stack as before */
+  @media (min-width:980px){ .tour{grid-template-columns:1fr 1.15fr;gap:36px;align-items:center} .tour-video{max-width:none} }
   .who{display:grid;grid-template-columns:96px 1fr;gap:18px;align-items:start;margin-top:40px} .who img{border-radius:24px;border:3px solid var(--green);width:96px;height:96px} .who h2{margin:0 0 8px} .who p{margin:0 0 10px;color:var(--ink)} .who a{color:var(--green);font-weight:700}
   @media (max-width:480px){.who{grid-template-columns:1fr} .who img{width:72px;height:72px}}
   .tour a{color:var(--green);font-weight:700}
