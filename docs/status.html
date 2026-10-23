@@ -150,8 +150,8 @@
   .get a{color:var(--green);font-weight:700}
   .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;margin:8px 0 12px} .tour-facts{display:block;margin:14px 0 10px} .tour-facts li{font-size:15px;color:var(--ink)}
   .tour h2{margin-top:12px}
-  /* 23 Oct 2026 (Amit): the real emails in a flat, cartoon phone (drawn like the robot icon), scrollable, four to pick from */
-  .inbox{display:grid;grid-template-columns:1fr;gap:22px;margin:20px 0 10px;align-items:start}
+  /* 23 Oct 2026 (Amit): the real emails in a flat, cartoon phone (drawn like the robot icon), scrollable. Two to pick from (Amit, 23 Oct: just the approvals email and the daily digest) */
+  .inbox{display:grid;grid-template-columns:1fr;gap:22px;margin:20px 0 48px;align-items:start}
   .inbox-pick{display:grid;gap:10px;align-content:start}
   .inbox-pick button{text-align:left;font:inherit;color:var(--ink);background:var(--deep2);border:2px solid var(--rule);border-radius:16px;padding:12px 14px;cursor:pointer}
   .inbox-pick button b{display:block;font-size:16px;margin-bottom:3px} .inbox-pick button span{display:block;font-size:14px;line-height:1.45;color:var(--muted)}
@@ -373,7 +373,7 @@
   </header>
 <main id="main">
   <section class="rec" id="status">
-    <div class="pghead"><img class="pgmark" src="marks/status.png" alt="" width="96" height="96"><h1 class="pg">Nothing <span class="p">to hide</span></h1></div>
+    <div class="pghead"><img class="pgmark" src="marks/status.png?v=1" alt="" width="96" height="96"><h1 class="pg">Nothing <span class="p">to hide</span></h1></div>
     <p class="lead">Did it run? That's the record we keep in public: how often the robot did its weekly job, not how the market went. It's rebuilt every night from the robot's own logs on GitHub, and it never carries a return figure, by design.</p>
     <div class="rec-grid" id="recgrid" hidden>
       <div class="rec-tile"><b id="r-weeks">–</b><span>weeks run</span></div>
