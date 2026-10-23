@@ -150,21 +150,6 @@
   .get a{color:var(--green);font-weight:700}
   .tour{display:grid;grid-template-columns:1fr;gap:20px;align-items:start;margin:8px 0 12px} .tour-facts{display:block;margin:14px 0 10px} .tour-facts li{font-size:15px;color:var(--ink)}
   .tour h2{margin-top:12px}
-  /* 23 Oct 2026 (Amit): the real emails in a flat, cartoon phone (drawn like the robot icon), scrollable. Two to pick from (Amit, 23 Oct: just the approvals email and the daily digest) */
-  .inbox{display:grid;grid-template-columns:1fr;gap:22px;margin:20px 0 48px;align-items:start}
-  .inbox-pick{display:grid;gap:10px;align-content:start}
-  .inbox-pick button{text-align:left;font:inherit;color:var(--ink);background:var(--deep2);border:2px solid var(--rule);border-radius:16px;padding:12px 14px;cursor:pointer}
-  .inbox-pick button b{display:block;font-size:16px;margin-bottom:3px} .inbox-pick button span{display:block;font-size:14px;line-height:1.45;color:var(--muted)}
-  .inbox-pick button[aria-selected="true"]{border-color:var(--green);background:#14402C} .inbox-pick button[aria-selected="true"] b{color:var(--green)}
-  .inbox-pick button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
-  .cphone{position:relative;justify-self:center;width:340px;max-width:100%;border:3px solid #8C5A99;border-radius:46px;padding:30px 12px 34px;background:linear-gradient(160deg,#5A1F66,#3E0A47);box-shadow:0 22px 40px rgba(0,0,0,.35)}
-  .cphone-cam{position:absolute;top:12px;left:50%;transform:translateX(-50%);width:70px;height:10px;border-radius:9px;background:#2A0630}
-  .cphone::before{content:"";position:absolute;left:-7px;top:120px;width:4px;height:46px;border-radius:3px;background:#8C5A99;box-shadow:0 60px 0 #8C5A99,344px 30px 0 #8C5A99}
-  .cphone::after{content:"";position:absolute;bottom:13px;left:50%;transform:translateX(-50%);width:84px;height:5px;border-radius:5px;background:#8C5A99}
-  .cphone-scr{position:relative;width:302px;height:560px;border-radius:26px;overflow:hidden;border:2px solid #2A0630;background:#34003B}
-  .cphone-scr iframe{display:block;width:375px;height:696px;border:0;background:#34003B;transform:scale(.8053);transform-origin:0 0} /* an iPhone-width email (375px), scaled to the drawn screen */
-  .cphone-hint{position:absolute;left:0;right:0;bottom:-30px;text-align:center;margin:0;font-size:12.5px;color:var(--muted)}
-  @media (min-width:860px){ .inbox{grid-template-columns:1fr 340px;gap:36px} }
   /* 23 Oct 2026 (Amit: "a few people have asked: so what is this?"): a three-step answer straight under the ISA box */
   .what{margin:0 0 30px;padding-top:24px} .what h2{margin-top:0}
   .what-steps{list-style:none;padding:0;margin:16px 0 12px;display:grid;gap:12px;counter-reset:w}
@@ -343,6 +328,32 @@
   .road{margin:18px 0 8px;padding:16px 18px;border-left:4px solid var(--pink);background:var(--deep2);border-radius:0 18px 18px 0}
   .road-k{margin:0 0 6px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pink-ink)}
   .road p:last-child{margin:0;font-size:16px;line-height:1.55;color:var(--ink)}
+
+  /* 23 Oct 2026 (Amit: option C with B's glow): two black iPhones, side by side, each scrolls; they swipe sideways on a phone */
+  .duo{position:relative;isolation:isolate;display:flex;justify-content:center;align-items:flex-start;gap:34px;margin:26px 0 10px}
+  .duo::before{content:"";position:absolute;z-index:-1;left:12%;right:12%;top:6%;bottom:22%;border-radius:50%;pointer-events:none;
+    background:radial-gradient(closest-side at 40% 45%,rgba(234,0,171,.50),rgba(234,0,171,.14) 60%,transparent),radial-gradient(closest-side at 72% 75%,rgba(0,232,122,.32),transparent);filter:blur(28px)}
+  .duo-f{margin:0;display:grid;justify-items:center;gap:18px;flex:0 0 auto}
+  .duo-f figcaption{text-align:center;max-width:290px;font-size:14px;line-height:1.45;color:var(--muted)} .duo-f figcaption b{display:block;color:var(--ink);font-size:16px;margin-bottom:2px}
+  .cphone{position:relative;width:332px;border-radius:54px;padding:13px;background:#0A0A0C;box-sizing:border-box;
+    box-shadow:0 0 0 2px #2B2B30,0 0 0 3.5px #050506,0 34px 60px rgba(0,0,0,.55)}
+  .cphone-cam{position:absolute;top:25px;left:50%;transform:translateX(-50%);width:98px;height:29px;border-radius:20px;background:#000;z-index:3}
+  .cphone::before{content:"";position:absolute;left:-4.5px;top:132px;width:3px;height:56px;border-radius:2px;background:#2B2B30;box-shadow:0 72px 0 #2B2B30,337px 38px 0 #2B2B30}
+  .cphone::after{content:"";position:absolute;bottom:21px;left:50%;transform:translateX(-50%);width:112px;height:4.5px;border-radius:5px;background:rgba(255,255,255,.55);z-index:3;pointer-events:none}
+  .cphone-scr{position:relative;width:306px;height:624px;border-radius:42px;overflow:hidden;background:#34003B;padding-top:44px;box-sizing:border-box}
+  .cphone-scr iframe{display:block;width:375px;height:711px;border:0;background:#34003B;transform:scale(.816);transform-origin:0 0} /* an iPhone-width email (375px), scaled to the drawn screen */
+  .sbar{position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:4px 26px 0 30px;box-sizing:border-box;font:600 14.5px -apple-system,'SF Pro Text',Poppins,sans-serif;color:#fff;background:#34003B;z-index:2}
+  .sbar-i{display:flex;gap:6px;align-items:center} .sbar svg{display:block}
+  .duo-note{text-align:center;margin:6px auto 34px;max-width:620px}
+  @media (min-width:900px){ .duo-f:nth-child(2){margin-top:46px} }
+  @media (max-width:760px){
+    .duo{justify-content:flex-start;overflow-x:auto;scroll-snap-type:x mandatory;gap:18px;padding:6px 4px 10px;margin-left:-4px;margin-right:-4px;scrollbar-width:none}
+    .duo::-webkit-scrollbar{display:none}
+    .duo-f{scroll-snap-align:center}
+    .duo::before{left:0;right:0}
+  }
+  @media (max-width:360px){ .cphone{transform:scale(.92);transform-origin:top center;margin-bottom:-50px} }
+  .duo-note .sw{display:none} @media (max-width:760px){ .duo-note .sw{display:inline} }
   .v2-next{margin:28px 0 8px}
   h1.pg{font-size:34px;margin:44px 0 6px;line-height:1.1} h1.pg .p{color:var(--pink)}
   h2.h3{font-family:inherit;text-transform:none;letter-spacing:0;line-height:1.3} footer h2.h3{color:var(--ink);font-size:14px;margin:18px 0 4px} .box h2.h3{margin:0 0 8px;font-size:18px} .box h2.h3 .n{color:var(--green)} .job h2.h3{margin:0;font-family:Anton,Impact,sans-serif;font-size:22px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
@@ -480,7 +491,7 @@
   </footer>
 </div>
 
-<script>(function(){var M={"join":"join.html","f":"join.html","email":"join.html","go":"join.html","consent":"join.html","website":"join.html","msg":"join.html","nonews":"how-it-works.html","calm":"how-it-works.html","jobs":"how-it-works.html","mix":"how-it-works.html","mixsay":"how-it-works.html","dayjob":"how-it-works.html","inbox":"how-it-works.html","inbox-f":"how-it-works.html","road":"how-it-works.html","days":"how-it-works.html","get":"what-you-get.html","vs":"what-you-get.html","isnt":"what-you-get.html","yours":"what-you-get.html","status":"status.html","recgrid":"status.html","r-weeks":"status.html","r-missed":"status.html","r-orders":"status.html","r-state":"status.html","recmeta":"status.html","transparency":"status.html","trades":"status.html","tlmeta":"status.html","tllist":"status.html","rules":"isa-rules.html","isa":"isa-rules.html","calc":"isa-rules.html","c-sal":"isa-rules.html","c-bon":"isa-rules.html","c-out":"isa-rules.html","c-vs1":"isa-rules.html","c-head":"isa-rules.html","c-bk":"isa-rules.html","c-bt":"isa-rules.html","c-bn":"isa-rules.html","c-tax":"isa-rules.html","c-ni":"isa-rules.html","c-keep":"isa-rules.html","c-isa1":"isa-rules.html","c-isa2":"isa-rules.html","faq":"questions.html","faq-2020":"questions.html","faq-crash":"questions.html","faq-t212":"questions.html","faq-updates":"questions.html","faq-cancel":"questions.html","faq-sipp":"questions.html","faq-brokers":"questions.html","faq-code":"questions.html","faq-paper":"questions.html","faq-time":"questions.html","faq-share":"questions.html","faq-miss":"questions.html","faq-safe":"questions.html","faq-run":"questions.html","faq-money":"questions.html","faq-rules":"questions.html","faq-advice":"questions.html","faq-trust":"questions.html","faq-security":"questions.html","faq-close":"questions.html","faq-uk":"questions.html","news":"newsletter.html","nf":"newsletter.html","nemail":"newsletter.html","ngo":"newsletter.html","nconsent":"newsletter.html","nwebsite":"newsletter.html","nmsg":"newsletter.html","issues":"newsletter.html","nllist":"newsletter.html","nlnone":"newsletter.html"};var h=location.hash.slice(1);if(h&&M[h]&&!document.getElementById(h))location.replace(M[h]+location.search+"#"+h);})();</script>
+<script>(function(){var M={"join":"join.html","f":"join.html","email":"join.html","go":"join.html","consent":"join.html","website":"join.html","msg":"join.html","nonews":"how-it-works.html","calm":"how-it-works.html","jobs":"how-it-works.html","mix":"how-it-works.html","mixsay":"how-it-works.html","dayjob":"how-it-works.html","inbox":"how-it-works.html","road":"how-it-works.html","days":"how-it-works.html","get":"what-you-get.html","vs":"what-you-get.html","isnt":"what-you-get.html","yours":"what-you-get.html","status":"status.html","recgrid":"status.html","r-weeks":"status.html","r-missed":"status.html","r-orders":"status.html","r-state":"status.html","recmeta":"status.html","transparency":"status.html","trades":"status.html","tlmeta":"status.html","tllist":"status.html","rules":"isa-rules.html","isa":"isa-rules.html","calc":"isa-rules.html","c-sal":"isa-rules.html","c-bon":"isa-rules.html","c-out":"isa-rules.html","c-vs1":"isa-rules.html","c-head":"isa-rules.html","c-bk":"isa-rules.html","c-bt":"isa-rules.html","c-bn":"isa-rules.html","c-tax":"isa-rules.html","c-ni":"isa-rules.html","c-keep":"isa-rules.html","c-isa1":"isa-rules.html","c-isa2":"isa-rules.html","faq":"questions.html","faq-2020":"questions.html","faq-crash":"questions.html","faq-t212":"questions.html","faq-updates":"questions.html","faq-cancel":"questions.html","faq-sipp":"questions.html","faq-brokers":"questions.html","faq-code":"questions.html","faq-paper":"questions.html","faq-time":"questions.html","faq-share":"questions.html","faq-miss":"questions.html","faq-safe":"questions.html","faq-run":"questions.html","faq-money":"questions.html","faq-rules":"questions.html","faq-advice":"questions.html","faq-trust":"questions.html","faq-security":"questions.html","faq-close":"questions.html","faq-uk":"questions.html","news":"newsletter.html","nf":"newsletter.html","nemail":"newsletter.html","ngo":"newsletter.html","nconsent":"newsletter.html","nwebsite":"newsletter.html","nmsg":"newsletter.html","issues":"newsletter.html","nllist":"newsletter.html","nlnone":"newsletter.html"};var h=location.hash.slice(1);if(h&&M[h]&&!document.getElementById(h))location.replace(M[h]+location.search+"#"+h);})();</script>
 <script>var V2SRC=(function(){var u,q=null,h="";try{u=new URLSearchParams(location.search);q=u.get("src")||u.get("utm_source")}catch(e){}if(!q){try{h=new URL(document.referrer).hostname.replace(/^www\./,"")}catch(e){}}var s=(q||(h&&!/(^|\.)myrobotisa\.com$/.test(h)?h:"")||"").replace(/[^\w.-]/g,"").slice(0,40);try{var o=sessionStorage.getItem("src");if(s&&(q||!o))sessionStorage.setItem("src",s);else if(o)s=o}catch(e){}return s||null;})();</script>
 <script>
 (function(){
@@ -718,10 +729,5 @@
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
 var l=document.querySelector("a.login");if(l){l.textContent="Members area";l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
 </script>
-<script>/* 23 Oct 2026: How it works, pick an example email to show in the phone */
-(function(){var box=document.getElementById("inbox");if(!box)return;var f=document.getElementById("inbox-f");
-box.querySelectorAll("[data-mail]").forEach(function(b){b.addEventListener("click",function(){
-box.querySelectorAll("[data-mail]").forEach(function(x){x.setAttribute("aria-selected",String(x===b));});
-f.src="emails/"+b.dataset.mail+".html";f.title="Example email: "+b.querySelector("b").textContent;});});})();</script>
 </body>
 </html>
