@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="50">
+<meta name="mri-version" content="51">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -321,7 +321,8 @@
   .su-pre .ah b::before{content:counter(acct);display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--deep);border:2px solid var(--pink);color:var(--pink-ink);font-size:14px;flex:none}
   .su-pre li p{margin:8px 0 0;color:var(--muted);font-size:14.5px;line-height:1.5} .su-pre li p b{color:var(--ink)}
   .su-keep{color:var(--green);margin:8px 0 0}
-  .su-xh{margin:26px 0 0} .su-xh h3{margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;font-size:24px;color:var(--ink)} .su-xh h3 span{color:var(--green)}
+  .su-xfold{margin:22px 0 0} .su-xfold > summary .fold-l{font-size:17px} #sx3-more{margin-top:14px} #sx3-more > summary{font-size:14.5px} #sx3-more > p,#sx3-more > ol{margin-top:8px}
+  #sx3-more ol{margin:8px 0 0;padding-left:20px;color:var(--ink);font-size:14px;line-height:1.55} .su-xh{margin:26px 0 0} .su-xh h3{margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;font-size:24px;color:var(--ink)} .su-xh h3 span{color:var(--green)}
   .su-xh p{margin:4px 0 0;color:var(--muted);font-size:14.5px}
   .su-x{counter-reset:su 5} .su-x .su-step{border-style:dashed} .su-x .su-step.done{border-style:solid}
   .su-x .pill.o{border-color:var(--rule);color:var(--muted)}
@@ -593,11 +594,12 @@
           <li class="su-step locked" id="su5"><div class="su-h"><b>Build my robot</b><span class="pill" id="su5-st">Ready when you are</span></div>
             <div class="row"><button class="btn" type="button" id="su-go" disabled>Build my robot</button></div>
             <ul class="su-log" id="su-log" aria-live="polite"></ul>
-            <div class="su-done" id="su-done" hidden><h3>Your robot is running</h3><p style="margin:0 0 12px">On paper money. The setup check email is on its way to you. Next: ask for its first weekly plan, then tap Approve in the email. Optional extras, including your app on your phone, are just below.</p>
+            <div class="su-done" id="su-done" hidden><h3>Your robot is running</h3><p style="margin:0 0 12px">On paper money. The setup check email is on its way to you. Next: ask for its first weekly plan, then tap Approve in the email. Optional extras, including the app for your phone, are just below.</p>
               <div class="row"><button class="btn" type="button" id="su-plan">Get my first weekly plan</button><a class="btn ghost" id="su-repo" target="_blank" rel="noopener">See my copy on GitHub</a></div>
               <p class="small" id="su-plan-msg" role="status" aria-live="polite"></p></div></li>
         </ol>
-        <div class="su-xh"><h3>Optional <span>extras</span></h3><p>Add any of these now or on any later day. Your robot runs fine without them.</p></div>
+        <details class="fold su-xfold" id="su-extras"><summary><span class="fold-l">Optional extras: error alerts, Claude fixes, your app</span></summary>
+        <p class="small" style="margin:10px 0 0">Add any of these now or on any later day. Your robot runs fine without them.</p>
         <ol class="su-steps su-x">
           <li class="su-step locked" id="sx1"><div class="su-h"><b>Error alerts</b><span class="pill o" id="sx1-st">Optional</span></div>
             <p>If a run fails in the night, Sentry (free) tells you where and why.</p>
@@ -608,37 +610,40 @@
             <label class="f" for="sx-dsn">Sentry DSN</label><input class="t" id="sx-dsn" autocomplete="off" spellcheck="false" placeholder="https://…@….sentry.io/…">
             <div class="row"><button class="btn" type="button" id="sx1-go" disabled>Switch on error alerts</button></div>
             <p class="small" id="sx1-msg" role="status" aria-live="polite">Build your robot first; then the extras can go into your copy.</p></li>
-          <li class="su-step locked" id="sx2"><div class="su-h"><b>Claude fixes failed runs</b><span class="pill o" id="sx2-st">Optional</span></div>
-            <p>When a run fails, Claude reads what went wrong and suggests a fix for you to approve. It never changes your money settings. It needs one of these:</p>
-            <div class="su-seg" data-k="cl"><button type="button" data-v="api" aria-pressed="true">Claude API key<small>pay as you go</small></button><button type="button" data-v="sub" aria-pressed="false">Claude Pro or Max<small>uses your plan</small></button></div>
-            <details id="sx2-api"><summary>Where do I find this?</summary><ol>
-              <li>Sign in at <a href="https://platform.claude.com" target="_blank" rel="noopener">platform.claude.com</a>. It's separate from the Claude app, and the free Claude plan doesn't include it.</li>
-              <li><b>Billing</b>: add a little credit. Each fix uses a small amount.</li>
-              <li><b>API keys &rarr; Create key</b>, call it <b>My Robot ISA</b>, and copy it (it starts with sk-ant-).</li></ol></details>
-            <details id="sx2-sub" hidden><summary>Where do I find this?</summary><ol>
-              <li>You need Claude Pro or Max (the free plan doesn't include Claude Code) and Claude Code on a computer.</li>
+          <li class="su-step locked" id="sx2"><div class="su-h"><b>Claude fixes failed runs</b><span class="pill o" id="sx2-st">Paid Claude</span></div>
+            <p>When a run fails, Claude reads what went wrong and suggests a fix for you to approve. It never changes your money settings. <b>The free Claude plan can't do this</b>: you need Claude Pro or Max, or Claude API credit, which you pay for per fix with no subscription.</p>
+            <div class="su-seg" data-k="cl"><button type="button" data-v="sub" aria-pressed="true">I have Claude Pro or Max<small>uses your plan</small></button><button type="button" data-v="api" aria-pressed="false">I don't<small>buy a little API credit instead</small></button></div>
+            <details id="sx2-sub"><summary>Where do I find this?</summary><ol>
+              <li>You need Claude Code on a computer once (it comes with Pro and Max).</li>
               <li>In a terminal, run <code>claude setup-token</code> and sign in when it asks.</li>
               <li>Copy the token it prints (it starts with sk-ant-).</li></ol></details>
-            <label class="f" for="sx-cl" id="sx-cl-l">Claude API key</label><input class="t" id="sx-cl" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…">
+            <details id="sx2-api" hidden><summary>Where do I find this?</summary><ol>
+              <li>Sign in at <a href="https://platform.claude.com" target="_blank" rel="noopener">platform.claude.com</a>. It's separate from the Claude app.</li>
+              <li><b>Billing</b>: add a little credit. Each fix uses a small amount.</li>
+              <li><b>API keys &rarr; Create key</b>, call it <b>My Robot ISA</b>, and copy it (it starts with sk-ant-).</li></ol></details>
+            <label class="f" for="sx-cl" id="sx-cl-l">Claude subscription token</label><input class="t" id="sx-cl" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…">
             <div class="row"><button class="btn" type="button" id="sx2-go" disabled>Switch on Claude fixes</button></div>
             <p class="small" id="sx2-msg" role="status" aria-live="polite"></p>
             <p class="small">Each fix also uses a few GitHub minutes. To switch it off, delete the key from your copy's Settings &rarr; Secrets.</p></li>
-          <li class="su-step locked" id="sx3"><div class="su-h"><b>Your app on your phone, Mac or PC</b><span class="pill o" id="sx3-st">Optional</span></div>
-            <p>A private dashboard only you can open, showing your robot's plan and how it's doing. It runs on a free Cloudflare account and only ever gets a read-only key.</p>
-            <details><summary>Where do I find these?</summary><ol>
-              <li><a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener">Make a free Cloudflare account</a>.</li>
-              <li><b>Account ID</b>: in Cloudflare, open <b>Workers &amp; Pages</b>; under <b>Account details</b>, copy <b>Account ID</b>.</li>
-              <li><b>API token</b>: <b>Account API tokens &rarr; Create Token &rarr; Custom token</b>. Call it <b>My Robot ISA</b> and add two permissions: <b>Account &middot; Cloudflare Pages &middot; Edit</b> and <b>Account &middot; Access: Apps and Policies &middot; Edit</b>. Create it and copy it.</li>
-              <li><b>A read-only Trading 212 key</b>: in the same Practice account, make one more key called <b>My Robot ISA dashboard</b> with only <b>Account data</b>, <b>Metadata</b> and <b>Portfolio</b> switched on, and IP access <b>Unrestricted</b>. No Orders switches: the app can never place an order.</li></ol></details>
-            <label class="f" for="sx-cfa">Cloudflare account ID</label><input class="t" id="sx-cfa" autocomplete="off" spellcheck="false">
-            <label class="f" for="sx-cft">Cloudflare API token</label><input class="t" id="sx-cft" type="password" autocomplete="off" spellcheck="false">
-            <label class="f" for="sx-rk">Read-only Trading 212 key</label><input class="t" id="sx-rk" type="password" autocomplete="off" spellcheck="false">
-            <label class="f" for="sx-rs">Read-only Trading 212 secret</label><input class="t" id="sx-rs" type="password" autocomplete="off" spellcheck="false">
-            <label class="f" for="sx-em">Who can open it (your email)</label><input class="t" id="sx-em" type="email" autocomplete="email">
-            <div class="row"><button class="btn" type="button" id="sx3-go" disabled>Set up my app</button></div>
-            <ul class="su-log" id="sx3-log" aria-live="polite"></ul>
-            <p class="small" id="sx3-msg" role="status" aria-live="polite"></p></li>
+          <li class="su-step" id="sx3"><div class="su-h"><b>Your app on your phone, Mac or PC</b><span class="pill o" id="sx3-st">Optional</span></div>
+            <p>One click puts this members area on your phone, Mac or PC, in its own window like any app. No App Store.</p>
+            <div class="row"><button class="btn" type="button" data-install>Install the app</button></div>
+            <details id="sx3-more"><summary>Add your robot's live numbers to the app (about 10 minutes)</summary>
+              <p>Your plan, holdings and results on a private page only you can open. It runs on your own free Cloudflare account, so your numbers never pass through ours, and it only ever gets a read-only key.</p>
+              <ol>
+                <li><a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener">Make a free Cloudflare account</a>.</li>
+                <li><b>Account API tokens &rarr; Create Token &rarr; Custom token</b>. Call it <b>My Robot ISA</b>, add <b>Account &middot; Cloudflare Pages &middot; Edit</b> and <b>Account &middot; Access: Apps and Policies &middot; Edit</b>, create it and copy it.</li>
+                <li>In Trading 212 (the same Practice account), make one more key called <b>My Robot ISA dashboard</b> with only <b>Account data</b>, <b>Metadata</b> and <b>Portfolio</b>, IP access <b>Unrestricted</b>. No Orders switches: it can never place an order.</li></ol>
+              <label class="f" for="sx-cft">Cloudflare API token</label><input class="t" id="sx-cft" type="password" autocomplete="off" spellcheck="false">
+              <label class="f" for="sx-rk">Read-only Trading 212 key</label><input class="t" id="sx-rk" type="password" autocomplete="off" spellcheck="false">
+              <label class="f" for="sx-rs">Read-only Trading 212 secret</label><input class="t" id="sx-rs" type="password" autocomplete="off" spellcheck="false">
+              <p class="small" id="sx-em-row">Only <b id="sx-em-show"></b> can open it. <a href="#" id="sx-em-edit" style="color:var(--green);font-weight:700">Change</a></p>
+              <div id="sx-em-box" hidden><label class="f" for="sx-em">Who can open it</label><input class="t" id="sx-em" type="email" autocomplete="email"></div>
+              <div class="row"><button class="btn" type="button" id="sx3-go" disabled>Add my numbers</button></div>
+              <ul class="su-log" id="sx3-log" aria-live="polite"></ul>
+              <p class="small" id="sx3-msg" role="status" aria-live="polite"></p></details></li>
         </ol>
+        </details>
         <a class="su-promo su-live-go" href="#live" data-go="live"><b>Ready for real money?</b><span>When you are, the real-money switch walks you through it step by step, just like this page.</span></a>
         <p class="small" style="margin-top:14px">Set up my robot does QuickStart steps 1 to 4 for you. Can't use it, say GitHub won't connect? The <a href="#guide/qs-1" style="color:var(--green);font-weight:700">manual steps</a> do the same by hand.</p>
       </section>
@@ -1436,7 +1441,7 @@
 
   // ---- Optional extras (QuickStart 5 and 6, folded into Set up my robot). The member's copy says what it supports
   // in kit-features.json; error alerts also work on older copies, whose universe.json already has sentry_dsn.
-  var SX = { cl: "api", feat: null, featFor: "" };
+  var SX = { feat: null, featFor: "" };
   function sxCopy() { return SU.full || (SU.have && SU.have.full) || ""; }
   async function sxFeatures(full) {
     if (SX.featFor === full) return SX.feat; SX.featFor = full; SX.feat = {};
@@ -1447,29 +1452,31 @@
   var SX_NEED = { sx1: "sentry_dsn", sx2: "claude_fix", sx3: "dashboard_setup" }, SX_MIN = { sx1: 1, sx2: 1, sx3: 2 };
   async function sxState() {
     var full = sxCopy(), on = !!(SU.tok && full);
-    ["sx1", "sx2", "sx3"].forEach(function (id) { $(id).classList.toggle("locked", !on); });
+    ["sx1", "sx2"].forEach(function (id) { $(id).classList.toggle("locked", !on); });
     if (!on) { sxCheck(); return; }
     var f = await sxFeatures(full);
     ["sx1", "sx2", "sx3"].forEach(function (id) {
       var ok = (f[SX_NEED[id]] || 0) >= SX_MIN[id]; $(id).dataset.ok = ok ? "1" : "";
       var m = $(id + "-msg"); if (!ok) m.textContent = "Your copy doesn't have this yet. It arrives with the next update to your code."; else if (/Build your robot|doesn't have this/.test(m.textContent)) m.textContent = "";
     });
-    if (!$("sx-em").value) $("sx-em").value = $("su-to").value || (me && me.email) || "";
+    if (!$("sx-em").value) $("sx-em").value = $("su-to").value || (me && me.email) || ""; $("sx-em-show").textContent = $("sx-em").value;
     sxCheck();
   }
   function sxCheck() {
     var on = !!(SU.tok && sxCopy()) && !SU.busy, ok = function (id) { return on && $(id).dataset.ok === "1"; };
     $("sx1-go").disabled = !(ok("sx1") && /^https:\/\/[0-9a-f]{16,}@[A-Za-z0-9.-]+\/\d+$/.test($("sx-dsn").value.trim()));
     $("sx2-go").disabled = !(ok("sx2") && /^sk-ant-[A-Za-z0-9_-]{20,}$/.test($("sx-cl").value.trim()));
-    $("sx3-go").disabled = !(ok("sx3") && /^[0-9a-f]{32}$/.test($("sx-cfa").value.trim()) && $("sx-cft").value.trim().length >= 30 &&
+    $("sx-em-show").textContent = $("sx-em").value.trim();
+    $("sx3-go").disabled = !(ok("sx3") && $("sx-cft").value.trim().length >= 30 &&
       $("sx-rk").value.trim().length > 10 && $("sx-rs").value.trim().length > 10 && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($("sx-em").value.trim()));
   }
   var sxReady = false;
   function sxInit() {
     if (sxReady) return; sxReady = true;
-    ["sx-dsn", "sx-cl", "sx-cfa", "sx-cft", "sx-rk", "sx-rs", "sx-em"].forEach(function (id) { $(id).addEventListener("input", sxCheck); });
+    $("sx-em-edit").addEventListener("click", function (e) { e.preventDefault(); $("sx-em-box").hidden = false; $("sx-em-row").hidden = true; $("sx-em").focus(); });
+    ["sx-dsn", "sx-cl", "sx-cft", "sx-rk", "sx-rs", "sx-em"].forEach(function (id) { $(id).addEventListener("input", sxCheck); });
     document.querySelector('.su-seg[data-k="cl"]').addEventListener("click", function () {
-      var api = SU.cl !== "sub"; $("sx2-api").hidden = !api; $("sx2-sub").hidden = api;
+      var api = SU.cl === "api"; $("sx2-api").hidden = !api; $("sx2-sub").hidden = api;
       $("sx-cl-l").textContent = api ? "Claude API key" : "Claude subscription token"; });
     $("sx1-go").addEventListener("click", sxSentry); $("sx2-go").addEventListener("click", sxClaude); $("sx3-go").addEventListener("click", sxApp);
     sxState();
@@ -1487,7 +1494,7 @@
     sxCheck();
   }
   async function sxClaude() {
-    var full = sxCopy(), m = $("sx2-msg"), n = SU.cl === "sub" ? "CLAUDE_CODE_OAUTH_TOKEN" : "ANTHROPIC_API_KEY", v = {}; v[n] = $("sx-cl").value.trim();
+    var full = sxCopy(), m = $("sx2-msg"), n = SU.cl === "api" ? "ANTHROPIC_API_KEY" : "CLAUDE_CODE_OAUTH_TOKEN", v = {}; v[n] = $("sx-cl").value.trim();
     $("sx2-go").disabled = true; m.textContent = "Locking it into your copy…";
     if (await ghSeal(full, v)) { $("sx-cl").value = ""; m.textContent = "Claude fixes are on. Next time a run fails, a suggested fix appears on GitHub for you to approve."; $("sx2").classList.add("done"); $("sx2-st").textContent = "On"; }
     else m.textContent = "Couldn't lock it in just now. Try again in a minute.";
@@ -1496,25 +1503,25 @@
   async function sxApp() {
     var full = sxCopy(), log = ghLog("sx3-log"), m = $("sx3-msg"); $("sx3-log").innerHTML = ""; m.textContent = ""; SU.busy = true; sxCheck();
     try {
-      var k = log("Locking your Cloudflare and read-only keys into your copy");
-      var ok = await ghSeal(full, { CLOUDFLARE_ACCOUNT_ID: $("sx-cfa").value.trim(), CLOUDFLARE_API_TOKEN: $("sx-cft").value.trim(), T212_READ_API_KEY: $("sx-rk").value.trim(), T212_READ_API_SECRET: $("sx-rs").value.trim() });
-      if (!ok) k.bad("Couldn't lock your keys in just now. Press Set up my app again.");
-      $("sx-cfa").value = $("sx-cft").value = $("sx-rk").value = $("sx-rs").value = ""; k.ok("Keys locked in. They've been cleared from this page.");
-      var e = log("Saving who can open it"); if (!(await ghVar(full, "DASHBOARD_EMAIL", $("sx-em").value.trim()))) e.bad("Couldn't save your email just now. Press Set up my app again: your keys are already saved."); e.ok("Only " + $("sx-em").value.trim() + " can open it");
+      var k = log("Locking your Cloudflare token and read-only key into your copy");
+      var ok = await ghSeal(full, { CLOUDFLARE_API_TOKEN: $("sx-cft").value.trim(), T212_READ_API_KEY: $("sx-rk").value.trim(), T212_READ_API_SECRET: $("sx-rs").value.trim() });
+      if (!ok) k.bad("Couldn't lock your keys in just now. Press Add my numbers again.");
+      $("sx-cft").value = $("sx-rk").value = $("sx-rs").value = ""; k.ok("Keys locked in. They've been cleared from this page.");
+      var e = log("Saving who can open it"); if (!(await ghVar(full, "DASHBOARD_EMAIL", $("sx-em").value.trim()))) e.bad("Couldn't save your email just now. Press Add my numbers again: your keys are already saved."); e.ok("Only " + $("sx-em").value.trim() + " can open it");
       var c = log("Setting up your app on Cloudflare (about a minute)"), r = await ghRun(full, "dashboard-setup.yml");
-      if (r.r === "missing" || r.r === "nostart") c.bad("Couldn't start the app setup. Press Set up my app again in a minute.");
-      if (r.r === "failure") c.bad("Cloudflare said no. Check the token has both permissions and the account ID is right, then press Set up my app again.");
+      if (r.r === "missing" || r.r === "nostart") c.bad("Couldn't start the app setup. Press Add my numbers again in a minute.");
+      if (r.r === "failure") c.bad("Cloudflare said no. Check the token has both permissions, then press Add my numbers again.");
       if (r.r === "running") { c.ok("Still setting up: open Actions → Dashboard setup on your copy to see the address when it finishes."); }
       else {
         c.ok("Set up on Cloudflare");
         var f = await gh("/repos/" + full + "/contents/dashboard-url.txt?ref=ci/dashboard-setup"), url = f.ok && f.j ? b64d(f.j.content).trim() : "";
         if (/^https:\/\/[A-Za-z0-9.-]+\.[a-z]{2,}(\/.*)?$/.test(url)) {
           rest("rpc/set_my_dashboard", { method: "POST", body: JSON.stringify({ p_url: url }) }).then(function (x) { if (x && x.ok) { me.dashboard_url = x.j || url; renderDash(); } }).catch(function () {});
-          m.innerHTML = 'Your app: <a href="' + esc(url) + '" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">' + esc(url.replace(/^https:\/\//, "")) + '</a>. It fills in after tonight\'s run. Open it on your phone and add it to your Home Screen; it\'s also saved under Your dashboard here.';
+          m.innerHTML = 'Your numbers: <a href="' + esc(url) + '" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">' + esc(url.replace(/^https:\/\//, "")) + '</a>. It fills in after tonight\'s run, and it\'s saved under Your dashboard in this app.';
         } else m.textContent = "Set up. Open Actions → Dashboard setup on your copy to see your app's address.";
         $("sx3").classList.add("done"); $("sx3-st").textContent = "On";
       }
-    } catch (e) { if (e.message !== "stop") m.textContent = "Something went wrong. Press Set up my app again."; }
+    } catch (e) { if (e.message !== "stop") m.textContent = "Something went wrong. Press Add my numbers again."; }
     SU.busy = false; sxCheck();
   }
 
