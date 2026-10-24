@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="51">
+<meta name="mri-version" content="52">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -316,7 +316,7 @@
   .su-done{margin-top:16px;padding:18px;border-radius:18px;background:#14402C;border:2px solid var(--green)} .su-done h3{margin:0 0 6px;font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;font-size:26px;color:var(--green)}
   .su-before{margin:0 0 14px} .su-pre{margin:12px 0 0;padding:0;list-style:none;counter-reset:acct}
   .su-pre{display:grid;gap:12px}
-  .su-pre li{counter-increment:acct;background:var(--deep2);border:1px solid var(--pink);border-radius:18px;padding:16px 18px;margin:0}
+  .su-pre li{counter-increment:acct;background:var(--deep2);border:1px solid var(--rule);border-radius:18px;padding:16px 18px;margin:0}
   .su-pre .ah b{display:flex;align-items:center;gap:10px;font-size:17px}
   .su-pre .ah b::before{content:counter(acct);display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--deep);border:2px solid var(--pink);color:var(--pink-ink);font-size:14px;flex:none}
   .su-pre li p{margin:8px 0 0;color:var(--muted);font-size:14.5px;line-height:1.5} .su-pre li p b{color:var(--ink)}
@@ -344,7 +344,6 @@
     <li class="mgroup" id="mgroup"><div class="grp-h"><a href="#home" data-go="home" class="on" aria-current="page">Members area</a><button type="button" class="grp-t" id="mgroup-t" aria-expanded="true" aria-controls="mgroup-sub" aria-label="Hide the members pages"></button></div>
       <ol class="sub" id="mgroup-sub">
         <li class="pv-only" hidden><a href="#setup" data-go="setup">Set up my robot <span class="pill g" style="margin-left:4px;padding:2px 7px;font-size:10px">New</span></a></li>
-        <li class="pv-only" hidden><a href="#live" data-go="live">Real money</a></li>
         <li class="npv-only"><a href="#start" data-go="start">Start here</a></li>
         <li><a href="#code" data-go="code">Your code</a></li>
         <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
@@ -611,15 +610,15 @@
             <div class="row"><button class="btn" type="button" id="sx1-go" disabled>Switch on error alerts</button></div>
             <p class="small" id="sx1-msg" role="status" aria-live="polite">Build your robot first; then the extras can go into your copy.</p></li>
           <li class="su-step locked" id="sx2"><div class="su-h"><b>Claude fixes failed runs</b><span class="pill o" id="sx2-st">Paid Claude</span></div>
-            <p>When a run fails, Claude reads what went wrong and suggests a fix for you to approve. It never changes your money settings. <b>The free Claude plan can't do this</b>: you need Claude Pro or Max, or Claude API credit, which you pay for per fix with no subscription.</p>
-            <div class="su-seg" data-k="cl"><button type="button" data-v="sub" aria-pressed="true">I have Claude Pro or Max<small>uses your plan</small></button><button type="button" data-v="api" aria-pressed="false">I don't<small>buy a little API credit instead</small></button></div>
+            <p>When a run fails, Claude reads what went wrong and suggests a fix for you to approve. It never changes your money settings. <b>The free Claude plan can't do this</b>: you need Claude Pro or Max, or a little Claude API credit (pay per fix, no subscription).</p>
+            <div class="su-seg" data-k="cl"><button type="button" data-v="sub" aria-pressed="true">I have Claude Pro or Max<small>uses your plan</small></button><button type="button" data-v="api" aria-pressed="false">I don't<small>pay per fix, capped at $1 each</small></button></div>
             <details id="sx2-sub"><summary>Where do I find this?</summary><ol>
               <li>You need Claude Code on a computer once (it comes with Pro and Max).</li>
               <li>In a terminal, run <code>claude setup-token</code> and sign in when it asks.</li>
               <li>Copy the token it prints (it starts with sk-ant-).</li></ol></details>
             <details id="sx2-api" hidden><summary>Where do I find this?</summary><ol>
               <li>Sign in at <a href="https://platform.claude.com" target="_blank" rel="noopener">platform.claude.com</a>. It's separate from the Claude app.</li>
-              <li><b>Billing</b>: add a little credit. Each fix uses a small amount.</li>
+              <li><b>Billing</b>: add $5 of credit; it lasts a year. A fix only runs when a run fails, and each one is capped at $1 (most cost well under that), so $5 covers at least five fixes.</li>
               <li><b>API keys &rarr; Create key</b>, call it <b>My Robot ISA</b>, and copy it (it starts with sk-ant-).</li></ol></details>
             <label class="f" for="sx-cl" id="sx-cl-l">Claude subscription token</label><input class="t" id="sx-cl" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…">
             <div class="row"><button class="btn" type="button" id="sx2-go" disabled>Switch on Claude fixes</button></div>
@@ -1449,7 +1448,7 @@
     if (!SX.feat.sentry_dsn) { var u = await gh("/repos/" + full + "/contents/universe.json"); if (u.ok && u.j && /"sentry_dsn"/.test(b64d(u.j.content))) SX.feat.sentry_dsn = 1; }
     return SX.feat;
   }
-  var SX_NEED = { sx1: "sentry_dsn", sx2: "claude_fix", sx3: "dashboard_setup" }, SX_MIN = { sx1: 1, sx2: 1, sx3: 2 };
+  var SX_NEED = { sx1: "sentry_dsn", sx2: "claude_fix", sx3: "dashboard_setup" }, SX_MIN = { sx1: 1, sx2: 2, sx3: 2 };   // claude_fix 2 = the $1-a-fix cap is in the kit
   async function sxState() {
     var full = sxCopy(), on = !!(SU.tok && full);
     ["sx1", "sx2"].forEach(function (id) { $(id).classList.toggle("locked", !on); });
