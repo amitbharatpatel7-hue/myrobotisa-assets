@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="52">
+<meta name="mri-version" content="53">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -321,6 +321,13 @@
   .su-pre .ah b::before{content:counter(acct);display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--deep);border:2px solid var(--pink);color:var(--pink-ink);font-size:14px;flex:none}
   .su-pre li p{margin:8px 0 0;color:var(--muted);font-size:14.5px;line-height:1.5} .su-pre li p b{color:var(--ink)}
   .su-keep{color:var(--green);margin:8px 0 0}
+  .su-pre .ah{display:flex;align-items:center;justify-content:space-between;gap:10px} .su-pre .ah .pill:empty{display:none}
+  .su-pre li{transition:opacity .15s,border-color .15s,box-shadow .15s} .su-pre li.now{border-color:var(--pink);box-shadow:0 0 0 3px rgba(234,0,171,.18)}
+  .su-pre li.later{opacity:.5} .su-pre li.later .acct-row{display:none}
+  .su-pre li.done{border-color:rgba(0,232,122,.55)} .su-pre li.done .ah b::before{content:"\2713";background:var(--green);border-color:var(--green);color:var(--deep)}
+  .su-pre .pill.now-p{border-color:var(--pink);color:var(--pink-ink)} .acct-row{margin-top:12px} .acct-row .btn{min-height:40px;padding:8px 18px;font-size:14px}
+  #acct-count{color:var(--muted);font-weight:600;font-size:13px;margin-left:6px}
+  .su-pre li.done .acct-row{margin-top:6px} .su-pre li.done .acct-row .btn{border:0;background:none;min-height:0;padding:0;color:var(--muted);font-size:13px;font-weight:600;text-decoration:underline;box-shadow:none}
   .su-xfold{margin:22px 0 0} .su-xfold > summary .fold-l{font-size:17px} #sx3-more{margin-top:14px} #sx3-more > summary{font-size:14.5px} #sx3-more > p,#sx3-more > ol{margin-top:8px}
   #sx3-more ol{margin:8px 0 0;padding-left:20px;color:var(--ink);font-size:14px;line-height:1.55} .su-xh{margin:26px 0 0} .su-xh h3{margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;font-size:24px;color:var(--ink)} .su-xh h3 span{color:var(--green)}
   .su-xh p{margin:4px 0 0;color:var(--muted);font-size:14.5px}
@@ -545,14 +552,17 @@
       <section class="card wide" aria-labelledby="h-su" id="su-card" data-page="setup">
         <h2 id="h-su">Set up <span class="g">my robot</span></h2>
         <p class="lede">About ten minutes once your Trading 212, GitHub and email accounts are open, and no typing into GitHub. You bring two keys; this page builds your copy, locks the keys away, switches on the schedule and runs the setup check. Then you watch it work on paper money, and the lessons explain what you just built.</p>
-        <details class="fold su-before" id="su-before"><summary><span class="fold-l">Before you start: three free accounts</span></summary>
+        <details class="fold su-before" id="su-before"><summary><span class="fold-l">Before you start: three free accounts <span id="acct-count"></span></span></summary>
           <ol class="su-pre">
-            <li><div class="ah"><b>Trading 212</b></div>
-              <p>No account yet? <a href="https://www.trading212.com/" target="_blank" rel="noopener">Open one</a> (Invest or Stocks ISA; the ID check usually takes minutes, sometimes a day). Then <b>install the Trading 212 app on your phone and sign in with Face ID or your fingerprint first</b>: when you sign in on the website, the code appears in that app (tap <b>Display code</b>), so keep your phone with you. <a href="#guide/qs-2">Step-by-step guide and video</a></p></li>
-            <li><div class="ah"><b>GitHub</b></div>
-              <p><a href="https://github.com/signup" target="_blank" rel="noopener">Make a free account</a> with this email. It keeps your copy of the code and runs it on a schedule. <a href="#guide/qs-1">Guide</a></p></li>
-            <li><div class="ah"><b>Resend</b></div>
-              <p>It sends your robot's emails. <a href="https://resend.com/signup" target="_blank" rel="noopener">Sign up free</a> with the inbox you want the emails in, and click the link in its confirmation email. <a href="#guide/qs-3">Guide</a></p></li>
+            <li id="acct1"><div class="ah"><b>Trading 212</b><span class="pill" id="acct1-st"></span></div>
+              <p>No account yet? <a href="https://www.trading212.com/" target="_blank" rel="noopener">Open one</a> (Invest or Stocks ISA; the ID check usually takes minutes, sometimes a day). Then <b>install the Trading 212 app on your phone and sign in with Face ID or your fingerprint first</b>: when you sign in on the website, the code appears in that app (tap <b>Display code</b>), so keep your phone with you. <a href="#guide/qs-2">Step-by-step guide and video</a></p>
+              <div class="row acct-row"><button class="btn ghost acct-ok" type="button"></button></div></li>
+            <li id="acct2"><div class="ah"><b>GitHub</b><span class="pill" id="acct2-st"></span></div>
+              <p><a href="https://github.com/signup" target="_blank" rel="noopener">Make a free account</a> with this email. It keeps your copy of the code and runs it on a schedule. <a href="#guide/qs-1">Guide</a></p>
+              <div class="row acct-row"><button class="btn ghost acct-ok" type="button"></button></div></li>
+            <li id="acct3"><div class="ah"><b>Resend</b><span class="pill" id="acct3-st"></span></div>
+              <p>It sends your robot's emails. <a href="https://resend.com/signup" target="_blank" rel="noopener">Sign up free</a> with the inbox you want the emails in, and click the link in its confirmation email. <a href="#guide/qs-3">Guide</a></p>
+              <div class="row acct-row"><button class="btn ghost acct-ok" type="button"></button></div></li>
           </ol>
         </details>
         <div class="su-lock" role="note"><span aria-hidden="true">&#128274;</span><span><b>Your keys never touch our servers.</b> They go from this page straight into your own GitHub, locked with GitHub's encryption so only your copy of the code can read them. We can't see them. The GitHub connection is used for this setup and forgotten when you close the page.</span></div>
@@ -905,7 +915,7 @@
     document.querySelectorAll(".npv-only").forEach(function (el) { el.hidden = !!m.preview_videos; });   // Start here folds into Set up my robot
     renderDash(); renderAll(); show("home"); if (gcur.id) guideVideo(gcur.id); passkeyCard(); loadNotes(); if (location.hash === "#mydash") dashOpen(false);
     rest("member_progress?select=item,done").then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
-      rows.forEach(function (x) { done[x.item] = x.done; }); renderAll(); paintBench(); if (gcur.id) { guideVideo(gcur.id); guideRender(); }
+      rows.forEach(function (x) { done[x.item] = x.done; }); renderAll(); if (suReady) acctPaint(); paintBench(); if (gcur.id) { guideVideo(gcur.id); guideRender(); }
     }).catch(function () {});
   }
 
@@ -1289,9 +1299,38 @@
     suState(2, t212 ? "Ready" : "To do", t212); suState(3, mail ? "Ready" : "To do", mail);
     $("su-go").disabled = !(SU.tok && t212 && mail && name) || SU.busy;
   }
+  // 24 Oct 2026 (v53): the three free accounts go one at a time, like the QuickStart: the next one is highlighted,
+  // later ones wait, each tick is saved as acct:<n> in member_progress. Connecting GitHub ticks GitHub; a build ticks all three.
+  function acctPaint() {
+    var cur = 0, n = 0;
+    for (var i = 1; i <= 3; i++) { var on = !!done["acct:" + i]; if (on) n++; else if (!cur) cur = i; }
+    for (var j = 1; j <= 3; j++) {
+      var li = $("acct" + j), on2 = !!done["acct:" + j], st = $("acct" + j + "-st"), b = li.querySelector(".acct-ok");
+      li.className = on2 ? "done" : (j === cur ? "now" : "later");
+      st.textContent = on2 ? "Done" : (j === cur ? (j === 1 ? "Start here" : "Next") : "");
+      st.className = "pill" + (on2 ? " g" : (j === cur ? " now-p" : ""));
+      b.textContent = on2 ? "Undo" : (j === 1 ? "I've got Trading 212 and its app" : j === 2 ? "I've got a GitHub account" : "I've signed up to Resend");
+      b.dataset.acct = j;
+    }
+    $("acct-count").textContent = n === 3 ? "· all done" : "· " + n + " of 3 done";
+  }
+  function acctSet(list, on) {
+    var now = new Date().toISOString(), rows = list.filter(function (k) { return !!done[k] !== on; });
+    if (!rows.length) return; rows.forEach(function (k) { done[k] = on; }); acctPaint();
+    if (!me || !me.user_id) return;   // not signed in yet: the tick shows now and is saved by the next one
+    rest("member_progress?on_conflict=user_id,item", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
+      body: JSON.stringify(rows.map(function (k) { return { user_id: me.user_id, item: k, done: on, updated_at: now }; })) })
+      .then(function (r) { if (r && r.ok === false) throw 0; }).catch(function () { rows.forEach(function (k) { done[k] = !on; }); acctPaint(); alertOnce("Couldn't save that tick. Check you're online."); });
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest(".acct-ok"); if (!b) return;
+    var k = "acct:" + b.dataset.acct; acctSet([k], !done[k]);
+  });
   var suReady = false;
   function suInit() {
     if (!$("su-to").value && me && me.email) $("su-to").value = me.email;
+    if (done["qs:4"] && !(done["acct:1"] && done["acct:2"] && done["acct:3"])) acctSet(["acct:1", "acct:2", "acct:3"], true);
+    acctPaint();
     if (suReady) return; suReady = true;
     ["su-tk", "su-ts", "su-rk", "su-to", "su-name"].forEach(function (id) { $(id).addEventListener("input", suCheck); });
     $("su-name").addEventListener("input", suLookup);
@@ -1404,12 +1443,13 @@
       $("su-repo").href = "https://github.com/" + full; $("su-done").hidden = false; suState(5, "Done", true); SU.busy = false; SU.full = full; sxState();
       // QuickStart steps 1-4 are what this page just did: tick them in Start here (saved to the account like any tick)
       var now = new Date().toISOString(), rows = [1, 2, 3, 4].map(function (n) { done["qs:" + n] = true; return { user_id: me.user_id, item: "qs:" + n, done: true, updated_at: now }; });
-      renderAll();
+      renderAll(); acctSet(["acct:1", "acct:2", "acct:3"], true);
       rest("member_progress?on_conflict=user_id,item", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" }, body: JSON.stringify(rows) }).catch(function () {});
     } catch (e) { if (e.message !== "stop") { SU.busy = false; suCheck(); } }
   }
   // 24 Oct 2026 (v50): one connection serves both pages; whichever page asked shows it.
   function ghConnected() {
+    acctSet(["acct:2"], true);
     suState(1, "Connected", true); $("su1-msg").textContent = "Connected as @" + SU.login + "."; $("su-gh").hidden = true; suUnlock(); suLookup();
     lvStep(1, "Connected", true); $("lv-gh").hidden = true; $("lv1-msg").textContent = "Connected as @" + SU.login + ". Looking for your copy…"; lvLookup();
   }
