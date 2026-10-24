@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="48">
+<meta name="mri-version" content="49">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -315,9 +315,16 @@
   @keyframes suspin{to{transform:rotate(360deg)}} @media (prefers-reduced-motion:reduce){.su-log li.run i{animation:none}}
   .su-done{margin-top:16px;padding:18px;border-radius:18px;background:#14402C;border:2px solid var(--green)} .su-done h3{margin:0 0 6px;font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;font-size:26px;color:var(--green)}
   .su-before{margin:0 0 14px} .su-pre{margin:12px 0 0;padding:0;list-style:none;counter-reset:acct}
-  .su-pre li{position:relative;margin:0 0 14px;padding:12px 14px 12px 58px;line-height:1.55;border:1px solid rgba(234,0,171,.45);border-radius:14px;background:rgba(234,0,171,.07);counter-increment:acct}
-  .su-pre li::before{content:counter(acct);position:absolute;left:14px;top:12px;width:30px;height:30px;border-radius:50%;background:var(--pink,#EA00AB);color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center}
-  .su-pre li > b:first-child{color:var(--pink-ink)} .su-keep{color:var(--green);margin:8px 0 0}
+  .su-pre{display:grid;gap:12px}
+  .su-pre li{counter-increment:acct;background:var(--deep2);border:1px solid var(--pink);border-radius:18px;padding:16px 18px;margin:0}
+  .su-pre .ah b{display:flex;align-items:center;gap:10px;font-size:17px}
+  .su-pre .ah b::before{content:counter(acct);display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--deep);border:2px solid var(--pink);color:var(--pink-ink);font-size:14px;flex:none}
+  .su-pre li p{margin:8px 0 0;color:var(--muted);font-size:14.5px;line-height:1.5} .su-pre li p b{color:var(--ink)}
+  .su-keep{color:var(--green);margin:8px 0 0}
+  .su-live{margin-top:18px;border:1px solid var(--amber);border-radius:18px;background:var(--deep2);padding:4px 18px 16px}
+  .su-live summary{cursor:pointer;font-weight:800;color:var(--amber);padding:12px 0 4px}
+  .su-live p,.su-live li{color:var(--muted);font-size:14.5px;line-height:1.55} .su-live ol{padding-left:20px;margin:8px 0}
+  .su-live .warn{color:var(--ink);font-weight:700}
   .su-pre a,.su-step details a{color:var(--green);font-weight:700}
 </style>
 </head>
@@ -529,11 +536,14 @@
       <section class="card wide" aria-labelledby="h-su" id="su-card" data-page="setup">
         <h2 id="h-su">Set up <span class="g">my robot</span></h2>
         <p class="lede">About ten minutes once your Trading 212, GitHub and email accounts are open, and no typing into GitHub. You bring two keys; this page builds your copy, locks the keys away, switches on the schedule and runs the setup check. Then you watch it work on paper money, and the lessons explain what you just built.</p>
-        <details class="fold su-before" id="su-before" open><summary><span class="fold-l">Before you start: three free accounts</span></summary>
+        <details class="fold su-before" id="su-before"><summary><span class="fold-l">Before you start: three free accounts</span></summary>
           <ol class="su-pre">
-            <li><b>Trading 212.</b> No account yet? <a href="https://www.trading212.com/" target="_blank" rel="noopener">Open one</a> (Invest or Stocks ISA; the ID check usually takes minutes, sometimes a day). Then <b>install the Trading 212 app on your phone and sign in with Face ID or your fingerprint first</b>: when you sign in on the website, Trading 212 sends a code to that app, so keep your phone with you. <a href="#guide/qs-2">Step-by-step guide and video</a></li>
-            <li><b>GitHub.</b> <a href="https://github.com/signup" target="_blank" rel="noopener">Make a free account</a> with this email. It keeps your copy of the code and runs it on a schedule. <a href="#guide/qs-1">Guide</a></li>
-            <li><b>Resend</b> (sends your robot's emails). <a href="https://resend.com/signup" target="_blank" rel="noopener">Sign up free</a> with the inbox you want the emails in, and click the link in its confirmation email. <a href="#guide/qs-3">Guide</a></li>
+            <li><div class="ah"><b>Trading 212</b></div>
+              <p>No account yet? <a href="https://www.trading212.com/" target="_blank" rel="noopener">Open one</a> (Invest or Stocks ISA; the ID check usually takes minutes, sometimes a day). Then <b>install the Trading 212 app on your phone and sign in with Face ID or your fingerprint first</b>: when you sign in on the website, the code appears in that app (tap <b>Display code</b>), so keep your phone with you. <a href="#guide/qs-2">Step-by-step guide and video</a></p></li>
+            <li><div class="ah"><b>GitHub</b></div>
+              <p><a href="https://github.com/signup" target="_blank" rel="noopener">Make a free account</a> with this email. It keeps your copy of the code and runs it on a schedule. <a href="#guide/qs-1">Guide</a></p></li>
+            <li><div class="ah"><b>Resend</b></div>
+              <p>It sends your robot's emails. <a href="https://resend.com/signup" target="_blank" rel="noopener">Sign up free</a> with the inbox you want the emails in, and click the link in its confirmation email. <a href="#guide/qs-3">Guide</a></p></li>
           </ol>
         </details>
         <div class="su-lock" role="note"><span aria-hidden="true">&#128274;</span><span><b>Your keys never touch our servers.</b> They go from this page straight into your own GitHub, locked with GitHub's encryption so only your copy of the code can read them. We can't see them. The GitHub connection is used for this setup and forgotten when you close the page.</span></div>
@@ -578,7 +588,24 @@
               <div class="row"><button class="btn" type="button" id="su-plan">Get my first weekly plan</button><a class="btn ghost" id="su-repo" target="_blank" rel="noopener">See my copy on GitHub</a></div>
               <p class="small" id="su-plan-msg" role="status" aria-live="polite"></p></div></li>
         </ol>
-        <p class="small" style="margin-top:14px">Prefer to do it by hand, or want to see each step? The <a href="#guide/qs-1" style="color:var(--green);font-weight:700">step-by-step QuickStart</a> does the same thing.</p>
+        <details class="su-live" id="su-live"><summary>Ready for real money? (after Lesson 13)</summary>
+          <p class="warn">Stay on practice money until you've done the 14 lessons. Lesson 13, Small and real, is the one to watch first.</p>
+          <ol>
+            <li><b>Go-live check.</b> It reads your copy's own records: four clean weekly runs in a row, the core at its target weight, your holdings matching the plan, the off switch tested, and nothing left amber or red. It changes nothing.</li>
+            <li><b>A live key.</b> In Trading 212, switch to your real Invest or Stocks ISA account, then Settings &rarr; API (Beta) &rarr; Generate API key with the same seven switches. Live and practice keys are different.</li>
+            <li><b>Switch.</b> Paste the live key and secret, type <b>REAL MONEY</b>, and press Switch. Your first live run starts fresh from cash, and the robot still can't place an order without your tap.</li>
+          </ol>
+          <div class="row"><button class="btn ghost" type="button" id="lv-check" disabled>Run the go-live check</button></div>
+          <p class="small" id="lv-msg" role="status" aria-live="polite">Build your robot first; then this check can run on your copy.</p>
+          <div id="lv-form" hidden>
+            <label class="f" for="lv-tk">Live API key</label><input class="t" id="lv-tk" type="password" autocomplete="off" spellcheck="false">
+            <label class="f" for="lv-ts">Live API secret</label><input class="t" id="lv-ts" type="password" autocomplete="off" spellcheck="false">
+            <label class="f" for="lv-ok">Type REAL MONEY to confirm</label><input class="t" id="lv-ok" autocomplete="off" spellcheck="false">
+            <div class="row"><button class="btn" type="button" id="lv-go" disabled>Switch to real money</button></div>
+          </div>
+          <p class="small">Changed your mind later? <a href="mailto:hello@myrobotisa.com?subject=Back%20to%20practice">Email us</a> and we'll walk you back to practice: halting first is always safe (Lesson 12).</p>
+        </details>
+        <p class="small" style="margin-top:14px">Set up my robot does QuickStart steps 1 to 4 for you. Can't use it, say GitHub won't connect? The <a href="#guide/qs-1" style="color:var(--green);font-weight:700">manual steps</a> do the same by hand.</p>
       </section>
 
       <section class="card wide" aria-labelledby="h-pk" id="pk-card" data-page="passkeys">
@@ -1172,6 +1199,7 @@
     var name = /^[A-Za-z0-9._-]{1,90}$/.test($("su-name").value.trim());
     suState(2, t212 ? "Ready" : "To do", t212); suState(3, mail ? "Ready" : "To do", mail);
     $("su-go").disabled = !(SU.tok && t212 && mail && name) || SU.busy;
+    if (typeof lvState === "function") lvState();
   }
   var suReady = false;
   function suInit() {
@@ -1195,6 +1223,8 @@
         "&state=" + state + "&allow_signup=true"; // no redirect_uri: GitHub returns to the callback registered on the OAuth App
     });
     $("su-go").addEventListener("click", suBuild);
+    $("lv-check").addEventListener("click", lvCheck); $("lv-go").addEventListener("click", lvGo);
+    ["lv-tk", "lv-ts", "lv-ok"].forEach(function (id) { $(id).addEventListener("input", lvState); });
     $("su-plan").addEventListener("click", suPlan);
     suUnlock();
   }
@@ -1279,12 +1309,55 @@
       if (!run || run.status !== "completed") { s.ok("Setup check is still running: the email will tell you the result."); }
       else if (run.conclusion === "success") s.ok("Setup check passed: all green");
       else suFail(s, "The setup check found something. Its email says exactly which key and what to do; fix it, then press Build again.");
-      $("su-repo").href = "https://github.com/" + full; $("su-done").hidden = false; suState(5, "Done", true); SU.busy = false; SU.full = full;
+      $("su-repo").href = "https://github.com/" + full; $("su-done").hidden = false; suState(5, "Done", true); SU.busy = false; SU.full = full; lvState();
       // QuickStart steps 1-4 are what this page just did: tick them in Start here (saved to the account like any tick)
       var now = new Date().toISOString(), rows = [1, 2, 3, 4].map(function (n) { done["qs:" + n] = true; return { user_id: me.user_id, item: "qs:" + n, done: true, updated_at: now }; });
       renderAll();
       rest("member_progress?on_conflict=user_id,item", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" }, body: JSON.stringify(rows) }).catch(function () {});
     } catch (e) { if (e.message !== "stop") { SU.busy = false; suCheck(); } }
+  }
+  // 24 Oct 2026: real money, after the lessons. The go-live check runs on the member's own copy (the kit's
+  // golive-check workflow, report only); the switch stores the live key pair, sets T212_ENV=live and reruns the setup check.
+  function lvState() {
+    var full = SU.full || (SU.have && SU.have.full) || "";
+    $("lv-check").disabled = !(SU.tok && full) || SU.busy;
+    if (SU.tok && full && $("lv-msg").dataset.s !== "set") $("lv-msg").textContent = "Runs on " + full.split("/")[1] + ". Takes about a minute.";
+    var ok = SU.lvPass && $("lv-tk").value.trim().length > 10 && $("lv-ts").value.trim().length > 10 && $("lv-ok").value.trim().toUpperCase() === "REAL MONEY";
+    $("lv-go").disabled = !ok || SU.busy;
+  }
+  async function lvCheck() {
+    var full = SU.full || (SU.have && SU.have.full); if (!full) return;
+    var m = $("lv-msg"); m.dataset.s = "set"; $("lv-check").disabled = true; m.textContent = "Starting the go-live check…";
+    var since = new Date(Date.now() - 60000).toISOString();
+    var d = await gh("/repos/" + full + "/actions/workflows/golive-check.yml/dispatches", { method: "POST", body: { ref: "main" } });
+    if (d.status === 404) { m.textContent = "Your copy doesn't have the go-live check yet. It arrives with the next update to your code; nothing has changed."; $("lv-check").disabled = false; return; }
+    if (!d.ok) { m.textContent = "Couldn't start the check just now. Try again in a minute."; $("lv-check").disabled = false; return; }
+    var run = null;
+    for (var t = 0; t < 40; t++) { await sleep(4000); var rs = await gh("/repos/" + full + "/actions/workflows/golive-check.yml/runs?per_page=1&created=>" + since);
+      run = rs.j && rs.j.workflow_runs && rs.j.workflow_runs[0]; if (run && run.status === "completed") break; }
+    $("lv-check").disabled = false;
+    if (!run || run.status !== "completed") { m.textContent = "Still running. Open Actions on your copy to see the result, then come back."; return; }
+    if (run.conclusion === "success") { SU.lvPass = true; $("lv-form").hidden = false; m.textContent = "Go-live check passed. When you're ready, paste your live key below."; }
+    else { SU.lvPass = false; $("lv-form").hidden = true; m.innerHTML = 'Not ready yet: <a href="' + run.html_url + '" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">see which checks to finish</a>. Keep going on practice; it counts.'; }
+    lvState();
+  }
+  async function lvGo() {
+    var full = SU.full || (SU.have && SU.have.full); if (!full || !SU.lvPass) return;
+    var m = $("lv-msg"); $("lv-go").disabled = true; SU.busy = true; m.textContent = "Switching…";
+    try {
+      var pk = await gh("/repos/" + full + "/actions/secrets/public-key"); if (!pk.ok) throw new Error("lock");
+      var vals = { T212_API_KEY: $("lv-tk").value.trim(), T212_API_SECRET: $("lv-ts").value.trim() };
+      for (var n in vals) { var put = await gh("/repos/" + full + "/actions/secrets/" + n, { method: "PUT", body: { encrypted_value: window.mriSeal(pk.j.key, vals[n]), key_id: pk.j.key_id } }); if (!put.ok) throw new Error("save"); }
+      vals = null;
+      var v = await gh("/repos/" + full + "/actions/variables/T212_ENV", { method: "PATCH", body: { name: "T212_ENV", value: "live" } });
+      if (v.status === 404) v = await gh("/repos/" + full + "/actions/variables", { method: "POST", body: { name: "T212_ENV", value: "live" } });
+      if (!v.ok) throw new Error("env");
+      await gh("/repos/" + full + "/actions/workflows/setup-check.yml/dispatches", { method: "POST", body: { ref: "main" } });
+      $("lv-tk").value = $("lv-ts").value = $("lv-ok").value = "";
+      m.textContent = "Switched to real money. The setup check is checking your live key now and emails you. Nothing trades until you approve a plan.";
+      $("lv-form").hidden = true; SU.lvPass = false;
+    } catch (e) { m.textContent = "Couldn't finish the switch just now. Press Switch again in a minute to finish it; nothing trades until you approve a plan."; }
+    SU.busy = false; lvState();
   }
   async function suPlan() {
     if (!SU.full) return; var b = $("su-plan"); b.disabled = true; $("su-plan-msg").textContent = "Asking your robot for its plan…";
