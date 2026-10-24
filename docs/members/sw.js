@@ -1,6 +1,6 @@
 // Members area service worker: makes it installable and lets the page open offline with a clear message.
 // Network first for this site's own files; sign-in and data calls (supabase.co) are never touched or cached.
-const C = "mri-members-v54"; // bump with version.json and the mri-version meta in index.html
+const C = "mri-members-v55"; // bump with version.json and the mri-version meta in index.html
 const SHELL = ["./", "index.html", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(C).then(c => c.addAll(SHELL.map(u => new Request(u, { cache: "reload" })))).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith("mri-members-") && k !== C).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
