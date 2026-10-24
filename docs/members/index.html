@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="49">
+<meta name="mri-version" content="50">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -321,10 +321,18 @@
   .su-pre .ah b::before{content:counter(acct);display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--deep);border:2px solid var(--pink);color:var(--pink-ink);font-size:14px;flex:none}
   .su-pre li p{margin:8px 0 0;color:var(--muted);font-size:14.5px;line-height:1.5} .su-pre li p b{color:var(--ink)}
   .su-keep{color:var(--green);margin:8px 0 0}
-  .su-live{margin-top:18px;border:1px solid var(--amber);border-radius:18px;background:var(--deep2);padding:4px 18px 16px}
-  .su-live summary{cursor:pointer;font-weight:800;color:var(--amber);padding:12px 0 4px}
-  .su-live p,.su-live li{color:var(--muted);font-size:14.5px;line-height:1.55} .su-live ol{padding-left:20px;margin:8px 0}
-  .su-live .warn{color:var(--ink);font-weight:700}
+  .su-xh{margin:26px 0 0} .su-xh h3{margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;font-size:24px;color:var(--ink)} .su-xh h3 span{color:var(--green)}
+  .su-xh p{margin:4px 0 0;color:var(--muted);font-size:14.5px}
+  .su-x{counter-reset:su 5} .su-x .su-step{border-style:dashed} .su-x .su-step.done{border-style:solid}
+  .su-x .pill.o{border-color:var(--rule);color:var(--muted)}
+  .su-chk{display:grid;gap:10px;margin-top:10px} .su-chk label{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:var(--ink);cursor:pointer;line-height:1.45}
+  .su-chk input{width:20px;height:20px;margin-top:1px;accent-color:#00E87A;flex:none}
+  .su-step code{font-family:'IBM Plex Mono',ui-monospace,Menlo,monospace;background:var(--deep);padding:1px 6px;border-radius:6px;color:var(--green)}
+  .su-live-go{border-color:var(--amber);background:rgba(255,194,75,.08)} .su-live-go b{color:var(--amber)}
+  #lv-card .su-h b::before{border-color:var(--amber);color:var(--amber)} #lv-card .su-step.done{border-color:var(--amber)}
+  #lv-card .su-step.done .su-h b::before{background:var(--amber);color:var(--deep)}
+  #lv-card .su-done{background:rgba(255,194,75,.1);border-color:var(--amber)} #lv-card .su-done h3{color:var(--amber)}
+
   .su-pre a,.su-step details a{color:var(--green);font-weight:700}
 </style>
 </head>
@@ -335,6 +343,7 @@
     <li class="mgroup" id="mgroup"><div class="grp-h"><a href="#home" data-go="home" class="on" aria-current="page">Members area</a><button type="button" class="grp-t" id="mgroup-t" aria-expanded="true" aria-controls="mgroup-sub" aria-label="Hide the members pages"></button></div>
       <ol class="sub" id="mgroup-sub">
         <li class="pv-only" hidden><a href="#setup" data-go="setup">Set up my robot <span class="pill g" style="margin-left:4px;padding:2px 7px;font-size:10px">New</span></a></li>
+        <li class="pv-only" hidden><a href="#live" data-go="live">Real money</a></li>
         <li class="npv-only"><a href="#start" data-go="start">Start here</a></li>
         <li><a href="#code" data-go="code">Your code</a></li>
         <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
@@ -584,28 +593,101 @@
           <li class="su-step locked" id="su5"><div class="su-h"><b>Build my robot</b><span class="pill" id="su5-st">Ready when you are</span></div>
             <div class="row"><button class="btn" type="button" id="su-go" disabled>Build my robot</button></div>
             <ul class="su-log" id="su-log" aria-live="polite"></ul>
-            <div class="su-done" id="su-done" hidden><h3>Your robot is running</h3><p style="margin:0 0 12px">On paper money. The setup check email is on its way to you. Next: ask for its first weekly plan, then tap Approve in the email. Later, when you're ready: <a href="#guide/qs-5">optional extras</a> and <a href="#guide/qs-6">your app on your phone, Mac or PC</a>.</p>
+            <div class="su-done" id="su-done" hidden><h3>Your robot is running</h3><p style="margin:0 0 12px">On paper money. The setup check email is on its way to you. Next: ask for its first weekly plan, then tap Approve in the email. Optional extras, including your app on your phone, are just below.</p>
               <div class="row"><button class="btn" type="button" id="su-plan">Get my first weekly plan</button><a class="btn ghost" id="su-repo" target="_blank" rel="noopener">See my copy on GitHub</a></div>
               <p class="small" id="su-plan-msg" role="status" aria-live="polite"></p></div></li>
         </ol>
-        <details class="su-live" id="su-live"><summary>Ready for real money? (after Lesson 13)</summary>
-          <p class="warn">Stay on practice money until you've done the 14 lessons. Lesson 13, Small and real, is the one to watch first.</p>
-          <ol>
-            <li><b>Go-live check.</b> It reads your copy's own records: four clean weekly runs in a row, the core at its target weight, your holdings matching the plan, the off switch tested, and nothing left amber or red. It changes nothing.</li>
-            <li><b>A live key.</b> In Trading 212, switch to your real Invest or Stocks ISA account, then Settings &rarr; API (Beta) &rarr; Generate API key with the same seven switches. Live and practice keys are different.</li>
-            <li><b>Switch.</b> Paste the live key and secret, type <b>REAL MONEY</b>, and press Switch. Your first live run starts fresh from cash, and the robot still can't place an order without your tap.</li>
-          </ol>
-          <div class="row"><button class="btn ghost" type="button" id="lv-check" disabled>Run the go-live check</button></div>
-          <p class="small" id="lv-msg" role="status" aria-live="polite">Build your robot first; then this check can run on your copy.</p>
-          <div id="lv-form" hidden>
+        <div class="su-xh"><h3>Optional <span>extras</span></h3><p>Add any of these now or on any later day. Your robot runs fine without them.</p></div>
+        <ol class="su-steps su-x">
+          <li class="su-step locked" id="sx1"><div class="su-h"><b>Error alerts</b><span class="pill o" id="sx1-st">Optional</span></div>
+            <p>If a run fails in the night, Sentry (free) tells you where and why.</p>
+            <details><summary>Where do I find this?</summary><ol>
+              <li><a href="https://sentry.io/signup/" target="_blank" rel="noopener">Make a free Sentry account</a>.</li>
+              <li>Create a project: choose <b>Python</b> and call it <b>my-robot-isa</b>.</li>
+              <li>Copy its <b>DSN</b>: it starts with https:// and ends with a number. Lost it? Settings &rarr; Projects &rarr; my-robot-isa &rarr; Client Keys (DSN).</li></ol></details>
+            <label class="f" for="sx-dsn">Sentry DSN</label><input class="t" id="sx-dsn" autocomplete="off" spellcheck="false" placeholder="https://…@….sentry.io/…">
+            <div class="row"><button class="btn" type="button" id="sx1-go" disabled>Switch on error alerts</button></div>
+            <p class="small" id="sx1-msg" role="status" aria-live="polite">Build your robot first; then the extras can go into your copy.</p></li>
+          <li class="su-step locked" id="sx2"><div class="su-h"><b>Claude fixes failed runs</b><span class="pill o" id="sx2-st">Optional</span></div>
+            <p>When a run fails, Claude reads what went wrong and suggests a fix for you to approve. It never changes your money settings. It needs one of these:</p>
+            <div class="su-seg" data-k="cl"><button type="button" data-v="api" aria-pressed="true">Claude API key<small>pay as you go</small></button><button type="button" data-v="sub" aria-pressed="false">Claude Pro or Max<small>uses your plan</small></button></div>
+            <details id="sx2-api"><summary>Where do I find this?</summary><ol>
+              <li>Sign in at <a href="https://platform.claude.com" target="_blank" rel="noopener">platform.claude.com</a>. It's separate from the Claude app, and the free Claude plan doesn't include it.</li>
+              <li><b>Billing</b>: add a little credit. Each fix uses a small amount.</li>
+              <li><b>API keys &rarr; Create key</b>, call it <b>My Robot ISA</b>, and copy it (it starts with sk-ant-).</li></ol></details>
+            <details id="sx2-sub" hidden><summary>Where do I find this?</summary><ol>
+              <li>You need Claude Pro or Max (the free plan doesn't include Claude Code) and Claude Code on a computer.</li>
+              <li>In a terminal, run <code>claude setup-token</code> and sign in when it asks.</li>
+              <li>Copy the token it prints (it starts with sk-ant-).</li></ol></details>
+            <label class="f" for="sx-cl" id="sx-cl-l">Claude API key</label><input class="t" id="sx-cl" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…">
+            <div class="row"><button class="btn" type="button" id="sx2-go" disabled>Switch on Claude fixes</button></div>
+            <p class="small" id="sx2-msg" role="status" aria-live="polite"></p>
+            <p class="small">Each fix also uses a few GitHub minutes. To switch it off, delete the key from your copy's Settings &rarr; Secrets.</p></li>
+          <li class="su-step locked" id="sx3"><div class="su-h"><b>Your app on your phone, Mac or PC</b><span class="pill o" id="sx3-st">Optional</span></div>
+            <p>A private dashboard only you can open, showing your robot's plan and how it's doing. It runs on a free Cloudflare account and only ever gets a read-only key.</p>
+            <details><summary>Where do I find these?</summary><ol>
+              <li><a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener">Make a free Cloudflare account</a>.</li>
+              <li><b>Account ID</b>: in Cloudflare, open <b>Workers &amp; Pages</b>; under <b>Account details</b>, copy <b>Account ID</b>.</li>
+              <li><b>API token</b>: <b>Account API tokens &rarr; Create Token &rarr; Custom token</b>. Call it <b>My Robot ISA</b> and add two permissions: <b>Account &middot; Cloudflare Pages &middot; Edit</b> and <b>Account &middot; Access: Apps and Policies &middot; Edit</b>. Create it and copy it.</li>
+              <li><b>A read-only Trading 212 key</b>: in the same Practice account, make one more key called <b>My Robot ISA dashboard</b> with only <b>Account data</b>, <b>Metadata</b> and <b>Portfolio</b> switched on, and IP access <b>Unrestricted</b>. No Orders switches: the app can never place an order.</li></ol></details>
+            <label class="f" for="sx-cfa">Cloudflare account ID</label><input class="t" id="sx-cfa" autocomplete="off" spellcheck="false">
+            <label class="f" for="sx-cft">Cloudflare API token</label><input class="t" id="sx-cft" type="password" autocomplete="off" spellcheck="false">
+            <label class="f" for="sx-rk">Read-only Trading 212 key</label><input class="t" id="sx-rk" type="password" autocomplete="off" spellcheck="false">
+            <label class="f" for="sx-rs">Read-only Trading 212 secret</label><input class="t" id="sx-rs" type="password" autocomplete="off" spellcheck="false">
+            <label class="f" for="sx-em">Who can open it (your email)</label><input class="t" id="sx-em" type="email" autocomplete="email">
+            <div class="row"><button class="btn" type="button" id="sx3-go" disabled>Set up my app</button></div>
+            <ul class="su-log" id="sx3-log" aria-live="polite"></ul>
+            <p class="small" id="sx3-msg" role="status" aria-live="polite"></p></li>
+        </ol>
+        <a class="su-promo su-live-go" href="#live" data-go="live"><b>Ready for real money?</b><span>When you are, the real-money switch walks you through it step by step, just like this page.</span></a>
+        <p class="small" style="margin-top:14px">Set up my robot does QuickStart steps 1 to 4 for you. Can't use it, say GitHub won't connect? The <a href="#guide/qs-1" style="color:var(--green);font-weight:700">manual steps</a> do the same by hand.</p>
+      </section>
+
+      <section class="card wide" aria-labelledby="h-lv" id="lv-card" data-page="live">
+        <h2 id="h-lv">Switch to <span class="g">real money</span></h2>
+        <p class="lede">When you're ready. Most people watch their robot on practice money for a few weeks first, and Lesson 13 explains why, but that's advice, not a rule. Either way, nothing is ever bought or sold without your tap.</p>
+        <ol class="su-steps">
+          <li class="su-step" id="lv1"><div class="su-h"><b>Connect GitHub</b><span class="pill" id="lv1-st">To do</span></div>
+            <p>So this page can reach your copy of the code, the same way Set up my robot does.</p>
+            <div class="row"><button class="btn" type="button" id="lv-gh">Connect GitHub</button></div>
+            <label class="f" for="lv-name">Your copy</label><input class="t" id="lv-name" value="my-robot-isa" autocomplete="off" spellcheck="false">
+            <p class="small" id="lv1-msg" role="status" aria-live="polite"></p></li>
+          <li class="su-step locked" id="lv2"><div class="su-h"><b>How your practice went</b><span class="pill" id="lv2-st">Optional</span></div>
+            <p>The go-live check reads your copy's own records: clean weekly runs, the core at its target weight, your holdings matching the plan, the off switch tested, and nothing amber or red. It changes nothing and it isn't a gate; it just shows what's ticked.</p>
+            <div class="row"><button class="btn ghost" type="button" id="lv-check" disabled>Run the go-live check</button></div>
+            <p class="small" id="lv-msg" role="status" aria-live="polite"></p></li>
+          <li class="su-step locked" id="lv3"><div class="su-h"><b>Before you switch</b><span class="pill" id="lv3-st">To do</span></div>
+            <div class="su-chk">
+              <label><input type="checkbox" id="lv-c1"><span>I've watched <a href="#guide/day-13">Lesson 13, Small and real</a></span></label>
+              <label><input type="checkbox" id="lv-c2"><span>I know how to halt my robot (<a href="#guide/day-12">Lesson 12</a>)</span></label>
+              <label><input type="checkbox" id="lv-c3"><span>My real Invest or Stocks ISA has the money I want the robot to use</span></label></div></li>
+          <li class="su-step locked" id="lv4"><div class="su-h"><b>Your Trading 212 live key</b><span class="pill" id="lv4-st">To do</span></div>
+            <p>Live and practice accounts have separate keys, so this is a new one.</p>
+            <details open><summary>Where do I find this?</summary><ol>
+              <li>In the Trading 212 app, open the menu (&#9776;) and switch from Practice back to your <b>real Invest or Stocks ISA</b>.</li>
+              <li><b>Settings &rarr; API (Beta) &rarr; Generate API key.</b> Call it <b>My Robot ISA live</b>.</li>
+              <li>Switch on the same seven: <b>Account data</b>, <b>History</b>, <b>History &ndash; Orders</b>, <b>Metadata</b>, <b>Orders &ndash; Execute</b>, <b>Orders &ndash; Read</b> and <b>Portfolio</b>.</li>
+              <li>IP access restrictions: <b>Unrestricted</b>. Press Generate and copy the key and the secret into the boxes below.</li></ol></details>
             <label class="f" for="lv-tk">Live API key</label><input class="t" id="lv-tk" type="password" autocomplete="off" spellcheck="false">
             <label class="f" for="lv-ts">Live API secret</label><input class="t" id="lv-ts" type="password" autocomplete="off" spellcheck="false">
+            <div id="lv-read" hidden>
+              <p>You set up your app, so it needs a read-only live key too: one more key called <b>My Robot ISA dashboard</b> with only Account data, Metadata and Portfolio. You can also add this later.</p>
+              <label class="f" for="lv-rk">Read-only live key</label><input class="t" id="lv-rk" type="password" autocomplete="off" spellcheck="false">
+              <label class="f" for="lv-rs">Read-only live secret</label><input class="t" id="lv-rs" type="password" autocomplete="off" spellcheck="false"></div></li>
+          <li class="su-step locked" id="lv5"><div class="su-h"><b>Switch</b><span class="pill" id="lv5-st">Ready when you are</span></div>
+            <p>Your first live run starts fresh from cash, and your practice records stay in your copy.</p>
             <label class="f" for="lv-ok">Type REAL MONEY to confirm</label><input class="t" id="lv-ok" autocomplete="off" spellcheck="false">
             <div class="row"><button class="btn" type="button" id="lv-go" disabled>Switch to real money</button></div>
-          </div>
-          <p class="small">Changed your mind later? <a href="mailto:hello@myrobotisa.com?subject=Back%20to%20practice">Email us</a> and we'll walk you back to practice: halting first is always safe (Lesson 12).</p>
+            <ul class="su-log" id="lv-log" aria-live="polite"></ul>
+            <div class="su-done" id="lv-done" hidden><h3>You're on real money</h3><p style="margin:0">The setup check email confirms your live key. Your next weekly plan waits for your Approve, as always: nothing is bought or sold without your tap.</p></div></li>
+        </ol>
+        <details class="fold" id="lv-back" style="margin-top:16px"><summary><span class="fold-l">Going back to practice</span></summary>
+          <p class="small">Halt first if any orders are waiting (Lesson 12). Then make a practice key as in Set up my robot step 2, paste it here and press Back to practice.</p>
+          <label class="f" for="lv-pk">Practice API key</label><input class="t" id="lv-pk" type="password" autocomplete="off" spellcheck="false">
+          <label class="f" for="lv-ps">Practice API secret</label><input class="t" id="lv-ps" type="password" autocomplete="off" spellcheck="false">
+          <div class="row"><button class="btn ghost" type="button" id="lv-bk" disabled>Back to practice</button></div>
+          <p class="small" id="lv-bmsg" role="status" aria-live="polite"></p>
         </details>
-        <p class="small" style="margin-top:14px">Set up my robot does QuickStart steps 1 to 4 for you. Can't use it, say GitHub won't connect? The <a href="#guide/qs-1" style="color:var(--green);font-weight:700">manual steps</a> do the same by hand.</p>
       </section>
 
       <section class="card wide" aria-labelledby="h-pk" id="pk-card" data-page="passkeys">
@@ -1183,10 +1265,13 @@
         if (!ours) { SU.have = null; hint.hidden = true; suCheck(); return; }
         var sc = await gh("/repos/" + full + "/actions/secrets?per_page=100");
         var names = (sc.ok && sc.j && sc.j.secrets || []).map(function (x) { return x.name; });
-        SU.have = { full: full, names: names };
+        var ev = await gh("/repos/" + full + "/actions/variables/T212_ENV"), env = ev.ok && ev.j ? ev.j.value : "";
+        SU.have = { full: full, names: names, env: env };
+        if (env === "live") SU.liveCopy = full; else if (SU.liveCopy === full) SU.liveCopy = "";
         var kept = ["T212_API_KEY", "T212_API_SECRET", "RESEND_API_KEY"].filter(function (n) { return names.indexOf(n) >= 0; }).length;
         hint.textContent = kept ? "Found your copy, " + name + ", with " + kept + " of 3 keys already locked in. Leave a key box empty to keep that key; paste a new one to replace it." : "Found your copy, " + name + ". Paste your keys and press Build: it carries on from where it stopped.";
-        hint.hidden = false; suCheck();
+        if (env === "live") hint.textContent += " It's on real money, so a Trading 212 key pasted here must be a live key; to go back to practice, use Real money \u2192 Going back to practice.";
+        hint.hidden = false; suCheck(); sxState();
       } catch (e) { hint.hidden = true; }
     }, 400);
   }
@@ -1199,7 +1284,6 @@
     var name = /^[A-Za-z0-9._-]{1,90}$/.test($("su-name").value.trim());
     suState(2, t212 ? "Ready" : "To do", t212); suState(3, mail ? "Ready" : "To do", mail);
     $("su-go").disabled = !(SU.tok && t212 && mail && name) || SU.busy;
-    if (typeof lvState === "function") lvState();
   }
   var suReady = false;
   function suInit() {
@@ -1215,35 +1299,38 @@
       SU.cfg = r.j || {};
       if (!SU.cfg.configured) { $("su-gh").disabled = true; $("su1-msg").textContent = "Coming soon: the GitHub connection switches on before launch. You can look through the steps now."; }
     }).catch(function () {});
-    $("su-gh").addEventListener("click", function () {
+    $("su-gh").addEventListener("click", function () { ghConnect("setup"); });
+    $("su-go").addEventListener("click", suBuild);
+    $("su-plan").addEventListener("click", suPlan);
+    sxInit();
+    suUnlock();
+  }
+  function ghConnect(back) {
       if (!SU.cfg || !SU.cfg.client_id) return;
       var state = Math.random().toString(36).slice(2) + Date.now().toString(36);
-      try { sessionStorage.setItem("mri-gh-state", state); } catch (e) {}
+      try { sessionStorage.setItem("mri-gh-state", state); sessionStorage.setItem("mri-gh-back", back); } catch (e) {}
       location.href = "https://github.com/login/oauth/authorize?client_id=" + encodeURIComponent(SU.cfg.client_id) + "&scope=" + encodeURIComponent("repo workflow") +
         "&state=" + state + "&allow_signup=true"; // no redirect_uri: GitHub returns to the callback registered on the OAuth App
-    });
-    $("su-go").addEventListener("click", suBuild);
-    $("lv-check").addEventListener("click", lvCheck); $("lv-go").addEventListener("click", lvGo);
-    ["lv-tk", "lv-ts", "lv-ok"].forEach(function (id) { $(id).addEventListener("input", lvState); });
-    $("su-plan").addEventListener("click", suPlan);
-    suUnlock();
   }
   // back from GitHub: swap the code for a token (kept in memory only) and clean the address bar
   (function () {
     var q = new URLSearchParams(location.search); if (!q.get("code") || !q.get("state")) return;
     var code = q.get("code"), state = q.get("state"), want = ""; try { want = sessionStorage.getItem("mri-gh-state") || ""; sessionStorage.removeItem("mri-gh-state"); } catch (e) {}
-    history.replaceState(null, "", location.pathname + "#setup");
+    var back = "setup"; try { back = sessionStorage.getItem("mri-gh-back") || "setup"; sessionStorage.removeItem("mri-gh-back"); } catch (e) {}
+    if (back !== "live") back = "setup";
+    history.replaceState(null, "", location.pathname + "#" + back);
     var tries = 0;
     (function wait() { // the session loads asynchronously; wait for it before calling the function
       if (typeof session === "undefined" || !session) { if (tries++ < 40) setTimeout(wait, 250); return; }
-      suInit();
-      if (!state || state !== want) { $("su1-msg").textContent = "That GitHub sign-in didn't match this page. Press Connect GitHub again."; return; }
-      $("su1-msg").textContent = "Connecting…";
+      suInit(); if (back === "live") lvInit();
+      var cm = back === "live" ? $("lv1-msg") : $("su1-msg");
+      if (!state || state !== want) { cm.textContent = "That GitHub sign-in didn't match this page. Press Connect GitHub again."; return; }
+      cm.textContent = "Connecting…";
       suFn("POST", { code: code }).then(function (r) {
-        if (!r.ok || !r.j.access_token) { $("su1-msg").textContent = (r.j && r.j.error) || "That didn't work. Press Connect GitHub again."; return; }
+        if (!r.ok || !r.j.access_token) { cm.textContent = (r.j && r.j.error) || "That didn't work. Press Connect GitHub again."; return; }
         SU.tok = r.j.access_token;
-        return gh("/user").then(function (u) { SU.login = u.j && u.j.login || ""; suState(1, "Connected", true); $("su1-msg").textContent = "Connected as @" + SU.login + "."; $("su-gh").hidden = true; suUnlock(); suLookup(); });
-      }).catch(function () { $("su1-msg").textContent = "No connection. Check you're online and try again."; });
+        return gh("/user").then(function (u) { SU.login = u.j && u.j.login || ""; ghConnected(); });
+      }).catch(function () { cm.textContent = "No connection. Check you're online and try again."; });
     })();
   })();
   function suLog(txt) { var li = document.createElement("li"); li.className = "run"; li.innerHTML = "<i></i><span></span>"; li.lastChild.textContent = txt; $("su-log").appendChild(li);
@@ -1254,6 +1341,7 @@
   async function suBuild() {
     if (SU.busy) return; SU.busy = true; $("su-go").disabled = true; $("su-log").innerHTML = ""; suState(5, "Building…", false);
     var name = $("su-name").value.trim(), owner = SU.login, full = owner + "/" + name;
+    var keepLive = SU.liveCopy === full;   // remembered past a retry, when SU.have has been cleared
     var vals = { T212_API_KEY: $("su-tk").value.trim(), T212_API_SECRET: $("su-ts").value.trim(), RESEND_API_KEY: $("su-rk").value.trim() };
     Object.keys(vals).forEach(function (n) { if (!vals[n]) delete vals[n]; });
     try {
@@ -1295,11 +1383,11 @@
       var nk = Object.keys(vals).length; vals = null;
       k.ok(nk === 3 ? "Keys locked in (3 of 3). They've been cleared from this page." : "Locked in " + nk + " new key" + (nk === 1 ? "" : "s") + " and kept the rest. Cleared from this page."); SU.saved = full; SU.have = null; }
       var v = suLog("Saving your choices");
-      var vars = { T212_ENV: "practice", NOTIFY_TO: $("su-to").value.trim(), RISK_PROFILE: SU.risk, DIGEST_FREQUENCY: SU.freq };
+      var vars = { T212_ENV: keepLive ? "live" : "practice", NOTIFY_TO: $("su-to").value.trim(), RISK_PROFILE: SU.risk, DIGEST_FREQUENCY: SU.freq };
       for (var vn in vars) { var cr = await gh("/repos/" + full + "/actions/variables", { method: "POST", body: { name: vn, value: vars[vn] } });
         if (cr.status === 409) cr = await gh("/repos/" + full + "/actions/variables/" + vn, { method: "PATCH", body: { name: vn, value: vars[vn] } });
         if (!cr.ok) suFail(v, "Couldn't save your choices just now. Press Build again: your keys are already saved."); }
-      v.ok("Practice account, " + SU.risk + ", emails " + (SU.freq === "weekly" ? "once a week" : "every day"));
+      v.ok((keepLive ? "Real money" : "Practice account") + ", " + SU.risk + ", emails " + (SU.freq === "weekly" ? "once a week" : "every day"));
       var s = suLog("Running the setup check");
       var since = new Date(Date.now() - 60000).toISOString();
       var d = await gh("/repos/" + full + "/actions/workflows/setup-check.yml/dispatches", { method: "POST", body: { ref: "main" } }); if (!d.ok) suFail(s, "Couldn't start the setup check. Press Build again, or open Actions on your copy and run Setup check.");
@@ -1309,55 +1397,209 @@
       if (!run || run.status !== "completed") { s.ok("Setup check is still running: the email will tell you the result."); }
       else if (run.conclusion === "success") s.ok("Setup check passed: all green");
       else suFail(s, "The setup check found something. Its email says exactly which key and what to do; fix it, then press Build again.");
-      $("su-repo").href = "https://github.com/" + full; $("su-done").hidden = false; suState(5, "Done", true); SU.busy = false; SU.full = full; lvState();
+      $("su-repo").href = "https://github.com/" + full; $("su-done").hidden = false; suState(5, "Done", true); SU.busy = false; SU.full = full; sxState();
       // QuickStart steps 1-4 are what this page just did: tick them in Start here (saved to the account like any tick)
       var now = new Date().toISOString(), rows = [1, 2, 3, 4].map(function (n) { done["qs:" + n] = true; return { user_id: me.user_id, item: "qs:" + n, done: true, updated_at: now }; });
       renderAll();
       rest("member_progress?on_conflict=user_id,item", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" }, body: JSON.stringify(rows) }).catch(function () {});
     } catch (e) { if (e.message !== "stop") { SU.busy = false; suCheck(); } }
   }
-  // 24 Oct 2026: real money, after the lessons. The go-live check runs on the member's own copy (the kit's
-  // golive-check workflow, report only); the switch stores the live key pair, sets T212_ENV=live and reruns the setup check.
+  // 24 Oct 2026 (v50): one connection serves both pages; whichever page asked shows it.
+  function ghConnected() {
+    suState(1, "Connected", true); $("su1-msg").textContent = "Connected as @" + SU.login + "."; $("su-gh").hidden = true; suUnlock(); suLookup();
+    lvStep(1, "Connected", true); $("lv-gh").hidden = true; $("lv1-msg").textContent = "Connected as @" + SU.login + ". Looking for your copy…"; lvLookup();
+  }
+  function ghLog(ul) { return function (txt) { var li = document.createElement("li"); li.className = "run"; li.innerHTML = "<i></i><span></span>"; li.lastChild.textContent = txt; $(ul).appendChild(li);
+    return { ok: function (t) { li.className = "ok"; if (t) li.lastChild.textContent = t; }, bad: function (t) { li.className = "bad"; li.lastChild.textContent = t; throw new Error("stop"); } }; }; }
+  async function ghSeal(full, vals) {   // PUT each secret, sealed in the browser; false if any failed
+    var pk = await gh("/repos/" + full + "/actions/secrets/public-key"); if (!pk.ok) return false;
+    for (var n in vals) { var put = await gh("/repos/" + full + "/actions/secrets/" + n, { method: "PUT", body: { encrypted_value: window.mriSeal(pk.j.key, vals[n]), key_id: pk.j.key_id } }); if (!put.ok) return false; }
+    return true;
+  }
+  async function ghVar(full, n, v) {
+    var r = await gh("/repos/" + full + "/actions/variables/" + n, { method: "PATCH", body: { name: n, value: v } });
+    if (r.status === 404) r = await gh("/repos/" + full + "/actions/variables", { method: "POST", body: { name: n, value: v } });
+    return r.ok;
+  }
+  async function ghRun(full, wf, polls) {   // start a workflow and wait for it: "success" | "failure" | "missing" | "nostart" | "running"
+    var since = new Date(Date.now() - 60000).toISOString();
+    var d = await gh("/repos/" + full + "/actions/workflows/" + wf + "/dispatches", { method: "POST", body: { ref: "main" } });
+    if (d.status === 404) return { r: "missing" }; if (!d.ok) return { r: "nostart" };
+    var run = null;
+    for (var t = 0; t < (polls || 40); t++) { await sleep(4000); var rs = await gh("/repos/" + full + "/actions/workflows/" + wf + "/runs?per_page=1&created=>" + since);
+      run = rs.j && rs.j.workflow_runs && rs.j.workflow_runs[0]; if (run && run.status === "completed") break; }
+    if (!run || run.status !== "completed") return { r: "running" };
+    return { r: run.conclusion === "success" ? "success" : "failure", url: run.html_url };
+  }
+  function b64d(t) { try { return decodeURIComponent(escape(atob((t || "").replace(/\n/g, "")))); } catch (e) { return ""; } }
+  function b64e(t) { return btoa(unescape(encodeURIComponent(t))); }
+
+  // ---- Optional extras (QuickStart 5 and 6, folded into Set up my robot). The member's copy says what it supports
+  // in kit-features.json; error alerts also work on older copies, whose universe.json already has sentry_dsn.
+  var SX = { cl: "api", feat: null, featFor: "" };
+  function sxCopy() { return SU.full || (SU.have && SU.have.full) || ""; }
+  async function sxFeatures(full) {
+    if (SX.featFor === full) return SX.feat; SX.featFor = full; SX.feat = {};
+    var f = await gh("/repos/" + full + "/contents/kit-features.json"); if (f.ok && f.j) { try { SX.feat = (JSON.parse(b64d(f.j.content)).features) || {}; } catch (e) {} }
+    if (!SX.feat.sentry_dsn) { var u = await gh("/repos/" + full + "/contents/universe.json"); if (u.ok && u.j && /"sentry_dsn"/.test(b64d(u.j.content))) SX.feat.sentry_dsn = 1; }
+    return SX.feat;
+  }
+  var SX_NEED = { sx1: "sentry_dsn", sx2: "claude_fix", sx3: "dashboard_setup" }, SX_MIN = { sx1: 1, sx2: 1, sx3: 2 };
+  async function sxState() {
+    var full = sxCopy(), on = !!(SU.tok && full);
+    ["sx1", "sx2", "sx3"].forEach(function (id) { $(id).classList.toggle("locked", !on); });
+    if (!on) { sxCheck(); return; }
+    var f = await sxFeatures(full);
+    ["sx1", "sx2", "sx3"].forEach(function (id) {
+      var ok = (f[SX_NEED[id]] || 0) >= SX_MIN[id]; $(id).dataset.ok = ok ? "1" : "";
+      var m = $(id + "-msg"); if (!ok) m.textContent = "Your copy doesn't have this yet. It arrives with the next update to your code."; else if (/Build your robot|doesn't have this/.test(m.textContent)) m.textContent = "";
+    });
+    if (!$("sx-em").value) $("sx-em").value = $("su-to").value || (me && me.email) || "";
+    sxCheck();
+  }
+  function sxCheck() {
+    var on = !!(SU.tok && sxCopy()) && !SU.busy, ok = function (id) { return on && $(id).dataset.ok === "1"; };
+    $("sx1-go").disabled = !(ok("sx1") && /^https:\/\/[0-9a-f]{16,}@[A-Za-z0-9.-]+\/\d+$/.test($("sx-dsn").value.trim()));
+    $("sx2-go").disabled = !(ok("sx2") && /^sk-ant-[A-Za-z0-9_-]{20,}$/.test($("sx-cl").value.trim()));
+    $("sx3-go").disabled = !(ok("sx3") && /^[0-9a-f]{32}$/.test($("sx-cfa").value.trim()) && $("sx-cft").value.trim().length >= 30 &&
+      $("sx-rk").value.trim().length > 10 && $("sx-rs").value.trim().length > 10 && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($("sx-em").value.trim()));
+  }
+  var sxReady = false;
+  function sxInit() {
+    if (sxReady) return; sxReady = true;
+    ["sx-dsn", "sx-cl", "sx-cfa", "sx-cft", "sx-rk", "sx-rs", "sx-em"].forEach(function (id) { $(id).addEventListener("input", sxCheck); });
+    document.querySelector('.su-seg[data-k="cl"]').addEventListener("click", function () {
+      var api = SU.cl !== "sub"; $("sx2-api").hidden = !api; $("sx2-sub").hidden = api;
+      $("sx-cl-l").textContent = api ? "Claude API key" : "Claude subscription token"; });
+    $("sx1-go").addEventListener("click", sxSentry); $("sx2-go").addEventListener("click", sxClaude); $("sx3-go").addEventListener("click", sxApp);
+    sxState();
+  }
+  async function sxSentry() {
+    var full = sxCopy(), m = $("sx1-msg"), dsn = $("sx-dsn").value.trim(); $("sx1-go").disabled = true; m.textContent = "Saving…";
+    try {
+      var u = await gh("/repos/" + full + "/contents/universe.json"); if (!u.ok) throw 0;
+      var txt = b64d(u.j.content), next = txt.replace(/("sentry_dsn"\s*:\s*)"[^"]*"/, function (_, k) { return k + JSON.stringify(dsn); });
+      if (next === txt && txt.indexOf(JSON.stringify(dsn)) < 0) throw 0;
+      var put = await gh("/repos/" + full + "/contents/universe.json", { method: "PUT", body: { message: "Error alerts: add my Sentry DSN", content: b64e(next), sha: u.j.sha } });
+      if (!put.ok) throw 0;
+      m.textContent = "Error alerts are on. A failed run now reports to your Sentry project."; $("sx1").classList.add("done"); $("sx1-st").textContent = "On"; $("sx-dsn").value = "";
+    } catch (e) { m.textContent = "Couldn't save that just now. Try again in a minute."; }
+    sxCheck();
+  }
+  async function sxClaude() {
+    var full = sxCopy(), m = $("sx2-msg"), n = SU.cl === "sub" ? "CLAUDE_CODE_OAUTH_TOKEN" : "ANTHROPIC_API_KEY", v = {}; v[n] = $("sx-cl").value.trim();
+    $("sx2-go").disabled = true; m.textContent = "Locking it into your copy…";
+    if (await ghSeal(full, v)) { $("sx-cl").value = ""; m.textContent = "Claude fixes are on. Next time a run fails, a suggested fix appears on GitHub for you to approve."; $("sx2").classList.add("done"); $("sx2-st").textContent = "On"; }
+    else m.textContent = "Couldn't lock it in just now. Try again in a minute.";
+    v = null; sxCheck();
+  }
+  async function sxApp() {
+    var full = sxCopy(), log = ghLog("sx3-log"), m = $("sx3-msg"); $("sx3-log").innerHTML = ""; m.textContent = ""; SU.busy = true; sxCheck();
+    try {
+      var k = log("Locking your Cloudflare and read-only keys into your copy");
+      var ok = await ghSeal(full, { CLOUDFLARE_ACCOUNT_ID: $("sx-cfa").value.trim(), CLOUDFLARE_API_TOKEN: $("sx-cft").value.trim(), T212_READ_API_KEY: $("sx-rk").value.trim(), T212_READ_API_SECRET: $("sx-rs").value.trim() });
+      if (!ok) k.bad("Couldn't lock your keys in just now. Press Set up my app again.");
+      $("sx-cfa").value = $("sx-cft").value = $("sx-rk").value = $("sx-rs").value = ""; k.ok("Keys locked in. They've been cleared from this page.");
+      var e = log("Saving who can open it"); if (!(await ghVar(full, "DASHBOARD_EMAIL", $("sx-em").value.trim()))) e.bad("Couldn't save your email just now. Press Set up my app again: your keys are already saved."); e.ok("Only " + $("sx-em").value.trim() + " can open it");
+      var c = log("Setting up your app on Cloudflare (about a minute)"), r = await ghRun(full, "dashboard-setup.yml");
+      if (r.r === "missing" || r.r === "nostart") c.bad("Couldn't start the app setup. Press Set up my app again in a minute.");
+      if (r.r === "failure") c.bad("Cloudflare said no. Check the token has both permissions and the account ID is right, then press Set up my app again.");
+      if (r.r === "running") { c.ok("Still setting up: open Actions → Dashboard setup on your copy to see the address when it finishes."); }
+      else {
+        c.ok("Set up on Cloudflare");
+        var f = await gh("/repos/" + full + "/contents/dashboard-url.txt?ref=ci/dashboard-setup"), url = f.ok && f.j ? b64d(f.j.content).trim() : "";
+        if (/^https:\/\/[A-Za-z0-9.-]+\.[a-z]{2,}(\/.*)?$/.test(url)) {
+          rest("rpc/set_my_dashboard", { method: "POST", body: JSON.stringify({ p_url: url }) }).then(function (x) { if (x && x.ok) { me.dashboard_url = x.j || url; renderDash(); } }).catch(function () {});
+          m.innerHTML = 'Your app: <a href="' + esc(url) + '" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">' + esc(url.replace(/^https:\/\//, "")) + '</a>. It fills in after tonight\'s run. Open it on your phone and add it to your Home Screen; it\'s also saved under Your dashboard here.';
+        } else m.textContent = "Set up. Open Actions → Dashboard setup on your copy to see your app's address.";
+        $("sx3").classList.add("done"); $("sx3-st").textContent = "On";
+      }
+    } catch (e) { if (e.message !== "stop") m.textContent = "Something went wrong. Press Set up my app again."; }
+    SU.busy = false; sxCheck();
+  }
+
+  // ---- Real money (v50): its own step-by-step page. The go-live check is advice, not a gate (Amit, 24 Oct 2026).
+  var LV = null;
+  function lvStep(n, txt, done) { var st = $("lv" + n + "-st"); if (!st) return; st.textContent = txt; st.className = "pill" + (done ? " g" : ""); $("lv" + n).classList.toggle("done", !!done); }
+  var lvReady = false, lvLook = null;
+  function lvInit() {
+    suInit();
+    if (lvReady) { lvState(); return; } lvReady = true;
+    $("lv-gh").addEventListener("click", function () { ghConnect("live"); });
+    $("lv-name").addEventListener("input", lvLookup);
+    ["lv-c1", "lv-c2", "lv-c3"].forEach(function (id) { $(id).addEventListener("change", lvState); });
+    ["lv-tk", "lv-ts", "lv-rk", "lv-rs", "lv-ok", "lv-pk", "lv-ps"].forEach(function (id) { $(id).addEventListener("input", lvState); });
+    $("lv-check").addEventListener("click", lvCheck); $("lv-go").addEventListener("click", lvGo); $("lv-bk").addEventListener("click", lvBack);
+    if (SU.tok) ghConnected(); else if (SU.cfg && !SU.cfg.configured) $("lv-gh").disabled = true;
+    if (SU.full) $("lv-name").value = SU.full.split("/")[1];
+    lvState();
+  }
+  function lvLookup() {
+    clearTimeout(lvLook); lvLook = setTimeout(async function () {
+      var name = $("lv-name").value.trim(), full = SU.login + "/" + name, msg = $("lv1-msg");
+      if (!SU.tok || !SU.login || !/^[A-Za-z0-9._-]{1,90}$/.test(name)) { LV = null; lvState(); return; }
+      try {
+        var r = await gh("/repos/" + full), ours = r.ok && r.j && r.j.template_repository && r.j.template_repository.full_name === SU_TEMPLATE;
+        if (!ours) { LV = null; msg.textContent = "Couldn't find a copy called " + name + " made by Set up my robot. Check the name above."; lvState(); return; }
+        var sc = await gh("/repos/" + full + "/actions/secrets?per_page=100"), names = (sc.ok && sc.j && sc.j.secrets || []).map(function (x) { return x.name; });
+        var ev = await gh("/repos/" + full + "/actions/variables/T212_ENV"), env = ev.ok && ev.j ? ev.j.value : "practice";
+        LV = { full: full, names: names, env: env };
+        msg.textContent = "Found your copy, " + name + ". " + (env === "live" ? "It's already on real money; you can still use this page to change its live key." : "It's on practice money.");
+      } catch (e) { LV = null; msg.textContent = "Couldn't reach GitHub just now. Try again in a minute."; }
+      lvState();
+    }, 400);
+  }
   function lvState() {
-    var full = SU.full || (SU.have && SU.have.full) || "";
-    $("lv-check").disabled = !(SU.tok && full) || SU.busy;
-    if (SU.tok && full && $("lv-msg").dataset.s !== "set") $("lv-msg").textContent = "Runs on " + full.split("/")[1] + ". Takes about a minute.";
-    var ok = SU.lvPass && $("lv-tk").value.trim().length > 10 && $("lv-ts").value.trim().length > 10 && $("lv-ok").value.trim().toUpperCase() === "REAL MONEY";
-    $("lv-go").disabled = !ok || SU.busy;
+    if (!lvReady) return;
+    var on = !!(SU.tok && LV), busy = !!SU.busy || !!(LV && LV.busy);
+    [2, 3, 4, 5].forEach(function (n) { $("lv" + n).classList.toggle("locked", !on); });
+    $("lv-check").disabled = !on || busy;
+    var ticks = $("lv-c1").checked && $("lv-c2").checked && $("lv-c3").checked; lvStep(3, ticks ? "Done" : "To do", ticks);
+    var app = !!(LV && LV.names.indexOf("T212_READ_API_KEY") >= 0); $("lv-read").hidden = !app;
+    var rk = $("lv-rk").value.trim(), rs = $("lv-rs").value.trim(), readOk = (!rk && !rs) || (rk.length > 10 && rs.length > 10);
+    var key = $("lv-tk").value.trim().length > 10 && $("lv-ts").value.trim().length > 10 && readOk; lvStep(4, key ? "Ready" : "To do", key);
+    var sure = $("lv-ok").value.trim().toUpperCase() === "REAL MONEY";
+    $("lv-go").disabled = !(on && ticks && key && sure) || busy;
+    $("lv-bk").disabled = !(on && $("lv-pk").value.trim().length > 10 && $("lv-ps").value.trim().length > 10) || busy;
   }
   async function lvCheck() {
-    var full = SU.full || (SU.have && SU.have.full); if (!full) return;
-    var m = $("lv-msg"); m.dataset.s = "set"; $("lv-check").disabled = true; m.textContent = "Starting the go-live check…";
-    var since = new Date(Date.now() - 60000).toISOString();
-    var d = await gh("/repos/" + full + "/actions/workflows/golive-check.yml/dispatches", { method: "POST", body: { ref: "main" } });
-    if (d.status === 404) { m.textContent = "Your copy doesn't have the go-live check yet. It arrives with the next update to your code; nothing has changed."; $("lv-check").disabled = false; return; }
-    if (!d.ok) { m.textContent = "Couldn't start the check just now. Try again in a minute."; $("lv-check").disabled = false; return; }
-    var run = null;
-    for (var t = 0; t < 40; t++) { await sleep(4000); var rs = await gh("/repos/" + full + "/actions/workflows/golive-check.yml/runs?per_page=1&created=>" + since);
-      run = rs.j && rs.j.workflow_runs && rs.j.workflow_runs[0]; if (run && run.status === "completed") break; }
-    $("lv-check").disabled = false;
-    if (!run || run.status !== "completed") { m.textContent = "Still running. Open Actions on your copy to see the result, then come back."; return; }
-    if (run.conclusion === "success") { SU.lvPass = true; $("lv-form").hidden = false; m.textContent = "Go-live check passed. When you're ready, paste your live key below."; }
-    else { SU.lvPass = false; $("lv-form").hidden = true; m.innerHTML = 'Not ready yet: <a href="' + run.html_url + '" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">see which checks to finish</a>. Keep going on practice; it counts.'; }
+    if (!LV) return; var m = $("lv-msg"); LV.busy = true; lvState(); m.textContent = "Running the go-live check (about a minute)…";
+    var r = await ghRun(LV.full, "golive-check.yml"); LV.busy = false;
+    if (r.r === "missing") m.textContent = "Your copy doesn't have the go-live check yet; it arrives with the next update. You can still switch.";
+    else if (r.r === "nostart") m.textContent = "Couldn't start the check just now. Try again in a minute, or carry on without it.";
+    else if (r.r === "running") m.textContent = "Still running. Open Actions on your copy to see the result, or carry on without it.";
+    else if (r.r === "success") { m.textContent = "Every box is ticked."; lvStep(2, "All ticked", true); }
+    else m.innerHTML = 'Not every box is ticked yet: <a href="' + esc(r.url || "#") + '" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">see which</a>. You can still switch; Lesson 13 explains what each one protects.';
     lvState();
   }
   async function lvGo() {
-    var full = SU.full || (SU.have && SU.have.full); if (!full || !SU.lvPass) return;
-    var m = $("lv-msg"); $("lv-go").disabled = true; SU.busy = true; m.textContent = "Switching…";
+    if (!LV || LV.busy) return; LV.busy = true; lvState(); $("lv-log").innerHTML = ""; $("lv-done").hidden = true; lvStep(5, "Switching…", false);
+    var log = ghLog("lv-log"), full = LV.full;
     try {
-      var pk = await gh("/repos/" + full + "/actions/secrets/public-key"); if (!pk.ok) throw new Error("lock");
+      var k = log("Locking your live key into your copy");
       var vals = { T212_API_KEY: $("lv-tk").value.trim(), T212_API_SECRET: $("lv-ts").value.trim() };
-      for (var n in vals) { var put = await gh("/repos/" + full + "/actions/secrets/" + n, { method: "PUT", body: { encrypted_value: window.mriSeal(pk.j.key, vals[n]), key_id: pk.j.key_id } }); if (!put.ok) throw new Error("save"); }
-      vals = null;
-      var v = await gh("/repos/" + full + "/actions/variables/T212_ENV", { method: "PATCH", body: { name: "T212_ENV", value: "live" } });
-      if (v.status === 404) v = await gh("/repos/" + full + "/actions/variables", { method: "POST", body: { name: "T212_ENV", value: "live" } });
-      if (!v.ok) throw new Error("env");
-      await gh("/repos/" + full + "/actions/workflows/setup-check.yml/dispatches", { method: "POST", body: { ref: "main" } });
-      $("lv-tk").value = $("lv-ts").value = $("lv-ok").value = "";
-      m.textContent = "Switched to real money. The setup check is checking your live key now and emails you. Nothing trades until you approve a plan.";
-      $("lv-form").hidden = true; SU.lvPass = false;
-    } catch (e) { m.textContent = "Couldn't finish the switch just now. Press Switch again in a minute to finish it; nothing trades until you approve a plan."; }
-    SU.busy = false; lvState();
+      if ($("lv-rk").value.trim()) { vals.T212_READ_API_KEY = $("lv-rk").value.trim(); vals.T212_READ_API_SECRET = $("lv-rs").value.trim(); }
+      if (!(await ghSeal(full, vals))) k.bad("Couldn't lock in your live key just now. Press Switch again in a minute.");
+      vals = null; k.ok("Live key locked in");
+      var e = log("Pointing your robot at your real account");
+      if (!(await ghVar(full, "T212_ENV", "live"))) e.bad("Couldn't finish the switch just now. Press Switch again in a minute to finish it; nothing trades until you approve a plan.");
+      LV.env = "live"; SU.liveCopy = full; e.ok("Your robot now uses your real account");
+      var c = log("Running the setup check on your live key"), r = await ghRun(full, "setup-check.yml", 60);
+      if (r.r === "missing" || r.r === "nostart") c.ok("Couldn't start the setup check: open Actions on your copy and run Setup check.");
+      else if (r.r === "running") c.ok("Setup check is still running: its email will tell you the result.");
+      else if (r.r === "success") c.ok("Setup check passed: all green");
+      else c.bad("The setup check found something. Its email says what; usually a switch left off on the live key. Fix it in Trading 212, paste the key again and press Switch.");
+      ["lv-tk", "lv-ts", "lv-rk", "lv-rs", "lv-ok"].forEach(function (id) { $(id).value = ""; });
+      $("lv-done").hidden = false; lvStep(5, "Done", true);
+    } catch (x) { if (x.message !== "stop") $("lv-log").insertAdjacentHTML("beforeend", "<li class=\"bad\"><i></i><span>Something went wrong. Press Switch again.</span></li>"); lvStep(5, "Stopped", false); }
+    LV.busy = false; lvState();
+  }
+  async function lvBack() {
+    if (!LV || LV.busy) return; var m = $("lv-bmsg"); LV.busy = true; lvState(); m.textContent = "Switching back to practice…";
+    var ok = await ghSeal(LV.full, { T212_API_KEY: $("lv-pk").value.trim(), T212_API_SECRET: $("lv-ps").value.trim() }) && await ghVar(LV.full, "T212_ENV", "practice");
+    if (ok) { $("lv-pk").value = $("lv-ps").value = ""; LV.env = "practice"; if (SU.liveCopy === LV.full) SU.liveCopy = ""; m.textContent = "Back on practice money. The setup check is checking your practice key and emails you."; ghRun(LV.full, "setup-check.yml", 1).catch(function () {}); }
+    else m.textContent = "Couldn't finish just now. Press Back to practice again in a minute.";
+    LV.busy = false; lvState();
   }
   async function suPlan() {
     if (!SU.full) return; var b = $("su-plan"); b.disabled = true; $("su-plan-msg").textContent = "Asking your robot for its plan…";
@@ -1487,7 +1729,7 @@
   });
 
   // ---- one section per page: Home (welcome and messages), Start here, Lessons, Code, Dashboard, Clips, Help
-  var PAGES = ["home", "setup", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help", "guide", "questions"];
+  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help", "guide", "questions"];
   // Questions (23 Oct 2026): the public Questions page, shown inside the members area so the members menu stays put. Fetched once.
   var faqLoaded = false;
   function loadFaq() {
@@ -1511,6 +1753,7 @@
     if (page === "lessons") $("les-fold").open = true;
     if (page === "questions") loadFaq();
     if (page === "setup") suInit();
+    if (page === "live") lvInit();
     if (page === "clips") { paintBench(); loadWants(); document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = "0"; }); setTimeout(function () { document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = b.dataset.w; }); }, 60); }
     $("preview").classList.toggle("off", page !== "home");
     document.documentElement.classList.toggle("dashview", page === "mydash"); document.documentElement.dataset.pg = page;
