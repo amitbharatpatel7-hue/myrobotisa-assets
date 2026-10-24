@@ -192,7 +192,52 @@
    "seconds": 41.81,
    "caption": "I worried my differentials only worked because I'd chosen them already knowing which had boomed. So I built a squad by auto-draft instead \u2014 pulled straight from sector index rosters, nothing hand-picked. It kept pace with mine, with a smaller worst run. Then I ran the same test I always run: delete the five best gameweeks. Both fell, and auto-draft fell further \u2014 below what doing nothing at all would have made. That's the test I run before I trust any result.\n\nI run this system with my own money, in an ISA. I hold positions in things I talk about, and I say so when I do. This is a record of what I did and what happened \u2014 not a recommendation to do the same. I'm an engineer, not a financial adviser.",
    "queued_at": "2026-10-20T13:16:40+00:00"
+  },
+  {
+   "slug": "gw02-short10",
+   "title": "27 clicks. Two real decisions.",
+   "file": "videos/gw02-short10-20261024-1331.mp4",
+   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw02-short10-20261024-1331.mp4",
+   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw02-short10-20261024-1331.mp4",
+   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw02-short10-20261024-1331.jpg",
+   "card_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/cards/gw02-short10-card-20261024-1331.mp4",
+   "card_raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/cards/gw02-short10-card-20261024-1331.mp4",
+   "card_bytes": 64671,
+   "bytes": 2557521,
+   "seconds": 46.35,
+   "caption": "I approved every change to my own trading system by hand \u2014 one day that meant clicking Merge 27 times, and counting up afterwards, only two of those were real decisions.\n\nSo I drew a line: anything that doesn't touch the money \u2014 the orders, the risk rules \u2014 merges itself once the tests pass, and undoes itself if it breaks the build. 27 approvals became one email, read in the evening. Autopick for the bench, manual for the captain.\n\nI run this system with my own money, in an ISA. I hold positions in things I talk about, and I say so when I do. This is a record of what I did and what happened \u2014 not a recommendation to do the same. I'm an engineer, not a financial adviser.",
+   "queued_at": "2026-10-24T13:31:01+00:00"
+  },
+  {
+   "slug": "gw02-short7",
+   "title": "Paid 51% more. Lasted longer.",
+   "file": "videos/gw02-short7-20261024-1331.mp4",
+   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw02-short7-20261024-1331.mp4",
+   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw02-short7-20261024-1331.mp4",
+   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw02-short7-20261024-1331.jpg",
+   "card_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/cards/gw02-short7-card-20261024-1331.mp4",
+   "card_raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/cards/gw02-short7-card-20261024-1331.mp4",
+   "card_bytes": 67964,
+   "bytes": 2618713,
+   "seconds": 44.27,
+   "caption": "I ran the same exit rule twice on the same stock, weeks apart. One entry was cheap and early. The other waited a week and paid 51% more for the same stock.\n\nSame stop rule for both: the more a position is up from its entry, the tighter the stop gets. The cheap entry showed a bigger paper gain sooner \u2014 so its stop tightened sooner, and it got sold first. It captured 118%. The one that paid more held on for 205.8%.\n\nYou got him in a week early, for less. And that's exactly why you benched him for the double.\n\nI run this system with my own money, in an ISA. I hold positions in things I talk about, and I say so when I do. This is a record of what I did and what happened \u2014 not a recommendation to do the same. I'm an engineer, not a financial adviser.",
+   "queued_at": "2026-10-24T13:31:01+00:00"
+  },
+  {
+   "slug": "gw02-short8",
+   "title": "One slot missed the riser 44 times in 100",
+   "file": "videos/gw02-short8-20261024-1331.mp4",
+   "url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/videos/gw02-short8-20261024-1331.mp4",
+   "raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/videos/gw02-short8-20261024-1331.mp4",
+   "cover_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/covers/gw02-short8-20261024-1331.jpg",
+   "card_url": "https://cdn.jsdelivr.net/gh/amitbharatpatel7-hue/ppp-assets@main/cards/gw02-short8-card-20261024-1331.mp4",
+   "card_raw_url": "https://raw.githubusercontent.com/amitbharatpatel7-hue/ppp-assets/main/cards/gw02-short8-card-20261024-1331.mp4",
+   "card_bytes": 65320,
+   "bytes": 2485517,
+   "seconds": 45.71,
+   "caption": "I only ever gave myself one slot for a differential pick. I tested whether that's actually enough \u2014 four hundred replays of the same season, same money, only the dice different. One slot caught the season's big riser 56% of the time. Two slots: 81%. Three: 94%. The other 44% of the time, that one slot was already full of something ordinary when the real mover took off.\n\nI run this system with my own money, in an ISA. I hold positions in things I talk about, and I say so when I do. This is a record of what I did and what happened \u2014 not a recommendation to do the same. I'm an engineer, not a financial adviser.",
+   "queued_at": "2026-10-24T13:31:01+00:00"
   }
  ],
- "updated_at": "2026-10-20T13:16:40+00:00"
+ "updated_at": "2026-10-24T13:31:01+00:00"
 }
