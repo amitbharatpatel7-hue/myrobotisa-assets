@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="47">
+<meta name="mri-version" content="48">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -314,7 +314,10 @@
   .su-log li.run i{border-color:var(--green);border-top-color:transparent;animation:suspin .8s linear infinite} .su-log li.ok i{background:var(--green);border-color:var(--green)} .su-log li.bad i{background:var(--pink-ink);border-color:var(--pink-ink)}
   @keyframes suspin{to{transform:rotate(360deg)}} @media (prefers-reduced-motion:reduce){.su-log li.run i{animation:none}}
   .su-done{margin-top:16px;padding:18px;border-radius:18px;background:#14402C;border:2px solid var(--green)} .su-done h3{margin:0 0 6px;font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;font-size:26px;color:var(--green)}
-  .su-before{margin:0 0 14px} .su-pre{margin:10px 0 0;padding-left:18px} .su-pre li{margin:0 0 10px;line-height:1.55}
+  .su-before{margin:0 0 14px} .su-pre{margin:12px 0 0;padding:0;list-style:none;counter-reset:acct}
+  .su-pre li{position:relative;margin:0 0 14px;padding:12px 14px 12px 58px;line-height:1.55;border:1px solid rgba(234,0,171,.45);border-radius:14px;background:rgba(234,0,171,.07);counter-increment:acct}
+  .su-pre li::before{content:counter(acct);position:absolute;left:14px;top:12px;width:30px;height:30px;border-radius:50%;background:var(--pink,#EA00AB);color:#fff;font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center}
+  .su-pre li > b:first-child{color:var(--pink-ink)} .su-keep{color:var(--green);margin:8px 0 0}
   .su-pre a,.su-step details a{color:var(--green);font-weight:700}
 </style>
 </head>
@@ -527,11 +530,11 @@
         <h2 id="h-su">Set up <span class="g">my robot</span></h2>
         <p class="lede">About ten minutes once your Trading 212, GitHub and email accounts are open, and no typing into GitHub. You bring two keys; this page builds your copy, locks the keys away, switches on the schedule and runs the setup check. Then you watch it work on paper money, and the lessons explain what you just built.</p>
         <details class="fold su-before" id="su-before" open><summary><span class="fold-l">Before you start: three free accounts</span></summary>
-          <ul class="su-pre">
+          <ol class="su-pre">
             <li><b>Trading 212.</b> No account yet? <a href="https://www.trading212.com/" target="_blank" rel="noopener">Open one</a> (Invest or Stocks ISA; the ID check usually takes minutes, sometimes a day). Then <b>install the Trading 212 app on your phone and sign in with Face ID or your fingerprint first</b>: when you sign in on the website, Trading 212 sends a code to that app, so keep your phone with you. <a href="#guide/qs-2">Step-by-step guide and video</a></li>
             <li><b>GitHub.</b> <a href="https://github.com/signup" target="_blank" rel="noopener">Make a free account</a> with this email. It keeps your copy of the code and runs it on a schedule. <a href="#guide/qs-1">Guide</a></li>
             <li><b>Resend</b> (sends your robot's emails). <a href="https://resend.com/signup" target="_blank" rel="noopener">Sign up free</a> with the inbox you want the emails in, and click the link in its confirmation email. <a href="#guide/qs-3">Guide</a></li>
-          </ul>
+          </ol>
         </details>
         <div class="su-lock" role="note"><span aria-hidden="true">&#128274;</span><span><b>Your keys never touch our servers.</b> They go from this page straight into your own GitHub, locked with GitHub's encryption so only your copy of the code can read them. We can't see them. The GitHub connection is used for this setup and forgotten when you close the page.</span></div>
         <ol class="su-steps">
@@ -542,10 +545,10 @@
           <li class="su-step locked" id="su2"><div class="su-h"><b>Your Trading 212 practice key</b><span class="pill" id="su2-st">To do</span></div>
             <p>Practice account first: no real money until Lesson 13.</p>
             <details open><summary>Where do I find this?</summary><ol>
-              <li>In the Trading 212 app, or at <a href="https://app.trading212.com" target="_blank" rel="noopener">app.trading212.com</a> (it sends a sign-in code to your app), tap the account name at the top (it says Invest or ISA) and choose <b>Practice</b>. Each account has its own keys, so make the key in Practice.</li>
+              <li>In the Trading 212 app, or at <a href="https://app.trading212.com" target="_blank" rel="noopener">app.trading212.com</a> (it sends a sign-in code to your app), open the menu (&#9776;, bottom right in the app) and tap <b>Switch to Practice</b>, then choose <b>INVEST &middot; Practice</b> (not CFD). Each account has its own keys, so make the key in Practice.</li>
               <li><b>Settings &rarr; API (Beta) &rarr; Generate API key.</b> If it asks for a name, call it <b>My Robot ISA</b>.</li>
-              <li>Switch on exactly these six: <b>Account data</b>, <b>Portfolio</b>, <b>Metadata</b>, <b>Orders &ndash; Read</b>, <b>Orders &ndash; Execute</b> and <b>History &ndash; Orders</b> (History switches on with it). Leave Dividends, Transactions and both Pies switches off. <span class="small">Orders &ndash; Execute lets it place the orders you approve: it never trades without your tap.</span></li>
-              <li>If it offers an IP restriction, leave it off: GitHub's computers change address.</li>
+              <li>Switch on exactly these seven: <b>Account data</b>, <b>History</b>, <b>History &ndash; Orders</b>, <b>Metadata</b>, <b>Orders &ndash; Execute</b>, <b>Orders &ndash; Read</b> and <b>Portfolio</b>. Leave History &ndash; Dividends, History &ndash; Transactions and both Pies switches off. <span class="small">Orders &ndash; Execute lets it place the orders you approve: it never trades without your tap.</span></li>
+              <li>Under <b>IP access restrictions</b>, choose <b>Unrestricted</b>. Trading 212 calls it less secure; it's needed here because GitHub's computers change address. Your key still only does what the seven switches allow.</li>
               <li>Press <b>Generate key</b>. It shows the key and the secret once: copy each one straight into the boxes below.</li></ol>
               <p class="small" style="margin:6px 0 0"><a href="#guide/qs-2">Show me with pictures and a video</a></p></details>
             <label class="f" for="su-tk">API key</label><input class="t" id="su-tk" type="password" autocomplete="off" spellcheck="false">
@@ -566,7 +569,8 @@
             <div class="su-seg" data-k="risk"><button type="button" data-v="cautious" aria-pressed="false">Cautious<small>smaller bold slice</small></button><button type="button" data-v="balanced" aria-pressed="true">Balanced<small>the default</small></button><button type="button" data-v="adventurous" aria-pressed="false">Adventurous<small>bigger bold slice</small></button></div>
             <label class="f">How often should it email you?</label>
             <div class="su-seg" data-k="freq"><button type="button" data-v="daily" aria-pressed="true">Every day<small>the default</small></button><button type="button" data-v="weekly" aria-pressed="false">Once a week<small>Fridays, plus anything that needs you</small></button></div>
-            <label class="f" for="su-name">Name for your copy</label><input class="t" id="su-name" value="my-robot-isa" autocomplete="off" spellcheck="false"></li>
+            <label class="f" for="su-name">Name for your copy</label><input class="t" id="su-name" value="my-robot-isa" autocomplete="off" spellcheck="false">
+            <p class="small su-keep" id="su-keep" hidden role="status" aria-live="polite"></p></li>
           <li class="su-step locked" id="su5"><div class="su-h"><b>Build my robot</b><span class="pill" id="su5-st">Ready when you are</span></div>
             <div class="row"><button class="btn" type="button" id="su-go" disabled>Build my robot</button></div>
             <ul class="su-log" id="su-log" aria-live="polite"></ul>
@@ -1139,11 +1143,32 @@
   }
   function suState(n, txt, done) { var st = $("su" + n + "-st"); st.textContent = txt; st.className = "pill" + (done ? " g" : ""); $("su" + n).classList.toggle("done", !!done); }
   function suUnlock() { [2, 3, 4, 5].forEach(function (n) { $("su" + n).classList.toggle("locked", !SU.tok); }); suCheck(); }
+  // 24 Oct 2026: an existing copy of the robot keeps the keys already locked into it. Leave a box empty to keep that key,
+  // so changing only the Trading 212 key (say, to add a permission) doesn't mean pasting the email key again.
+  function suHas(n) { var full = SU.login + "/" + $("su-name").value.trim(); return !!(SU.have && SU.have.full === full && SU.have.names.indexOf(n) >= 0); }
+  var suLook = null;
+  function suLookup() {
+    clearTimeout(suLook); suLook = setTimeout(async function () {
+      var name = $("su-name").value.trim(), full = SU.login + "/" + name, hint = $("su-keep");
+      if (!SU.tok || !SU.login || !/^[A-Za-z0-9._-]{1,90}$/.test(name)) { hint.hidden = true; return; }
+      try {
+        var r = await gh("/repos/" + full); var ours = r.ok && r.j && r.j.template_repository && r.j.template_repository.full_name === SU_TEMPLATE;
+        if (!ours) { SU.have = null; hint.hidden = true; suCheck(); return; }
+        var sc = await gh("/repos/" + full + "/actions/secrets?per_page=100");
+        var names = (sc.ok && sc.j && sc.j.secrets || []).map(function (x) { return x.name; });
+        SU.have = { full: full, names: names };
+        var kept = ["T212_API_KEY", "T212_API_SECRET", "RESEND_API_KEY"].filter(function (n) { return names.indexOf(n) >= 0; }).length;
+        hint.textContent = kept ? "Found your copy, " + name + ", with " + kept + " of 3 keys already locked in. Leave a key box empty to keep that key; paste a new one to replace it." : "Found your copy, " + name + ". Paste your keys and press Build: it carries on from where it stopped.";
+        hint.hidden = false; suCheck();
+      } catch (e) { hint.hidden = true; }
+    }, 400);
+  }
   function suCheck() {
     // once the keys are locked into this copy, a retry doesn't need them typed again
     var saved = !!SU.saved && SU.saved === SU.login + "/" + $("su-name").value.trim() && !$("su-tk").value && !$("su-ts").value && !$("su-rk").value;
-    var t212 = saved || ($("su-tk").value.trim().length > 10 && $("su-ts").value.trim().length > 10);
-    var mail = (saved || /^re_[A-Za-z0-9_]{10,}$/.test($("su-rk").value.trim())) && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($("su-to").value.trim());
+    var tk = $("su-tk").value.trim(), ts = $("su-ts").value.trim(), rk = $("su-rk").value.trim();
+    var t212 = saved || ((tk.length > 10 || (!tk && suHas("T212_API_KEY"))) && (ts.length > 10 || (!ts && suHas("T212_API_SECRET"))) && (tk || ts || suHas("T212_API_KEY")));
+    var mail = (saved || /^re_[A-Za-z0-9_]{10,}$/.test(rk) || (!rk && suHas("RESEND_API_KEY"))) && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($("su-to").value.trim());
     var name = /^[A-Za-z0-9._-]{1,90}$/.test($("su-name").value.trim());
     suState(2, t212 ? "Ready" : "To do", t212); suState(3, mail ? "Ready" : "To do", mail);
     $("su-go").disabled = !(SU.tok && t212 && mail && name) || SU.busy;
@@ -1153,6 +1178,7 @@
     if (!$("su-to").value && me && me.email) $("su-to").value = me.email;
     if (suReady) return; suReady = true;
     ["su-tk", "su-ts", "su-rk", "su-to", "su-name"].forEach(function (id) { $(id).addEventListener("input", suCheck); });
+    $("su-name").addEventListener("input", suLookup);
     document.querySelectorAll(".su-seg").forEach(function (g) {
       g.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return;
         g.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); SU[g.dataset.k] = b.dataset.v; });
@@ -1186,7 +1212,7 @@
       suFn("POST", { code: code }).then(function (r) {
         if (!r.ok || !r.j.access_token) { $("su1-msg").textContent = (r.j && r.j.error) || "That didn't work. Press Connect GitHub again."; return; }
         SU.tok = r.j.access_token;
-        return gh("/user").then(function (u) { SU.login = u.j && u.j.login || ""; suState(1, "Connected", true); $("su1-msg").textContent = "Connected as @" + SU.login + "."; $("su-gh").hidden = true; suUnlock(); });
+        return gh("/user").then(function (u) { SU.login = u.j && u.j.login || ""; suState(1, "Connected", true); $("su1-msg").textContent = "Connected as @" + SU.login + "."; $("su-gh").hidden = true; suUnlock(); suLookup(); });
       }).catch(function () { $("su1-msg").textContent = "No connection. Check you're online and try again."; });
     })();
   })();
@@ -1199,6 +1225,7 @@
     if (SU.busy) return; SU.busy = true; $("su-go").disabled = true; $("su-log").innerHTML = ""; suState(5, "Building…", false);
     var name = $("su-name").value.trim(), owner = SU.login, full = owner + "/" + name;
     var vals = { T212_API_KEY: $("su-tk").value.trim(), T212_API_SECRET: $("su-ts").value.trim(), RESEND_API_KEY: $("su-rk").value.trim() };
+    Object.keys(vals).forEach(function (n) { if (!vals[n]) delete vals[n]; });
     try {
       var a = suLog("Creating your private copy of the code");
       var g = await gh("/repos/" + SU_TEMPLATE + "/generate", { method: "POST", body: { owner: owner, name: name, private: true, description: "My Robot I.S.A." } });
@@ -1229,13 +1256,14 @@
         ? "Your copy is made, but it's missing its setup check. That's a problem on our side, not yours. Your keys haven't been sent anywhere yet. Email hello@myrobotisa.com and we'll fix it; then press Build again and it carries on from here."
         : "GitHub is still copying, which can take a few minutes on a busy day. Wait two minutes and press Build again: it carries on from where it stopped.");
       w.ok("Copy ready");
-      var reuse = SU.saved === full && !vals.T212_API_KEY && !vals.T212_API_SECRET && !vals.RESEND_API_KEY;
-      if (reuse) { suLog("Keys").ok("Your keys are already locked into " + name); } else {
+      var reuse = !Object.keys(vals).length;
+      if (reuse) { suLog("Keys").ok("Keeping the keys already locked into " + name); } else {
       var k = suLog("Locking your keys into your copy");
       var pk = await gh("/repos/" + full + "/actions/secrets/public-key"); if (!pk.ok) suFail(k, "Couldn't lock your keys into your copy just now. Press Build again: it carries on from here.");
       for (var n in vals) { var put = await gh("/repos/" + full + "/actions/secrets/" + n, { method: "PUT", body: { encrypted_value: window.mriSeal(pk.j.key, vals[n]), key_id: pk.j.key_id } }); if (!put.ok) suFail(k, "Couldn't lock in your " + ({ T212_API_KEY: "Trading 212 key", T212_API_SECRET: "Trading 212 secret", RESEND_API_KEY: "Resend key" })[n] + " just now. Press Build again: it carries on from here."); }
-      $("su-tk").value = $("su-ts").value = $("su-rk").value = ""; vals = null;
-      k.ok("Keys locked in (3 of 3). They've been cleared from this page."); SU.saved = full; }
+      $("su-tk").value = $("su-ts").value = $("su-rk").value = "";
+      var nk = Object.keys(vals).length; vals = null;
+      k.ok(nk === 3 ? "Keys locked in (3 of 3). They've been cleared from this page." : "Locked in " + nk + " new key" + (nk === 1 ? "" : "s") + " and kept the rest. Cleared from this page."); SU.saved = full; SU.have = null; }
       var v = suLog("Saving your choices");
       var vars = { T212_ENV: "practice", NOTIFY_TO: $("su-to").value.trim(), RISK_PROFILE: SU.risk, DIGEST_FREQUENCY: SU.freq };
       for (var vn in vars) { var cr = await gh("/repos/" + full + "/actions/variables", { method: "POST", body: { name: vn, value: vars[vn] } });
