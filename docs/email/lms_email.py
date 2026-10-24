@@ -29,6 +29,11 @@ v2.6.1 (24 Oct 2026, approved by Amit: "go ahead with the black theme ... for in
   * new blocks: `items` [(tag, kind, title, note, link|None)] numbered rows with the tag pinned right (a tag that
     repeats the card's own tag is dropped), and `tiles` [(label, value, note)] in the website dashboard's tile style;
   * LMS_BRAND / LMS_LOGO added; solid_tag(label, kind) for callers that build their own rows.
+v2.6.4 (24 Oct 2026, Amit's review of the member emails) — additive and opt-in: render(label="Daily digest") puts the logo
+  top left and that label top right with no wordmark (member emails, like the internal notices); the headline is always
+  white (a gain is said in the green subtitle, not the headline); key/value labels wrap with a gap before the value, and a
+  "\n" in a label is a line break; new moods headset (helpdesk), sorry (a person will reply), setup (setup check); the
+  calm robot now holds an umbrella (a quieter day) instead of the shield.
 v2.6.3 (24 Oct 2026) — the robot is part of the brand: a render with no mood gets the calm robot (up robot when
   tone="up"), tagged for its project; mood=False opts out. Renders that pass a mood are unchanged.
 v2.6.2 (24 Oct 2026, Amit chose option C) — Day Trade Lab gets its own logo (the robot with a lab flask, D.T.L. tag,
@@ -93,7 +98,8 @@ SBH_BRAND = ("S", "Stock Boom", "Hunter", "https://myrobotisa.com/email/sbh-robo
 # callers keep working; the original robot-steady.png / robot-flat.png images stay on the site for emails already sent.
 _E = "https://myrobotisa.com/email/"
 MOODS = {"up": _E + "robot-up.png", "milestone": _E + "robot-milestone.png", "calm": _E + "robot-calm.png",
-         "quiet": _E + "robot-quiet.png", "yourturn": _E + "robot-yourturn.png", "paused": _E + "robot-paused.png"}
+         "quiet": _E + "robot-quiet.png", "yourturn": _E + "robot-yourturn.png", "paused": _E + "robot-paused.png",
+         "headset": _E + "robot-headset.png", "sorry": _E + "robot-sorry.png", "setup": _E + "robot-setup.png"}
 MOODS["steady"], MOODS["flat"] = MOODS["calm"], MOODS["quiet"]
 # v2.5 (23 Oct 2026): Stock Boom Hunter emails use the same robots with an S.B.H. tag (myrobotisa.com/email/sbh/);
 # render() swaps them in automatically whenever the brand is SBH_BRAND.
@@ -170,7 +176,7 @@ def _prose(prose) -> str:
 def _kv(pairs) -> str:
     rows = "".join(
         f'<tr><td style="padding:7px 0;font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;'
-        f'color:{MUTED};font-family:{FONT_STACK};width:44%;vertical-align:top;">{esc(k)}</td>'
+        f'color:{MUTED};font-family:{FONT_STACK};width:44%;vertical-align:top;padding-right:14px;">{esc(k).replace(chr(10), "<br>")}</td>'
         f'<td style="padding:7px 0;font-size:15px;font-weight:700;color:{INK};font-family:{FONT_STACK};">{esc(v)}</td></tr>'
         for k, v in pairs)
     return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{rows}</table>'
@@ -399,7 +405,8 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
            mood: str | None = None,
            internal: bool = True,
            tone: str | None = None,
-           badge: str | None = None) -> str:
+           badge: str | None = None,
+           label: str | None = None) -> str:
     # v2.5: badge overrides the green pill's text (default "Internal"), e.g. "Stock Boom Hunter" on the engine's own emails.
     b = tuple(brand) if brand else ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, "")
     tile, word, suffix = b[0], b[1], b[2]
@@ -408,7 +415,17 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
     logo = b[3] if len(b) > 3 else None
     suffix_html = ('' if word.endswith('.') else ' ') + '<span style="color:%s">%s</span>' % (PINK, esc(suffix)) if suffix else ""
     stacked = len(word + suffix) > 14   # v2.5.2 (Amit): a long name (Stock Boom Hunter) stays on ONE line, a touch smaller, never wrapping
-    if len(b) > 4 and b[4] == "internal":
+    if label and not (len(b) > 4 and b[4] == "internal"):
+        # v2.6.4: member emails with a label: logo top left, what the email is for top right, no wordmark.
+        left = (f'<img src="{esc(logo)}" width="40" height="40" alt="{esc(word)}" style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {GREEN};">'
+                if logo else f'<span style="font-family:{HEAD_STACK};font-size:22px;text-transform:uppercase;color:{INK};">{esc(word)}{suffix_html}</span>')
+        brand_row = (
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 16px;"><tr>'
+            f'<td style="vertical-align:middle;">{left}</td>'
+            f'<td align="right" style="vertical-align:middle;text-align:right;white-space:nowrap;"><span style="display:inline-block;padding:6px 12px;'
+            f'border-radius:999px;background:{GREEN};background-color:{GREEN};color:{ON_GREEN};font-size:12px;font-weight:900;letter-spacing:.12em;'
+            f'text-transform:uppercase;font-family:{FONT_STACK};white-space:nowrap;">{esc(label)}</span></td></tr></table>')
+    elif len(b) > 4 and b[4] == "internal":
         # v2.6.1 (Amit, 24 Oct 2026): internal notices carry the project's logo top left and the INTERNAL NOTICE tag top
         # right; no wordmark (the logo, the sender and the eyebrow already say which project it is).
         badge_html = (f'<span style="display:inline-block;padding:5px 10px;border-radius:999px;background:{GREEN};background-color:{GREEN};'
@@ -442,7 +459,7 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
     header = panel(
         f'<tr><td style="padding:24px 26px;">{eyebrow(eyebrow_text)}'
         f'<div style="font-family:{HEAD_STACK};font-size:32px;font-weight:400;letter-spacing:.01em;text-transform:uppercase;'
-        f'line-height:1.08;color:{GREEN if tone == "up" else INK};margin:0 0 8px;">{esc(title)}</div>'
+        f'line-height:1.08;color:{INK};margin:0 0 8px;">{esc(title)}</div>'
         f'<div style="font-size:14px;color:{MUTED};font-family:{FONT_STACK};">{_segments(subtitle)}</div></td>{mood_td}</tr>')
     cards = "".join(_block_html(b) for b in blocks)
     btns = (f'<div style="margin:4px 0 6px;">' + "".join(button(*b) for b in buttons) + "</div>") if buttons else ""
@@ -529,7 +546,7 @@ def _project_of(brand, eyebrow_text):
 
 
 def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand=None, buttons=None, mood=None,
-           internal=True, tone=None, badge=None, scheme=None):
+           internal=True, tone=None, badge=None, scheme=None, label=None):
     # v2.6.3 (Amit, 24 Oct 2026: "the robot graphic is part of the brand and should be written into the theme"):
     # every email carries a robot. A caller that names no mood gets the up robot on an up day, otherwise the calm one;
     # the project tag (I.S.A., S.B.H., L.M.S., D.T.L.) is swapped in below as before. mood=False opts out explicitly.
@@ -541,7 +558,7 @@ def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand
         scheme = "internal" if internal else "night"
     if scheme != "internal":
         return _render_core(title, eyebrow_text, subtitle, blocks, cta=cta, footnote=footnote, brand=brand, buttons=buttons,
-                            mood=mood, internal=internal, tone=tone, badge=badge)
+                            mood=mood, internal=internal, tone=tone, badge=badge, label=label)
     proj = _project_of(brand, eyebrow_text)
     base = {"sbh": SBH_BRAND, "mri": MRI_BRAND, "lms": LMS_BRAND, "dtl": DTL_BRAND}.get(proj) or tuple(brand or ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, ""))
     logo = base[3] if len(base) > 3 else None
