@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="46">
+<meta name="mri-version" content="47">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -314,6 +314,8 @@
   .su-log li.run i{border-color:var(--green);border-top-color:transparent;animation:suspin .8s linear infinite} .su-log li.ok i{background:var(--green);border-color:var(--green)} .su-log li.bad i{background:var(--pink-ink);border-color:var(--pink-ink)}
   @keyframes suspin{to{transform:rotate(360deg)}} @media (prefers-reduced-motion:reduce){.su-log li.run i{animation:none}}
   .su-done{margin-top:16px;padding:18px;border-radius:18px;background:#14402C;border:2px solid var(--green)} .su-done h3{margin:0 0 6px;font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;font-size:26px;color:var(--green)}
+  .su-before{margin:0 0 14px} .su-pre{margin:10px 0 0;padding-left:18px} .su-pre li{margin:0 0 10px;line-height:1.55}
+  .su-pre a,.su-step details a{color:var(--green);font-weight:700}
 </style>
 </head>
 <body>
@@ -323,7 +325,7 @@
     <li class="mgroup" id="mgroup"><div class="grp-h"><a href="#home" data-go="home" class="on" aria-current="page">Members area</a><button type="button" class="grp-t" id="mgroup-t" aria-expanded="true" aria-controls="mgroup-sub" aria-label="Hide the members pages"></button></div>
       <ol class="sub" id="mgroup-sub">
         <li class="pv-only" hidden><a href="#setup" data-go="setup">Set up my robot <span class="pill g" style="margin-left:4px;padding:2px 7px;font-size:10px">New</span></a></li>
-        <li><a href="#start" data-go="start">Start here</a></li>
+        <li class="npv-only"><a href="#start" data-go="start">Start here</a></li>
         <li><a href="#code" data-go="code">Your code</a></li>
         <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
         <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
@@ -341,7 +343,7 @@
   <ol class="app-only" id="appnav">
     <li><a href="#home" data-go="home" class="on">Home</a></li>
     <li class="pv-only" hidden><a href="#setup" data-go="setup">Set up my robot</a></li>
-    <li><a href="#start" data-go="start">Start here</a></li>
+    <li class="npv-only"><a href="#start" data-go="start">Start here</a></li>
     <li><a href="#code" data-go="code">Your code</a></li>
     <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
     <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
@@ -523,7 +525,14 @@
       </section>
       <section class="card wide" aria-labelledby="h-su" id="su-card" data-page="setup">
         <h2 id="h-su">Set up <span class="g">my robot</span></h2>
-        <p class="lede">About ten minutes, and no typing into GitHub. You bring two keys; this page builds your copy, locks the keys away, switches on the schedule and runs the setup check. Then you watch it work on paper money, and the lessons explain what you just built.</p>
+        <p class="lede">About ten minutes once your Trading 212, GitHub and email accounts are open, and no typing into GitHub. You bring two keys; this page builds your copy, locks the keys away, switches on the schedule and runs the setup check. Then you watch it work on paper money, and the lessons explain what you just built.</p>
+        <details class="fold su-before" id="su-before" open><summary><span class="fold-l">Before you start: three free accounts</span></summary>
+          <ul class="su-pre">
+            <li><b>Trading 212.</b> No account yet? <a href="https://www.trading212.com/" target="_blank" rel="noopener">Open one</a> (Invest or Stocks ISA; the ID check usually takes minutes, sometimes a day). Then <b>install the Trading 212 app on your phone and sign in with Face ID or your fingerprint first</b>: when you sign in on the website, Trading 212 sends a code to that app, so keep your phone with you. <a href="#guide/qs-2">Step-by-step guide and video</a></li>
+            <li><b>GitHub.</b> <a href="https://github.com/signup" target="_blank" rel="noopener">Make a free account</a> with this email. It keeps your copy of the code and runs it on a schedule. <a href="#guide/qs-1">Guide</a></li>
+            <li><b>Resend</b> (sends your robot's emails). <a href="https://resend.com/signup" target="_blank" rel="noopener">Sign up free</a> with the inbox you want the emails in, and click the link in its confirmation email. <a href="#guide/qs-3">Guide</a></li>
+          </ul>
+        </details>
         <div class="su-lock" role="note"><span aria-hidden="true">&#128274;</span><span><b>Your keys never touch our servers.</b> They go from this page straight into your own GitHub, locked with GitHub's encryption so only your copy of the code can read them. We can't see them. The GitHub connection is used for this setup and forgotten when you close the page.</span></div>
         <ol class="su-steps">
           <li class="su-step" id="su1"><div class="su-h"><b>Connect GitHub</b><span class="pill" id="su1-st">To do</span></div>
@@ -532,12 +541,22 @@
             <p class="small" id="su1-msg" role="status" aria-live="polite"></p></li>
           <li class="su-step locked" id="su2"><div class="su-h"><b>Your Trading 212 practice key</b><span class="pill" id="su2-st">To do</span></div>
             <p>Practice account first: no real money until Lesson 13.</p>
-            <details><summary>Where do I find this?</summary><ol><li>Open Trading 212, tap your account at the top and choose <b>Switch to Practice</b>.</li><li>Settings &rarr; API (Beta) &rarr; Generate key. Tick Account data, Portfolio, Metadata, History, Orders and Pies.</li><li>It shows a key and a secret once. Copy each one straight into the boxes below.</li></ol></details>
+            <details open><summary>Where do I find this?</summary><ol>
+              <li>In the Trading 212 app, or at <a href="https://app.trading212.com" target="_blank" rel="noopener">app.trading212.com</a> (it sends a sign-in code to your app), tap the account name at the top (it says Invest or ISA) and choose <b>Practice</b>. Each account has its own keys, so make the key in Practice.</li>
+              <li><b>Settings &rarr; API (Beta) &rarr; Generate API key.</b> If it asks for a name, call it <b>My Robot ISA</b>.</li>
+              <li>Switch on exactly these six: <b>Account data</b>, <b>Portfolio</b>, <b>Metadata</b>, <b>Orders &ndash; Read</b>, <b>Orders &ndash; Execute</b> and <b>History &ndash; Orders</b> (History switches on with it). Leave Dividends, Transactions and both Pies switches off. <span class="small">Orders &ndash; Execute lets it place the orders you approve: it never trades without your tap.</span></li>
+              <li>If it offers an IP restriction, leave it off: GitHub's computers change address.</li>
+              <li>Press <b>Generate key</b>. It shows the key and the secret once: copy each one straight into the boxes below.</li></ol>
+              <p class="small" style="margin:6px 0 0"><a href="#guide/qs-2">Show me with pictures and a video</a></p></details>
             <label class="f" for="su-tk">API key</label><input class="t" id="su-tk" type="password" autocomplete="off" spellcheck="false">
             <label class="f" for="su-ts">API secret</label><input class="t" id="su-ts" type="password" autocomplete="off" spellcheck="false"></li>
           <li class="su-step locked" id="su3"><div class="su-h"><b>Your email key</b><span class="pill" id="su3-st">To do</span></div>
             <p>So your robot can email you its plan and how it's doing.</p>
-            <details><summary>Where do I find this?</summary><ol><li>Sign up free at <a href="https://resend.com/signup" target="_blank" rel="noopener" style="color:var(--green)">resend.com</a> with the inbox you want the emails in, and confirm the email it sends.</li><li>API Keys &rarr; Create. Sending access is enough. Copy the key (it starts with re_).</li></ol></details>
+            <details open><summary>Where do I find this?</summary><ol>
+              <li>Sign in at <a href="https://resend.com/api-keys" target="_blank" rel="noopener">resend.com</a> (the account you made with the inbox you want the emails in).</li>
+              <li><b>API Keys &rarr; Create API key.</b> Name: <b>My Robot ISA</b>. Permission: <b>Sending access</b>. Domain: leave it on <b>All domains</b>. You don't need a domain of your own: your robot's emails come from Resend's own address to your inbox.</li>
+              <li>Press <b>Add</b> and copy the key (it starts with re_). It's shown once.</li></ol>
+              <p class="small" style="margin:6px 0 0"><a href="#guide/qs-3">Show me with pictures</a></p></details>
             <label class="f" for="su-rk">Resend key</label><input class="t" id="su-rk" type="password" autocomplete="off" spellcheck="false" placeholder="re_...">
             <label class="f" for="su-to">Send my emails to</label><input class="t" id="su-to" type="email" autocomplete="email">
             <p class="small">Must be the address you signed up to Resend with.</p></li>
@@ -551,7 +570,7 @@
           <li class="su-step locked" id="su5"><div class="su-h"><b>Build my robot</b><span class="pill" id="su5-st">Ready when you are</span></div>
             <div class="row"><button class="btn" type="button" id="su-go" disabled>Build my robot</button></div>
             <ul class="su-log" id="su-log" aria-live="polite"></ul>
-            <div class="su-done" id="su-done" hidden><h3>Your robot is running</h3><p style="margin:0 0 12px">On paper money. The setup check email is on its way to you. Next: ask for its first weekly plan, then tap Approve in the email. QuickStart steps 1 to 4 are ticked off in Start here.</p>
+            <div class="su-done" id="su-done" hidden><h3>Your robot is running</h3><p style="margin:0 0 12px">On paper money. The setup check email is on its way to you. Next: ask for its first weekly plan, then tap Approve in the email. Later, when you're ready: <a href="#guide/qs-5">optional extras</a> and <a href="#guide/qs-6">your app on your phone, Mac or PC</a>.</p>
               <div class="row"><button class="btn" type="button" id="su-plan">Get my first weekly plan</button><a class="btn ghost" id="su-repo" target="_blank" rel="noopener">See my copy on GitHub</a></div>
               <p class="small" id="su-plan-msg" role="status" aria-live="polite"></p></div></li>
         </ol>
@@ -766,6 +785,7 @@
       "<div><span>Updates included until</span><b>" + esc(fmtDate(m.updates_until)) + "</b></div>" +
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
     document.querySelectorAll(".pv-only").forEach(function (el) { el.hidden = !m.preview_videos; });
+    document.querySelectorAll(".npv-only").forEach(function (el) { el.hidden = !!m.preview_videos; });   // Start here folds into Set up my robot
     renderDash(); renderAll(); show("home"); if (gcur.id) guideVideo(gcur.id); passkeyCard(); loadNotes(); if (location.hash === "#mydash") dashOpen(false);
     rest("member_progress?select=item,done").then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
       rows.forEach(function (x) { done[x.item] = x.done; }); renderAll(); paintBench(); if (gcur.id) { guideVideo(gcur.id); guideRender(); }
@@ -1104,7 +1124,7 @@
   // ---- Set up my robot (23 Oct 2026): the QuickStart done for the member. Everything runs in their browser against
   // GitHub's own API; github-oauth only swaps GitHub's one-time code for their token. Keys are sealed to their repo's
   // public key here (mri-seal.js: libsodium sealed box) before they leave the page.
-  var SU = { tok: null, login: "", cfg: null, risk: "balanced", freq: "daily", busy: false };
+  var SU = { tok: null, login: "", cfg: null, risk: "balanced", freq: "daily", busy: false, after: 0 };
   var SU_TEMPLATE = "amitbharatpatel7-hue/my-robot-isa-template"; // created before launch; members are invited to it
   function gh(path, opt) {
     opt = opt || {};
@@ -1171,7 +1191,8 @@
     })();
   })();
   function suLog(txt) { var li = document.createElement("li"); li.className = "run"; li.innerHTML = "<i></i><span></span>"; li.lastChild.textContent = txt; $("su-log").appendChild(li);
-    return { ok: function (t) { li.className = "ok"; if (t) li.lastChild.textContent = t; }, bad: function (t) { li.className = "bad"; li.lastChild.textContent = t; } }; }
+    return { ok: function (t) { li.className = "ok"; if (t) li.lastChild.textContent = t; }, bad: function (t) { li.className = "bad"; li.lastChild.textContent = t; },
+             set: function (t) { li.lastChild.textContent = t; } }; }
   function sleep(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
   function suFail(step, msg) { step.bad(msg); SU.busy = false; suCheck(); suState(5, "Stopped", false); throw new Error("stop"); }
   async function suBuild() {
@@ -1188,16 +1209,31 @@
         var ours = ex.ok && ex.j && ex.j.template_repository && ex.j.template_repository.full_name === SU_TEMPLATE;
         if (!ours) suFail(a, "You already have a repository called " + name + " on GitHub. Change the name in step 4 (for example my-robot-isa-2) and press Build again.");
         a.ok("Using your existing copy, " + name); }
-      else if (!g.ok) suFail(a, "GitHub said no (" + g.status + "). Try again in a minute.");
+      else if (g.status === 403 && /rate limit/i.test((g.j && g.j.message) || "")) suFail(a, "GitHub is busy right now. Wait a minute and press Build again.");
+      else if (g.status === 403 || g.status === 401) suFail(a, "GitHub didn't let this page make your copy. Press Connect GitHub again and allow access to your repositories, then press Build.");
+      else if (!g.ok) suFail(a, "GitHub had a hiccup (" + g.status + "). Wait a minute and press Build again: nothing has been changed yet.");
       else a.ok("Created your private copy, " + name);
       var w = suLog("Waiting for GitHub to finish copying");
-      for (var i = 0; i < 30; i++) { var c = await gh("/repos/" + full + "/contents/.github/workflows/setup-check.yml"); if (c.ok) break; await sleep(2000); if (i === 29) suFail(w, "GitHub is taking a while. Wait a minute and press Build again."); }
+      // 24 Oct 2026: wait for the copy itself (README.md) and, separately, for the setup check inside it. If the copy is
+      // there but has no setup check, waiting longer can't help: say so at once instead of "press Build again" forever.
+      var ready = false, copied = false;
+      for (var i = 0; i < 60; i++) {
+        var c = await gh("/repos/" + full + "/contents/.github/workflows/setup-check.yml"); if (c.ok) { ready = true; break; }
+        if (!copied) { var rd = await gh("/repos/" + full + "/contents/README.md"); copied = rd.ok; }
+        if (copied && ++SU.after > 4) break;
+        if (i % 5 === 4) w.set("Waiting for GitHub to finish copying (" + (i + 1) * 2 + " seconds so far; this is normal)");
+        await sleep(2000);
+      }
+      SU.after = 0;
+      if (!ready) suFail(w, copied
+        ? "Your copy is made, but it's missing its setup check. That's a problem on our side, not yours. Your keys haven't been sent anywhere yet. Email hello@myrobotisa.com and we'll fix it; then press Build again and it carries on from here."
+        : "GitHub is still copying, which can take a few minutes on a busy day. Wait two minutes and press Build again: it carries on from where it stopped.");
       w.ok("Copy ready");
       var reuse = SU.saved === full && !vals.T212_API_KEY && !vals.T212_API_SECRET && !vals.RESEND_API_KEY;
       if (reuse) { suLog("Keys").ok("Your keys are already locked into " + name); } else {
       var k = suLog("Locking your keys into your copy");
-      var pk = await gh("/repos/" + full + "/actions/secrets/public-key"); if (!pk.ok) suFail(k, "Couldn't read your copy's lock. Try again.");
-      for (var n in vals) { var put = await gh("/repos/" + full + "/actions/secrets/" + n, { method: "PUT", body: { encrypted_value: window.mriSeal(pk.j.key, vals[n]), key_id: pk.j.key_id } }); if (!put.ok) suFail(k, "Couldn't save " + n + ". Try again."); }
+      var pk = await gh("/repos/" + full + "/actions/secrets/public-key"); if (!pk.ok) suFail(k, "Couldn't lock your keys into your copy just now. Press Build again: it carries on from here.");
+      for (var n in vals) { var put = await gh("/repos/" + full + "/actions/secrets/" + n, { method: "PUT", body: { encrypted_value: window.mriSeal(pk.j.key, vals[n]), key_id: pk.j.key_id } }); if (!put.ok) suFail(k, "Couldn't lock in your " + ({ T212_API_KEY: "Trading 212 key", T212_API_SECRET: "Trading 212 secret", RESEND_API_KEY: "Resend key" })[n] + " just now. Press Build again: it carries on from here."); }
       $("su-tk").value = $("su-ts").value = $("su-rk").value = ""; vals = null;
       k.ok("Keys locked in (3 of 3). They've been cleared from this page."); SU.saved = full; }
       var v = suLog("Saving your choices");
@@ -1297,8 +1333,9 @@
     var complete = g.steps.every(function (_, i) { return done[gkey(id, i)]; });
     gcur = { id: id, n: gcur.id === id ? gcur.n : first, celebrate: complete };
     $("gd-kind").textContent = g.kind; $("h-gd").textContent = g.title; $("gd-mins").textContent = "about " + g.mins + " min";
-    var isQs = id.indexOf("qs-") === 0; $("gd-back-start").textContent = isQs ? "\u2190 Start here" : "\u2190 The 14 lessons"; $("gd-back-start").href = isQs ? "#start" : "#lessons";
-    var other = $("gd-other"); other.textContent = isQs ? "The 14 lessons" : "Start here"; other.href = isQs ? "#lessons" : "#start"; other.dataset.go = isQs ? "lessons" : "start";
+    var isQs = id.indexOf("qs-") === 0, pv = !!(me && me.preview_videos), home = pv ? ["Set up my robot", "#setup", "setup"] : ["Start here", "#start", "start"];
+    $("gd-back-start").textContent = isQs ? "\u2190 " + home[0] : "\u2190 The 14 lessons"; $("gd-back-start").href = isQs ? home[1] : "#lessons"; $("gd-back-start").dataset.go = isQs ? home[2] : "lessons";
+    var other = $("gd-other"); other.textContent = isQs ? "The 14 lessons" : home[0]; other.href = isQs ? "#lessons" : home[1]; other.dataset.go = isQs ? "lessons" : home[2];
     guideRender();
   }
   function guideRender() {
@@ -1308,7 +1345,7 @@
     $("gd-count").textContent = ticked === total ? "All " + total + " steps done." : ticked + " of " + total + " steps done";
     var isDone = !!done[gkey(id, n)];
     var ORDER = ["qs-1","qs-2","qs-3","qs-4","qs-5","qs-6","day-1","day-2","day-3","day-4","day-5","day-6","day-7","day-8","day-9","day-10","day-11","day-12","day-13","day-14"];
-    var nextId = ORDER[ORDER.indexOf(id) + 1], nextG = nextId && GUIDES[nextId], backHref = id.indexOf("qs-") === 0 ? "#start" : "#lessons", backLabel = id.indexOf("qs-") === 0 ? "Back to Start here" : "Back to all lessons";
+    var nextId = ORDER[ORDER.indexOf(id) + 1], nextG = nextId && GUIDES[nextId], backHref = id.indexOf("qs-") === 0 ? ((me && me.preview_videos) ? "#setup" : "#start") : "#lessons", backLabel = id.indexOf("qs-") === 0 ? ((me && me.preview_videos) ? "Back to Set up my robot" : "Back to Start here") : "Back to all lessons";
     if (ticked === total && gcur.celebrate) {
       $("gd-step").innerHTML = '<div class="gd-step gd-done"><div class="sn" style="color:var(--green)">All ' + total + ' steps done</div><h3>' + esc(g.kind) + ' finished &#10003;</h3>' +
         '<p>' + (nextG ? 'Up next: <b>' + esc(nextG.kind) + ' &middot; ' + esc(nextG.title) + '</b> (about ' + nextG.mins + ' min).' : 'That was the last one. You own a robot that runs by written rules. Everything else is patience.') + '</p>' +
