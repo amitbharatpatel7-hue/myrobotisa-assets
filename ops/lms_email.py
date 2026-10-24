@@ -29,6 +29,9 @@ v2.6.1 (24 Oct 2026, approved by Amit: "go ahead with the black theme ... for in
   * new blocks: `items` [(tag, kind, title, note, link|None)] numbered rows with the tag pinned right (a tag that
     repeats the card's own tag is dropped), and `tiles` [(label, value, note)] in the website dashboard's tile style;
   * LMS_BRAND / LMS_LOGO added; solid_tag(label, kind) for callers that build their own rows.
+v2.6.2 (24 Oct 2026, Amit chose option C) — Day Trade Lab gets its own logo (the robot with a lab flask, D.T.L. tag,
+  DTL_BRAND / DTL_LOGO) and D.T.L.-tagged robots (myrobotisa.com/email/dtl/); detected from the brand or a
+  "Day Trade Lab" eyebrow, like the other projects. Member emails unchanged.
 
 Public surface (unchanged from v1, two optional additions):
 
@@ -500,13 +503,15 @@ def _items(rows, hide: str = "") -> str:
 # is untouched.
 LMS_LOGO = "https://myrobotisa.com/email/lms.png"
 LMS_BRAND = ("L", "Last Man", "Standing", LMS_LOGO)
+DTL_LOGO = "https://myrobotisa.com/email/dtl-robot.png"   # v2.6.2 (Amit, 24 Oct 2026: option C, the lab flask)
+DTL_BRAND = ("D", "Day Trade", "Lab", DTL_LOGO)
 _INTERNAL = {"PAGE": "#0A0A0D", "CARD": "#17171D", "CARD_DEEP": "#101014", "HAIRLINE": "#2A2A33", "MUTED": "#B9B6C2",
              "ON_GREEN": "#0A0A0D", "MUTED_BG": "#24242C", "GREEN_BG": "#12301F",
              "PILL_COLORS": {"green": ("#0A0A0D", "#00E87A"), "amber": ("#2A1A00", "#FFC94D"), "red": ("#FFFFFF", "#FF4D7A"), "muted": ("#E6E3EC", "#3A3A44")}}
 
 
 def _project_of(brand, eyebrow_text):
-    """'sbh' | 'mri' | 'lms' | None, from the brand tuple or, failing that, the eyebrow ("Last Man Standing · Autofix")."""
+    """'sbh' | 'mri' | 'lms' | 'dtl' | None, from the brand tuple or, failing that, the eyebrow ("Last Man Standing · Autofix")."""
     b = tuple(brand) if brand else ()
     words = (" ".join(str(x) for x in b[1:3]) + " " + (eyebrow_text or "")).lower()
     logo = str(b[3]) if len(b) > 3 and b[3] else ""
@@ -516,6 +521,8 @@ def _project_of(brand, eyebrow_text):
         return "mri"
     if logo == LMS_LOGO or "last man" in words:
         return "lms"
+    if logo == DTL_LOGO or "day trade" in words or "day-trade" in words:
+        return "dtl"
     return None
 
 
@@ -527,12 +534,12 @@ def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand
         return _render_core(title, eyebrow_text, subtitle, blocks, cta=cta, footnote=footnote, brand=brand, buttons=buttons,
                             mood=mood, internal=internal, tone=tone, badge=badge)
     proj = _project_of(brand, eyebrow_text)
-    base = {"sbh": SBH_BRAND, "mri": MRI_BRAND, "lms": LMS_BRAND}.get(proj) or tuple(brand or ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, ""))
+    base = {"sbh": SBH_BRAND, "mri": MRI_BRAND, "lms": LMS_BRAND, "dtl": DTL_BRAND}.get(proj) or tuple(brand or ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, ""))
     logo = base[3] if len(base) > 3 else None
     if proj == "sbh" and mood and mood.startswith(_E) and "/sbh/" not in mood:
         mood = mood.replace(_E, _E + "sbh/")
-    if proj == "lms" and mood and mood.startswith(_E) and "/lms/" not in mood:
-        mood = mood.replace(_E + "sbh/", _E).replace(_E, _E + "lms/")   # the same robots with an L.M.S. tag
+    if proj in ("lms", "dtl") and mood and mood.startswith(_E) and f"/{proj}/" not in mood:
+        mood = mood.replace(_E + "sbh/", _E).replace(_E, _E + proj + "/")   # the same robots with an L.M.S. / D.T.L. tag
     if badge and badge.lower() not in ("internal", "internal notice") and not eyebrow_text.lower().startswith(badge.lower()):
         eyebrow_text = f"{badge} · {eyebrow_text}"
     if not logo and proj is None and brand and brand[1] and str(brand[1]).lower() not in eyebrow_text.lower():
