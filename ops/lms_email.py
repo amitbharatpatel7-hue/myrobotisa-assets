@@ -12,7 +12,9 @@ including the internal ones to me, and flag (Internal) in the subject"):
     `bgcolor` attribute as well as the inline background longhand, so Apple Mail and Outlook leave the colours alone;
   * `subject()` prefixes "(Internal) " unless `internal=False` — only emails to members or customers pass False.
 
-v2.5 (23 Oct 2026, approved by Amit) — additive: the same cards as v2.4, plus (v2.5.1) the green tag now sits at the right edge:
+v2.5 (23 Oct 2026, approved by Amit) — additive: the same cards as v2.4, plus (v2.5.1) the green tag sits at the right edge and
+(v2.5.3, 24 Oct) tag columns are pinned right at 1% width and ticks get an 8px gap, because the iPhone Gmail app enlarges
+text and re-shares spare width, which pulled tags in from the edge and butted ticks against their text:
   * render(..., badge="Setup check") replaces the green INTERNAL pill's text (the email type: Health, Setup check, ...);
   * a block can carry `checks` [(status, name, note)] (ok = green tick, bad = amber cross, off = muted dash) and
     `link` (label, url) for one green text link under the card;
@@ -216,7 +218,7 @@ def _spark(sp: dict) -> str:
 
 def _did(items) -> str:
     """v2.4: "What the robot did" as short ticked lines, so a member sees the work in one glance."""
-    rows = "".join(f'<tr><td valign="top" style="width:22px;padding:4px 0;font-size:15px;font-weight:900;color:{GREEN};font-family:{FONT_STACK};">&#10003;</td>'
+    rows = "".join(f'<tr><td valign="top" width="26" style="width:26px;padding:4px 8px 4px 0;font-size:15px;font-weight:900;color:{GREEN};font-family:{FONT_STACK};">&#10003;</td>'
                    f'<td style="padding:4px 0;font-size:15px;line-height:1.5;color:{INK};font-family:{FONT_STACK};">{_segments(t)}</td></tr>' for t in items)
     return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{rows}</table>'
 
@@ -236,7 +238,7 @@ def _checks(rows) -> str:
     out = []
     for status, name, note in rows:
         m, c = marks.get(status, marks["off"])
-        out.append(f'<tr><td valign="top" style="width:24px;padding:6px 0;font-size:15px;font-weight:900;color:{c};font-family:{FONT_STACK};">{m}</td>'
+        out.append(f'<tr><td valign="top" width="26" style="width:26px;padding:6px 8px 6px 0;font-size:15px;font-weight:900;color:{c};font-family:{FONT_STACK};">{m}</td>'
                    f'<td style="padding:6px 0;font-size:15px;line-height:1.4;color:{INK};font-family:{FONT_STACK};"><b>{esc(name)}</b>'
                    + (f'<br><span style="font-size:13px;color:{MUTED};">{esc(note)}</span>' if note else "") + '</td></tr>')
     return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{"".join(out)}</table>'
@@ -309,7 +311,7 @@ def section(heading: str, body_html: str, status: tuple | None = None) -> str:
     head = (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>'
             f'<td style="font-family:{HEAD_STACK};font-size:20px;font-weight:400;letter-spacing:.02em;'
             f'text-transform:uppercase;color:{INK};line-height:1.15;">{esc(heading)}</td>'
-            f'<td align="right" style="vertical-align:top;">{st}</td></tr></table>')
+            f'<td align="right" width="1%" style="width:1%;vertical-align:top;padding-left:12px;white-space:nowrap;">{st}</td></tr></table>')
     return f'<tr><td style="padding:20px 24px;">{head}<div style="margin-top:12px;">{body_html}</div></td></tr>'
 
 
@@ -358,9 +360,9 @@ def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
            f'style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {GREEN};"></td>' if logo else
            f'<td width="34" height="34" align="center" {_bg(GREEN)}border-radius:9px;color:{ON_GREEN};font-weight:900;'
            f'font-size:16px;font-family:{FONT_STACK};">{esc(tile)}</td>') +
-        f'<td style="padding-left:10px;font-family:{HEAD_STACK};font-size:{19 if stacked else 22}px;letter-spacing:{"0" if stacked else ".02em"};text-transform:uppercase;'
+        f'<td style="padding-left:10px;font-family:{HEAD_STACK};font-size:{18 if stacked else 22}px;letter-spacing:{"0" if stacked else ".02em"};text-transform:uppercase;'
         f'color:{INK};{"white-space:nowrap;" if stacked else ""}">{esc(word)}{suffix_html}</td>'
-        + (f'<td align="right" style="padding-left:10px;vertical-align:middle;text-align:right;white-space:nowrap;"><span style="display:inline-block;padding:5px {10 if badge and len(badge) > 10 else 12}px;border-radius:999px;'
+        + (f'<td align="right" width="1%" style="width:1%;padding-left:10px;vertical-align:middle;text-align:right;white-space:nowrap;"><span style="display:inline-block;padding:5px {10 if badge and len(badge) > 10 else 12}px;border-radius:999px;'
            f'background:{GREEN};background-color:{GREEN};color:{ON_GREEN};font-size:{11 if badge and len(badge) > 10 else 12}px;font-weight:900;letter-spacing:{".07em" if badge and len(badge) > 10 else ".14em"};'
            f'text-transform:uppercase;font-family:{FONT_STACK};{"white-space:nowrap;" if badge else ""}">{esc(badge or "Internal")}</span></td>' if (internal or badge) else "") +
         f'</tr></table>')
