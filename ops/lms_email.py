@@ -29,6 +29,8 @@ v2.6.1 (24 Oct 2026, approved by Amit: "go ahead with the black theme ... for in
   * new blocks: `items` [(tag, kind, title, note, link|None)] numbered rows with the tag pinned right (a tag that
     repeats the card's own tag is dropped), and `tiles` [(label, value, note)] in the website dashboard's tile style;
   * LMS_BRAND / LMS_LOGO added; solid_tag(label, kind) for callers that build their own rows.
+v2.6.3 (24 Oct 2026) — the robot is part of the brand: a render with no mood gets the calm robot (up robot when
+  tone="up"), tagged for its project; mood=False opts out. Renders that pass a mood are unchanged.
 v2.6.2 (24 Oct 2026, Amit chose option C) — Day Trade Lab gets its own logo (the robot with a lab flask, D.T.L. tag,
   DTL_BRAND / DTL_LOGO) and D.T.L.-tagged robots (myrobotisa.com/email/dtl/); detected from the brand or a
   "Day Trade Lab" eyebrow, like the other projects. Member emails unchanged.
@@ -528,6 +530,13 @@ def _project_of(brand, eyebrow_text):
 
 def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand=None, buttons=None, mood=None,
            internal=True, tone=None, badge=None, scheme=None):
+    # v2.6.3 (Amit, 24 Oct 2026: "the robot graphic is part of the brand and should be written into the theme"):
+    # every email carries a robot. A caller that names no mood gets the up robot on an up day, otherwise the calm one;
+    # the project tag (I.S.A., S.B.H., L.M.S., D.T.L.) is swapped in below as before. mood=False opts out explicitly.
+    if mood is None:
+        mood = MOODS["up"] if tone == "up" else MOODS["calm"]
+    elif mood is False:
+        mood = None
     if scheme is None:
         scheme = "internal" if internal else "night"
     if scheme != "internal":
