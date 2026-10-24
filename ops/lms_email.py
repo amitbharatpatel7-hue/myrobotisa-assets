@@ -20,6 +20,15 @@ text and re-shares spare width, which pulled tags in from the edge and butted ti
     `link` (label, url) for one green text link under the card;
   * SBH_BRAND is the Stock Boom Hunter robot (S.B.H. tag) with a one-line STOCK BOOM HUNTER wordmark, and its emails
     use the S.B.H.-tagged mood robots automatically (MOODS_SBH, myrobotisa.com/email/sbh/).
+v2.6.1 (24 Oct 2026, approved by Amit: "go ahead with the black theme ... for internal") — internal vs member:
+  * every internal=True email (My Robot I.S.A., Last Man Standing, Stock Boom Hunter, the other ops repos) renders in a
+    black scheme: near-black page, graphite cards, solid tags, the project's logo top left (MRI avatar, the S.B.H.
+    robot, the LMS app icon), an INTERNAL NOTICE tag top right, no wordmark; `badge` (Health, Setup check ...) moves
+    into the pink eyebrow; LMS gets L.M.S.-tagged robots (myrobotisa.com/email/lms/); iOS data detectors are off;
+  * internal=False (anything a member or player reads) is byte-for-byte the v2.5.3 purple theme, untouched;
+  * new blocks: `items` [(tag, kind, title, note, link|None)] numbered rows with the tag pinned right (a tag that
+    repeats the card's own tag is dropped), and `tiles` [(label, value, note)] in the website dashboard's tile style;
+  * LMS_BRAND / LMS_LOGO added; solid_tag(label, kind) for callers that build their own rows.
 
 Public surface (unchanged from v1, two optional additions):
 
@@ -162,6 +171,42 @@ def _kv(pairs) -> str:
     return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{rows}</table>'
 
 
+# v2.6.1 (Amit, 24 Oct 2026): figures as the website's dashboard tiles (myrobotisa.com/demo): an inset card per figure
+# with a small uppercase label, the value in a monospace face, and a muted line under it whose change is coloured.
+# Each tile is (label, value, note), where value and note are strings or lists of strings and (text, kind) pairs,
+# kind "up" (green) or "down" (red, internal notices only).
+TILE_UP, TILE_DOWN = "#00E87A", "#FF6B8A"
+
+
+def _tile_text(part) -> str:
+    parts = part if isinstance(part, list) else [part]
+    out = []
+    for x in parts:
+        if isinstance(x, (tuple, list)):
+            c = TILE_UP if x[1] == "up" else TILE_DOWN if x[1] == "down" else INK
+            out.append(f'<span style="color:{c};">{esc(x[0])}</span>')
+        else:
+            out.append(esc(x))
+    return "".join(out)
+
+
+def _tiles(rows) -> str:
+    out = []
+    for i, r in enumerate(rows):
+        label, value, note = r[0], r[1], (r[2] if len(r) > 2 else "")
+        out.append(
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(CARD_DEEP)}'
+            f'border:1px solid {HAIRLINE};border-radius:14px;margin:{0 if i == 0 else 10}px 0 0;"><tr><td style="padding:14px 16px;">'
+            f'<div style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:{MUTED};font-family:{FONT_STACK};">{esc(label)}</div>'
+            f'<div style="margin-top:4px;font-size:22px;font-weight:600;line-height:1.25;color:{INK};font-family:{TILE_MONO};">{_tile_text(value)}</div>'
+            + (f'<div style="margin-top:2px;font-size:13px;line-height:1.45;color:{MUTED};font-family:{FONT_STACK};">{_tile_text(note)}</div>' if note else "")
+            + '</td></tr></table>')
+    return "".join(out)
+
+
+TILE_MONO = "'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace"
+
+
 def _more(more: dict) -> str:
     items = "".join(f'<li style="margin:4px 0;font-size:14px;line-height:1.5;color:{INK};font-family:{FONT_STACK};">{esc(i)}</li>'
                     for i in more.get("items", []))
@@ -289,6 +334,9 @@ def _block_body(block: dict) -> str:
 def _block_body_inner(block: dict) -> str:
     if "spark" in block:
         return _spark(block["spark"]) + ('<div style="height:12px;line-height:12px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
+    if "items" in block:
+        st = (block.get("status") or ("",))[0]
+        return _items(block["items"], hide=str(st))
     if "checks" in block:
         return _checks(block["checks"]) + ('<div style="height:8px;line-height:8px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
     if "did" in block:
@@ -301,6 +349,8 @@ def _block_body_inner(block: dict) -> str:
         return table(block["table"]["headers"], block["table"]["rows"])
     if "pills" in block:
         return _pill_row(block["pills"])
+    if "tiles" in block:
+        return _tiles(block["tiles"])
     if "kv" in block:
         return _kv(block["kv"])
     return _prose(block.get("prose", ""))
@@ -337,7 +387,7 @@ def _block_html(block: dict) -> str:
 
 
 # ---------------------------------------------------------------- public API
-def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
+def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
            cta: tuple[str, str] | None = None, footnote: str | None = None,
            brand: tuple | None = None,
            buttons: list[tuple] | None = None,
@@ -351,16 +401,32 @@ def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
     if mood and len(b) > 3 and str(b[3]).endswith("sbh-robot.png") and mood.startswith(_E) and "/sbh/" not in mood:
         mood = mood.replace(_E, _E + "sbh/")
     logo = b[3] if len(b) > 3 else None
-    suffix_html = ' <span style="color:%s">%s</span>' % (PINK, esc(suffix)) if suffix else ""
+    suffix_html = ('' if word.endswith('.') else ' ') + '<span style="color:%s">%s</span>' % (PINK, esc(suffix)) if suffix else ""
     stacked = len(word + suffix) > 14   # v2.5.2 (Amit): a long name (Stock Boom Hunter) stays on ONE line, a touch smaller, never wrapping
-    brand_row = (
+    if len(b) > 4 and b[4] == "internal":
+        # v2.6.1 (Amit, 24 Oct 2026): internal notices carry the project's logo top left and the INTERNAL NOTICE tag top
+        # right; no wordmark (the logo, the sender and the eyebrow already say which project it is).
+        badge_html = (f'<span style="display:inline-block;padding:5px 10px;border-radius:999px;background:{GREEN};background-color:{GREEN};'
+                      f'color:{ON_GREEN};font-size:11px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;font-family:{FONT_STACK};'
+                      f'white-space:nowrap;">{esc(badge or "Internal notice")}</span>')
+        left = (f'<img src="{esc(logo)}" width="40" height="40" alt="{esc(word)}" style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {GREEN};">'
+                if logo else
+                f'<table role="presentation" cellpadding="0" cellspacing="0"><tr><td width="40" height="40" align="center" {_bg(GREEN)}width:40px;height:40px;'
+                f'border-radius:11px;color:{ON_GREEN};font-weight:900;font-size:18px;font-family:{FONT_STACK};">{esc(tile or "R")}</td></tr></table>')
+        brand_row = (
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 16px;"><tr>'
+            f'<td style="vertical-align:middle;">{left}</td>'
+            f'<td align="right" style="vertical-align:middle;text-align:right;white-space:nowrap;">{badge_html}</td>'
+            f'</tr></table>')
+    else:
+      brand_row = (
         # v2.5.1 (Amit, 23 Oct 2026): the green tag (Internal / Health / Setup check) sits at the right, lined up with the card's edge.
         f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 16px;"><tr>'
         + (f'<td width="40" height="40" style="width:40px;height:40px;"><img src="{esc(logo)}" width="40" height="40" alt="" '
            f'style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {GREEN};"></td>' if logo else
-           f'<td width="34" height="34" align="center" {_bg(GREEN)}border-radius:9px;color:{ON_GREEN};font-weight:900;'
-           f'font-size:16px;font-family:{FONT_STACK};">{esc(tile)}</td>') +
-        f'<td style="padding-left:10px;font-family:{HEAD_STACK};font-size:{18 if stacked else 22}px;letter-spacing:{"0" if stacked else ".02em"};text-transform:uppercase;'
+           (f'<td width="34" height="34" align="center" {_bg(GREEN)}border-radius:9px;color:{ON_GREEN};font-weight:900;'
+           f'font-size:16px;font-family:{FONT_STACK};">{esc(tile)}</td>' if tile else "")) +
+        f'<td style="padding-left:{10 if (logo or tile) else 0}px;font-family:{HEAD_STACK};font-size:{18 if stacked else (26 if not (logo or tile) else 22)}px;letter-spacing:{"0" if stacked else ".02em"};text-transform:uppercase;'
         f'color:{INK};{"white-space:nowrap;" if stacked else ""}">{esc(word)}{suffix_html}</td>'
         + (f'<td align="right" width="1%" style="width:1%;padding-left:10px;vertical-align:middle;text-align:right;white-space:nowrap;"><span style="display:inline-block;padding:5px {10 if badge and len(badge) > 10 else 12}px;border-radius:999px;'
            f'background:{GREEN};background-color:{GREEN};color:{ON_GREEN};font-size:{11 if badge and len(badge) > 10 else 12}px;font-weight:900;letter-spacing:{".07em" if badge and len(badge) > 10 else ".14em"};'
@@ -397,6 +463,95 @@ def render(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
         f'<tr><td align="center" class="mri-pad" style="padding:28px 16px;">\n'
         '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;">\n'
         f'<tr><td>{body}</td></tr>\n</table>\n</td></tr></table>\n</body>\n</html>\n')
+
+
+# v2.6 (24 Oct 2026, Amit): solid tags that read on any dark card, and a numbered "items" block for internal notices.
+SOLID_TAGS = {"amber": ("#FFC94D", "#2A1A00"), "red": ("#FF4D7A", "#FFFFFF"), "green": ("#00E87A", "#0A0A0D"), "muted": ("#3A3A44", "#E6E3EC")}
+
+
+def solid_tag(label: str, kind: str = "amber") -> str:
+    bg, fg = SOLID_TAGS.get(kind, SOLID_TAGS["muted"])
+    return (f'<span style="display:inline-block;padding:4px 10px;border-radius:999px;font-size:10.5px;font-weight:900;letter-spacing:.08em;'
+            f'text-transform:uppercase;color:{fg};background:{bg};background-color:{bg};font-family:{FONT_STACK};white-space:nowrap;">{esc(label)}</span>')
+
+
+def _items(rows, hide: str = "") -> str:
+    """v2.6: numbered rows, each (tag_label, tag_kind, title, note, link_or_None); the tag sits in its own right-hand
+    column (1% wide, so every tag lines up on the card's right edge), the link under the note."""
+    out = []
+    for i, row in enumerate(rows, 1):
+        label, kind, title, note = row[0], row[1], row[2], row[3]
+        link = row[4] if len(row) > 4 else None
+        sep = f"border-top:1px solid {HAIRLINE};" if i > 1 else ""
+        a = (f'<div style="margin-top:6px;"><a href="{esc(link[1])}" style="font-size:13.5px;font-weight:800;color:{GREEN};'
+             f'text-decoration:none;font-family:{FONT_STACK};">{esc(link[0])} &rarr;</a></div>') if link else ""
+        out.append(f'<tr><td valign="top" width="28" style="width:28px;padding:12px 6px 12px 0;{sep}font-family:{HEAD_STACK};font-size:20px;line-height:1.1;color:{MUTED};">{i}</td>'
+                   f'<td valign="top" style="padding:12px 0;{sep}font-family:{FONT_STACK};">'
+                   f'<div style="font-size:15px;font-weight:700;line-height:1.35;color:{INK};">{esc(title)}</div>'
+                   + (f'<div style="margin-top:2px;font-size:13px;line-height:1.45;color:{MUTED};">{esc(note)}</div>' if note else "") + a + '</td>'
+                   f'<td valign="top" align="right" width="1%" style="width:1%;padding:12px 0 12px 12px;{sep}white-space:nowrap;">{"" if hide and label.lower() == hide.lower() else solid_tag(label, kind)}</td></tr>')
+    return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{"".join(out)}</table>'
+
+
+# v2.6 / v2.6.1 (24 Oct 2026, Amit): every internal email (internal=True) for My Robot I.S.A., Last Man Standing,
+# Stock Boom Hunter and the other ops repos uses a black scheme so it never looks like a member's email: near-black
+# page, graphite cards, solid tags, the project's logo top left and an INTERNAL NOTICE tag top right. The email type the
+# caller passed as `badge` (Health, Setup check ...) moves into the pink eyebrow line. Member mail (internal=False)
+# is untouched.
+LMS_LOGO = "https://myrobotisa.com/email/lms.png"
+LMS_BRAND = ("L", "Last Man", "Standing", LMS_LOGO)
+_INTERNAL = {"PAGE": "#0A0A0D", "CARD": "#17171D", "CARD_DEEP": "#101014", "HAIRLINE": "#2A2A33", "MUTED": "#B9B6C2",
+             "ON_GREEN": "#0A0A0D", "MUTED_BG": "#24242C", "GREEN_BG": "#12301F",
+             "PILL_COLORS": {"green": ("#0A0A0D", "#00E87A"), "amber": ("#2A1A00", "#FFC94D"), "red": ("#FFFFFF", "#FF4D7A"), "muted": ("#E6E3EC", "#3A3A44")}}
+
+
+def _project_of(brand, eyebrow_text):
+    """'sbh' | 'mri' | 'lms' | None, from the brand tuple or, failing that, the eyebrow ("Last Man Standing · Autofix")."""
+    b = tuple(brand) if brand else ()
+    words = (" ".join(str(x) for x in b[1:3]) + " " + (eyebrow_text or "")).lower()
+    logo = str(b[3]) if len(b) > 3 and b[3] else ""
+    if logo.endswith("sbh-robot.png") or "stock boom" in words:
+        return "sbh"
+    if logo == MRI_LOGO or "my robot" in words or "i.s.a" in words:
+        return "mri"
+    if logo == LMS_LOGO or "last man" in words:
+        return "lms"
+    return None
+
+
+def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand=None, buttons=None, mood=None,
+           internal=True, tone=None, badge=None, scheme=None):
+    if scheme is None:
+        scheme = "internal" if internal else "night"
+    if scheme != "internal":
+        return _render_core(title, eyebrow_text, subtitle, blocks, cta=cta, footnote=footnote, brand=brand, buttons=buttons,
+                            mood=mood, internal=internal, tone=tone, badge=badge)
+    proj = _project_of(brand, eyebrow_text)
+    base = {"sbh": SBH_BRAND, "mri": MRI_BRAND, "lms": LMS_BRAND}.get(proj) or tuple(brand or ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, ""))
+    logo = base[3] if len(base) > 3 else None
+    if proj == "sbh" and mood and mood.startswith(_E) and "/sbh/" not in mood:
+        mood = mood.replace(_E, _E + "sbh/")
+    if proj == "lms" and mood and mood.startswith(_E) and "/lms/" not in mood:
+        mood = mood.replace(_E + "sbh/", _E).replace(_E, _E + "lms/")   # the same robots with an L.M.S. tag
+    if badge and badge.lower() not in ("internal", "internal notice") and not eyebrow_text.lower().startswith(badge.lower()):
+        eyebrow_text = f"{badge} · {eyebrow_text}"
+    if not logo and proj is None and brand and brand[1] and str(brand[1]).lower() not in eyebrow_text.lower():
+        eyebrow_text = f"{brand[1]} · {eyebrow_text}"   # a project without a logo is named in the eyebrow instead
+    ibrand = (base[0], base[1], base[2] if len(base) > 2 else "", logo, "internal")
+    g = globals(); saved = {k: g[k] for k in _INTERNAL}
+    try:
+        g.update(_INTERNAL)
+        html = _render_core(title, eyebrow_text, subtitle, blocks, cta=cta, footnote=footnote, brand=ibrand, buttons=buttons,
+                            mood=mood, internal=True, tone=tone, badge="Internal notice")
+    finally:
+        g.update(saved)
+    # v2.6.1: stop iOS Mail turning times, amounts and domains into blue underlined links.
+    html = html.replace('<meta name="supported-color-schemes" content="light only">\n',
+                        '<meta name="supported-color-schemes" content="light only">\n'
+                        '<meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no">\n', 1)
+    html = html.replace("<style>", "<style>a[x-apple-data-detectors]{color:inherit !important;text-decoration:none !important;"
+                        "font-size:inherit !important;font-family:inherit !important;font-weight:inherit !important;line-height:inherit !important}", 1)
+    return html
 
 
 def subject(project: str, type_: str, detail: str, internal: bool = True) -> str:
