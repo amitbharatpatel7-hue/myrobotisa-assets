@@ -6,7 +6,7 @@
 <meta name="robots" content="noindex">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="29">
+<meta name="mri-version" content="30">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -343,6 +343,8 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
     <li><a href="../status.html">Nothing to hide</a></li>
     <li><a href="../isa-rules.html">ISA rules</a></li>
     <li><a href="../questions.html">Questions</a></li>
+    <li><a href="../join.html">Free test drive</a></li>
+    <li><a href="../newsletter.html">Newsletter</a></li>
   </ol>
   <div id="installbox" data-install role="button" tabindex="0" aria-label="Try the demo as an app on your phone, Mac or PC">
     <b>Try the demo as an app</b>
@@ -354,8 +356,8 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
 <button id="menubtn" aria-label="Menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
 
 <main class="wrap">
-  <div class="sitehdr"><a class="handle" href="https://www.instagram.com/myrobotisa/">@myrobotisa</a><span class="hdr-r"><a class="login" href="../members/">Log in</a><span class="tag" data-launch><span class="t-long">Launching </span>January 2027</span><a class="tag" data-live href="../#join" hidden>We're live</a></span></div>
-  <div class="demo" role="note">Demo with made-up example data. Not a real account, not real investments and not a recommendation. <a href="../#join">Get early access</a></div>
+  <div class="sitehdr"><a class="handle" href="https://www.instagram.com/myrobotisa/">@myrobotisa</a><span class="hdr-r"><a class="login" href="../members/">Log in</a><span class="tag" data-launch><span class="t-long">Launching </span>January 2027</span><a class="tag" data-live href="../join.html#join" hidden>We're live</a></span></div>
+  <div class="demo" role="note">Demo with made-up example data. Not a real account, not real investments and not a recommendation. <a href="../join.html#join">Get early access</a></div>
 
   <header class="hero">
     <div>
@@ -418,7 +420,7 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
     <header class="qs-hero">
       <p class="qs-tag">QuickStart</p>
       <h1>Your first <span>paper trade</span> in about 30 minutes</h1>
-      <p>Six short steps, the same ones as <b>Set up my robot</b> in the members area, each with a one-minute video. Tick them off as you go; about 20 minutes, under 10 if you already have GitHub and Trading 212.</p>
+      <p>Six short steps, the same ones as <b>Set up my robot</b> in the members area, each with a one-minute video. Tick them off as you go: about 30 minutes including the free accounts you make on the way, well under 15 if you already have GitHub and Trading 212.</p>
     </header>
     <section class="card">
       <div class="qbar" aria-hidden="true"><i id="qfill"></i></div>
@@ -691,12 +693,12 @@ function showWeek(id){
 
 // ---- quickstart walkthrough (demo: nothing is created)
 const QS=[
-  ["Connect GitHub","2 min",["Press <b>Connect GitHub</b> in Set up my robot. GitHub asks once if My Robot I.S.A. can use your account","Your private copy of the robot is made for you: named, locked to you, nothing to download"],"qs-01-copy-the-code"],
-  ["Your Trading 212 key, practice account first","5 min",["In the Trading 212 app, switch to Practice and generate an API key","Paste it into Set up my robot. Real orders stay off until you choose"],"qs-02-broker-key"],
-  ["Your email key","3 min",["Create a free Resend account and an API key","Paste it into Set up my robot. Reports come to your own inbox"],"qs-03-email-key"],
-  ["Pick how bold, press Build","2 min",["Cautious, balanced or adventurous: one choice, changeable later","Press <b>Build my robot</b>. The setup check tells you exactly what's missing"],"qs-04-setup-check"],
+  ["Connect GitHub","5 min",["Press <b>Connect GitHub</b> in Set up my robot. GitHub asks once if My Robot I.S.A. can use your account","Your private copy of the robot is made for you: named, locked to you, nothing to download"],"qs-01-copy-the-code"],
+  ["Your Trading 212 key, practice account first","8 min",["In the Trading 212 app, switch to Practice and generate an API key","Paste it into Set up my robot. Real orders stay off until you choose"],"qs-02-broker-key"],
+  ["Your email key","5 min",["Create a free Resend account and an API key","Paste it into Set up my robot. Reports come to your own inbox"],"qs-03-email-key"],
+  ["Pick how bold, press Build","5 min",["Cautious, balanced or adventurous: one choice, changeable later","Press <b>Build my robot</b>. The setup check tells you exactly what's missing"],"qs-04-setup-check"],
   ["Optional extras","3 min",["Robot Care: when a run fails, the fix is waiting for your tap. <a href=\"../robot-care.html\">A year free for founding members</a>","Or your own Claude for fixes, and error alerts with a free Sentry account"],"qs-05-optional-extras"],
-  ["Put it on your phone, Mac or PC","2 min",["Open your own dashboard link and sign in with the code emailed to you","Phone: Share, then Add to Home Screen. Mac: File, then Add to Dock. PC: Install in Chrome or Edge"],"qs-06-your-app"]
+  ["Put it on your phone, Mac or PC","4 min",["Open your own dashboard link and sign in with the code emailed to you","Phone: Share, then Add to Home Screen. Mac: File, then Add to Dock. PC: Install in Chrome or Edge"],"qs-06-your-app"]
 ];
 
 let qdone=new Set();
