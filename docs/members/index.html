@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="59">
+<meta name="mri-version" content="60">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -363,6 +363,7 @@
     <!-- 22 Oct 2026 (Amit): just Home and Questions. Same tab: the site pages show this Members area group too while you're signed in. -->
     <li class="sep">The site</li>
     <li><a href="../">Home</a></li>
+    <li><a href="../robot-care.html">Robot Care</a></li>
     <li><a href="#questions" data-go="questions">Questions</a></li>
   </ol>
   <!-- In the installed app the menu is the members area only (21 Oct 2026) -->
@@ -446,7 +447,7 @@
       <section class="card" aria-labelledby="h-qs" data-page="start">
         <h2 id="h-qs">Start <span class="g">here</span></h2>
         <p class="lede">The QuickStart: your first paper trade in about 30 minutes. A short video for each step.</p>
-        <a class="su-promo pv-only" hidden href="#setup" data-go="setup"><b>Short on time? Let us do steps 1 to 4 for you</b><span>Set up my robot builds your copy, locks in your keys and runs the setup check in about 10 minutes. Then come back here for steps 5 and 6.</span></a>
+        <a class="su-promo pv-only" hidden href="#setup" data-go="setup"><b>Short on time? Let us do steps 1 to 4 for you</b><span>Set up my robot builds your copy, locks in your keys and runs the setup check in about 10 minutes. The optional extras and your app (steps 5 and 6) are at the bottom of the same page.</span></a>
         <div class="bar" aria-hidden="true"><i id="qs-bar"></i></div>
         <p class="small" id="qs-count"></p>
         <ol class="steps" id="qs"></ol>
@@ -544,7 +545,7 @@
 
       <section class="card" aria-labelledby="h-help" data-page="help">
         <h2 id="h-help">Help and <span class="g">your membership</span></h2>
-        <p class="lede">Stuck? Ask in the <b>members' space</b>: questions get an instant answer from our FAQ where one fits, and anything else a reply from Amit. It's also where to share ideas and tell us what you'd change. You're invited with the GitHub account you connected. Or email us: a reply within two working days.</p>
+        <p class="lede">Stuck? Ask in the <b>members' space</b>: questions get an instant answer from our FAQ where one fits, and anything else a reply from us. It's also where to share ideas and tell us what you'd change. You're invited with the GitHub account you connected. Or email us: a reply within two working days.</p>
         <div class="kv" id="mem-kv"></div>
         <div class="row"><a class="btn" href="https://github.com/myrobotisa/community/discussions" target="_blank" rel="noopener">Open the members' space</a><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=Members%20area">Email support</a><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button></div>
         <p class="small" style="margin:12px 0 0">You keep every lesson and video released while your updates are included, and the version of the code you had. Renewing is optional and never automatic.</p>
@@ -618,9 +619,9 @@
               <li>Copy its <b>DSN</b>: it starts with https:// and ends with a number. Lost it? Settings &rarr; Projects &rarr; my-robot-isa &rarr; Client Keys (DSN).</li></ol></details>
             <label class="f" for="sx-dsn">Sentry DSN</label><input class="t" id="sx-dsn" autocomplete="off" spellcheck="false" placeholder="https://…@….sentry.io/…">
             <div class="row"><button class="btn" type="button" id="sx1-go" disabled>Switch on error alerts</button></div>
-            <p class="small" id="sx1-msg" role="status" aria-live="polite">Build your robot first; then the extras can go into your copy.</p></li>
+            <p class="small" id="sx1-msg" role="status" aria-live="polite">Press Connect GitHub in step 1 first; then the extras can go into your copy.</p></li>
           <li class="su-step locked" id="sxc"><div class="su-h"><b>Robot Care</b><span class="pill g" id="sxc-st">Free for a year</span></div>
-            <p>When a run fails, our Claude reads the log and writes the smallest fix, and it's checked against the safety rails. It waits on GitHub for your one tap: nothing changes until you merge, and it never touches your keys, your money settings or anything that places orders. Founding members get the first year free. <a href="../robot-care.html">How Robot Care works</a></p>
+            <p>When a run fails, our Claude reads the log and writes the smallest fix, and it's checked against the safety rails. It waits on GitHub for your one tap: nothing changes until you merge, and it never touches your keys, your money settings or anything that places orders. The first 100 founding members get the first year free. <a href="../robot-care.html">How Robot Care works</a></p>
             <div class="row"><button class="btn" type="button" id="sxc-go" disabled>Switch on Robot Care</button><a class="btn" id="sxc-inst" target="_blank" rel="noopener" hidden>Install it on my copy</a></div>
             <p class="small" id="sxc-msg" role="status" aria-live="polite">Connect GitHub in step 1 first, so Robot Care knows which copy is yours.</p></li>
           <li class="su-step locked" id="sx2"><div class="su-h"><b>Or use your own Claude</b><span class="pill o" id="sx2-st">Paid Claude</span></div>
@@ -721,7 +722,7 @@
     </div>
 
     <footer>
-      My Robot I.S.A. is software and a course, not financial advice. Investing puts your capital at risk.
+      My Robot I.S.A. is software and lessons, not financial advice. Investing puts your capital at risk.
       · <a href="../">myrobotisa.com</a> · <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>
       · <span id="app-version"></span>
     </footer>
@@ -755,7 +756,7 @@
     ["Your Trading 212 key, practice account first", "8 min", "Turn on the API in Trading 212's practice account, create a key and paste it into your copy's secrets. Real orders stay off."],
     ["Your email key", "5 min", "A free Resend account and an API key. No domain needed: reports come to your own inbox."],
     ["Run the setup check", "5 min", "It lists anything missing in plain words, then makes your first paper trade and sends your first report."],
-    ["Optional extras", "5 min", "Error alerts with a free Sentry account, and Claude fixing failed runs if you have a Claude subscription."],
+    ["Optional extras", "5 min", "Robot Care (free for your first year as a founding member), or your own Claude for fixes, and error alerts with a free Sentry account."],
     ["Your app on your phone, Mac or PC", "10 min", "A free Cloudflare account and a read-only broker key. Then add it to your home screen or Dock."]
   ];
   var LESSONS = [
@@ -1493,15 +1494,19 @@
     if (!SX.feat.sentry_dsn) { var u = await gh("/repos/" + full + "/contents/universe.json"); if (u.ok && u.j && /"sentry_dsn"/.test(b64d(u.j.content))) SX.feat.sentry_dsn = 1; }
     return SX.feat;
   }
-  var SX_NEED = { sx1: "sentry_dsn", sx2: "claude_fix", sx3: "dashboard_setup" }, SX_MIN = { sx1: 1, sx2: 2, sx3: 2 };   // claude_fix 2 = the $1-a-fix cap is in the kit
+  var SX_NEED = { sx1: "sentry_dsn", sx2: "claude_fix", sx3: "dashboard_setup" }, SX_MIN = { sx1: 1, sx2: 2, sx3: 2 };   // claude_fix 2 = the per-fix cost cap is in the kit
   async function sxState() {
     var full = sxCopy(), on = !!(SU.tok && full);
     ["sx1", "sx2"].forEach(function (id) { $(id).classList.toggle("locked", !on); });
-    if (!on) { sxCheck(); return; }
+    if (!on) {   // 25 Oct 2026 (Amit: "I can't choose anything but Robot Care"): say what's missing
+      var why = !SU.tok ? "Press Connect GitHub in step 1 first: the connection is forgotten when you close the page, so these extras unlock once you connect again."
+                        : "Build your robot first (or name your existing copy in step 4); then the extras can go into your copy.";
+      ["sx1", "sx2"].forEach(function (id) { $(id + "-msg").textContent = why; });
+      sxCheck(); return; }
     var f = await sxFeatures(full);
     ["sx1", "sx2", "sx3"].forEach(function (id) {
       var ok = (f[SX_NEED[id]] || 0) >= SX_MIN[id]; $(id).dataset.ok = ok ? "1" : "";
-      var m = $(id + "-msg"); if (!ok) m.textContent = "Your copy doesn't have this yet. It arrives with the next update to your code."; else if (/Build your robot|doesn't have this/.test(m.textContent)) m.textContent = "";
+      var m = $(id + "-msg"); if (!ok) m.textContent = "Your copy doesn't have this yet. It arrives with the next update to your code."; else if (/Build your robot|Connect GitHub in step 1|doesn't have this/.test(m.textContent)) m.textContent = "";
     });
     if (!$("sx-em").value) $("sx-em").value = $("su-to").value || (me && me.email) || ""; $("sx-em-show").textContent = $("sx-em").value;
     sxCheck();
@@ -1530,6 +1535,7 @@
       if (r.ok && u.ok) return base + "/permissions?suggested_target_id=" + u.j.id + "&repository_ids[]=" + r.j.id; } } catch (e) {}
     return base;
   }
+  function niceDate(iso) { try { return new Date(iso + "T12:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }); } catch (e) { return iso; } }
   function scRender() {
     var st = SC.st, m = $("sxc-msg"), go = $("sxc-go"), inst = $("sxc-inst"), pill = $("sxc-st");
     $("sxc").classList.remove("locked", "done"); go.hidden = false; inst.hidden = true; pill.className = "pill g"; pill.textContent = "Free for a year";
@@ -1537,7 +1543,7 @@
     if (!st.eligible) { pill.className = "pill o"; pill.textContent = "Coming soon"; go.hidden = true;
       m.textContent = "Robot Care's free year is for the first 100 founding members. Paid Robot Care opens soon, and we'll email you. Meanwhile your own Claude, just below, does the same job."; return; }
     if (st.robot_care && st.installed) { $("sxc").classList.add("done"); pill.textContent = "On"; go.hidden = true;
-      m.textContent = "Robot Care is on for @" + st.login + ". When a run fails, the fix waits on GitHub for your tap, and your daily digest reminds you."; return; }
+      m.textContent = "Robot Care is on for @" + st.login + (st.until ? ", free until " + niceDate(st.until) : "") + ". When a run fails, the fix waits on GitHub for your tap, and your daily digest reminds you."; return; }
     if (st.robot_care) { pill.textContent = "One more step"; go.hidden = true; inst.hidden = false; scInstallUrl().then(function (u) { inst.href = u; });
       m.textContent = "Switched on. Last step, on GitHub: check your copy is ticked, then press Install. Come back here and it shows On."; return; }
     if (!st.login) { $("sxc").classList.add("locked"); go.disabled = true; m.textContent = "Connect GitHub in step 1 first, so Robot Care knows which copy is yours."; return; }
@@ -1554,7 +1560,7 @@
     try {
       var r = await scFn("POST");
       if (!r.ok) { if (w) w.close(); m.textContent = (r.j && r.j.error) || "That didn't work. Try again in a minute."; $("sxc-go").disabled = false; return; }
-      SC.st = Object.assign(SC.st || {}, { robot_care: true, installed: false }); var u = await scInstallUrl();
+      SC.st = Object.assign(SC.st || {}, { robot_care: true, installed: false, until: r.j.until || null }); var u = await scInstallUrl();
       if (w) w.location = u; else location.href = u;
       scRender();
     } catch (e) { if (w) w.close(); m.textContent = "No connection. Check you're online and try again."; $("sxc-go").disabled = false; }
