@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="61">
+<meta name="mri-version" content="62">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -622,7 +622,7 @@
             <p class="small" id="sx1-msg" role="status" aria-live="polite">Press Connect GitHub in step 1 first; then the extras can go into your copy.</p></li>
           <li class="su-step locked" id="sxc"><div class="su-h"><b>Robot Care</b><span class="pill g" id="sxc-st">Free for a year</span></div>
             <p>When a run fails, our Claude reads the log and writes the smallest fix, and it's checked against the safety rails. It waits on GitHub for your one tap: nothing changes until you merge, and it never touches your keys, your money settings or anything that places orders. The first 100 founding members get the first year free. <a href="../robot-care.html">How Robot Care works</a></p>
-            <div class="row"><button class="btn" type="button" id="sxc-go" disabled>Switch on Robot Care</button><a class="btn" id="sxc-inst" target="_blank" rel="noopener" hidden>Install it on my copy</a></div>
+            <div class="row"><button class="btn" type="button" id="sxc-go" disabled>Switch on Robot Care</button><a class="btn" id="sxc-inst" target="_blank" rel="noopener" hidden>Install it on my copy</a><button class="btn ghost" type="button" id="sxc-sw" hidden>Use this account instead</button></div>
             <p class="small" id="sxc-msg" role="status" aria-live="polite">Connect GitHub in step 1 first, so Robot Care knows which copy is yours.</p></li>
           <li class="su-step locked" id="sx2"><div class="su-h"><b>Or use your own Claude</b><span class="pill o" id="sx2-st">Paid Claude</span></div>
             <p>When a run fails, Claude reads what went wrong and suggests a fix for you to approve. It never changes your money settings. <b>The free Claude plan can't do this</b>: you need Claude Pro or Max, or a little Claude API credit (pay as you go, no subscription). <a href="#guide/qs-claude">Step-by-step guide, about 10 minutes</a>. Using your own Claude also lets you type @claude on GitHub to ask questions about your robot.</p>
@@ -1376,7 +1376,7 @@
       cm.textContent = "Connecting…";
       suFn("POST", { code: code }).then(function (r) {
         if (!r.ok || !r.j.access_token) { cm.textContent = (r.j && r.j.error) || "That didn't work. Press Connect GitHub again."; return; }
-        SU.tok = r.j.access_token; SU.invite = r.j.invite || "";
+        SU.tok = r.j.access_token; SU.invite = r.j.invite || ""; SU.link = r.j.link || ""; SU.saved = r.j.saved || "";
         return gh("/user").then(function (u) { SU.login = u.j && u.j.login || ""; ghConnected(); });
       }).catch(function () { cm.textContent = "No connection. Check you're online and try again."; });
     })();
@@ -1456,7 +1456,7 @@
   function ghConnected() {
     acctSet(["acct:2"], true);
     suState(1, "Connected", true); $("su1-msg").textContent = "Connected as @" + SU.login + "." + (SU.invite === "invited" ? " You're also invited to the members' space on GitHub: accept it from GitHub's email, or at github.com/myrobotisa." : ""); $("su-gh").hidden = true; suUnlock(); suLookup();
-    scState();
+    scState(); sxState();
     lvStep(1, "Connected", true); $("lv-gh").hidden = true; $("lv1-msg").textContent = "Connected as @" + SU.login + ". Looking for your copy…"; lvLookup();
   }
   function ghLog(ul) { return function (txt) { var li = document.createElement("li"); li.className = "run"; li.innerHTML = "<i></i><span></span>"; li.lastChild.textContent = txt; $(ul).appendChild(li);
@@ -1500,7 +1500,8 @@
     ["sx1", "sx2"].forEach(function (id) { $(id).classList.toggle("locked", !on); });
     if (!on) {   // 25 Oct 2026 (Amit: "I can't choose anything but Robot Care"): say what's missing
       var why = !SU.tok ? "Press Connect GitHub in step 1 first: the connection is forgotten when you close the page, so these extras unlock once you connect again."
-                        : "Build your robot first (or name your existing copy in step 4); then the extras can go into your copy.";
+                        : "These go into your copy of the code, and there's no copy called " + ($("su-name").value.trim() || "my-robot-isa") + " under @" + SU.login + " yet. Build it with step 5, or type your copy's name in step 4." +
+                          (SC.st && SC.st.login && SC.st.login.toLowerCase() !== (SU.login || "").toLowerCase() ? " Your robot is under @" + SC.st.login + "? Sign out of GitHub, then press Connect GitHub and choose that account." : "");
       ["sx1", "sx2"].forEach(function (id) { $(id + "-msg").textContent = why; });
       sxCheck(); return; }
     var f = await sxFeatures(full);
@@ -1540,10 +1541,13 @@
     var st = SC.st, m = $("sxc-msg"), go = $("sxc-go"), inst = $("sxc-inst"), pill = $("sxc-st");
     $("sxc").classList.remove("locked", "done"); go.hidden = false; inst.hidden = true; pill.className = "pill g"; pill.textContent = "Free for a year";
     if (!st) { $("sxc").classList.add("locked"); go.disabled = true; return; }
+    var other = SU.login && st.login && SU.login.toLowerCase() !== st.login.toLowerCase();
+    $("sxc-sw").hidden = !(other && SU.tok);
+    if (other && SU.tok) $("sxc-sw").textContent = "Use @" + SU.login + " for Robot Care instead";
     if (!st.eligible) { pill.className = "pill o"; pill.textContent = "Coming soon"; go.hidden = true;
       m.textContent = "Robot Care's free year is for the first 100 founding members. Paid Robot Care opens soon, and we'll email you. Meanwhile your own Claude, just below, does the same job."; return; }
     if (st.robot_care && st.installed) { $("sxc").classList.add("done"); pill.textContent = "On"; go.hidden = true;
-      m.textContent = "Robot Care is on for @" + st.login + (st.until ? ", free until " + niceDate(st.until) : "") + ". When a run fails, the fix waits on GitHub for your tap, and your daily digest reminds you."; return; }
+      m.textContent = (other && SU.tok ? "You're connected as @" + SU.login + ", but Robot Care looks after @" + st.login + "'s copy. " : "") + "Robot Care is on for @" + st.login + (st.until ? ", free until " + niceDate(st.until) : "") + ". When a run fails, the fix waits on GitHub for your tap, and your daily digest reminds you."; return; }
     if (st.robot_care) { pill.textContent = "One more step"; go.hidden = true; inst.hidden = false; scInstallUrl().then(function (u) { inst.href = u; });
       m.textContent = "Switched on. Last step, on GitHub: check your copy is ticked, then press Install. Come back here and it shows On."; return; }
     if (!st.login) { $("sxc").classList.add("locked"); go.disabled = true; m.textContent = "Connect GitHub in step 1 first, so Robot Care knows which copy is yours."; return; }
@@ -1553,6 +1557,17 @@
     try { var r = await scFn("GET"); SC.st = r.ok ? r.j : null; if (!r.ok) $("sxc-msg").textContent = (r.j && r.j.error) || "Robot Care isn't available just now."; }
     catch (e) { SC.st = null; }
     scRender();
+  }
+  async function scSwitch() {   // move Robot Care to the GitHub account connected now (GitHub confirms who it is)
+    var m = $("sxc-msg"); $("sxc-sw").disabled = true; m.textContent = "Switching…";
+    try {
+      var s = await fresh();
+      var r = await fetch(SB + "/functions/v1/robot-care-join", { method: "POST", headers: { apikey: KEY, Authorization: "Bearer " + s.access_token, "Content-Type": "application/json" },
+        body: JSON.stringify({ switch: true, token: SU.tok }) }).then(function (x) { return x.json().catch(function () { return {}; }).then(function (j) { return { ok: x.ok, j: j }; }); });
+      $("sxc-sw").disabled = false;
+      if (!r.ok) { m.textContent = (r.j && r.j.error) || "That didn't work. Try again in a minute."; return; }
+      await scState(); sxState();
+    } catch (e) { $("sxc-sw").disabled = false; m.textContent = "No connection. Check you're online and try again."; }
   }
   async function scGo() {
     var m = $("sxc-msg"); $("sxc-go").disabled = true; m.textContent = "Switching on…";
@@ -1574,7 +1589,7 @@
       var api = SU.cl === "api"; $("sx2-api").hidden = !api; $("sx2-sub").hidden = api;
       $("sx-cl-l").textContent = api ? "Claude API key" : "Claude subscription token"; });
     $("sx1-go").addEventListener("click", sxSentry); $("sx2-go").addEventListener("click", sxClaude); $("sx3-go").addEventListener("click", sxApp);
-    $("sxc-go").addEventListener("click", scGo);
+    $("sxc-go").addEventListener("click", scGo); $("sxc-sw").addEventListener("click", scSwitch);
     window.addEventListener("focus", function () { if (SC.st && SC.st.robot_care && !SC.st.installed) scState(); });
     sxState(); scState();
   }
