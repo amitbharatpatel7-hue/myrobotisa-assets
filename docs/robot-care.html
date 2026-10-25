@@ -127,6 +127,7 @@
   .care-steps b{display:flex;align-items:center;gap:10px;color:var(--green);font-weight:800;font-size:15px;margin-bottom:6px}
   .care-steps b::before{content:counter(cs);display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--green);color:var(--deep);font-family:Anton,Impact,sans-serif;font-size:15px;flex:none}
   .care-steps span{display:block;color:var(--ink);font-size:15px;line-height:1.5}
+  .care-video{margin:18px 0 6px;max-width:900px} .care-video video{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:18px;border:3px solid var(--green);background:var(--deep2)} .care-video p{margin:8px 0 0}
   .care-list{list-style:none;padding:0;margin:0} .care-list li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;margin:10px 0;color:var(--ink);line-height:1.5}
   .care-list .ci{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;background:var(--deep);border:2px solid var(--rule);color:var(--muted);font-style:normal;font-weight:800;font-size:16px;flex:none}
   .care-us .care-list .ci{border-color:var(--green);color:var(--green)} .care-list b{color:var(--ink)}
@@ -392,6 +393,7 @@
       <li><b>Claude writes the fix</b><span>Claude reads the log and the files involved, works out the smallest change that mends it, and opens a pull request in your repo with the reason in plain words.</span></li>
       <li><b>You tap merge</b><span>Nothing changes until you merge it, from your phone, in a minute. If it's a key or account problem, you get a comment saying exactly what to do instead.</span></li>
     </ol>
+    <div class="care-video"><video controls playsinline preload="metadata" poster="care-poster.jpg" width="960" height="540" aria-label="When a run fails: what happens, start to finish, in a minute and a half"><source src="clips/robot-care-fails.mp4?v=1" type="video/mp4">Your browser can't play this clip.</video><p class="small">Watch it happen, start to finish: 89 seconds. Example data, nothing here is a real account.</p></div>
     <p class="small">The fix is held to the same rails as everything else in the kit: it can never touch your keys, your money settings, <code>ORDER_MODE</code>, <code>T212_ENV</code>, the schedules or anything that places orders. It changes at most four files and eighty lines, and it never weakens a safety rail (the halt, the drawdown stop, the position cap, the stale-data check). A fix that would is refused before you ever see it.</p>
 
     <h2 class="h3">Two ways to have it</h2>
