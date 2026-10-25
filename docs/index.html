@@ -111,6 +111,22 @@
   details.words{background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px 18px;margin:0 0 16px}
   details.words summary{cursor:pointer;font-weight:700}
   details.words p{margin:10px 0 0;color:var(--muted);line-height:1.55}
+  /* 25 Oct 2026 (Amit): Questions grouped into categories, with a jump bar; Robot Care page */
+  .fjump{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
+  .fjump a{display:inline-block;padding:8px 14px;border-radius:999px;background:var(--deep2);border:1px solid var(--rule);color:var(--ink);text-decoration:none;font-size:14px;font-weight:700}
+  .fjump a:hover{border-color:var(--green);color:var(--green)}
+  .faq .fg{margin-top:28px} .faq .fg h2.fgh{margin:0 0 4px;font-family:Anton,Impact,sans-serif;font-size:22px;font-weight:400;letter-spacing:.02em;text-transform:uppercase;color:var(--ink);scroll-margin-top:24px} .faq .fg h2.fgh .p{color:var(--pink)}
+  .faq .fg details:last-of-type{border-bottom:1px solid var(--rule)}
+  .side ol a .new{float:right;margin-top:1px;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--green);color:var(--deep);border-radius:999px;padding:3px 8px;line-height:1.2}
+  .care-two{display:grid;grid-template-columns:1fr;gap:12px;margin:14px 0 6px} @media (min-width:800px){.care-two{grid-template-columns:1fr 1fr}}
+  .care-two .box h3,.care-two .box h2.h3{font-family:Anton,Impact,sans-serif;font-size:22px;font-weight:400;letter-spacing:.02em;text-transform:uppercase;color:var(--ink);margin:0 0 4px} .care-two .box .ck{margin:0 0 10px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
+  .care-two .box ul{padding-left:20px;margin:0} .care-two .box li{margin:6px 0;color:var(--ink)}
+  .care-price{margin:16px 0 0;background:var(--deep2);border:1px solid var(--green);border-radius:18px;padding:16px 18px} .care-price b.big{display:block;font-family:Anton,Impact,sans-serif;font-size:30px;font-weight:400;line-height:1;text-transform:uppercase;color:var(--ink);margin-bottom:4px} .care-price b.big .p{color:var(--pink)} .care-price p{margin:6px 0 0;color:var(--muted)}
+  .care-steps{list-style:none;padding:0;margin:14px 0 8px;display:grid;gap:10px;counter-reset:cs} @media (min-width:900px){.care-steps{grid-template-columns:repeat(4,1fr)}}
+  .care-steps li{counter-increment:cs;background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px 16px}
+  .care-steps b{display:flex;align-items:center;gap:10px;color:var(--green);font-weight:800;font-size:15px;margin-bottom:6px}
+  .care-steps b::before{content:counter(cs);display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--green);color:var(--deep);font-family:Anton,Impact,sans-serif;font-size:15px;flex:none}
+  .care-steps span{display:block;color:var(--ink);font-size:15px;line-height:1.5}
   .faq details{border-top:1px solid var(--rule);padding:14px 0}
   .faq details:last-of-type{border-bottom:1px solid var(--rule)}
   .faq summary{cursor:pointer;font-weight:700;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
@@ -345,6 +361,7 @@
     <li><a href="how-it-works.html">How it works</a></li>
     <li><a href="what-you-get.html">What you get</a></li>
     <li><a href="demo/">Try the demo</a></li>
+    <li><a href="robot-care.html">Robot Care <span class="new">New</span></a></li>
     <li><a href="status.html">Nothing to hide</a></li>
     <li><a href="isa-rules.html">ISA rules</a></li>
     <li><a href="questions.html">Questions</a></li>
