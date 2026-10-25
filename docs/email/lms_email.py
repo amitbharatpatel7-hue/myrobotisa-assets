@@ -29,6 +29,11 @@ v2.6.1 (24 Oct 2026, approved by Amit: "go ahead with the black theme ... for in
   * new blocks: `items` [(tag, kind, title, note, link|None)] numbered rows with the tag pinned right (a tag that
     repeats the card's own tag is dropped), and `tiles` [(label, value, note)] in the website dashboard's tile style;
   * LMS_BRAND / LMS_LOGO added; solid_tag(label, kind) for callers that build their own rows.
+v2.6.5 (25 Oct 2026, Amit's robot picks) — member emails get one robot per email type, in the course style with
+  hands and no tag: up day upchart, quieter day tea, all quiet sleep, your turn phone, paused pause sign, milestone trophy,
+  setup check magnifier tick; new moods reminder (alarm clock), sent (paper plane), refused / setupfix (wrench), answer
+  (bulb), advice (shrug), reply (chat phone), signin (code card). New file names, so emails already sent are unchanged;
+  tagged internal emails (S.B.H., L.M.S., D.T.L.) map back to their existing tagged files.
 v2.6.4 (24 Oct 2026, Amit's review of the member emails) — additive and opt-in: render(label="Daily digest") puts the logo
   top left and that label top right with no wordmark (member emails, like the internal notices); the headline is always
   white (a gain is said in the green subtitle, not the headline); key/value labels wrap with a gap before the value, and a
@@ -97,13 +102,32 @@ SBH_BRAND = ("S", "Stock Boom", "Hunter", "https://myrobotisa.com/email/sbh-robo
 # v2.4 (23 Oct 2026, approved by Amit): six robot moods, one per kind of day. "steady"/"flat" stay as aliases so older
 # callers keep working; the original robot-steady.png / robot-flat.png images stay on the site for emails already sent.
 _E = "https://myrobotisa.com/email/"
-MOODS = {"up": _E + "robot-up.png", "milestone": _E + "robot-milestone.png", "calm": _E + "robot-calm.png",
-         "quiet": _E + "robot-quiet.png", "yourturn": _E + "robot-yourturn.png", "paused": _E + "robot-paused.png",
-         "headset": _E + "robot-headset.png", "sorry": _E + "robot-sorry.png", "setup": _E + "robot-setup.png"}
+# v2.6.5 (25 Oct 2026, Amit picked one robot per email type from the 3-option sheets): new files, so emails already
+# sent keep the robot they went out with. New keys: reminder, sent, refused, setupfix, answer, advice, reply, signin.
+MOODS = {"up": _E + "robot-upchart.png", "milestone": _E + "robot-trophy.png", "calm": _E + "robot-tea.png",
+         "quiet": _E + "robot-sleep.png", "yourturn": _E + "robot-phonetick.png", "paused": _E + "robot-pausesign.png",
+         "headset": _E + "robot-bulb.png", "sorry": _E + "robot-chatphone.png", "setup": _E + "robot-check.png",
+         "reminder": _E + "robot-schedule.png", "sent": _E + "robot-paperplane.png", "refused": _E + "robot-wrench.png",
+         "setupfix": _E + "robot-wrench.png", "answer": _E + "robot-bulb.png", "advice": _E + "robot-shrug.png",
+         "reply": _E + "robot-chatphone.png", "signin": _E + "robot-codecard.png"}
 MOODS["steady"], MOODS["flat"] = MOODS["calm"], MOODS["quiet"]
 # v2.5 (23 Oct 2026): Stock Boom Hunter emails use the same robots with an S.B.H. tag (myrobotisa.com/email/sbh/);
 # render() swaps them in automatically whenever the brand is SBH_BRAND.
-MOODS_SBH = {k: v.replace(_E, _E + "sbh/") for k, v in MOODS.items()}
+# v2.6.5: the tagged sets (sbh/, lms/, dtl/) only have the original files, so a v2.6.5 robot maps back to its original
+# name before the folder swap. Member (purple, untagged) emails use the new robots.
+_TAGGED = {"robot-upchart.png": "robot-up.png", "robot-trophy.png": "robot-milestone.png", "robot-tea.png": "robot-calm.png",
+           "robot-sleep.png": "robot-quiet.png", "robot-phonetick.png": "robot-yourturn.png", "robot-pausesign.png": "robot-paused.png",
+           "robot-bulb.png": "robot-headset.png", "robot-chatphone.png": "robot-sorry.png", "robot-check.png": "robot-setup.png",
+           "robot-schedule.png": "robot-yourturn.png", "robot-paperplane.png": "robot-milestone.png", "robot-wrench.png": "robot-paused.png",
+           "robot-shrug.png": "robot-calm.png", "robot-codecard.png": "robot-yourturn.png"}
+
+
+def _to_tagged(mood: str) -> str:
+    head, _, name = mood.rpartition("/")
+    return f"{head}/{_TAGGED.get(name, name)}"
+
+
+MOODS_SBH = {k: _to_tagged(v).replace(_E, _E + "sbh/") for k, v in MOODS.items()}
 
 PILL_COLORS = {
     "green": (GREEN_FG, GREEN_BG),
@@ -411,7 +435,7 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
     b = tuple(brand) if brand else ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, "")
     tile, word, suffix = b[0], b[1], b[2]
     if mood and len(b) > 3 and str(b[3]).endswith("sbh-robot.png") and mood.startswith(_E) and "/sbh/" not in mood:
-        mood = mood.replace(_E, _E + "sbh/")
+        mood = _to_tagged(mood).replace(_E, _E + "sbh/")
     logo = b[3] if len(b) > 3 else None
     suffix_html = ('' if word.endswith('.') else ' ') + '<span style="color:%s">%s</span>' % (PINK, esc(suffix)) if suffix else ""
     stacked = len(word + suffix) > 14   # v2.5.2 (Amit): a long name (Stock Boom Hunter) stays on ONE line, a touch smaller, never wrapping
@@ -563,9 +587,9 @@ def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand
     base = {"sbh": SBH_BRAND, "mri": MRI_BRAND, "lms": LMS_BRAND, "dtl": DTL_BRAND}.get(proj) or tuple(brand or ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, ""))
     logo = base[3] if len(base) > 3 else None
     if proj == "sbh" and mood and mood.startswith(_E) and "/sbh/" not in mood:
-        mood = mood.replace(_E, _E + "sbh/")
+        mood = _to_tagged(mood).replace(_E, _E + "sbh/")
     if proj in ("lms", "dtl") and mood and mood.startswith(_E) and f"/{proj}/" not in mood:
-        mood = mood.replace(_E + "sbh/", _E).replace(_E, _E + proj + "/")   # the same robots with an L.M.S. / D.T.L. tag
+        mood = _to_tagged(mood).replace(_E + "sbh/", _E).replace(_E, _E + proj + "/")   # the same robots with an L.M.S. / D.T.L. tag
     if badge and badge.lower() not in ("internal", "internal notice") and not eyebrow_text.lower().startswith(badge.lower()):
         eyebrow_text = f"{badge} · {eyebrow_text}"
     if not logo and proj is None and brand and brand[1] and str(brand[1]).lower() not in eyebrow_text.lower():
