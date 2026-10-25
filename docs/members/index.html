@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="56">
+<meta name="mri-version" content="57">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -620,15 +620,15 @@
             <div class="row"><button class="btn" type="button" id="sx1-go" disabled>Switch on error alerts</button></div>
             <p class="small" id="sx1-msg" role="status" aria-live="polite">Build your robot first; then the extras can go into your copy.</p></li>
           <li class="su-step locked" id="sx2"><div class="su-h"><b>Claude fixes failed runs</b><span class="pill o" id="sx2-st">Paid Claude</span></div>
-            <p>When a run fails, Claude reads what went wrong and suggests a fix for you to approve. It never changes your money settings. <b>The free Claude plan can't do this</b>: you need Claude Pro or Max, or a little Claude API credit (pay per fix, no subscription). <a href="#guide/qs-claude">Step-by-step guide, about 10 minutes</a>. Or let <a href="../robot-care.html">Robot Care</a> do it with our Claude: a year free for founding members, one tap here once it opens.</p>
-            <div class="su-seg" data-k="cl"><button type="button" data-v="sub" aria-pressed="true">I have Claude Pro or Max<small>uses your plan</small></button><button type="button" data-v="api" aria-pressed="false">I don't<small>pay per fix, capped at $1 each</small></button></div>
+            <p>When a run fails, Claude reads what went wrong and suggests a fix for you to approve. It never changes your money settings. <b>The free Claude plan can't do this</b>: you need Claude Pro or Max, or a little Claude API credit (pay as you go, no subscription). <a href="#guide/qs-claude">Step-by-step guide, about 10 minutes</a>. Or let <a href="../robot-care.html">Robot Care</a> do it with our Claude: a year free for founding members, one tap here once it opens.</p>
+            <div class="su-seg" data-k="cl"><button type="button" data-v="sub" aria-pressed="true">I have Claude Pro or Max<small>uses your plan</small></button><button type="button" data-v="api" aria-pressed="false">I don't<small>pay as you go</small></button></div>
             <details id="sx2-sub"><summary>Where do I find this?</summary><ol>
               <li>You need Claude Code on a computer once (it comes with Pro and Max).</li>
               <li>In a terminal, run <code>claude setup-token</code> and sign in when it asks.</li>
               <li>Copy the token it prints (it starts with sk-ant-).</li></ol></details>
             <details id="sx2-api" hidden><summary>Where do I find this?</summary><ol>
               <li>Sign in at <a href="https://platform.claude.com" target="_blank" rel="noopener">platform.claude.com</a>. It's separate from the Claude app.</li>
-              <li><b>Billing</b>: add $5 of credit; it lasts a year. A fix only runs when a run fails, and each one is capped at $1 (most cost well under that), so $5 covers at least five fixes.</li>
+              <li><b>Billing</b>: add $5 of credit and set a monthly limit. Claude only runs when something fails, so it lasts a long time.</li>
               <li><b>API keys &rarr; Create key</b>, call it <b>My Robot ISA</b>, and copy it (it starts with sk-ant-).</li></ol></details>
             <label class="f" for="sx-cl" id="sx-cl-l">Claude subscription token</label><input class="t" id="sx-cl" type="password" autocomplete="off" spellcheck="false" placeholder="sk-ant-…">
             <div class="row"><button class="btn" type="button" id="sx2-go" disabled>Switch on Claude fixes</button></div>
@@ -735,7 +735,7 @@
 </div>
 
 <script src="mri-seal.js" defer></script>
-<script src="guides.js?v=41"></script>
+<script src="guides.js?v=42"></script>
 <script>
 (function () {
   "use strict";
