@@ -118,22 +118,26 @@
   .faq .fg{margin-top:28px} .faq .fg h2.fgh{margin:0 0 4px;font-family:Anton,Impact,sans-serif;font-size:22px;font-weight:400;letter-spacing:.02em;text-transform:uppercase;color:var(--ink);scroll-margin-top:24px} .faq .fg h2.fgh .p{color:var(--pink)}
   .faq .fg details:last-of-type{border-bottom:1px solid var(--rule)}
   .side ol a .new{float:right;margin-top:1px;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;background:var(--green);color:var(--deep);border-radius:999px;padding:3px 8px;line-height:1.2}
-  .care-two{display:grid;grid-template-columns:1fr;gap:12px;margin:14px 0 6px} @media (min-width:800px){.care-two{grid-template-columns:1fr 1fr}}
-  .care-two .box h3,.care-two .box h2.h3{font-family:Anton,Impact,sans-serif;font-size:22px;font-weight:400;letter-spacing:.02em;text-transform:uppercase;color:var(--ink);margin:0 0 4px} .care-two .box .ck{margin:0 0 10px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
-  .care-two .box ul{padding-left:20px;margin:0} .care-two .box li{margin:6px 0;color:var(--ink)}
-  .care-price{margin:16px 0 0;background:var(--deep2);border:1px solid var(--green);border-radius:18px;padding:16px 18px} .care-price b.big{display:block;font-family:Anton,Impact,sans-serif;font-size:30px;font-weight:400;line-height:1;text-transform:uppercase;color:var(--ink);margin-bottom:4px} .care-price b.big .p{color:var(--pink)} .care-price p{margin:6px 0 0;color:var(--muted)}
-  .care-steps{list-style:none;padding:0;margin:14px 0 8px;display:grid;gap:10px;counter-reset:cs} @media (min-width:900px){.care-steps{grid-template-columns:repeat(4,1fr)}}
-  .care-steps li{counter-increment:cs;background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px 16px}
-  .care-steps b{display:flex;align-items:center;gap:10px;color:var(--green);font-weight:800;font-size:15px;margin-bottom:6px}
-  .care-steps b::before{content:counter(cs);display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--green);color:var(--deep);font-family:Anton,Impact,sans-serif;font-size:15px;flex:none}
-  .care-steps span{display:block;color:var(--ink);font-size:15px;line-height:1.5}
-  .care-row{display:grid;grid-template-columns:1fr;gap:18px;align-items:start;margin:18px 0 6px} @media (min-width:980px){.care-row{grid-template-columns:1fr 1fr;gap:28px}} .care-row .care-rails{margin:0}
   .pghead{margin-bottom:14px}
-  .care-video{margin:0;max-width:560px} .care-video video{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:18px;border:3px solid var(--green);background:var(--deep2)} .care-video p{margin:8px 0 0}
-  .care-list{list-style:none;padding:0;margin:0} .care-list li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;margin:10px 0;color:var(--ink);line-height:1.5}
-  .care-list .ci{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;background:var(--deep);border:2px solid var(--rule);color:var(--muted);font-style:normal;font-weight:800;font-size:16px;flex:none}
-  .care-us .care-list .ci{border-color:var(--green);color:var(--green)} .care-list b{color:var(--ink)}
+  .care .lead{margin-bottom:6px}
+  .care-steps{list-style:none;padding:0;margin:14px 0 0;display:grid;gap:12px;counter-reset:cs} @media (min-width:900px){.care-steps{grid-template-columns:repeat(4,1fr)}}
+  .care-steps li{counter-increment:cs;background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:16px}
+  .care-steps b{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;color:var(--green);font-weight:800;font-size:15px;line-height:1.3;margin-bottom:8px;min-height:40px}
+  .care-steps b::before{content:counter(cs);display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;background:var(--green);color:var(--deep);font-family:Anton,Impact,sans-serif;font-size:15px;flex:none;margin-top:-4px}
+  .care-steps span{display:block;color:var(--ink);font-size:15px;line-height:1.5}
+  .care-row{display:grid;grid-template-columns:1fr;gap:14px;align-items:stretch;margin:14px 0 0} @media (min-width:980px){.care-row{grid-template-columns:1fr 1fr;gap:14px}}
+  .care-video{margin:0} .care-video video{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:18px;border:3px solid var(--green);background:var(--deep2)} .care-video p{margin:8px 0 0}
+  .care-never{background:var(--deep2);border:1px solid var(--rule);border-radius:18px;padding:18px}
+  .care-never h3,.care-never h2.h3{margin:0 0 10px;font-family:Anton,Impact,sans-serif;font-size:22px;font-weight:400;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)} .care-never h3 .p,.care-never h2.h3 .p{color:var(--pink)}
+  .care-list{list-style:none;padding:0;margin:0} .care-two .box ul.care-list,.care-never ul.care-list{padding:0;margin:0}
+  .care-list li{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;margin:8px 0;color:var(--ink);line-height:1.45;font-size:15px}
+  .care-list .ci{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:10px;background:var(--deep);border:2px solid var(--rule);color:var(--muted);font-style:normal;font-weight:800;font-size:15px;flex:none}
+  .care-list .ci.x{border-color:var(--pink);color:var(--pink)} .care-us .care-list .ci{border-color:var(--green);color:var(--green)} .care-list b{color:var(--ink)}
+  .care-never p.small{margin:12px 0 0}
+  .care-two{display:grid;grid-template-columns:1fr;gap:14px;margin:14px 0 0} @media (min-width:800px){.care-two{grid-template-columns:1fr 1fr}}
+  .care-two .box{padding:18px} .care-two .box h3,.care-two .box h2.h3{font-family:Anton,Impact,sans-serif;font-size:22px;font-weight:400;letter-spacing:.02em;text-transform:uppercase;color:var(--ink);margin:0 0 10px} .care-two .box .ck{margin:0 0 4px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
   .care-us{border-color:var(--green)}
+  .care-price{margin:14px 0 0;background:var(--deep2);border:1px solid var(--green);border-radius:18px;padding:18px} .care-price b.big{display:block;font-family:Anton,Impact,sans-serif;font-size:30px;font-weight:400;line-height:1;text-transform:uppercase;color:var(--ink);margin-bottom:6px} .care-price b.big .p{color:var(--pink)} .care-price p{margin:8px 0 0;color:var(--muted)}
   .vs-table.care-table{min-width:0;table-layout:fixed} .care-table tbody th{width:170px} .care-table td{width:auto}
   @media (max-width:600px){.vs-table.care-table{font-size:13px} .care-table tbody th{width:88px;padding-right:8px} .care-table td{padding-right:8px;word-wrap:break-word} .care-table thead th{font-size:11px}}
   .faq details{border-top:1px solid var(--rule);padding:14px 0}
@@ -388,17 +392,28 @@
     <div class="pghead"><img class="pgmark" src="marks/robot-care.png" alt="" width="96" height="96"><h1 class="pg">Robot <span class="p">Care</span></h1></div>
     <p class="lead">Even the best cars need an MOT. Your robot runs in your own GitHub account, on its own schedule, with your own keys, and most weeks it just works. Robot Care is the garage: when something breaks, the fix is written, checked and waiting for your tap by breakfast. Do it yourself with your own Claude, or let us take care of it.</p>
 
-    <h2 class="h3">What happens when a run fails</h2>
+    <h2>What happens <span class="p">when a run fails</span></h2>
     <ol class="care-steps">
       <li><b>It stops safely</b><span>A failed run places nothing. Orders always wait for your approval, so a broken robot is a quiet robot, not a dangerous one.</span></li>
       <li><b>It raises its hand</b><span>Your copy opens one issue, <em>Robot run failed</em>, with the run log. GitHub's own notification is your alert.</span></li>
       <li><b>Claude writes the fix</b><span>Claude reads the log and the files involved, works out the smallest change that mends it, and opens a pull request in your repo with the reason in plain words.</span></li>
       <li><b>You tap merge</b><span>Nothing changes until you merge it, from your phone, in a minute. If it's a key or account problem, you get a comment saying exactly what to do instead.</span></li>
     </ol>
-    <div class="care-row"><div class="care-video"><video controls playsinline preload="metadata" poster="care-poster.jpg" width="960" height="540" aria-label="When a run fails: what happens, start to finish, in a minute and a half"><source src="clips/robot-care-fails.mp4?v=2" type="video/mp4">Your browser can't play this clip.</video><p class="small">Watch it happen, start to finish: 87 seconds. Example data, nothing here is a real account.</p></div>
-    <p class="small care-rails">The fix is held to the same rails as everything else in the kit: it can never touch your keys, your money settings, <code>ORDER_MODE</code>, <code>T212_ENV</code>, the schedules or anything that places orders. It changes at most four files and eighty lines, and it never weakens a safety rail (the halt, the drawdown stop, the position cap, the stale-data check). A fix that would is refused before you ever see it.</p></div>
+    <div class="care-row">
+      <div class="care-video"><video controls playsinline preload="metadata" poster="care-poster.jpg" width="960" height="540" aria-label="When a run fails: what happens, start to finish, in a minute and a half"><source src="clips/robot-care-fails.mp4?v=3" type="video/mp4">Your browser can't play this clip.</video><p class="small">Watch it happen, start to finish: 87 seconds. Example data, nothing here is a real account.</p></div>
+      <div class="care-never">
+        <h2 class="h3">A fix can <span class="p">never</span> touch</h2>
+        <ul class="care-list">
+          <li><i class="ci x" aria-hidden="true">&#215;</i><span>Your keys, or any secret</span></li>
+          <li><i class="ci x" aria-hidden="true">&#215;</i><span>Your money settings: <code>ORDER_MODE</code>, <code>T212_ENV</code>, the risk profile</span></li>
+          <li><i class="ci x" aria-hidden="true">&#215;</i><span>Anything that places orders, or the schedules</span></li>
+          <li><i class="ci x" aria-hidden="true">&#215;</i><span>A safety rail: the halt, the drawdown stop, the position cap, the stale-data check</span></li>
+        </ul>
+        <p class="small">At most four files and eighty lines. The same rails hold whichever route you choose, and a fix that would break one is refused before you ever see it.</p>
+      </div>
+    </div>
 
-    <h2 class="h3">Two ways to have it</h2>
+    <h2>Two ways <span class="p">to have it</span></h2>
     <div class="care-two">
       <div class="box">
         <p class="ck">Do it yourself</p>
@@ -430,7 +445,7 @@
       <p>Why not free for everyone? Each fix is a Claude run we pay for. We'd rather keep the price low enough that anyone can have it than bury it in a bigger ticket. Updates to the kit itself (new brokers, improvements, new lessons) are separate and come with your 12 months of updates either way.</p>
     </div>
 
-    <h2 class="h3">Which one is for you?</h2>
+    <h2>Which one <span class="p">is for you?</span></h2>
     <div class="vs-wrap" tabindex="0" role="region" aria-label="Comparison of your own Claude and Robot Care, scrolls sideways on small screens">
     <table class="vs-table care-table">
       <caption class="vh">Your own Claude compared with Robot Care</caption>
