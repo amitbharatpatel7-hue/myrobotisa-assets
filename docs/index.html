@@ -4,18 +4,18 @@
 <meta charset="utf-8">
 <script>/* 23 Oct 2026: GitHub sign-in for Set up my robot lands here if the OAuth callback is the homepage; pass it to the members area */(function(){var q=location.search;if(/[?&]code=/.test(q)&&/[?&]state=/.test(q))location.replace("/members/"+q+"#setup");})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My Robot I.S.A. — Build your own robot ISA in 14 days</title>
+<title>My Robot I.S.A. — Build your own robot ISA in 30 minutes</title>
 <meta name="description" content="Build your own robot ISA: the code for a rules-based stocks and shares ISA system, 14 short lessons and a dashboard. Free test drive in December; £99 for the first 100.">
 <link rel="canonical" href="https://myrobotisa.com/">
-<meta property="og:title" content="Build your own robot ISA in 14 days">
-<meta property="og:description" content="We take the Ls. You take the lessons. Free test drive in December; £99 for the first 100 in January 2027, then £199.">
+<meta property="og:title" content="Build your own robot ISA in 30 minutes">
+<meta property="og:description" content="It does the work. You keep control. Free test drive in December; £99 for the first 100 in January 2027, then £199.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://myrobotisa.com/">
 <meta property="og:site_name" content="My Robot I.S.A.">
 <meta property="og:image" content="https://myrobotisa.com/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="My Robot I.S.A.: We take the Ls. You take the lessons.">
+<meta property="og:image:alt" content="My Robot I.S.A.: It does the work. You keep control.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://myrobotisa.com/og.jpg">
 <meta name="theme-color" content="#34003B">
@@ -33,7 +33,7 @@
   html,body{margin:0;background:var(--deep);color:var(--ink);font-family:Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
   a{color:var(--green)}
   .wrap{max-width:760px;margin:0 auto;padding:0 20px}
-  header{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+  header{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:20px 0}
   .handle{color:var(--muted);font-weight:500;font-size:15px;text-decoration:none;display:inline-flex;align-items:center;min-height:34px}
   .pw{display:contents}
   .pf[hidden],.ps[hidden],.places[hidden],.tag[hidden]{display:none!important}
@@ -361,11 +361,11 @@
 <main id="main">
   <section class="hero">
     <div>
-      <h1>Build your own <span class="p">robot ISA</span> in 14 days</h1>
-      <p class="promise">We take the Ls. <span class="g">You take the lessons.</span></p>
-      <p class="line">Your stocks and shares ISA, run by tested rules in code: the robot proposes each week's trades, you approve them in under a minute.</p>
+      <h1>Build your own <span class="p">robot ISA</span> in 30 minutes</h1>
+      <p class="promise">It does the work. <span class="g">You keep control.</span></p>
+      <p class="line">A robot runs your Stocks and Shares ISA by rules tested on six years of real market data. Every Sunday it plans the trades; you approve them from your phone in under a minute.</p>
       <ul class="proof">
-        <li><b>30 minutes</b> to your first paper trade, then 14 days at your own pace</li>
+        <li><b>30 minutes</b> to your robot running on practice money (about 10 if you already have GitHub, Trading 212 and Resend), then 14 short lessons at your own pace</li>
         <li><b>Tested</b> on real market data from 2020 to 2026, through the Covid crash, the 2022 bear market and the 2025 tariff drop. <a href="#tested" style="color:var(--green);font-weight:700">See what it went through</a></li>
         <li><b>Live</b> with the founder's own money, in an ISA</li>
       </ul>
@@ -702,7 +702,7 @@
 <script>
 // 22 Oct 2026: signed-in members see "Members area" instead of "Log in" in the header (the side menu stays the site's; Amit, 23 Oct).
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
-var l=document.querySelector("a.login");if(l){l.textContent="Members area";l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
+var l=document.querySelector("a.login");if(l){l.innerHTML="Members<span class=\"t-long\"> area</span>";l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
 </script>
 </body>
 </html>
