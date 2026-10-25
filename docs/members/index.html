@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="60">
+<meta name="mri-version" content="61">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -410,7 +410,7 @@
       </div>
       <div class="msg" id="si-msg" role="status" aria-live="polite"></div>
     </div>
-    <p class="small" style="text-align:center;margin-top:16px">Not a member yet? <a href="../#join" style="font-weight:700">Get the free test drive</a> · <a href="../">myrobotisa.com</a></p>
+    <p class="small" style="text-align:center;margin-top:16px">Not a member yet? <a href="../join.html#join" style="font-weight:700">Get the free test drive</a> · <a href="../">myrobotisa.com</a></p>
   </main>
 
   <!-- HOME -->
@@ -734,13 +734,13 @@
     <div class="card">
       <h1>Not a <span class="p">member</span> yet</h1>
       <p class="lede">You're signed in as <b id="nm-email"></b>, but that email isn't on a membership. Bought with a different email? Sign out and use that one.</p>
-      <div class="row"><a class="btn" href="../#join">Get the free test drive</a><button class="btn ghost" type="button" id="nm-out">Sign out</button></div>
+      <div class="row"><a class="btn" href="../join.html#join">Get the free test drive</a><button class="btn ghost" type="button" id="nm-out">Sign out</button></div>
     </div>
   </main>
 </div>
 
 <script src="mri-seal.js" defer></script>
-<script src="guides.js?v=42"></script>
+<script src="guides.js?v=43"></script>
 <script>
 (function () {
   "use strict";
@@ -752,12 +752,12 @@
   var fmtDate = function (d) { return d ? new Date(d + (d.length === 10 ? "T12:00:00Z" : "")).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : "—"; };
 
   var QS = [
-    ["Copy the code", "3 min", "Create a free GitHub account, then press Use this template to make your own private copy."],
-    ["Your Trading 212 key, practice account first", "8 min", "Turn on the API in Trading 212's practice account, create a key and paste it into your copy's secrets. Real orders stay off."],
+    ["Connect GitHub", "5 min", "Create a free GitHub account, then press Connect GitHub in Set up my robot: your own private copy of the robot is made for you."],
+    ["Your Trading 212 key, practice account first", "8 min", "Turn on the API in Trading 212's practice account, create a key and paste it into Set up my robot. Real orders stay off."],
     ["Your email key", "5 min", "A free Resend account and an API key. No domain needed: reports come to your own inbox."],
-    ["Run the setup check", "5 min", "It lists anything missing in plain words, then makes your first paper trade and sends your first report."],
-    ["Optional extras", "5 min", "Robot Care (free for your first year as a founding member), or your own Claude for fixes, and error alerts with a free Sentry account."],
-    ["Your app on your phone, Mac or PC", "10 min", "A free Cloudflare account and a read-only broker key. Then add it to your home screen or Dock."]
+    ["Pick how bold, press Build", "5 min", "Cautious, balanced or adventurous, then Build my robot. The setup check lists anything missing in plain words, makes your first paper trade and sends your first report."],
+    ["Optional extras", "3 min", "Robot Care (free for your first year as a founding member), or your own Claude for fixes, and error alerts with a free Sentry account."],
+    ["Your app on your phone, Mac or PC", "4 min", "Open your own dashboard link, sign in, then add it to your home screen or Dock."]
   ];
   var LESSONS = [
     ["Rules, not tips", "What a robot ISA is and isn't; writing rules down so a machine can follow them"],
