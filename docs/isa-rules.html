@@ -718,7 +718,7 @@
 <script>
 // 22 Oct 2026: signed-in members see "Members area" instead of "Log in" in the header (the side menu stays the site's; Amit, 23 Oct).
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
-var l=document.querySelector("a.login");if(l){l.textContent="Members area";l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
+var l=document.querySelector("a.login");if(l){l.innerHTML="<span>Members<span class=\"t-long\"> area</span></span>";l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
 </script>
 </body>
 </html>
