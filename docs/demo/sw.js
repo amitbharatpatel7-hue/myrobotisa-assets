@@ -2,7 +2,7 @@
 // 22 Oct 2026: pages, data.js and version.json are fetched with a throwaway query so neither the browser nor GitHub's
 // CDN can hand back an older copy straight after an update; only this folder's own files are touched; and old caches
 // are cleared by name (the earlier version also deleted the members app's cache on the same site).
-const C = "mri-demo-v27"; // bump with version.json and the mri-version meta in index.html
+const C = "mri-demo-v28"; // bump with version.json and the mri-version meta in index.html
 const FILES = ["./", "index.html", "data.js", "manifest.webmanifest", "icon-192.png", "icon-512.png", "apple-touch-icon.png"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(C).then(c => c.addAll(FILES.map(u => new Request(u, { cache: "reload" })))).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k.startsWith("mri-demo-") && k !== C).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
