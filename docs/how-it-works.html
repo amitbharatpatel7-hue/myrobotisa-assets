@@ -127,6 +127,15 @@
   .care-steps b{display:flex;align-items:center;gap:10px;color:var(--green);font-weight:800;font-size:15px;margin-bottom:6px}
   .care-steps b::before{content:counter(cs);display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--green);color:var(--deep);font-family:Anton,Impact,sans-serif;font-size:15px;flex:none}
   .care-steps span{display:block;color:var(--ink);font-size:15px;line-height:1.5}
+  .care-row{display:grid;grid-template-columns:1fr;gap:18px;align-items:start;margin:18px 0 6px} @media (min-width:980px){.care-row{grid-template-columns:1fr 1fr;gap:28px}} .care-row .care-rails{margin:0}
+  .pghead{margin-bottom:14px}
+  .care-video{margin:0;max-width:560px} .care-video video{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:18px;border:3px solid var(--green);background:var(--deep2)} .care-video p{margin:8px 0 0}
+  .care-list{list-style:none;padding:0;margin:0} .care-list li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;margin:10px 0;color:var(--ink);line-height:1.5}
+  .care-list .ci{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;background:var(--deep);border:2px solid var(--rule);color:var(--muted);font-style:normal;font-weight:800;font-size:16px;flex:none}
+  .care-us .care-list .ci{border-color:var(--green);color:var(--green)} .care-list b{color:var(--ink)}
+  .care-us{border-color:var(--green)}
+  .vs-table.care-table{min-width:0;table-layout:fixed} .care-table tbody th{width:170px} .care-table td{width:auto}
+  @media (max-width:600px){.vs-table.care-table{font-size:13px} .care-table tbody th{width:88px;padding-right:8px} .care-table td{padding-right:8px;word-wrap:break-word} .care-table thead th{font-size:11px}}
   .faq details{border-top:1px solid var(--rule);padding:14px 0}
   .faq details:last-of-type{border-bottom:1px solid var(--rule)}
   .faq summary{cursor:pointer;font-weight:700;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
