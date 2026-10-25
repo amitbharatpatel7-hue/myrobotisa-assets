@@ -189,7 +189,7 @@ li.done .qn{background:var(--brand-green);color:#1C0A21}
 .qt small{font-weight:600;color:var(--muted);margin-left:6px}
 .qd{grid-column:2/3;color:var(--muted);font-size:14px}
 .qd ul{margin:6px 0 0;padding-left:18px}
-.qv{grid-column:2/3;font-size:13px;color:var(--gain);font-weight:700;margin-top:4px}
+.qv{grid-column:2/3;font-size:13px;color:var(--gain);font-weight:700;margin-top:4px} .qv summary{cursor:pointer;list-style:none} .qv summary::before{content:'\25B8  '} .qv details[open] summary::before{content:'\25BE  '} .qv video{display:block;width:100%;max-width:560px;margin-top:8px;border-radius:12px;border:2px solid var(--brand-green);background:#000}
 ol.qs .btn{min-height:40px;padding:6px 12px;font-size:13px}
 @media (max-width:560px){ol.qs>li{grid-template-columns:36px 1fr}.qb{grid-column:2/3}}
 ul.checks{list-style:none;padding:0;margin:14px 0 0}
@@ -343,9 +343,9 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
     <li><a href="../isa-rules.html">ISA rules</a></li>
     <li><a href="../questions.html">Questions</a></li>
   </ol>
-  <div id="installbox" data-install role="button" tabindex="0" aria-label="Put it on your phone, Mac or PC: install the app">
-    <b>Put it on your phone, Mac or PC</b>
-    <span id="installhow">Install it like an app: no App Store, nothing to download.</span>
+  <div id="installbox" data-install role="button" tabindex="0" aria-label="Try the demo as an app on your phone, Mac or PC">
+    <b>Try the demo as an app</b>
+    <span id="installhow">Your own dashboard installs the same way: no App Store, nothing to download.</span>
     <button id="installbtn" type="button" tabindex="-1">Install the app</button>
   </div>
 </aside>
@@ -417,7 +417,7 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
     <header class="qs-hero">
       <p class="qs-tag">QuickStart</p>
       <h1>Your first <span>paper trade</span> in about 30 minutes</h1>
-      <p>Five steps, one screen each, each with a short video. Tick them off as you go. The setup check at the end tells you exactly what's missing.</p>
+      <p>Six short steps, the same ones as <b>Set up my robot</b> in the members area, each with a one-minute video. Tick them off as you go; about 20 minutes, under 10 if you already have GitHub and Trading 212.</p>
     </header>
     <section class="card">
       <div class="qbar" aria-hidden="true"><i id="qfill"></i></div>
@@ -690,21 +690,23 @@ function showWeek(id){
 
 // ---- quickstart walkthrough (demo: nothing is created)
 const QS=[
-  ["Copy the code","3 min",["Create a free GitHub account if you haven't got one","Press <b>Use this template</b> to make your own private copy"]],
-  ["Your Trading 212 key, practice account first","8 min",["Turn on the API in Trading 212's practice account and create a key","Paste it into your copy's secrets with the one-line helper. Real orders stay off"]],
-  ["Your email key","5 min",["Create a free Resend account and an API key","Paste it in the same way. No domain needed: reports come to your own inbox"]],
-  ["Optional extras","5 min",["Error alerts with a free Sentry account","Claude fixing failed runs for you, if you have a Claude subscription"]],
-  ["Install the app on your phone, Mac or PC","2 min",["Open your private dashboard link and sign in with the code emailed to you","Phone: Share, then Add to Home Screen. Mac: Safari's File menu, then Add to Dock. PC: Install in Chrome or Edge"]]
+  ["Connect GitHub","2 min",["Press <b>Connect GitHub</b> in Set up my robot. GitHub asks once if My Robot I.S.A. can use your account","Your private copy of the robot is made for you: named, locked to you, nothing to download"],"qs-01-copy-the-code"],
+  ["Your Trading 212 key, practice account first","5 min",["In the Trading 212 app, switch to Practice and generate an API key","Paste it into Set up my robot. Real orders stay off until you choose"],"qs-02-broker-key"],
+  ["Your email key","3 min",["Create a free Resend account and an API key","Paste it into Set up my robot. Reports come to your own inbox"],"qs-03-email-key"],
+  ["Pick how bold, press Build","2 min",["Cautious, balanced or adventurous: one choice, changeable later","Press <b>Build my robot</b>. The setup check tells you exactly what's missing"],"qs-04-setup-check"],
+  ["Optional extras","3 min",["Robot Care: when a run fails, the fix is waiting for your tap. <a href=\"../robot-care.html\">A year free for founding members</a>","Or your own Claude for fixes, and error alerts with a free Sentry account"],"qs-05-optional-extras"],
+  ["Put it on your phone, Mac or PC","2 min",["Open your own dashboard link and sign in with the code emailed to you","Phone: Share, then Add to Home Screen. Mac: File, then Add to Dock. PC: Install in Chrome or Edge"],"qs-06-your-app"]
 ];
+
 let qdone=new Set();
 function renderQS(){
-  $("qsteps").innerHTML=QS.map(([t,mins,pts],i)=>`<li class="${qdone.has(i)?'done':''}"><span class="qn">${qdone.has(i)?'✓':i+1}</span><div class="qt">${t}<small>${mins}</small></div><div class="qb"><button class="btn${qdone.has(i)?'':' go'}" type="button" data-q="${i}">${qdone.has(i)?'Undo':'Mark done'}</button></div><div class="qd"><ul>${pts.map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="qv">Video for this step coming soon</div></li>`).join("");
+  $("qsteps").innerHTML=QS.map(([t,mins,pts],i)=>`<li class="${qdone.has(i)?'done':''}"><span class="qn">${qdone.has(i)?'✓':i+1}</span><div class="qt">${t}<small>${mins}</small></div><div class="qb"><button class="btn${qdone.has(i)?'':' go'}" type="button" data-q="${i}">${qdone.has(i)?'Undo':'Mark done'}</button></div><div class="qd"><ul>${pts.map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="qv"><details><summary>Watch this step (about a minute)</summary><video controls playsinline preload="none" poster="" src="../members/video-7b085e8e0a/${QS[i][3]}.mp4"></video></details></div></li>`).join("");
   $("qsteps").querySelectorAll("button[data-q]").forEach(b=>b.addEventListener("click",()=>{const i=+b.dataset.q; qdone.has(i)?qdone.delete(i):qdone.add(i); renderQS();}));
   $("qfill").style.width=(qdone.size/QS.length*100)+"%";
   $("qcount").textContent=`${qdone.size} of ${QS.length} steps done · about ${QS.reduce((s,q,i)=>s+(qdone.has(i)?0:parseInt(q[1])),0)} minutes left`;
 }
 $("qrun").addEventListener("click",()=>{
-  const L=[["✓","GitHub copy found, private","up"],["✓","Broker key works · practice account · read and trade allowed","up"],["✓","Email key works · a test email went to you@example.com","up"],["–","Error alerts: optional, skipped","tag"],["–","Claude auto-fix: optional, skipped","tag"],["✓","Real orders are off (practice money)","up"],["✓","First paper trade placed: Global shares fund, £50, filled","up"],["✓","First daily report sent. You're set up.","up"]];
+  const L=[["✓","GitHub copy found, private","up"],["✓","Broker key works · practice account · read and trade allowed","up"],["✓","Email key works · a test email went to you@example.com","up"],["–","Error alerts: optional, skipped","tag"],["–","Robot Care or your own Claude: optional, skipped","tag"],["✓","Real orders are off (practice money)","up"],["✓","First paper trade placed: Global shares fund, £50, filled","up"],["✓","First daily report sent. You're set up.","up"]];
   const ul=$("qchecks"); ul.innerHTML=""; $("qrun").disabled=true;
   L.forEach((r,i)=>setTimeout(()=>{ ul.insertAdjacentHTML("beforeend",`<li><span class="ic ${r[2]}">${r[0]}</span><span>${r[1]}</span></li>`); if(i===L.length-1){ $("qrun").disabled=false; $("qrun").textContent="Run it again"; } },350*(i+1)));
 });
