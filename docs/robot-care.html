@@ -127,6 +127,12 @@
   .care-steps b{display:flex;align-items:center;gap:10px;color:var(--green);font-weight:800;font-size:15px;margin-bottom:6px}
   .care-steps b::before{content:counter(cs);display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--green);color:var(--deep);font-family:Anton,Impact,sans-serif;font-size:15px;flex:none}
   .care-steps span{display:block;color:var(--ink);font-size:15px;line-height:1.5}
+  .care-list{list-style:none;padding:0;margin:0} .care-list li{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:start;margin:10px 0;color:var(--ink);line-height:1.5}
+  .care-list .ci{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;background:var(--deep);border:2px solid var(--rule);color:var(--muted);font-style:normal;font-weight:800;font-size:16px;flex:none}
+  .care-us .care-list .ci{border-color:var(--green);color:var(--green)} .care-list b{color:var(--ink)}
+  .care-us{border-color:var(--green)}
+  .vs-table.care-table{min-width:0;table-layout:fixed} .care-table tbody th{width:170px} .care-table td{width:auto}
+  @media (max-width:600px){.vs-table.care-table{font-size:13px} .care-table tbody th{width:88px;padding-right:8px} .care-table td{padding-right:8px;word-wrap:break-word} .care-table thead th{font-size:11px}}
   .faq details{border-top:1px solid var(--rule);padding:14px 0}
   .faq details:last-of-type{border-bottom:1px solid var(--rule)}
   .faq summary{cursor:pointer;font-weight:700;font-size:17px;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center}
@@ -377,7 +383,7 @@
 <main id="main">
   <section class="care" id="care">
     <div class="pghead"><img class="pgmark" src="marks/robot-care.png" alt="" width="96" height="96"><h1 class="pg">Robot <span class="p">Care</span></h1></div>
-    <p class="lead">Your robot runs in your own GitHub account, on its own schedule, with your own keys. Robot Care is what looks after it when something breaks: a fix, written and checked, waiting for your tap. You can run the same thing yourself with your own Claude account, or let us take care of it.</p>
+    <p class="lead">Even the best cars need an MOT. Your robot runs in your own GitHub account, on its own schedule, with your own keys, and most weeks it just works. Robot Care is the garage: when something breaks, the fix is written, checked and waiting for your tap by breakfast. Do it yourself with your own Claude, or let us take care of it.</p>
 
     <h2 class="h3">What happens when a run fails</h2>
     <ol class="care-steps">
@@ -393,40 +399,52 @@
       <div class="box">
         <p class="ck">Do it yourself</p>
         <h2 class="h3">Your own Claude</h2>
-        <ul>
-          <li>Built into every copy. Add one secret to your repo (a Claude Console API key, or a token from a Claude Pro, Max or Team plan) and it's on.</li>
-          <li>Claude runs on your account and your GitHub Actions minutes. An API key is capped at $1 a fix; most fixes cost well under that.</li>
-          <li>You can also reply <code>@claude</code> on any issue in your repo and talk it through.</li>
-          <li>Switch it off by deleting the secret. Free from us; you pay Claude directly.</li>
+        <ul class="care-list">
+          <li><i class="ci" aria-hidden="true">1</i><span><b>Built into every copy.</b> Add one secret to your repo (a Claude Console API key, or a token from a Claude Pro, Max or Team plan) and it's on.</span></li>
+          <li><i class="ci" aria-hidden="true">2</i><span><b>You pay Claude, not us.</b> Claude bills your account for what it uses: a few pence for most fixes, never more than $1 each. Plus your GitHub Actions minutes.</span></li>
+          <li><i class="ci" aria-hidden="true">3</i><span><b>Talk to it.</b> Reply <code>@claude</code> on any issue in your repo and work the problem through together.</span></li>
+          <li><i class="ci" aria-hidden="true">4</i><span><b>We'll help you set it up.</b> The QuickStart in the members area walks you through it, with the tools to do it in a few minutes. Delete the secret and it's off.</span></li>
         </ul>
       </div>
-      <div class="box">
+      <div class="box care-us">
         <p class="ck">Done for you</p>
         <h2 class="h3">Robot Care</h2>
-        <ul>
-          <li>Nothing to set up and no Claude account needed. Install the Robot Care app on your repo from the members area, in one tap. We pay for Claude.</li>
-          <li>Every fix is checked against the rails on our side before the pull request is opened, by the same code that runs our own robot.</li>
-          <li>We see what breaks across every robot, so a fix found for one member goes into the next update for everyone.</li>
-          <li>A fix is waiting by breakfast whether you're at work, asleep or on holiday. Up to 3 fixes a day and 15 a month, which is far more than a healthy robot needs.</li>
-          <li>Still yours, still your tap. We never see your keys (GitHub doesn't show them to anyone, and the app doesn't ask), and nothing merges without you.</li>
+        <ul class="care-list">
+          <li><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span><b>Nothing to set up.</b> No Claude account, no key, no bill from anyone else. Install the Robot Care app on your repo from the members area in one tap. We pay for Claude.</span></li>
+          <li><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span><b>Checked before you see it.</b> Every fix is run against the rails on our side, by the same code that looks after our own robot, before the pull request is opened.</span></li>
+          <li><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span><b>A hundred robots' worth of experience.</b> We watch what breaks across every robot we look after, so a problem seen before is mended in yours in minutes, not worked out from scratch.</span></li>
+          <li><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span><b>Hands free.</b> A fix is waiting by breakfast whether you're at work, asleep or on holiday. If a robot keeps failing, a person looks at it.</span></li>
+          <li><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span><b>Still yours, still your tap.</b> We never see your keys (GitHub doesn't show them to anyone, and the app doesn't ask) and nothing merges without you.</span></li>
         </ul>
       </div>
     </div>
 
     <div class="care-price">
-      <b class="big">Free for the <span class="p">first 100</span> founding members</b>
-      <p>After that, Robot Care is <strong style="color:var(--ink)">£10 a month</strong>, cancel any time. The £10 covers what each fix costs us in Claude usage and the checking around it; it isn't a fee for running your robot, which stays in your own account and costs you nothing extra from us.</p>
-      <p>Updates to the kit itself (new brokers, improvements, new lessons) are separate: they come with your 12 months of updates whether or not you have Robot Care.</p>
+      <b class="big">&#163;10 a month. <span class="p">Flat.</span></b>
+      <p><strong style="color:var(--ink)">Free for the first 100 founding members.</strong> After that, &#163;10 a month, cancel any time: less than boiler cover, for a robot that works with your money.</p>
+      <p>Based on our own robot's record (38 scheduled runs since September, none failed) and what a fix costs us (pennies to a pound of Claude), &#163;10 covers a healthy robot many times over. If yours needs more in a month, we take the cost. <strong style="color:var(--ink)">We never charge more than &#163;10.</strong></p>
+      <p>Why not free for everyone? Each fix is a Claude run we pay for. We'd rather keep the price low enough that anyone can have it than bury it in a bigger ticket. Updates to the kit itself (new brokers, improvements, new lessons) are separate and come with your 12 months of updates either way.</p>
     </div>
 
-    <h2 class="h3">Straight answers</h2>
-    <ul class="not">
-      <li><strong>Who maintains the robot?</strong> The code is yours and runs in your account; nobody runs it for you. Robot Care mends it when a run fails, and the kit updates keep it current. Day to day there's nothing to maintain: it runs on a schedule and emails you.</li>
-      <li><strong>Why does it cost anything?</strong> Each fix is a Claude run, which costs tokens, and we cap it at $1 a fix. Founding members get it free so we can learn from a hundred real robots; after that £10 a month keeps it paid for.</li>
-      <li><strong>What it can't do.</strong> It can't fix an expired Trading 212 key, an empty account or a bank holiday: those aren't code. It tells you what to do instead. And it never decides what to buy or sell; that's the rules, and you.</li>
-      <li><strong>Can I have both?</strong> Yes. Robot Care handles failed runs; your own Claude secret adds <code>@claude</code> conversations on issues. If you hit a Robot Care cap, your own Claude takes over.</li>
-    </ul>
-    <p class="small">Robot Care is software support, not financial advice. A fix mends code; it can't make a system profitable, and investing puts your capital at risk.</p>
+    <h2 class="h3">Which one is for you?</h2>
+    <div class="vs-wrap" tabindex="0" role="region" aria-label="Comparison of your own Claude and Robot Care, scrolls sideways on small screens">
+    <table class="vs-table care-table">
+      <caption class="vh">Your own Claude compared with Robot Care</caption>
+      <thead><tr><th scope="col"></th><th scope="col">Your own Claude</th><th scope="col">Robot Care</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Setting up</th><td>Make a Claude account, create a key, add it as a secret<span>about 10 minutes with the QuickStart</span></td><td><i class="y">One tap</i><span>from the members area</span></td></tr>
+        <tr><th scope="row">Who pays for Claude</th><td>You<span>a few pence a fix, capped at $1</span></td><td><i class="y">We do</i></td></tr>
+        <tr><th scope="row">What you pay</th><td>Your Claude usage</td><td><i class="y">&#163;10 a month</i><span>free for the first 100 founding members</span></td></tr>
+        <tr><th scope="row">When a run fails</th><td>A pull request from your Claude</td><td>A pull request, checked by us first</td></tr>
+        <tr><th scope="row">Learns from other robots</th><td><i class="n">No</i><span>yours only</span></td><td><i class="y">Yes</i><span>every robot we look after</span></td></tr>
+        <tr><th scope="row">Someone keeping an eye</th><td><i class="n">No</i><span>that's you</span></td><td><i class="y">Yes</i><span>a person, if it keeps failing</span></td></tr>
+        <tr><th scope="row">Chat with Claude on an issue</th><td><i class="y">Yes</i><span>reply @claude</span></td><td><i class="n">Not on its own</i><span>add your own Claude too and you have both</span></td></tr>
+        <tr><th scope="row">Your keys, your money settings</th><td><i class="y">Never touched</i></td><td><i class="y">Never touched</i></td></tr>
+        <tr><th scope="row">Nothing changes without you</th><td><i class="y">Yes</i></td><td><i class="y">Yes</i></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="small vs-note">What neither can do: fix an expired Trading 212 key, an empty account or a bank holiday. Those aren't code, so you get a plain-words comment saying what to do. Neither decides what to buy or sell; that's the rules, and you. Robot Care is software support, not financial advice, and investing puts your capital at risk.</p>
   </section>
 
 
