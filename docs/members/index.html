@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="55">
+<meta name="mri-version" content="56">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -620,7 +620,7 @@
             <div class="row"><button class="btn" type="button" id="sx1-go" disabled>Switch on error alerts</button></div>
             <p class="small" id="sx1-msg" role="status" aria-live="polite">Build your robot first; then the extras can go into your copy.</p></li>
           <li class="su-step locked" id="sx2"><div class="su-h"><b>Claude fixes failed runs</b><span class="pill o" id="sx2-st">Paid Claude</span></div>
-            <p>When a run fails, Claude reads what went wrong and suggests a fix for you to approve. It never changes your money settings. <b>The free Claude plan can't do this</b>: you need Claude Pro or Max, or a little Claude API credit (pay per fix, no subscription).</p>
+            <p>When a run fails, Claude reads what went wrong and suggests a fix for you to approve. It never changes your money settings. <b>The free Claude plan can't do this</b>: you need Claude Pro or Max, or a little Claude API credit (pay per fix, no subscription). <a href="#guide/qs-claude">Step-by-step guide, about 10 minutes</a>. Or let <a href="../robot-care.html">Robot Care</a> do it with our Claude: a year free for founding members, one tap here once it opens.</p>
             <div class="su-seg" data-k="cl"><button type="button" data-v="sub" aria-pressed="true">I have Claude Pro or Max<small>uses your plan</small></button><button type="button" data-v="api" aria-pressed="false">I don't<small>pay per fix, capped at $1 each</small></button></div>
             <details id="sx2-sub"><summary>Where do I find this?</summary><ol>
               <li>You need Claude Code on a computer once (it comes with Pro and Max).</li>
@@ -735,7 +735,7 @@
 </div>
 
 <script src="mri-seal.js" defer></script>
-<script src="guides.js?v=40"></script>
+<script src="guides.js?v=41"></script>
 <script>
 (function () {
   "use strict";
@@ -1733,7 +1733,7 @@
     $("gd-bar").style.width = (ticked / total * 100) + "%";
     $("gd-count").textContent = ticked === total ? "All " + total + " steps done." : ticked + " of " + total + " steps done";
     var isDone = !!done[gkey(id, n)];
-    var ORDER = ["qs-1","qs-2","qs-3","qs-4","qs-5","qs-6","day-1","day-2","day-3","day-4","day-5","day-6","day-7","day-8","day-9","day-10","day-11","day-12","day-13","day-14"];
+    var ORDER = ["qs-1","qs-2","qs-3","qs-4","qs-5","qs-claude","qs-6","day-1","day-2","day-3","day-4","day-5","day-6","day-7","day-8","day-9","day-10","day-11","day-12","day-13","day-14"];
     var nextId = ORDER[ORDER.indexOf(id) + 1], nextG = nextId && GUIDES[nextId], backHref = id.indexOf("qs-") === 0 ? ((me && me.preview_videos) ? "#setup" : "#start") : "#lessons", backLabel = id.indexOf("qs-") === 0 ? ((me && me.preview_videos) ? "Back to Set up my robot" : "Back to Start here") : "Back to all lessons";
     if (ticked === total && gcur.celebrate) {
       $("gd-step").innerHTML = '<div class="gd-step gd-done"><div class="sn" style="color:var(--green)">All ' + total + ' steps done</div><h3>' + esc(g.kind) + ' finished &#10003;</h3>' +
