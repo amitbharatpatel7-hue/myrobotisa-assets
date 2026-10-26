@@ -8,10 +8,11 @@
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
 <meta name="mri-version" content="70">
-<!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
+<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
 <script>
 // Running as the installed app? Any of: launched from the app's start link (?app=1), an app display mode, or iOS's flag.
 (function () {
@@ -476,16 +477,16 @@
       </section>
 
       <section class="card" aria-labelledby="h-app" data-page="home">
-        <h2 id="h-app">Your dashboard, <span class="g">as an app</span></h2>
-        <p class="lede">One app on your phone, Mac or PC: your dashboard, for quick access to your numbers. It opens in its own window like any app, with no App Store. This members area stays in your browser.</p>
+        <h2 id="h-app">Your app, <span class="g">every screen</span></h2>
+        <p class="lede">Put this members area, and later your own dashboard, on your phone, Mac or PC. It opens in its own window like any app, with no App Store.</p>
         <div class="devices" id="devices">
           <div class="dev" data-dev="phone" data-install role="button" tabindex="0"><b>Phone</b>iPhone: the menu button by the address (☰ or ⋯), then Share, then Add to Home Screen. Android: menu, then Install app.</div>
           <div class="dev" data-dev="mac" data-install role="button" tabindex="0"><b>Mac</b>Safari: File, then Add to Dock. Chrome: the install icon in the address bar.</div>
           <div class="dev" data-dev="pc" data-install role="button" tabindex="0"><b>Windows PC</b>Chrome or Edge: the install icon in the address bar, then Install.</div>
         </div>
-        <div class="row"><button class="btn" id="b-install" type="button" data-install>Install my dashboard</button></div>
+        <div class="row"><button class="btn" id="b-install" type="button" data-install>Install the app</button></div>
         <p class="small" id="installed" hidden style="margin:12px 0 0;color:var(--green);font-weight:700">You're using the installed app.</p>
-        <p class="small" style="margin:12px 0 0">No dashboard yet? Set it up in <a href="#setup">Set up my robot</a> first. Signing in to the app uses the same emailed code, and Face ID or Touch ID where your device has it.</p>
+        <p class="small" style="margin:12px 0 0">Signing in inside the app uses the same emailed code: the app keeps its own sign-in, separate from your browser.</p>
       </section>
 
       <section class="card wide" aria-labelledby="h-les" data-page="lessons">
@@ -678,9 +679,9 @@
             <div class="row"><button class="btn" type="button" id="sx2-go" disabled>Switch on Claude fixes</button></div>
             <p class="small" id="sx2-msg" role="status" aria-live="polite"></p>
             <p class="small">Each fix also uses a few GitHub minutes. To switch it off, delete the key from your copy's Settings &rarr; Secrets.</p></li>
-          <li class="su-step" id="sx3"><div class="su-h"><b>Your dashboard on your phone, Mac or PC</b><span class="pill o" id="sx3-st">Optional</span></div>
-            <p>One click puts your dashboard on your phone, Mac or PC, in its own window like any app. No App Store. It is the only app you need: this members area stays in your browser.</p>
-            <div class="row"><button class="btn" type="button" data-install>Install my dashboard</button></div>
+          <li class="su-step" id="sx3"><div class="su-h"><b>Your app on your phone, Mac or PC</b><span class="pill o" id="sx3-st">Optional</span></div>
+            <p>One click puts this members area on your phone, Mac or PC, in its own window like any app. No App Store.</p>
+            <div class="row"><button class="btn" type="button" data-install>Install the app</button></div>
             <details id="sx3-more"><summary>Add your robot's live numbers to the app (about 10 minutes)</summary>
               <p>Your plan, holdings and results on a private page only you can open. It runs on your own free Cloudflare account, so your numbers never pass through ours, and it only ever gets a read-only key.</p>
               <ol>
@@ -800,7 +801,7 @@
   ];
   var LESSONS = [
     ["Rules, not tips", "What a robot ISA is and isn't; writing rules down so a machine can follow them"],
-    ["Get it running", "Your copy of the code, set up with Claude, making its first paper trade"],
+    ["Get it running", "Your copy of the code, built in Set up my robot, making its first paper trade"],
     ["Data you can trust", "Where the prices come from, and how the robot makes sure every number is real"],
     ["Make it yours", "Changing rules, limits and what it trades: settings file first, then code"],
     ["Backtest honestly", "No hindsight, no peeking: testing your own rules fairly before any real money"],
@@ -1114,7 +1115,6 @@
   addEventListener("focus", function () { if (location.hash === "#mydash" && !$("dash-help").hidden) dashOpen(true); });
   function renderDash() {
     var box = $("dash-box"), url = me.dashboard_url;
-    window.MRI_DASH_URL = url || null;   // the install kit installs the dashboard, not this page (26 Oct 2026)
     if (url) {
       box.innerHTML = '<div class="kv"><div><span>Your dashboard</span><b style="overflow-wrap:anywhere">' + esc(url.replace(/^https:\/\//, "")) + '</b></div><div><span>Who can see it</span><b>Only you</b></div></div>' +
         '<div class="row"><a class="btn" href="' + esc(dashHref(url)) + '">Open my dashboard</a></div>' +
@@ -2104,8 +2104,8 @@
 </style>
 <dialog id="ik" aria-labelledby="ik-h">
   <div class="ik-c">
-    <h2 id="ik-h">Put your dashboard on your <i>phone, Mac or PC</i></h2>
-    <p class="ik-sub" id="ik-sub">Your dashboard has just opened in a new tab. Over there, follow these steps. It installs like an app, with no App Store, and opens in its own window.</p>
+    <h2 id="ik-h">Put it on your <i>phone, Mac or PC</i></h2>
+    <p class="ik-sub">It installs like an app, with no App Store and nothing to download, and opens in its own window.</p>
     <div class="ik-tabs" role="group" aria-label="Your device">
       <button type="button" data-ik="iphone">iPhone</button>
       <button type="button" data-ik="ipad">iPad</button>
@@ -2174,15 +2174,10 @@
   document.getElementById("ik-show").addEventListener("click", function () { dlg.close ? dlg.close() : dlg.removeAttribute("open"); showCoach(); });
   [].forEach.call(dlg.querySelectorAll("[data-ik]"), function (b) { b.addEventListener("click", function () { pick(b.dataset.ik); }); });
   function open() {
-    // 26 Oct 2026 (Amit): the only app is the member's dashboard. Open it in a new tab, then show the steps for that tab.
-    var url = window.MRI_DASH_URL;
-    if (!url) {
-      pick(dev); document.getElementById("ik-steps").innerHTML = "<li><span><b>Set up your dashboard first.</b> It takes about 10 minutes in <a href=\"#setup\" onclick=\"document.getElementById('ik').close()\">Set up my robot</a>, then come back here to put it on your phone.</span></li>";
-      document.getElementById("ik-note").textContent = ""; document.getElementById("ik-sub").textContent = "The app is your dashboard, so it needs to exist before it can be installed.";
-      document.getElementById("ik-go").hidden = true; if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", ""); return;
+    if (standalone) { alertInstalled(); return; }
+    if (deferred) { // the browser can install it in one click: do that straight away
+      deferred.prompt(); deferred.userChoice.finally(function () { deferred = null; }); return;
     }
-    window.open(url, "_blank", "noopener");
-    document.getElementById("ik-sub").textContent = "Your dashboard has just opened in a new tab. Over there, follow these steps. It installs like an app, with no App Store, and opens in its own window.";
     pick(dev);
     document.getElementById("ik-go").hidden = true;
     if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
@@ -2194,6 +2189,8 @@
   document.getElementById("ik-close").addEventListener("click", function () { dlg.close ? dlg.close() : dlg.removeAttribute("open"); });
   dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
   document.getElementById("ik-go").addEventListener("click", function () { if (deferred) { dlg.close(); open(); } });
+  addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferred = e; document.getElementById("ik-go").hidden = false; });
+  addEventListener("appinstalled", function () { deferred = null; standalone = true; });
   document.addEventListener("click", function (e) {
     var t = e.target.closest && e.target.closest("[data-install]");
     if (t) { e.preventDefault(); open(); }
