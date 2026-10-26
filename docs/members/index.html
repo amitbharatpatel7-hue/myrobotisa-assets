@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="65">
+<meta name="mri-version" content="66">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -192,7 +192,8 @@
   .sp-list .pill{padding:3px 8px;font-size:10px} .sp-list .pill.q{border-color:var(--green);color:var(--green)} .sp-list .pill.i{border-color:var(--pink-ink);color:var(--pink-ink)} .sp-list .pill.a{border-color:var(--amber);color:var(--amber)}
   .sp-list .sp-ans{color:var(--green);font-weight:700} .sp-list .sp-n{color:var(--muted);font-size:13px;white-space:nowrap}
   .sp-rules{background:var(--deep3);border:1px solid var(--rule);border-radius:14px;padding:12px 16px;margin:0 0 14px;font-size:14px;color:var(--muted)} .sp-rules b{color:var(--ink)}
-  .sp-filter{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0} .sp-filter button{background:var(--deep);border:1px solid var(--rule);color:var(--muted);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer} .sp-filter button[aria-pressed="true"]{border-color:var(--green);color:var(--green)}
+  .sp-filter{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0} .sp-groups button{font-size:12px;padding:5px 10px} .sp-groups{margin-top:8px}
+  .sp-search{margin:12px 0 0;max-width:420px} .sp-list .sp-grp{font-size:11px;color:var(--muted);border:1px solid var(--rule);border-radius:999px;padding:2px 8px} .sp-filter button{background:var(--deep);border:1px solid var(--rule);color:var(--muted);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer} .sp-filter button[aria-pressed="true"]{border-color:var(--green);color:var(--green)}
   .note{background:var(--deep3);border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:14px;padding:12px 14px}
   .msg-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .note{position:relative;transition:border-color .15s,background .15s,opacity .15s}
@@ -562,16 +563,19 @@
 
       <section class="card wide" aria-labelledby="h-help" data-page="help">
         <h2 id="h-help">Help and the <span class="g">members' space</span></h2>
-        <p class="lede">Stuck, or got an idea? Ask in the members' space, a private board on GitHub for members only: common setup questions get an instant answer from our FAQ, and a person reads every post. Add a thumbs up to the ideas you'd like sooner. Posts open on GitHub with the account you connected; your invitation arrived when you connected it.</p>
+        <p class="small" style="margin:-6px 0 12px"><a href="#membership" id="to-memb" style="color:var(--green);font-weight:700">Your membership: plan, renewal and manage &darr;</a></p>
+        <p class="lede">Stuck, or got an idea? Ask here: a private board on GitHub for members only. Common setup questions get an instant answer; a person reads every post. Thumbs up the ideas you'd like sooner.</p>
         <div class="row"><a class="btn" id="sp-ask2" href="https://github.com/myrobotisa/community/discussions/new?category=q-a" target="_blank" rel="noopener">Ask a question</a><a class="btn ghost" id="sp-idea2" href="https://github.com/myrobotisa/community/discussions/new?category=ideas" target="_blank" rel="noopener">Share an idea</a><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=Members%20area">Email support</a></div>
         <div class="sp-filter" role="group" aria-label="Show" id="sp-filter"><button type="button" data-f="" aria-pressed="true">Latest</button><button type="button" data-f="q-a" aria-pressed="false">Questions</button><button type="button" data-f="ideas" aria-pressed="false">Ideas</button><button type="button" data-f="announcements" aria-pressed="false">From us</button></div>
+        <div class="sp-filter sp-groups" role="group" aria-label="Question group" id="sp-groups" hidden></div>
+        <input class="t sp-search" id="sp-search" type="search" placeholder="Search the posts&hellip;" aria-label="Search the posts" autocomplete="off">
         <ul class="sp-list" id="sp-list" aria-live="polite"></ul>
         <p class="small" id="sp-msg" style="margin:10px 0 0"></p>
         <details class="fold" style="margin-top:12px"><summary><span class="fold-l">House rules</span></summary><p class="small" style="margin:10px 0 0">No stock tips and no "should I buy X": we can't answer it and it isn't what the space is for. One idea per post, so people can vote on it. Kind, specific, and say what you were trying to do when it went wrong.</p></details>
         <p class="small" style="margin:12px 0 0"><a href="https://github.com/myrobotisa/community/discussions" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">Open the members' space on GitHub</a> · Email replies within two working days · No invitation? Email us your GitHub username.</p>
       </section>
 
-      <section class="card" aria-labelledby="h-memb" data-page="help">
+      <section class="card" aria-labelledby="h-memb" data-page="help" id="membership">
         <h2 id="h-memb">Your <span class="g">membership</span></h2>
         <div class="kv" id="mem-kv"></div>
         <div class="row"><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button></div>
@@ -1889,13 +1893,15 @@
     }).catch(function () { faqLoaded = false; $("faq-body").innerHTML = '<p class="small">Couldn\'t load the questions just now. <a href="../questions.html">Open the public page</a>.</p>'; });
   }
   // ---- Members' space feed (26 Oct 2026): community-feed reads GitHub for us; posting opens GitHub in a new tab
-  var SP = { posts: null, filter: "", loading: false };
+  var SP = { posts: null, filter: "", group: "", q: "", loading: false };
+  var SP_GROUPS = ["Before you start", "How it runs", "When something breaks", "Buying and cancelling", "Trust and safety"];
   function spAgo(iso) { var m = Math.round((Date.now() - Date.parse(iso)) / 60000); if (m < 60) return (m < 2 ? "just now" : m + " min ago"); var h = Math.round(m / 60); if (h < 36) return h + (h === 1 ? " hour ago" : " hours ago"); var d = Math.round(h / 24); return d + (d === 1 ? " day ago" : " days ago"); }
   function spRow(p) {
     var cat = { "q-a": ["Question", "q"], "ideas": ["Idea", "i"], "announcements": ["From us", "a"] }[p.category] || ["General", ""];
     var li = document.createElement("li"), a = document.createElement("a"); a.href = p.url; a.target = "_blank"; a.rel = "noopener";
     a.innerHTML = '<b></b><span class="sp-n"></span><span class="sp-meta"><span class="pill ' + cat[1] + '"></span><span class="sp-ans" hidden>&#10003; Answered</span><span class="sp-when"></span></span>';
     a.querySelector("b").textContent = p.title; a.querySelector(".pill").textContent = cat[0];
+    if (p.group) { var g = document.createElement("span"); g.className = "sp-grp"; g.textContent = p.group; a.querySelector(".sp-meta").appendChild(g); }
     a.querySelector(".sp-n").textContent = (p.replies ? p.replies + (p.replies === 1 ? " reply" : " replies") : "") + (p.category === "ideas" && p.upvotes ? (p.replies ? " · " : "") + p.upvotes + " \u{1F44D}" : "");
     if (p.answered) a.querySelector(".sp-ans").hidden = false;
     a.querySelector(".sp-when").textContent = spAgo(p.at); li.appendChild(a); return li;
@@ -1904,9 +1910,13 @@
     var home = $("sp-home-list"), full = $("sp-list"); if (!SP.posts) return;
     home.innerHTML = ""; full.innerHTML = "";
     SP.posts.slice(0, 4).forEach(function (p) { home.appendChild(spRow(p)); });
-    var shown = SP.posts.filter(function (p) { return !SP.filter || p.category === SP.filter; });
+    var q = SP.q.toLowerCase();
+    var shown = SP.posts.filter(function (p) { return (!SP.filter || p.category === SP.filter) && (!SP.group || p.group === SP.group) && (!q || p.title.toLowerCase().indexOf(q) >= 0); });
+    if (SP.filter === "q-a" && !q) shown.sort(function (a, b) { return (a.group || "~").localeCompare(b.group || "~") || a.title.localeCompare(b.title); });   // questions: by group, A to Z
     shown.forEach(function (p) { full.appendChild(spRow(p)); });
-    $("sp-msg").textContent = shown.length ? "" : "Nothing here yet. Be the first.";
+    $("sp-msg").textContent = shown.length ? "" : (q ? "Nothing matches. Ask it: the button above opens a new post on GitHub." : "Nothing here yet. Be the first.");
+    var gs = $("sp-groups"); gs.hidden = SP.filter !== "q-a";
+    if (!gs.children.length) { gs.innerHTML = '<button type="button" data-g="" aria-pressed="true">All groups</button>' + SP_GROUPS.map(function (g) { return '<button type="button" data-g="' + g + '" aria-pressed="false">' + g + '</button>'; }).join(""); }
     $("sp-home-msg").textContent = SP.posts.length ? "" : "Nothing posted yet. Be the first.";
   }
   function spLoad() {
@@ -1920,7 +1930,10 @@
       .catch(function (e) { var t = "Couldn't load the latest posts just now. Open the members' space on GitHub instead."; $("sp-home-msg").textContent = t; $("sp-msg").textContent = t; })
       .then(function () { SP.loading = false; });
   }
-  $("sp-filter").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; SP.filter = b.dataset.f; document.querySelectorAll("#sp-filter button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); spPaint(); });
+  $("sp-filter").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; SP.filter = b.dataset.f; SP.group = ""; document.querySelectorAll("#sp-filter button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); document.querySelectorAll("#sp-groups button").forEach(function (x) { x.setAttribute("aria-pressed", String(!x.dataset.g)); }); spPaint(); });
+  $("sp-groups").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; SP.group = b.dataset.g; document.querySelectorAll("#sp-groups button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); spPaint(); });
+  $("sp-search").addEventListener("input", function () { SP.q = this.value.trim(); spPaint(); });
+  $("to-memb").addEventListener("click", function (e) { e.preventDefault(); $("membership").scrollIntoView({ behavior: "smooth", block: "start" }); });
   // 26 Oct 2026 (Amit): the logo always goes to the site's home page. In the installed app there is no site around it,
   // so there it goes to the members' home instead.
   if (document.documentElement.classList.contains("app")) { var br = $("brand"); br.href = "#home"; br.dataset.go = "home"; br.title = "Home"; }
