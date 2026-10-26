@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="66">
+<meta name="mri-version" content="67">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -193,6 +193,7 @@
   .sp-list .sp-ans{color:var(--green);font-weight:700} .sp-list .sp-n{color:var(--muted);font-size:13px;white-space:nowrap}
   .sp-rules{background:var(--deep3);border:1px solid var(--rule);border-radius:14px;padding:12px 16px;margin:0 0 14px;font-size:14px;color:var(--muted)} .sp-rules b{color:var(--ink)}
   .sp-filter{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0} .sp-groups button{font-size:12px;padding:5px 10px} .sp-groups{margin-top:8px}
+  .help-seg{margin:4px 0 14px} .help-seg button[aria-selected="true"]{border-color:var(--green);background:#14402C;color:var(--green)}
   .sp-search{margin:12px 0 0;max-width:420px} .sp-list .sp-grp{font-size:11px;color:var(--muted);border:1px solid var(--rule);border-radius:999px;padding:2px 8px} .sp-filter button{background:var(--deep);border:1px solid var(--rule);color:var(--muted);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer} .sp-filter button[aria-pressed="true"]{border-color:var(--green);color:var(--green)}
   .note{background:var(--deep3);border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:14px;padding:12px 14px}
   .msg-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -562,8 +563,9 @@
       </section>
 
       <section class="card wide" aria-labelledby="h-help" data-page="help">
-        <h2 id="h-help">Help and the <span class="g">members' space</span></h2>
-        <p class="small" style="margin:-6px 0 12px"><a href="#membership" id="to-memb" style="color:var(--green);font-weight:700">Your membership: plan, renewal and manage &darr;</a></p>
+        <h2 id="h-help">Help and <span class="g">membership</span></h2>
+        <div class="su-seg help-seg" role="tablist" aria-label="Help and membership"><button type="button" role="tab" id="tab-space" data-v="space" aria-selected="true">Members' space<small>questions and ideas</small></button><button type="button" role="tab" id="tab-memb" data-v="memb" aria-selected="false">Your membership<small>plan, renewal, manage</small></button></div>
+        <div id="pane-space" role="tabpanel">
         <p class="lede">Stuck, or got an idea? Ask here: a private board on GitHub for members only. Common setup questions get an instant answer; a person reads every post. Thumbs up the ideas you'd like sooner.</p>
         <div class="row"><a class="btn" id="sp-ask2" href="https://github.com/myrobotisa/community/discussions/new?category=q-a" target="_blank" rel="noopener">Ask a question</a><a class="btn ghost" id="sp-idea2" href="https://github.com/myrobotisa/community/discussions/new?category=ideas" target="_blank" rel="noopener">Share an idea</a><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=Members%20area">Email support</a></div>
         <div class="sp-filter" role="group" aria-label="Show" id="sp-filter"><button type="button" data-f="" aria-pressed="true">Latest</button><button type="button" data-f="q-a" aria-pressed="false">Questions</button><button type="button" data-f="ideas" aria-pressed="false">Ideas</button><button type="button" data-f="announcements" aria-pressed="false">From us</button></div>
@@ -573,13 +575,12 @@
         <p class="small" id="sp-msg" style="margin:10px 0 0"></p>
         <details class="fold" style="margin-top:12px"><summary><span class="fold-l">House rules</span></summary><p class="small" style="margin:10px 0 0">No stock tips and no "should I buy X": we can't answer it and it isn't what the space is for. One idea per post, so people can vote on it. Kind, specific, and say what you were trying to do when it went wrong.</p></details>
         <p class="small" style="margin:12px 0 0"><a href="https://github.com/myrobotisa/community/discussions" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">Open the members' space on GitHub</a> · Email replies within two working days · No invitation? Email us your GitHub username.</p>
-      </section>
-
-      <section class="card" aria-labelledby="h-memb" data-page="help" id="membership">
-        <h2 id="h-memb">Your <span class="g">membership</span></h2>
+        </div>
+        <div id="pane-memb" role="tabpanel" hidden>
         <div class="kv" id="mem-kv"></div>
-        <div class="row"><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button></div>
+        <div class="row"><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=My%20membership">Email about my membership</a></div>
         <p class="small" style="margin:12px 0 0">You keep every lesson and video released while your updates are included, and the version of the code you had. Renewing is optional and never automatic.</p>
+        </div>
       </section>
       <section class="card wide" aria-labelledby="h-su" id="su-card" data-page="setup">
         <h2 id="h-su">Set up <span class="g">my robot</span></h2>
@@ -1879,7 +1880,7 @@
   });
 
   // ---- one section per page: Home (welcome and messages), Start here, Lessons, Code, Dashboard, Clips, Help
-  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help", "guide", "questions"];
+  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help", "guide", "questions"];   // #space and #membership map to help
   // Questions (23 Oct 2026): the public Questions page, shown inside the members area so the members menu stays put. Fetched once.
   var faqLoaded = false;
   function loadFaq() {
@@ -1933,7 +1934,8 @@
   $("sp-filter").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; SP.filter = b.dataset.f; SP.group = ""; document.querySelectorAll("#sp-filter button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); document.querySelectorAll("#sp-groups button").forEach(function (x) { x.setAttribute("aria-pressed", String(!x.dataset.g)); }); spPaint(); });
   $("sp-groups").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; SP.group = b.dataset.g; document.querySelectorAll("#sp-groups button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); spPaint(); });
   $("sp-search").addEventListener("input", function () { SP.q = this.value.trim(); spPaint(); });
-  $("to-memb").addEventListener("click", function (e) { e.preventDefault(); $("membership").scrollIntoView({ behavior: "smooth", block: "start" }); });
+  function helpTab(v) { ["space", "memb"].forEach(function (k) { $("pane-" + k).hidden = k !== v; $("tab-" + k).setAttribute("aria-selected", String(k === v)); }); }
+  document.querySelector(".help-seg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) helpTab(b.dataset.v); });
   // 26 Oct 2026 (Amit): the logo always goes to the site's home page. In the installed app there is no site around it,
   // so there it goes to the members' home instead.
   if (document.documentElement.classList.contains("app")) { var br = $("brand"); br.href = "#home"; br.dataset.go = "home"; br.title = "Home"; }
@@ -1941,6 +1943,7 @@
     var gid = null;
     if (page.indexOf("guide/") === 0) { gid = page.slice(6); page = "guide"; }
     if (page === "space") page = "help";   // 26 Oct 2026: the members' space lives on Help and membership
+    if (page === "membership") { page = "help"; helpTab("memb"); }
     if (PAGES.indexOf(page) < 0) page = "home";
     if (page === "guide") { if (!window.GUIDES || !GUIDES[gid]) { page = "start"; } else { guideOpen(gid); } }
     document.querySelectorAll("#v-home [data-page]").forEach(function (el) { el.classList.toggle("off", el.dataset.page.split(" ").indexOf(page) < 0); });
