@@ -445,7 +445,7 @@
   <h2 id="yours">Your copy is <span class="p">yours</span></h2>
   <p class="lead">You can read every line, change anything and run it as your own. What you can't do is pass it on, so here's how it works.</p>
   <ul class="not">
-    <li><strong>Delivered by private invite.</strong> After you buy, you're invited to the private code repo on GitHub. There's no zip file to forward.</li>
+    <li><strong>Delivered by private invite.</strong> After you buy, you're invited to your own private copy of the code on GitHub. There's no zip file to forward.</li>
     <li><strong>Every copy is marked.</strong> Each buyer's copy carries its own unique ID, so a shared or posted copy traces straight back to whoever shared it.</li>
     <li><strong>A personal licence.</strong> For your own use only: no sharing, reselling or publishing. Breaking it ends your updates and support.</li>
     <li><strong>12 months of updates included.</strong> Fixes, new brokers and improvements. After that it's £99 a year if you want them (founding members keep that rate for life), and it never renews on its own. <a href="questions.html#faq-updates" style="color:var(--green);font-weight:700">How updates work</a></li>
@@ -702,7 +702,7 @@
 <script>
 // 22 Oct 2026: signed-in members see "Members area" instead of "Log in" in the header (the side menu stays the site's; Amit, 23 Oct).
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
-var l=document.querySelector("a.login");if(l){l.innerHTML="<span>Members<span class=\"t-long\"> area</span></span>";l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
+var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
 </script>
 </body>
 </html>
