@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="68">
+<meta name="mri-version" content="69">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -193,6 +193,10 @@
   .sp-list .sp-ans{color:var(--green);font-weight:700} .sp-list .sp-n{color:var(--muted);font-size:13px;white-space:nowrap}
   .sp-rules{background:var(--deep3);border:1px solid var(--rule);border-radius:14px;padding:12px 16px;margin:0 0 14px;font-size:14px;color:var(--muted)} .sp-rules b{color:var(--ink)}
   .sp-filter{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0} .sp-groups button{font-size:12px;padding:5px 10px} .sp-groups{margin-top:8px}
+  #fq-members{margin:18px 0 22px} #fq-list details{border-top:1px solid var(--rule);padding:12px 0} #fq-list details:last-of-type{border-bottom:1px solid var(--rule)}
+  #fq-list summary{cursor:pointer;font-weight:700;font-size:16px;list-style:none;display:flex;justify-content:space-between;gap:12px;align-items:center} #fq-list summary::-webkit-details-marker{display:none}
+  #fq-list summary::after{content:'+';color:var(--green);font-family:Anton,Impact,sans-serif;font-size:22px;line-height:1;flex:none} #fq-list details[open] summary::after{content:'\2013'}
+  .fq-a{margin:10px 0 0;color:var(--muted);line-height:1.55;font-size:15px} .fq-a p{margin:0 0 8px} .fq-a ul{margin:0 0 8px;padding-left:20px} .fq-a a{color:var(--green);font-weight:700} .fq-a code{font-size:13px}
   .help-seg{margin:4px 0 14px} .help-seg button[aria-selected="true"]{border-color:var(--green);background:#14402C;color:var(--green)}
   .sp-search{margin:12px 0 0;max-width:420px} .sp-list .sp-grp{font-size:11px;color:var(--muted);border:1px solid var(--rule);border-radius:999px;padding:2px 8px} .sp-filter button{background:var(--deep);border:1px solid var(--rule);color:var(--muted);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer} .sp-filter button[aria-pressed="true"]{border-color:var(--green);color:var(--green)}
   .note{background:var(--deep3);border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:14px;padding:12px 14px}
@@ -456,8 +460,8 @@
 
     <section class="card" aria-labelledby="h-sph" id="sp-home" data-page="home">
       <h2 id="h-sph">The members' <span class="g">space</span></h2>
-      <p class="lede">Questions, ideas and what you'd change, with the other members and us. Common questions get an instant answer; a person reads every post.</p>
-      <div class="row"><a class="btn" id="sp-ask" href="https://github.com/myrobotisa/community/discussions/new?category=q-a" target="_blank" rel="noopener">Ask a question</a><a class="btn ghost" id="sp-idea" href="https://github.com/myrobotisa/community/discussions/new?category=ideas" target="_blank" rel="noopener">Share an idea</a><a class="btn ghost" href="#help" data-go="help">See all</a></div>
+      <p class="lede">Ideas, votes and news, with the other members and us. Thumbs up what you'd like built next.</p>
+      <div class="row"><a class="btn" id="sp-idea" href="https://github.com/myrobotisa/community/discussions/new?category=ideas" target="_blank" rel="noopener">Share an idea</a><a class="btn ghost" id="sp-ask" href="#questions" data-go="questions">Ask a question</a><a class="btn ghost" href="#help" data-go="help">See all</a></div>
       <ul class="sp-list" id="sp-home-list" aria-live="polite"></ul>
       <p class="small" id="sp-home-msg" style="margin:10px 0 0"></p>
     </section>
@@ -558,7 +562,13 @@
 
       <section class="card wide faq" aria-labelledby="h-faq" data-page="questions" id="faq-page">
         <h2 id="h-faq">Questions people <span class="p">ask</span></h2>
-        <p class="lede">The same answers as the public Questions page. Not here? <a href="mailto:hello@myrobotisa.com?subject=Question">Email hello@myrobotisa.com</a>, a person answers.</p>
+        <p class="lede">Tap a question for its answer. Not here? Ask it: common questions get an instant answer, a person reads every post, and once it's answered it appears below.</p>
+        <div class="row"><a class="btn" id="sp-ask3" href="https://github.com/myrobotisa/community/discussions/new?category=q-a" target="_blank" rel="noopener">Ask a question</a><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=Question">Email instead</a></div>
+        <div class="fg" id="fq-members" hidden>
+          <h2 class="fgh">Asked by <span class="p">members</span></h2>
+          <div id="fq-list"></div>
+          <p class="small" id="fq-waiting" style="margin:8px 0 0" hidden></p>
+        </div>
         <div id="faq-body"><p class="small">Loading…</p></div>
       </section>
 
@@ -566,11 +576,9 @@
         <h2 id="h-help">Help and <span class="g">membership</span></h2>
         <div class="su-seg help-seg" role="tablist" aria-label="Help and membership"><button type="button" role="tab" id="tab-space" data-v="space" aria-selected="true">Members' space<small>questions and ideas</small></button><button type="button" role="tab" id="tab-memb" data-v="memb" aria-selected="false">Your membership<small>plan, renewal, manage</small></button></div>
         <div id="pane-space" role="tabpanel">
-        <p class="lede">Stuck, or got an idea? Ask here: a private board on GitHub for members only. Common setup questions get an instant answer; a person reads every post. Thumbs up the ideas you'd like sooner.</p>
-        <div class="row"><a class="btn" id="sp-ask2" href="https://github.com/myrobotisa/community/discussions/new?category=q-a" target="_blank" rel="noopener">Ask a question</a><a class="btn ghost" id="sp-idea2" href="https://github.com/myrobotisa/community/discussions/new?category=ideas" target="_blank" rel="noopener">Share an idea</a><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=Members%20area">Email support</a></div>
-        <div class="sp-filter" role="group" aria-label="Show" id="sp-filter"><button type="button" data-f="" aria-pressed="true">Latest</button><button type="button" data-f="q-a" aria-pressed="false">Questions</button><button type="button" data-f="ideas" aria-pressed="false">Ideas</button><button type="button" data-f="announcements" aria-pressed="false">From us</button></div>
-        <div class="sp-filter sp-groups" role="group" aria-label="Question group" id="sp-groups" hidden></div>
-        <input class="t sp-search" id="sp-search" type="search" placeholder="Search the posts&hellip;" aria-label="Search the posts" autocomplete="off">
+        <p class="lede">Ideas, votes and news, with the other members and us: a private board on GitHub for members only. Thumbs up the ideas you'd like sooner. Got a question? It has its own page: <a href="#questions" data-go="questions" style="color:var(--green);font-weight:700">Questions</a>.</p>
+        <div class="row"><a class="btn" id="sp-idea2" href="https://github.com/myrobotisa/community/discussions/new?category=ideas" target="_blank" rel="noopener">Share an idea</a><a class="btn ghost" id="sp-ask2" href="#questions" data-go="questions">Ask a question</a><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=Members%20area">Email support</a></div>
+        <div class="sp-filter" role="group" aria-label="Show" id="sp-filter"><button type="button" data-f="" aria-pressed="true">Latest</button><button type="button" data-f="ideas" aria-pressed="false">Ideas</button><button type="button" data-f="announcements" aria-pressed="false">From us</button></div>
         <ul class="sp-list" id="sp-list" aria-live="polite"></ul>
         <p class="small" id="sp-msg" style="margin:10px 0 0"></p>
         <details class="fold" style="margin-top:12px"><summary><span class="fold-l">House rules</span></summary><p class="small" style="margin:10px 0 0">No stock tips and no "should I buy X": we can't answer it and it isn't what the space is for. One idea per post, so people can vote on it. Kind, specific, and say what you were trying to do when it went wrong.</p></details>
@@ -1894,15 +1902,31 @@
     }).catch(function () { faqLoaded = false; $("faq-body").innerHTML = '<p class="small">Couldn\'t load the questions just now. <a href="../questions.html">Open the public page</a>.</p>'; });
   }
   // ---- Members' space feed (26 Oct 2026): community-feed reads GitHub for us; posting opens GitHub in a new tab
-  var SP = { posts: null, filter: "", group: "", q: "", loading: false };
-  var SP_GROUPS = ["Before you start", "How it runs", "When something breaks", "Buying and cancelling", "Trust and safety"];
+  var SP = { posts: null, filter: "", loading: false };
+  // Safe rendering of an answer's markdown: everything is escaped first; then bold, bullets, paragraphs and links to our own hosts
+  function spMd(t) {
+    var e = esc(t).replace(/<details>[\s\S]*?<summary>[\s\S]*?<\/summary>|<\/?details>/g, "");
+    e = e.replace(/\[([^\]]+)\]\((https:\/\/(?:[a-z0-9.-]*\.)?(?:myrobotisa\.com|github\.com)\/[^)\s]*)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    e = e.replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>").replace(/`([^`]+)`/g, "<code>$1</code>");
+    return e.split(/\n{2,}/).map(function (p) { var ls = p.split("\n"); return ls.every(function (l) { return /^\s*[-*] /.test(l); }) ? "<ul>" + ls.map(function (l) { return "<li>" + l.replace(/^\s*[-*] /, "") + "</li>"; }).join("") + "</ul>" : "<p>" + p.replace(/\n/g, "<br>") + "</p>"; }).join("");
+  }
+  function fqPaint() {
+    if (!SP.posts) return;
+    var qs = SP.posts.filter(function (p) { return p.category === "q-a"; }), done = qs.filter(function (p) { return p.answered && p.answer; }), waiting = qs.filter(function (p) { return !p.answered; });
+    var box = $("fq-members"), list = $("fq-list"); box.hidden = !qs.length; list.innerHTML = "";
+    done.sort(function (a, b) { return a.title.localeCompare(b.title); }).forEach(function (p) {
+      var d = document.createElement("details"); d.innerHTML = "<summary></summary><div class=\"fq-a\"></div><p class=\"small\"><a class=\"fq-gh\" target=\"_blank\" rel=\"noopener\">Open on GitHub</a>" + (p.replies > 1 ? " · " + p.replies + " replies" : "") + "</p>";
+      d.querySelector("summary").textContent = p.title; d.querySelector(".fq-a").innerHTML = spMd(p.answer.body); d.querySelector("a.fq-gh").href = p.url; list.appendChild(d);
+    });
+    var w = $("fq-waiting"); w.hidden = !waiting.length;
+    if (waiting.length) { w.innerHTML = "Waiting for an answer: " + waiting.map(function (p) { return '<a target="_blank" rel="noopener"></a>'; }).join(", ") + "."; waiting.forEach(function (p, i) { var a = w.querySelectorAll("a")[i]; a.href = p.url; a.textContent = p.title; }); }
+  }
   function spAgo(iso) { var m = Math.round((Date.now() - Date.parse(iso)) / 60000); if (m < 60) return (m < 2 ? "just now" : m + " min ago"); var h = Math.round(m / 60); if (h < 36) return h + (h === 1 ? " hour ago" : " hours ago"); var d = Math.round(h / 24); return d + (d === 1 ? " day ago" : " days ago"); }
   function spRow(p) {
     var cat = { "q-a": ["Question", "q"], "ideas": ["Idea", "i"], "announcements": ["From us", "a"] }[p.category] || ["General", ""];
     var li = document.createElement("li"), a = document.createElement("a"); a.href = p.url; a.target = "_blank"; a.rel = "noopener";
     a.innerHTML = '<b></b><span class="sp-n"></span><span class="sp-meta"><span class="pill ' + cat[1] + '"></span><span class="sp-ans" hidden>&#10003; Answered</span><span class="sp-when"></span></span>';
     a.querySelector("b").textContent = p.title; a.querySelector(".pill").textContent = cat[0];
-    if (p.group) { var g = document.createElement("span"); g.className = "sp-grp"; g.textContent = p.group; a.querySelector(".sp-meta").appendChild(g); }
     a.querySelector(".sp-n").textContent = (p.replies ? p.replies + (p.replies === 1 ? " reply" : " replies") : "") + (p.category === "ideas" && p.upvotes ? (p.replies ? " · " : "") + p.upvotes + " \u{1F44D}" : "");
     if (p.answered) a.querySelector(".sp-ans").hidden = false;
     a.querySelector(".sp-when").textContent = spAgo(p.at); li.appendChild(a); return li;
@@ -1910,15 +1934,13 @@
   function spPaint() {
     var home = $("sp-home-list"), full = $("sp-list"); if (!SP.posts) return;
     home.innerHTML = ""; full.innerHTML = "";
-    SP.posts.slice(0, 4).forEach(function (p) { home.appendChild(spRow(p)); });
-    var q = SP.q.toLowerCase();
-    var shown = SP.posts.filter(function (p) { return (!SP.filter || p.category === SP.filter) && (!SP.group || p.group === SP.group) && (!q || p.title.toLowerCase().indexOf(q) >= 0); });
-    if (SP.filter === "q-a" && !q) shown.sort(function (a, b) { return (a.group || "~").localeCompare(b.group || "~") || a.title.localeCompare(b.title); });   // questions: by group, A to Z
+    var space = SP.posts.filter(function (p) { return p.category !== "q-a"; });   // 26 Oct 2026 (Amit): questions live on the Questions page
+    space.slice(0, 4).forEach(function (p) { home.appendChild(spRow(p)); });
+    var shown = space.filter(function (p) { return !SP.filter || p.category === SP.filter; });
     shown.forEach(function (p) { full.appendChild(spRow(p)); });
-    $("sp-msg").textContent = shown.length ? "" : (q ? "Nothing matches. Ask it: the button above opens a new post on GitHub." : "Nothing here yet. Be the first.");
-    var gs = $("sp-groups"); gs.hidden = SP.filter !== "q-a";
-    if (!gs.children.length) { gs.innerHTML = '<button type="button" data-g="" aria-pressed="true">All groups</button>' + SP_GROUPS.map(function (g) { return '<button type="button" data-g="' + g + '" aria-pressed="false">' + g + '</button>'; }).join(""); }
-    $("sp-home-msg").textContent = SP.posts.length ? "" : "Nothing posted yet. Be the first.";
+    $("sp-msg").textContent = shown.length ? "" : "Nothing here yet. Be the first.";
+    $("sp-home-msg").textContent = space.length ? "" : "Nothing posted yet. Be the first.";
+    fqPaint();
   }
   function spLoad() {
     if (SP.posts || SP.loading) return; SP.loading = true;
@@ -1927,13 +1949,11 @@
       if (!s) throw new Error("signed out");
       return fetch(SB + "/functions/v1/community-feed", { headers: { apikey: KEY, Authorization: "Bearer " + s.access_token } });
     }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || r.status); return j; }); })
-      .then(function (j) { SP.posts = j.posts || []; if (j.ask) { $("sp-ask").href = $("sp-ask2").href = j.ask.q; $("sp-idea").href = $("sp-idea2").href = j.ask.idea; } spPaint(); })
+      .then(function (j) { SP.posts = j.posts || []; if (j.ask) { $("sp-ask3").href = j.ask.q; $("sp-idea").href = $("sp-idea2").href = j.ask.idea; } spPaint(); })
       .catch(function (e) { var t = "Couldn't load the latest posts just now. Open the members' space on GitHub instead."; $("sp-home-msg").textContent = t; $("sp-msg").textContent = t; })
       .then(function () { SP.loading = false; });
   }
-  $("sp-filter").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; SP.filter = b.dataset.f; SP.group = ""; document.querySelectorAll("#sp-filter button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); document.querySelectorAll("#sp-groups button").forEach(function (x) { x.setAttribute("aria-pressed", String(!x.dataset.g)); }); spPaint(); });
-  $("sp-groups").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; SP.group = b.dataset.g; document.querySelectorAll("#sp-groups button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); spPaint(); });
-  $("sp-search").addEventListener("input", function () { SP.q = this.value.trim(); spPaint(); });
+  $("sp-filter").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; SP.filter = b.dataset.f; document.querySelectorAll("#sp-filter button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); spPaint(); });
   function helpTab(v) { ["space", "memb"].forEach(function (k) { $("pane-" + k).hidden = k !== v; $("tab-" + k).setAttribute("aria-selected", String(k === v)); }); }
   document.querySelector(".help-seg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) helpTab(b.dataset.v); });
   // 26 Oct 2026 (Amit): the logo always goes to the site's home page. In the installed app there is no site around it,
@@ -1951,7 +1971,7 @@
     document.querySelector('.mgroup .grp-h > a').classList.toggle("on", true);
     if (page === "lessons") $("les-fold").open = true;
     if (page === "questions") loadFaq();
-    if (page === "home" || page === "help") spLoad();
+    if (page === "home" || page === "help" || page === "questions") spLoad();
     if (page === "setup") suInit();
     if (page === "live") lvInit();
     if (page === "clips") { paintBench(); loadWants(); document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = "0"; }); setTimeout(function () { document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = b.dataset.w; }); }, 60); }
