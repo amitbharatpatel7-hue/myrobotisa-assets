@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="62">
+<meta name="mri-version" content="63">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -184,6 +184,15 @@
   .gd-zoom{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;cursor:zoom-out} .gd-zoom img{max-width:100%;max-height:100%;border-radius:10px}
   .item .gd-link{display:inline-block;margin-top:4px;font-size:13px;font-weight:700;color:var(--green)}
   .pill-link{text-decoration:none;transition:background .15s,color .15s,box-shadow .15s} .pill-link:hover,.pill-link:focus-visible{background:var(--ink);border-color:var(--ink);color:var(--deep);outline:none} .notes{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+  /* Members' space (26 Oct 2026): the GitHub Discussions feed, in the site's own clothes */
+  .sp-list{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
+  .sp-list li a{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;background:var(--deep3);border:1px solid var(--rule);border-radius:14px;padding:11px 14px;color:var(--ink);text-decoration:none;transition:border-color .15s}
+  .sp-list li a:hover,.sp-list li a:focus-visible{border-color:var(--green)}
+  .sp-list b{font-weight:700;line-height:1.35} .sp-list .sp-meta{grid-column:1/-1;font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+  .sp-list .pill{padding:3px 8px;font-size:10px} .sp-list .pill.q{border-color:var(--green);color:var(--green)} .sp-list .pill.i{border-color:var(--pink-ink);color:var(--pink-ink)} .sp-list .pill.a{border-color:var(--amber);color:var(--amber)}
+  .sp-list .sp-ans{color:var(--green);font-weight:700} .sp-list .sp-n{color:var(--muted);font-size:13px;white-space:nowrap}
+  .sp-rules{background:var(--deep3);border:1px solid var(--rule);border-radius:14px;padding:12px 16px;margin:0 0 14px;font-size:14px;color:var(--muted)} .sp-rules b{color:var(--ink)}
+  .sp-filter{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0} .sp-filter button{background:var(--deep);border:1px solid var(--rule);color:var(--muted);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer} .sp-filter button[aria-pressed="true"]{border-color:var(--green);color:var(--green)}
   .note{background:var(--deep3);border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:14px;padding:12px 14px}
   .msg-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
   .note{position:relative;transition:border-color .15s,background .15s,opacity .15s}
@@ -355,6 +364,7 @@
         <li><a href="#code" data-go="code">Your code</a></li>
         <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
         <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
+        <li><a href="#space" data-go="space">Members' space <span class="pill g" style="margin-left:4px;padding:2px 7px;font-size:10px">New</span></a></li>
         <li><a href="#clips" data-go="clips">What's new</a></li>
         <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
         <li><a href="#help" data-go="help">Help and membership</a></li>
@@ -374,6 +384,7 @@
     <li><a href="#code" data-go="code">Your code</a></li>
     <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
     <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
+    <li><a href="#space" data-go="space">Members' space</a></li>
     <li><a href="#clips" data-go="clips">What's new</a></li>
     <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
         <li><a href="#help" data-go="help">Help and membership</a></li>
@@ -443,6 +454,14 @@
       <details class="fold" id="notes-older" hidden><summary><span class="fold-l">Show earlier messages</span></summary><ul class="notes" id="notes-old" style="margin-top:12px"></ul></details>
     </section>
 
+    <section class="card" aria-labelledby="h-sph" id="sp-home" data-page="home">
+      <h2 id="h-sph">The members' <span class="g">space</span></h2>
+      <p class="lede">Questions, ideas and what you'd change, with the other members and us. Common questions get an instant answer; a person reads every post.</p>
+      <div class="row"><a class="btn" id="sp-ask" href="https://github.com/myrobotisa/community/discussions/new?category=q-a" target="_blank" rel="noopener">Ask a question</a><a class="btn ghost" id="sp-idea" href="https://github.com/myrobotisa/community/discussions/new?category=ideas" target="_blank" rel="noopener">Share an idea</a><a class="btn ghost" href="#space" data-go="space">See all</a></div>
+      <ul class="sp-list" id="sp-home-list" aria-live="polite"></ul>
+      <p class="small" id="sp-home-msg" style="margin:10px 0 0"></p>
+    </section>
+
     <div class="grid">
       <section class="card" aria-labelledby="h-qs" data-page="start">
         <h2 id="h-qs">Start <span class="g">here</span></h2>
@@ -509,6 +528,17 @@
         </div>
       </section>
 
+      <section class="card wide" aria-labelledby="h-sp" data-page="space">
+        <h2 id="h-sp">The members' <span class="g">space</span></h2>
+        <p class="lede">A private board on GitHub, for members only. Ask anything about setting up or running your robot, share an idea, tell us what you'd change, and add a thumbs up to what you agree with. Common setup questions get an instant answer from our FAQ; a person reads every post and replies where one's needed. Posts open on GitHub with the account you connected; your invitation arrived when you connected it.</p>
+        <div class="sp-rules"><b>House rules.</b> No stock tips and no "should I buy X": we can't answer it and it isn't what the space is for. One idea per post, so people can vote on it. Kind, specific, and say what you were trying to do.</div>
+        <div class="row"><a class="btn" href="https://github.com/myrobotisa/community/discussions/new?category=q-a" target="_blank" rel="noopener">Ask a question</a><a class="btn ghost" href="https://github.com/myrobotisa/community/discussions/new?category=ideas" target="_blank" rel="noopener">Share an idea</a><a class="btn ghost" href="https://github.com/myrobotisa/community/discussions" target="_blank" rel="noopener">Open on GitHub</a></div>
+        <div class="sp-filter" role="group" aria-label="Show" id="sp-filter"><button type="button" data-f="" aria-pressed="true">All</button><button type="button" data-f="q-a" aria-pressed="false">Questions</button><button type="button" data-f="ideas" aria-pressed="false">Ideas</button><button type="button" data-f="announcements" aria-pressed="false">Announcements</button></div>
+        <ul class="sp-list" id="sp-list" aria-live="polite"></ul>
+        <p class="small" id="sp-msg" style="margin:10px 0 0"></p>
+        <p class="small" style="margin-top:14px">Not getting the invitation? Email <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a> with your GitHub username.</p>
+      </section>
+
       <section class="card wide" aria-labelledby="h-new" data-page="clips">
         <h2 id="h-new">What's <span class="g">new</span></h2>
         <p class="lede">Shipped first, then what's on the bench. Tap <b>I want this</b> on anything you'd like sooner: it's saved to your account and counts.</p>
@@ -545,7 +575,7 @@
 
       <section class="card" aria-labelledby="h-help" data-page="help">
         <h2 id="h-help">Help and <span class="g">your membership</span></h2>
-        <p class="lede">Stuck? Ask in the <b>members' space</b>: questions get an instant answer from our FAQ where one fits, and anything else a reply from us. It's also where to share ideas and tell us what you'd change. You're invited with the GitHub account you connected. Or email us: a reply within two working days.</p>
+        <p class="lede">Stuck? Ask in the <b>members' space</b>: questions get an instant answer from our FAQ where one fits, and anything else a reply from us. It's also where to share ideas and tell us what you'd change. You're invited with the GitHub account you connected. Or email us: a reply within two working days. <a href="#space" data-go="space" style="color:var(--green);font-weight:700">See the latest posts</a>.</p>
         <div class="kv" id="mem-kv"></div>
         <div class="row"><a class="btn" href="https://github.com/myrobotisa/community/discussions" target="_blank" rel="noopener">Open the members' space</a><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=Members%20area">Email support</a><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button></div>
         <p class="small" style="margin:12px 0 0">You keep every lesson and video released while your updates are included, and the version of the code you had. Renewing is optional and never automatic.</p>
@@ -1848,7 +1878,7 @@
   });
 
   // ---- one section per page: Home (welcome and messages), Start here, Lessons, Code, Dashboard, Clips, Help
-  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help", "guide", "questions"];
+  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "dashboard", "mydash", "space", "clips", "passkeys", "help", "guide", "questions"];
   // Questions (23 Oct 2026): the public Questions page, shown inside the members area so the members menu stays put. Fetched once.
   var faqLoaded = false;
   function loadFaq() {
@@ -1861,6 +1891,39 @@
       $("faq-body").innerHTML = sec.innerHTML;
     }).catch(function () { faqLoaded = false; $("faq-body").innerHTML = '<p class="small">Couldn\'t load the questions just now. <a href="../questions.html">Open the public page</a>.</p>'; });
   }
+  // ---- Members' space feed (26 Oct 2026): community-feed reads GitHub for us; posting opens GitHub in a new tab
+  var SP = { posts: null, filter: "", loading: false };
+  function spAgo(iso) { var m = Math.round((Date.now() - Date.parse(iso)) / 60000); if (m < 60) return (m < 2 ? "just now" : m + " min ago"); var h = Math.round(m / 60); if (h < 36) return h + (h === 1 ? " hour ago" : " hours ago"); var d = Math.round(h / 24); return d + (d === 1 ? " day ago" : " days ago"); }
+  function spRow(p) {
+    var cat = { "q-a": ["Question", "q"], "ideas": ["Idea", "i"], "announcements": ["From us", "a"] }[p.category] || ["General", ""];
+    var li = document.createElement("li"), a = document.createElement("a"); a.href = p.url; a.target = "_blank"; a.rel = "noopener";
+    a.innerHTML = '<b></b><span class="sp-n"></span><span class="sp-meta"><span class="pill ' + cat[1] + '"></span><span class="sp-ans" hidden>&#10003; Answered</span><span class="sp-when"></span></span>';
+    a.querySelector("b").textContent = p.title; a.querySelector(".pill").textContent = cat[0];
+    a.querySelector(".sp-n").textContent = (p.replies ? p.replies + (p.replies === 1 ? " reply" : " replies") : "") + (p.category === "ideas" && p.upvotes ? (p.replies ? " · " : "") + p.upvotes + " \u{1F44D}" : "");
+    if (p.answered) a.querySelector(".sp-ans").hidden = false;
+    a.querySelector(".sp-when").textContent = spAgo(p.at); li.appendChild(a); return li;
+  }
+  function spPaint() {
+    var home = $("sp-home-list"), full = $("sp-list"); if (!SP.posts) return;
+    home.innerHTML = ""; full.innerHTML = "";
+    SP.posts.slice(0, 4).forEach(function (p) { home.appendChild(spRow(p)); });
+    var shown = SP.posts.filter(function (p) { return !SP.filter || p.category === SP.filter; });
+    shown.forEach(function (p) { full.appendChild(spRow(p)); });
+    $("sp-msg").textContent = shown.length ? "" : "Nothing here yet. Be the first.";
+    $("sp-home-msg").textContent = SP.posts.length ? "" : "Nothing posted yet. Be the first.";
+  }
+  function spLoad() {
+    if (SP.posts || SP.loading) return; SP.loading = true;
+    $("sp-home-msg").textContent = "Loading the latest posts\u2026";
+    fresh().then(function (s) {
+      if (!s) throw new Error("signed out");
+      return fetch(SB + "/functions/v1/community-feed", { headers: { apikey: KEY, Authorization: "Bearer " + s.access_token } });
+    }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || r.status); return j; }); })
+      .then(function (j) { SP.posts = j.posts || []; if (j.ask) { $("sp-ask").href = j.ask.q; $("sp-idea").href = j.ask.idea; } spPaint(); })
+      .catch(function (e) { var t = "Couldn't load the latest posts just now. Open the members' space on GitHub instead."; $("sp-home-msg").textContent = t; $("sp-msg").textContent = t; })
+      .then(function () { SP.loading = false; });
+  }
+  $("sp-filter").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; SP.filter = b.dataset.f; document.querySelectorAll("#sp-filter button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); spPaint(); });
   function go(page) {
     var gid = null;
     if (page.indexOf("guide/") === 0) { gid = page.slice(6); page = "guide"; }
@@ -1871,6 +1934,7 @@
     document.querySelector('.mgroup .grp-h > a').classList.toggle("on", true);
     if (page === "lessons") $("les-fold").open = true;
     if (page === "questions") loadFaq();
+    if (page === "home" || page === "space") spLoad();
     if (page === "setup") suInit();
     if (page === "live") lvInit();
     if (page === "clips") { paintBench(); loadWants(); document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = "0"; }); setTimeout(function () { document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = b.dataset.w; }); }, 60); }
