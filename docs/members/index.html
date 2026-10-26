@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="67">
+<meta name="mri-version" content="68">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -357,7 +357,7 @@
 </head>
 <body>
 <nav class="side" id="side" aria-label="Site">
-  <a class="side-brand" href="./"><img src="icon-192.png" alt=""><span>My Robot <b>I.S.A.</b></span></a>
+  <a class="side-brand" href="../" id="side-brand" title="myrobotisa.com"><img src="icon-192.png" alt=""><span>My Robot <b>I.S.A.</b></span></a>
   <ol class="site-only">
     <li class="mgroup" id="mgroup"><div class="grp-h"><a href="#home" data-go="home" class="on" aria-current="page">Members area</a><button type="button" class="grp-t" id="mgroup-t" aria-expanded="true" aria-controls="mgroup-sub" aria-label="Hide the members pages"></button></div>
       <ol class="sub" id="mgroup-sub">
@@ -1938,7 +1938,7 @@
   document.querySelector(".help-seg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) helpTab(b.dataset.v); });
   // 26 Oct 2026 (Amit): the logo always goes to the site's home page. In the installed app there is no site around it,
   // so there it goes to the members' home instead.
-  if (document.documentElement.classList.contains("app")) { var br = $("brand"); br.href = "#home"; br.dataset.go = "home"; br.title = "Home"; }
+  if (document.documentElement.classList.contains("app")) { ["brand", "side-brand"].forEach(function (id) { var br = $(id); br.href = "#home"; br.dataset.go = "home"; br.title = "Home"; }); }
   function go(page) {
     var gid = null;
     if (page.indexOf("guide/") === 0) { gid = page.slice(6); page = "guide"; }
