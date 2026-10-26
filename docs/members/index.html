@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="64">
+<meta name="mri-version" content="65">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -393,7 +393,7 @@
 <button id="menubtn" aria-label="Sections menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
 <div class="wrap" id="top">
   <div class="top">
-    <a class="brand" href="./"><img src="icon-192.png" alt=""><span><b>My Robot <i>I.S.A.</i></b><small>Members</small></span></a>
+    <a class="brand" href="../" id="brand" title="myrobotisa.com"><img src="icon-192.png" alt=""><span><b>My Robot <i>I.S.A.</i></b><small>Members</small></span></a>
     <div class="who" id="who" hidden><span id="whoemail"></span><button class="btn ghost sm" id="signout" type="button">Sign out</button></div>
   </div>
 
@@ -1921,6 +1921,9 @@
       .then(function () { SP.loading = false; });
   }
   $("sp-filter").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; SP.filter = b.dataset.f; document.querySelectorAll("#sp-filter button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); spPaint(); });
+  // 26 Oct 2026 (Amit): the logo always goes to the site's home page. In the installed app there is no site around it,
+  // so there it goes to the members' home instead.
+  if (document.documentElement.classList.contains("app")) { var br = $("brand"); br.href = "#home"; br.dataset.go = "home"; br.title = "Home"; }
   function go(page) {
     var gid = null;
     if (page.indexOf("guide/") === 0) { gid = page.slice(6); page = "guide"; }
