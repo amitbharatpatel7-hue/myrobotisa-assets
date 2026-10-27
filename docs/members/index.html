@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="76">
+<meta name="mri-version" content="77">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -431,7 +431,6 @@
         <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
         <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
         <li><a href="#clips" data-go="clips">What's new</a></li>
-        <li><a href="#ideas" data-go="ideas">Ideas &amp; questions</a></li>
         <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
         <li><a href="#help" data-go="help">Help and membership</a></li>
       </ol>
@@ -451,7 +450,6 @@
     <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
     <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
     <li><a href="#clips" data-go="clips">What's new</a></li>
-    <li><a href="#ideas" data-go="ideas">Ideas &amp; questions</a></li>
     <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
         <li><a href="#help" data-go="help">Help and membership</a></li>
   </ol>
@@ -639,16 +637,6 @@
           </span></div>
       </section>
 
-      <section class="card wide" aria-labelledby="h-ib" data-page="ideas" id="ib-card">
-        <div class="ib-head"><div><h2 id="h-ib">Ideas &amp; <span class="g">questions</span></h2><p class="lede">You use it every day, so you shape what we build next. Vote for the ideas you want, suggest your own, or ask anything. When something moves, it shows up in your Messages.</p></div>
-        <button class="btn" type="button" id="ib-new">Suggest an idea</button></div>
-        <div class="ib-seg" role="tablist" aria-label="Ideas or questions"><button type="button" role="tab" id="ib-t-idea" data-k="idea" aria-selected="true">Ideas <span id="ib-n-idea"></span></button><button type="button" role="tab" id="ib-t-question" data-k="question" aria-selected="false">Questions <span id="ib-n-question"></span></button></div>
-        <div class="ib-tools"><div class="ib-chips" id="ib-chips" role="group" aria-label="Show"></div><label class="sr" for="ib-q">Search ideas and questions</label><input class="ib-search" id="ib-q" type="search" placeholder="Search ideas and questions"></div>
-        <ul class="ib-list" id="ib-list" aria-live="polite"></ul>
-        <p class="small" id="ib-msg" style="margin:12px 0 0">Loading…</p>
-        <details class="fold" style="margin-top:14px"><summary><span class="fold-l">House rules</span></summary><p class="small" style="margin:10px 0 0">No stock tips and no "should I buy X": we can't answer it and it isn't what this space is for. One idea per post, so people can vote on it. Kind, specific, and say what you were trying to do when it went wrong. Only members can see this page.</p></details>
-      </section>
-
       <section class="card wide" aria-labelledby="ib-p-title" data-page="post" id="ib-post">
         <a class="ib-back" href="#ideas" id="ib-p-back">&larr; All ideas</a>
         <div id="ib-p-body"><p class="small">Loading…</p></div>
@@ -668,10 +656,15 @@
 
       <section class="card wide" aria-labelledby="h-help" data-page="help">
         <h2 id="h-help">Help and <span class="g">membership</span></h2>
-        <div class="su-seg help-seg" role="tablist" aria-label="Help and membership"><button type="button" role="tab" id="tab-space" data-v="space" aria-selected="true">Members' space<small>questions and ideas</small></button><button type="button" role="tab" id="tab-memb" data-v="memb" aria-selected="false">Your membership<small>plan, renewal, manage</small></button></div>
+        <div class="su-seg help-seg" role="tablist" aria-label="Help and membership"><button type="button" role="tab" id="tab-space" data-v="space" aria-selected="true">Ideas &amp; questions<small>vote, suggest, ask</small></button><button type="button" role="tab" id="tab-memb" data-v="memb" aria-selected="false">Your membership<small>plan, renewal, manage</small></button></div>
         <div id="pane-space" role="tabpanel">
-        <p class="lede">Ideas, votes and questions, with the other members and us, right here in the members area. Vote for the ideas you'd like sooner, suggest your own, and see what happens to them in your Messages.</p>
-        <div class="row"><a class="btn" href="#ideas/new">Share an idea</a><a class="btn ghost" href="#ideas/ask">Ask a question</a><a class="btn ghost" href="#ideas">Ideas &amp; questions</a></div>
+        <div class="ib-head"><div><p class="lede" style="margin-top:0">You use it every day, so you shape what we build next. Vote for the ideas you want, suggest your own, or ask anything. When something moves, it shows up in your Messages.</p></div>
+        <button class="btn" type="button" id="ib-new">Suggest an idea</button></div>
+        <div class="ib-seg" role="tablist" aria-label="Ideas or questions"><button type="button" role="tab" id="ib-t-idea" data-k="idea" aria-selected="true">Ideas <span id="ib-n-idea"></span></button><button type="button" role="tab" id="ib-t-question" data-k="question" aria-selected="false">Questions <span id="ib-n-question"></span></button></div>
+        <div class="ib-tools"><div class="ib-chips" id="ib-chips" role="group" aria-label="Show"></div><label class="sr" for="ib-q">Search ideas and questions</label><input class="ib-search" id="ib-q" type="search" placeholder="Search ideas and questions"></div>
+        <ul class="ib-list" id="ib-list" aria-live="polite"></ul>
+        <p class="small" id="ib-msg" style="margin:12px 0 0">Loading…</p>
+        <details class="fold" style="margin-top:14px"><summary><span class="fold-l">House rules</span></summary><p class="small" style="margin:10px 0 0">No stock tips and no "should I buy X": we can't answer it and it isn't what this space is for. One idea per post, so people can vote on it. Kind, specific, and say what you were trying to do when it went wrong. Only members can see this page.</p></details>
         <p class="small" style="margin:12px 0 0">Prefer email? <a href="mailto:hello@myrobotisa.com?subject=Members%20area" style="color:var(--green);font-weight:700">hello@myrobotisa.com</a> · replies within two working days.</p>
         </div>
         <div id="pane-memb" role="tabpanel" hidden>
@@ -2270,6 +2263,7 @@
     if (page === "space") page = "ideas";   // 27 Oct 2026: the members' space is the Ideas & questions board
     var ibSheetKind = page === "ideas/new" ? "idea" : page === "ideas/ask" ? "question" : null; if (ibSheetKind) page = "ideas";
     var ibPost = /^post\/\d+$/.test(page) ? +page.slice(5) : null; if (ibPost) page = "post";
+    if (page === "ideas") { page = "help"; helpTab("space"); }   // 27 Oct 2026 (Amit): the board is the first tab of Help and membership
     if (!ibSheetKind && !$("ib-sheet").hidden) ibClose(true);
     if (page === "membership") { page = "help"; helpTab("memb"); }
     if (PAGES.indexOf(page) < 0) page = "home";
@@ -2279,8 +2273,8 @@
     document.querySelector('.mgroup .grp-h > a').classList.toggle("on", true);
     if (page === "lessons") $("les-fold").open = true;
     if (page === "questions") loadFaq();
-    if (page === "home" || page === "questions" || page === "ideas" || page === "post") ibLoad();
-    IB.cur = null; if (page === "post") ibOpen(ibPost); if (page === "ideas") { if (ibSheetKind) { IB.kind = ibSheetKind; ibPaintBoard(); ibSheet(ibSheetKind); } }
+    if (page === "home" || page === "questions" || page === "help" || page === "post") ibLoad();
+    IB.cur = null; if (page === "post") ibOpen(ibPost); if (page === "help") { if (ibSheetKind) { IB.kind = ibSheetKind; ibPaintBoard(); ibSheet(ibSheetKind); } }
     if (page === "setup") suInit();
     if (page === "live") lvInit();
     if (page === "clips") { paintBench(); loadWants(); document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = "0"; }); setTimeout(function () { document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = b.dataset.w; }); }, 60); }
