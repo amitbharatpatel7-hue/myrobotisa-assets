@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="72">
+<meta name="mri-version" content="73">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -48,11 +48,12 @@
   @media (min-width:1400px){ .wrap{max-width:1000px} }
   /* 23 Oct 2026: grows with the site's column on big screens (1180 from 1600px; capped there since 23 Oct 2026 so every section shares one edge) */
   @media (min-width:1600px){ .wrap{max-width:1180px} }
-  /* 27 Oct 2026 (Amit: "too much space in the columns compared to the dash, which is edge to edge"): the members area
-     fills the window beside the sidebar like the dashboard does, 24px gutters (40px on wide screens), capped at 1440. */
-  .wrap{max-width:1440px!important;padding:0 24px 48px!important}
-  @media (min-width:1100px){ .wrap{padding:0 40px 48px!important} }
-  @media (max-width:600px){ .wrap{padding:0 16px 48px!important} }
+  /* 27 Oct 2026 (Amit: "too much space in the columns compared to the dash, which is edge to edge"): INSIDE Robot Dash's
+     in-app view only, the members area fills the window like the dashboard, 24px gutters (40px on wide screens), capped at 1440.
+     In the browser it keeps the website's column so the site and the members area line up (Amit, 27 Oct 2026). */
+  html.in-dash .wrap{max-width:1440px!important;padding:0 24px 48px!important}
+  @media (min-width:1100px){ html.in-dash .wrap{padding:0 40px 48px!important} }
+  @media (max-width:600px){ html.in-dash .wrap{padding:0 16px 48px!important} }
   .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0}
   .brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
   .brand img{width:40px;height:40px;border-radius:11px;border:2px solid var(--green)}
