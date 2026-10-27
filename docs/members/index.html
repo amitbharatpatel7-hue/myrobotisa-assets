@@ -7,12 +7,11 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="70">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mri-version" content="71">
+<!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="manifest" href="manifest.webmanifest">
 <script>
 // Running as the installed app? Any of: launched from the app's start link (?app=1), an app display mode, or iOS's flag.
 (function () {
@@ -45,6 +44,11 @@
   @media (min-width:1400px){ .wrap{max-width:1000px} }
   /* 23 Oct 2026: grows with the site's column on big screens (1180 from 1600px; capped there since 23 Oct 2026 so every section shares one edge) */
   @media (min-width:1600px){ .wrap{max-width:1180px} }
+  /* 27 Oct 2026 (Amit: "too much space in the columns compared to the dash, which is edge to edge"): the members area
+     fills the window beside the sidebar like the dashboard does, 24px gutters (40px on wide screens), capped at 1440. */
+  .wrap{max-width:1440px!important;padding:0 24px 48px!important}
+  @media (min-width:1100px){ .wrap{padding:0 40px 48px!important} }
+  @media (max-width:600px){ .wrap{padding:0 16px 48px!important} }
   .top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0}
   .brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
   .brand img{width:40px;height:40px;border-radius:11px;border:2px solid var(--green)}
@@ -84,8 +88,8 @@
   /* home */
   .preview{display:flex;gap:10px;align-items:flex-start;border:1px dashed var(--amber);border-radius:14px;padding:12px 14px;margin:0 0 18px;font-size:14px;line-height:1.5;color:var(--ink)}
   .preview b{color:var(--amber)}
-  .hello{display:grid;gap:18px;align-items:end;margin:6px 0 22px}
-  @media(min-width:860px){.hello{grid-template-columns:1.3fr 1fr}}
+  .hello{display:grid;gap:18px;align-items:center;margin:6px 0 22px}
+  @media(min-width:860px){.hello{grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr)}}
   .mem{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;align-items:center}
   .mem dt{font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)} .mem dd{margin:0;font-weight:600}
   .grid{display:grid;gap:16px}
@@ -282,6 +286,9 @@
   .gd-tips ul{margin:10px 0 0;padding-left:20px;color:var(--muted)} .gd-tips li{margin:6px 0;line-height:1.5}
 
   /* installed app (22 Oct 2026, owner's choice): menu hidden behind the round button at every width, content full width */
+  /* 27 Oct 2026: anyone still running the old members app is pointed to the dashboard app */
+  .oldapp{display:none} html.app .oldapp{display:block;margin:12px 0 16px;padding:16px 18px;border:2px solid var(--green);border-radius:16px;background:var(--deep2);font-size:15px;line-height:1.5}
+  .oldapp b{color:var(--green)} .oldapp .row{margin-top:12px}
   html.app body{padding-left:0}
   html.app .top .brand{visibility:visible}
   html.app .side{width:min(300px,85vw);padding:calc(22px + env(safe-area-inset-top)) 16px calc(20px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
@@ -430,6 +437,8 @@
 
   <!-- HOME -->
   <main id="v-home" hidden>
+    <div class="oldapp" id="oldapp" role="note"><b>Your app is now your dashboard.</b> This members area is going back to your browser, so you only need one app. Open your dashboard, install it from there (Mac or PC: the install icon in the address bar; iPhone: Share, then Add to Home Screen), then remove this app (Mac: this window's menu, then Uninstall; iPhone: press and hold the icon, then Remove App).
+      <div class="row"><button class="btn" type="button" id="oldapp-go">Open my dashboard</button></div></div>
     <div class="preview" id="preview"><span><b>Early preview.</b> The lessons, QuickStart videos and the code open when sales start in January 2027. Ticks you make here are saved to your account, so you can try it on your phone and your Mac and see them follow you.</span></div>
 
     <section class="hello" data-page="home">
@@ -477,16 +486,16 @@
       </section>
 
       <section class="card" aria-labelledby="h-app" data-page="home">
-        <h2 id="h-app">Your app, <span class="g">every screen</span></h2>
-        <p class="lede">Put this members area, and later your own dashboard, on your phone, Mac or PC. It opens in its own window like any app, with no App Store.</p>
+        <h2 id="h-app">Your dashboard, <span class="g">as an app</span></h2>
+        <p class="lede">One app on your phone, Mac or PC: your dashboard, for quick access to your numbers. It opens in its own window like any app, with no App Store. This members area stays in your browser.</p>
         <div class="devices" id="devices">
           <div class="dev" data-dev="phone" data-install role="button" tabindex="0"><b>Phone</b>iPhone: the menu button by the address (☰ or ⋯), then Share, then Add to Home Screen. Android: menu, then Install app.</div>
           <div class="dev" data-dev="mac" data-install role="button" tabindex="0"><b>Mac</b>Safari: File, then Add to Dock. Chrome: the install icon in the address bar.</div>
           <div class="dev" data-dev="pc" data-install role="button" tabindex="0"><b>Windows PC</b>Chrome or Edge: the install icon in the address bar, then Install.</div>
         </div>
-        <div class="row"><button class="btn" id="b-install" type="button" data-install>Install the app</button></div>
+        <div class="row"><button class="btn" id="b-install" type="button" data-install>Install my dashboard</button></div>
         <p class="small" id="installed" hidden style="margin:12px 0 0;color:var(--green);font-weight:700">You're using the installed app.</p>
-        <p class="small" style="margin:12px 0 0">Signing in inside the app uses the same emailed code: the app keeps its own sign-in, separate from your browser.</p>
+        <p class="small" style="margin:12px 0 0">No dashboard yet? Set it up in <a href="#setup">Set up my robot</a> first. Signing in to the app uses the same emailed code, and Face ID or Touch ID where your device has it.</p>
       </section>
 
       <section class="card wide" aria-labelledby="h-les" data-page="lessons">
@@ -679,9 +688,9 @@
             <div class="row"><button class="btn" type="button" id="sx2-go" disabled>Switch on Claude fixes</button></div>
             <p class="small" id="sx2-msg" role="status" aria-live="polite"></p>
             <p class="small">Each fix also uses a few GitHub minutes. To switch it off, delete the key from your copy's Settings &rarr; Secrets.</p></li>
-          <li class="su-step" id="sx3"><div class="su-h"><b>Your app on your phone, Mac or PC</b><span class="pill o" id="sx3-st">Optional</span></div>
-            <p>One click puts this members area on your phone, Mac or PC, in its own window like any app. No App Store.</p>
-            <div class="row"><button class="btn" type="button" data-install>Install the app</button></div>
+          <li class="su-step" id="sx3"><div class="su-h"><b>Your dashboard on your phone, Mac or PC</b><span class="pill o" id="sx3-st">Optional</span></div>
+            <p>One click puts your dashboard on your phone, Mac or PC, in its own window like any app. No App Store. It is the only app you need: this members area stays in your browser.</p>
+            <div class="row"><button class="btn" type="button" data-install>Install my dashboard</button></div>
             <details id="sx3-more"><summary>Add your robot's live numbers to the app (about 10 minutes)</summary>
               <p>Your plan, holdings and results on a private page only you can open. It runs on your own free Cloudflare account, so your numbers never pass through ours, and it only ever gets a read-only key.</p>
               <ol>
@@ -937,6 +946,8 @@
     me = m; me.user_id = uid;
     $("whoemail").textContent = session.email || m.email;
     var first = (PLAN[m.plan] || "Member");
+    (function (u) { var b = $("oldapp-go"); if (!b) return; if (!u) { b.textContent = "Set up my dashboard"; b.onclick = function () { location.hash = "setup"; }; return; }
+      b.onclick = function () { window.open(u, "_blank", "noopener"); }; })(m.dashboard_url);
     $("hi").innerHTML = m.first_name ? 'Welcome back, <span class="g">' + esc(m.first_name) + '</span>'
       : m.plan === "founding" ? 'Welcome, <span class="g">founding member</span>' : 'Welcome <span class="g">back</span>';
     var lapsed = m.status !== "active";
@@ -1115,6 +1126,7 @@
   addEventListener("focus", function () { if (location.hash === "#mydash" && !$("dash-help").hidden) dashOpen(true); });
   function renderDash() {
     var box = $("dash-box"), url = me.dashboard_url;
+    window.MRI_DASH_URL = url || null;   // the install kit installs the dashboard, not this page (26 Oct 2026)
     if (url) {
       box.innerHTML = '<div class="kv"><div><span>Your dashboard</span><b style="overflow-wrap:anywhere">' + esc(url.replace(/^https:\/\//, "")) + '</b></div><div><span>Who can see it</span><b>Only you</b></div></div>' +
         '<div class="row"><a class="btn" href="' + esc(dashHref(url)) + '">Open my dashboard</a></div>' +
@@ -2104,8 +2116,8 @@
 </style>
 <dialog id="ik" aria-labelledby="ik-h">
   <div class="ik-c">
-    <h2 id="ik-h">Put it on your <i>phone, Mac or PC</i></h2>
-    <p class="ik-sub">It installs like an app, with no App Store and nothing to download, and opens in its own window.</p>
+    <h2 id="ik-h">Put your dashboard on your <i>phone, Mac or PC</i></h2>
+    <p class="ik-sub" id="ik-sub">Your dashboard has just opened in a new tab. Over there, follow these steps. It installs like an app, with no App Store, and opens in its own window.</p>
     <div class="ik-tabs" role="group" aria-label="Your device">
       <button type="button" data-ik="iphone">iPhone</button>
       <button type="button" data-ik="ipad">iPad</button>
@@ -2174,10 +2186,15 @@
   document.getElementById("ik-show").addEventListener("click", function () { dlg.close ? dlg.close() : dlg.removeAttribute("open"); showCoach(); });
   [].forEach.call(dlg.querySelectorAll("[data-ik]"), function (b) { b.addEventListener("click", function () { pick(b.dataset.ik); }); });
   function open() {
-    if (standalone) { alertInstalled(); return; }
-    if (deferred) { // the browser can install it in one click: do that straight away
-      deferred.prompt(); deferred.userChoice.finally(function () { deferred = null; }); return;
+    // 26 Oct 2026 (Amit): the only app is the member's dashboard. Open it in a new tab, then show the steps for that tab.
+    var url = window.MRI_DASH_URL;
+    if (!url) {
+      pick(dev); document.getElementById("ik-steps").innerHTML = "<li><span><b>Set up your dashboard first.</b> It takes about 10 minutes in <a href=\"#setup\" onclick=\"document.getElementById('ik').close()\">Set up my robot</a>, then come back here to put it on your phone.</span></li>";
+      document.getElementById("ik-note").textContent = ""; document.getElementById("ik-sub").textContent = "The app is your dashboard, so it needs to exist before it can be installed.";
+      document.getElementById("ik-go").hidden = true; if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", ""); return;
     }
+    window.open(url, "_blank", "noopener");
+    document.getElementById("ik-sub").textContent = "Your dashboard has just opened in a new tab. Over there, follow these steps. It installs like an app, with no App Store, and opens in its own window.";
     pick(dev);
     document.getElementById("ik-go").hidden = true;
     if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
@@ -2189,8 +2206,6 @@
   document.getElementById("ik-close").addEventListener("click", function () { dlg.close ? dlg.close() : dlg.removeAttribute("open"); });
   dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
   document.getElementById("ik-go").addEventListener("click", function () { if (deferred) { dlg.close(); open(); } });
-  addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); deferred = e; document.getElementById("ik-go").hidden = false; });
-  addEventListener("appinstalled", function () { deferred = null; standalone = true; });
   document.addEventListener("click", function (e) {
     var t = e.target.closest && e.target.closest("[data-install]");
     if (t) { e.preventDefault(); open(); }
