@@ -228,3 +228,14 @@ grant select, insert on public.community_posts to authenticated;
 grant select, insert, delete on public.community_votes to authenticated;
 grant select, insert, delete on public.community_comments to authenticated;
 grant select on public.community_status_events to authenticated;
+
+-- Applied as two follow-ups the same evening (27 Oct 2026), after the security advisor:
+-- Supabase's default privileges gave authenticated every right on new tables (TRUNCATE ignores RLS),
+-- and the two helpers were callable without signing in. Keep only what the members area uses.
+revoke all on public.community_posts, public.community_votes, public.community_comments, public.community_status_events from authenticated;
+grant select, insert on public.community_posts to authenticated;
+grant select, insert, delete on public.community_votes to authenticated;
+grant select, insert, delete on public.community_comments to authenticated;
+grant select on public.community_status_events to authenticated;
+revoke execute on function public.community_name(), public.is_owner() from public, anon;
+grant execute on function public.community_name(), public.is_owner() to authenticated;
