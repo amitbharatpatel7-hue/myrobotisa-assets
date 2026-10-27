@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="75">
+<meta name="mri-version" content="76">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -210,6 +210,51 @@
   #fq-list summary::after{content:'+';color:var(--green);font-family:Anton,Impact,sans-serif;font-size:22px;line-height:1;flex:none} #fq-list details[open] summary::after{content:'\2013'}
   .fq-a{margin:10px 0 0;color:var(--muted);line-height:1.55;font-size:15px} .fq-a p{margin:0 0 8px} .fq-a ul{margin:0 0 8px;padding-left:20px} .fq-a a{color:var(--green);font-weight:700} .fq-a code{font-size:13px}
   .help-seg{margin:4px 0 14px} .help-seg button[aria-selected="true"]{border-color:var(--green);background:#14402C;color:var(--green)}
+  /* Ideas & questions (27 Oct 2026, Amit): the members' own board in Supabase, replacing GitHub Discussions. */
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .ib-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px} .ib-head > div{flex:1 1 320px}
+  .ib-seg{display:inline-flex;gap:4px;padding:4px;background:var(--deep3);border:1px solid var(--rule);border-radius:999px;margin-top:16px}
+  .ib-seg button{min-height:42px;padding:0 18px;border:0;border-radius:999px;background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:14px;cursor:pointer}
+  .ib-seg button[aria-selected="true"]{background:var(--green);color:var(--deep)}
+  .ib-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:14px}
+  .ib-search{flex:0 1 340px;min-width:200px;min-height:44px;border-radius:999px;border:1px solid var(--rule);background:var(--deep3);color:var(--ink);font:inherit;font-size:15px;padding:0 16px}
+  .ib-chips,.ib-cats{display:flex;flex-wrap:wrap;gap:8px}
+  .ib-chips button,.ib-cats button{min-height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--muted);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+  .ib-chips button[aria-pressed="true"],.ib-cats button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--deep)}
+  .ib-list{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:10px}
+  .ib-post{display:flex;gap:14px;align-items:flex-start;background:var(--deep3);border:1px solid var(--rule);border-radius:16px;padding:14px 16px}
+  .ib-post.hid,.ib-c li.hid{opacity:.55}
+  .ib-vote{flex:none;width:58px;min-height:64px;border-radius:12px;border:1px solid var(--rule);background:var(--deep);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:inherit;font-weight:700;font-size:16px;cursor:pointer}
+  .ib-vote:hover{border-color:var(--green)} .ib-vote[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:var(--deep)} .ib-vote svg{width:18px;height:18px}
+  .ib-q{flex:none;width:58px;min-height:64px;border-radius:12px;border:1px solid var(--rule);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:var(--muted)}
+  .ib-q small{font-size:10px;font-weight:600} .ib-q.ok{border-color:var(--green);color:var(--green)}
+  .ib-body{flex:1;min-width:0}
+  .ib-body a.ib-t{display:block;color:var(--ink);text-decoration:none;font-weight:700;font-size:16px;line-height:1.35} .ib-body a.ib-t:hover{color:var(--green)}
+  .ib-meta{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin-top:8px;font-size:12.5px;color:var(--muted)} .ib-meta .pill{padding:3px 8px;font-size:10px}
+  .pill.st-planned{border-color:var(--pink-ink);color:var(--pink-ink)} .pill.st-building{border-color:var(--amber);color:var(--amber)} .pill.st-live{background:var(--green);border-color:var(--green);color:var(--deep)}
+  .ib-back{display:inline-flex;align-items:center;min-height:44px;color:var(--muted);text-decoration:none;font-weight:600} .ib-back:hover{color:var(--green)}
+  .ib-h1{font-family:Anton,Impact,"Arial Narrow Bold",sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(28px,5vw,40px);line-height:1.08;margin:10px 0 6px;letter-spacing:.01em}
+  .ib-desc{white-space:pre-wrap;line-height:1.6;margin:12px 0 0}
+  .ib-box{background:var(--deep3);border:1px solid var(--rule);border-radius:16px;padding:16px;margin-top:16px}
+  .ib-box h3{margin:0 0 10px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)} .ib-box p{margin:0;line-height:1.55;white-space:pre-wrap}
+  .ib-tl{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+  .ib-tl li{display:flex;align-items:center;gap:12px;font-size:14px} .ib-tl i{flex:none;width:20px;height:20px;border-radius:999px;border:2px solid var(--rule)}
+  .ib-tl li.done i{background:var(--green);border-color:var(--green)} .ib-tl li.now i{background:var(--amber);border-color:var(--amber);box-shadow:0 0 0 4px rgba(255,194,75,.25)}
+  .ib-tl li.now span{color:var(--amber);font-weight:700} .ib-tl li.next span{color:var(--muted)} .ib-tl time{margin-left:auto;color:var(--muted);font-size:13px}
+  .ib-c{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:12px}
+  .ib-c li{border-top:1px solid var(--rule);padding-top:12px} .ib-c li:first-child{border-top:0;padding-top:0} .ib-c li.ans{border:1px solid var(--green);border-radius:14px;padding:12px}
+  .ib-c .who{font-weight:700;font-size:14px} .ib-c .who .pill{margin-left:6px;padding:2px 7px;font-size:10px} .ib-c time{color:var(--muted);font-size:12.5px;margin-left:6px}
+  .ib-c p{margin:4px 0 0;white-space:pre-wrap;line-height:1.55}
+  .ib-act{margin-top:6px;display:flex;gap:14px} .ib-act button{background:none;border:0;color:var(--green);font:inherit;font-size:13px;font-weight:700;padding:0;cursor:pointer;min-height:32px}
+  .ib-form textarea,.ib-form input[type=text],.ib-form select{width:100%;border-radius:14px;border:1px solid var(--rule);background:var(--deep);color:var(--ink);font:inherit;font-size:16px;padding:12px 14px}
+  .ib-form textarea{resize:vertical} .ib-form label{display:block;font-weight:700;font-size:14px;margin:14px 0 6px} .ib-form label small{font-weight:400;color:var(--muted)}
+  #ib-sheet{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center;background:rgba(20,0,24,.72)}
+  #ib-sheet .ib-panel{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:var(--deep);border:1px solid var(--rule);border-radius:24px 24px 0 0;padding:16px 20px calc(24px + env(safe-area-inset-bottom))}
+  @media (min-width:700px){ #ib-sheet{align-items:center} #ib-sheet .ib-panel{border-radius:24px} }
+  #ib-sheet h2{margin:0;font-family:Anton,Impact,"Arial Narrow Bold",sans-serif;font-weight:400;text-transform:uppercase;font-size:28px}
+  .ib-x{flex:none;width:44px;height:44px;border-radius:999px;border:0;background:var(--deep2);color:var(--ink);font-size:24px;line-height:1;cursor:pointer}
+  .ib-dupes{background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:12px 14px;margin-top:12px} .ib-dupes .ib-post{background:var(--deep3)}
+  html.ib-open body{overflow:hidden}
   .sp-search{margin:12px 0 0;max-width:420px} .sp-list .sp-grp{font-size:11px;color:var(--muted);border:1px solid var(--rule);border-radius:999px;padding:2px 8px} .sp-filter button{background:var(--deep);border:1px solid var(--rule);color:var(--muted);border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer} .sp-filter button[aria-pressed="true"]{border-color:var(--green);color:var(--green)}
   .note{background:var(--deep3);border:1px solid var(--rule);border-left:4px solid var(--rule);border-radius:14px;padding:12px 14px}
   .msg-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -386,6 +431,7 @@
         <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
         <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
         <li><a href="#clips" data-go="clips">What's new</a></li>
+        <li><a href="#ideas" data-go="ideas">Ideas &amp; questions</a></li>
         <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
         <li><a href="#help" data-go="help">Help and membership</a></li>
       </ol>
@@ -405,11 +451,26 @@
     <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
     <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
     <li><a href="#clips" data-go="clips">What's new</a></li>
+    <li><a href="#ideas" data-go="ideas">Ideas &amp; questions</a></li>
     <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
         <li><a href="#help" data-go="help">Help and membership</a></li>
   </ol>
   <div class="side-cta"><p class="side-social"><a href="https://www.youtube.com/@myrobotisa" aria-label="My Robot I.S.A. on YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></svg></a><a href="https://www.instagram.com/myrobotisa/" aria-label="My Robot I.S.A. on Instagram" title="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg></a><a href="https://www.tiktok.com/@myrobotisa" aria-label="My Robot I.S.A. on TikTok" title="TikTok"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.8 3.6 4 3.8v3.1a7.2 7.2 0 0 1-4-1.2v6.2A5.9 5.9 0 1 1 10.7 9v3.2a2.8 2.8 0 1 0 2.8 2.8V3h3.1Z"/></svg></a></p></div>
 </nav>
+<div id="ib-sheet" hidden><div class="ib-panel" role="dialog" aria-modal="true" aria-labelledby="ib-s-h">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px"><h2 id="ib-s-h">Suggest an idea</h2><button class="ib-x" type="button" id="ib-s-x" aria-label="Close">&times;</button></div>
+  <form class="ib-form" id="ib-s-form" novalidate>
+    <label for="ib-s-title" id="ib-s-tl">Your idea in one line</label>
+    <input type="text" id="ib-s-title" maxlength="140" autocomplete="off">
+    <div class="ib-dupes" id="ib-dupes" hidden><b>Is it one of these?</b><p class="small" style="margin:2px 0 0">Voting counts the same as posting, and it's quicker.</p><ul class="ib-list" id="ib-dupe-list" style="margin-top:10px"></ul></div>
+    <label for="ib-s-body">Anything else? <small>Optional</small></label>
+    <textarea id="ib-s-body" rows="4" maxlength="4000"></textarea>
+    <fieldset style="border:0;margin:0;padding:0"><legend style="font-weight:700;font-size:14px;margin:14px 0 6px;padding:0">What's it about?</legend><div class="ib-cats" id="ib-cats"></div></fieldset>
+    <p class="small" id="ib-s-msg" role="status" style="min-height:1.5em;margin:12px 0 0"></p>
+    <button class="btn" type="submit" id="ib-s-go" style="width:100%">Post my idea</button>
+    <p class="small" style="text-align:center;margin:10px 0 0">We read every one. Updates arrive in your Messages here, not by email.</p>
+  </form>
+</div></div>
 <button id="scrim" tabindex="-1" aria-hidden="true"></button>
 <button id="menubtn" aria-label="Sections menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
 <div class="wrap" id="top">
@@ -477,9 +538,9 @@
 
     <section class="card" aria-labelledby="h-sph" id="sp-home" data-page="home">
       <h2 id="h-sph">The members' <span class="g">space</span></h2>
-      <p class="lede">Ideas, votes and news, with the other members and us. Thumbs up what you'd like built next.</p>
-      <div class="row"><a class="btn" id="sp-idea" href="https://github.com/myrobotisa/community/discussions/new?category=ideas" target="_blank" rel="noopener">Share an idea</a><a class="btn ghost" id="sp-ask" href="#questions" data-go="questions">Ask a question</a><a class="btn ghost" href="#help" data-go="help">See all</a></div>
-      <ul class="sp-list" id="sp-home-list" aria-live="polite"></ul>
+      <p class="lede">Vote for what you'd like built next, or suggest something. You'll see what happens to it in your Messages.</p>
+      <div class="row"><a class="btn" id="sp-idea" href="#ideas/new">Share an idea</a><a class="btn ghost" id="sp-ask" href="#ideas/ask">Ask a question</a><a class="btn ghost" href="#ideas">See them all</a></div>
+      <ul class="ib-list" id="sp-home-list" aria-live="polite"></ul>
       <p class="small" id="sp-home-msg" style="margin:10px 0 0"></p>
     </section>
 
@@ -553,7 +614,8 @@
         <h2 id="h-new">What's <span class="g">new</span></h2>
         <p class="lede">Shipped first, then what's on the bench. Tap <b>I want this</b> on anything you'd like sooner: it's saved to your account and counts.</p>
         <ol class="tl" id="wn-list">
-          <li><span class="tl-dot"></span><div><span class="tl-date">23 Oct 2026</span><span class="pill g">New</span><b>Step-by-step guides, with tips</b><p>Every QuickStart step and lesson, one step per card, real GitHub and Resend screens, a Copy button for anything you'd otherwise type.</p><a class="tl-go" href="#start" data-go="start">Open Start here &rarr;</a></div></li>
+          <li><span class="tl-dot"></span><div><span class="tl-date">27 Oct 2026</span><span class="pill g">New</span><b>Ideas &amp; questions, right here</b><p>Vote for what we build next, suggest your own ideas and ask questions without leaving the members area. When an idea you backed moves, it shows up in your Messages.</p> <a href="#ideas">Open Ideas &amp; questions &rarr;</a></div></li>
+          <li><span class="tl-dot"></span><div><span class="tl-date">23 Oct 2026</span><b>Step-by-step guides, with tips</b><p>Every QuickStart step and lesson, one step per card, real GitHub and Resend screens, a Copy button for anything you'd otherwise type.</p><a class="tl-go" href="#start" data-go="start">Open Start here &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">22 Oct 2026</span><b>Lesson videos, re-cut</b><p>All 20 in the site's own look; the home-page clip now opens with what the robot was tested through.</p><a class="tl-go" href="#lessons" data-go="lessons">The 14 lessons &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">22 Oct 2026</span><b>Faster sign-in</b><p>Face ID, Touch ID or Windows Hello, one passkey per device. The email code still works.</p><a class="tl-go" href="#passkeys" data-go="passkeys">Set it up &rarr;</a></div></li>
         </ol>
@@ -577,10 +639,25 @@
           </span></div>
       </section>
 
+      <section class="card wide" aria-labelledby="h-ib" data-page="ideas" id="ib-card">
+        <div class="ib-head"><div><h2 id="h-ib">Ideas &amp; <span class="g">questions</span></h2><p class="lede">You use it every day, so you shape what we build next. Vote for the ideas you want, suggest your own, or ask anything. When something moves, it shows up in your Messages.</p></div>
+        <button class="btn" type="button" id="ib-new">Suggest an idea</button></div>
+        <div class="ib-seg" role="tablist" aria-label="Ideas or questions"><button type="button" role="tab" id="ib-t-idea" data-k="idea" aria-selected="true">Ideas <span id="ib-n-idea"></span></button><button type="button" role="tab" id="ib-t-question" data-k="question" aria-selected="false">Questions <span id="ib-n-question"></span></button></div>
+        <div class="ib-tools"><div class="ib-chips" id="ib-chips" role="group" aria-label="Show"></div><label class="sr" for="ib-q">Search ideas and questions</label><input class="ib-search" id="ib-q" type="search" placeholder="Search ideas and questions"></div>
+        <ul class="ib-list" id="ib-list" aria-live="polite"></ul>
+        <p class="small" id="ib-msg" style="margin:12px 0 0">Loading…</p>
+        <details class="fold" style="margin-top:14px"><summary><span class="fold-l">House rules</span></summary><p class="small" style="margin:10px 0 0">No stock tips and no "should I buy X": we can't answer it and it isn't what this space is for. One idea per post, so people can vote on it. Kind, specific, and say what you were trying to do when it went wrong. Only members can see this page.</p></details>
+      </section>
+
+      <section class="card wide" aria-labelledby="ib-p-title" data-page="post" id="ib-post">
+        <a class="ib-back" href="#ideas" id="ib-p-back">&larr; All ideas</a>
+        <div id="ib-p-body"><p class="small">Loading…</p></div>
+      </section>
+
       <section class="card wide faq" aria-labelledby="h-faq" data-page="questions" id="faq-page">
         <h2 id="h-faq">Questions people <span class="p">ask</span></h2>
-        <p class="lede">Tap a question for its answer. Not here? Ask it: common questions get an instant answer, a person reads every post, and once it's answered it appears below.</p>
-        <div class="row"><a class="btn" id="sp-ask3" href="https://github.com/myrobotisa/community/discussions/new?category=q-a" target="_blank" rel="noopener">Ask a question</a><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=Question">Email instead</a></div>
+        <p class="lede">Tap a question for its answer. Not here? Ask it: a person reads every question, other members can help, and once it's answered it appears below.</p>
+        <div class="row"><a class="btn" id="sp-ask3" href="#ideas/ask">Ask a question</a><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=Question">Email instead</a></div>
         <div class="fg" id="fq-members" hidden>
           <h2 class="fgh">Asked by <span class="p">members</span></h2>
           <div id="fq-list"></div>
@@ -593,13 +670,9 @@
         <h2 id="h-help">Help and <span class="g">membership</span></h2>
         <div class="su-seg help-seg" role="tablist" aria-label="Help and membership"><button type="button" role="tab" id="tab-space" data-v="space" aria-selected="true">Members' space<small>questions and ideas</small></button><button type="button" role="tab" id="tab-memb" data-v="memb" aria-selected="false">Your membership<small>plan, renewal, manage</small></button></div>
         <div id="pane-space" role="tabpanel">
-        <p class="lede">Ideas, votes and news, with the other members and us: a private board on GitHub for members only. Thumbs up the ideas you'd like sooner. Got a question? It has its own page: <a href="#questions" data-go="questions" style="color:var(--green);font-weight:700">Questions</a>.</p>
-        <div class="row"><a class="btn" id="sp-idea2" href="https://github.com/myrobotisa/community/discussions/new?category=ideas" target="_blank" rel="noopener">Share an idea</a><a class="btn ghost" id="sp-ask2" href="#questions" data-go="questions">Ask a question</a><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=Members%20area">Email support</a></div>
-        <div class="sp-filter" role="group" aria-label="Show" id="sp-filter"><button type="button" data-f="" aria-pressed="true">Latest</button><button type="button" data-f="ideas" aria-pressed="false">Ideas</button><button type="button" data-f="announcements" aria-pressed="false">From us</button></div>
-        <ul class="sp-list" id="sp-list" aria-live="polite"></ul>
-        <p class="small" id="sp-msg" style="margin:10px 0 0"></p>
-        <details class="fold" style="margin-top:12px"><summary><span class="fold-l">House rules</span></summary><p class="small" style="margin:10px 0 0">No stock tips and no "should I buy X": we can't answer it and it isn't what the space is for. One idea per post, so people can vote on it. Kind, specific, and say what you were trying to do when it went wrong.</p></details>
-        <p class="small" style="margin:12px 0 0"><a href="https://github.com/myrobotisa/community/discussions" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">Open the members' space on GitHub</a> · Email replies within two working days · No invitation? Email us your GitHub username.</p>
+        <p class="lede">Ideas, votes and questions, with the other members and us, right here in the members area. Vote for the ideas you'd like sooner, suggest your own, and see what happens to them in your Messages.</p>
+        <div class="row"><a class="btn" href="#ideas/new">Share an idea</a><a class="btn ghost" href="#ideas/ask">Ask a question</a><a class="btn ghost" href="#ideas">Ideas &amp; questions</a></div>
+        <p class="small" style="margin:12px 0 0">Prefer email? <a href="mailto:hello@myrobotisa.com?subject=Members%20area" style="color:var(--green);font-weight:700">hello@myrobotisa.com</a> · replies within two working days.</p>
         </div>
         <div id="pane-memb" role="tabpanel" hidden>
         <div class="kv" id="mem-kv"></div>
@@ -1915,7 +1988,7 @@
   });
 
   // ---- one section per page: Home (welcome and messages), Start here, Lessons, Code, Dashboard, Clips, Help
-  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help", "guide", "questions"];   // #space and #membership map to help
+  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help", "guide", "questions", "ideas", "post"];   // #space maps to ideas, #membership to help
   // Questions (23 Oct 2026): the public Questions page, shown inside the members area so the members menu stays put. Fetched once.
   var faqLoaded = false;
   function loadFaq() {
@@ -1928,59 +2001,264 @@
       $("faq-body").innerHTML = sec.innerHTML;
     }).catch(function () { faqLoaded = false; $("faq-body").innerHTML = '<p class="small">Couldn\'t load the questions just now. <a href="../questions.html">Open the public page</a>.</p>'; });
   }
-  // ---- Members' space feed (26 Oct 2026): community-feed reads GitHub for us; posting opens GitHub in a new tab
-  var SP = { posts: null, filter: "", loading: false };
-  // Safe rendering of an answer's markdown: everything is escaped first; then bold, bullets, paragraphs and links to our own hosts
-  function spMd(t) {
-    var e = esc(t).replace(/<details>[\s\S]*?<summary>[\s\S]*?<\/summary>|<\/?details>/g, "");
-    e = e.replace(/\[([^\]]+)\]\((https:\/\/(?:[a-z0-9.-]*\.)?(?:myrobotisa\.com|github\.com)\/[^)\s]*)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
-    e = e.replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>").replace(/`([^`]+)`/g, "<code>$1</code>");
-    return e.split(/\n{2,}/).map(function (p) { var ls = p.split("\n"); return ls.every(function (l) { return /^\s*[-*] /.test(l); }) ? "<ul>" + ls.map(function (l) { return "<li>" + l.replace(/^\s*[-*] /, "") + "</li>"; }).join("") + "</ul>" : "<p>" + p.replace(/\n/g, "<br>") + "</p>"; }).join("");
+  // ---- Ideas & questions (27 Oct 2026, Amit): the members' own board in Supabase, replacing GitHub Discussions.
+  // Members only (RLS on community_*). Votes, posts and replies go straight to the tables; status, team updates, answers
+  // and hiding go through the community_* functions. What happens to a post reaches people as Messages, never email.
+  // Schema: ops/supabase/2026-10-27-community.sql in this repo.
+  var IB = { posts: null, mine: {}, answers: {}, kind: "idea", filter: "", q: "", loading: null, cur: null, sheetKind: "idea", cat: "robot" };
+  var IB_ST = { review: "Under review", planned: "Planned", building: "Building", live: "Live", declined: "Not for now" };
+  var IB_CAT = { robot: "Robot settings", lessons: "Lessons", dashboard: "Dashboard and app", emails: "Messages and emails", account: "Account", other: "Something else" };
+  var IB_UP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>';
+  var IB_COLS = "id,kind,title,body,category,status,author_name,user_id,vote_count,comment_count,answer_id,hidden,created_at,status_at";
+  var IB_STOP = ["what", "when", "where", "which", "with", "that", "this", "there", "could", "would", "should", "have", "from", "your", "about", "into", "does", "make", "like", "just", "want", "able", "please", "robot", "option"];
+  function spAgo(iso) { var m = Math.round((Date.now() - Date.parse(iso)) / 60000); if (m < 60) return (m < 2 ? "just now" : m + " min ago"); var h = Math.round(m / 60); if (h < 36) return h + (h === 1 ? " hour ago" : " hours ago"); var d = Math.round(h / 24); return d + (d === 1 ? " day ago" : " days ago"); }
+  function ibDate(iso) { return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short" }); }
+  function ibOwner() { return !!(me && me.plan === "owner"); }
+  function ibJson(r) {
+    return r.text().then(function (t) {
+      var j = null; try { j = t ? JSON.parse(t) : null; } catch (e) {}
+      if (!r.ok) { var m = j && j.message; throw new Error(m && !/^(new row|permission|JWT)/i.test(m) ? m : "That didn't work. Check you're online and try again."); }
+      return j;
+    });
   }
+  function ibRpc(fn, args) { return rest("rpc/" + fn, { method: "POST", body: JSON.stringify(args) }).then(ibJson); }
+  function ibFind(id) { return (IB.posts || []).filter(function (x) { return x.id === id; })[0]; }
+  function ibLoad(force) {
+    if (IB.loading && !force) return IB.loading;
+    IB.loading = Promise.all([
+      rest("community_posts?select=" + IB_COLS + "&order=created_at.desc&limit=1000").then(ibJson),
+      rest("community_votes?select=post_id").then(ibJson)
+    ]).then(function (res) {
+      IB.posts = res[0] || []; IB.mine = {}; (res[1] || []).forEach(function (v) { IB.mine[v.post_id] = 1; });
+      var ans = IB.posts.filter(function (p) { return p.answer_id; }).map(function (p) { return p.answer_id; });
+      return ans.length ? rest("community_comments?select=id,body,author_name,is_team&id=in.(" + ans.join(",") + ")").then(ibJson) : [];
+    }).then(function (cs) { IB.answers = {}; (cs || []).forEach(function (c) { IB.answers[c.id] = c; }); ibPaintAll(); })
+      .catch(function () {
+        IB.loading = null; var t = "Couldn't load ideas and questions just now. Check you're online and try again.";
+        $("ib-msg").textContent = t; $("sp-home-msg").textContent = t;
+      });
+    return IB.loading;
+  }
+  function ibPill(p) {
+    if (p.kind === "question") return p.answer_id ? '<span class="pill g">Answered</span>' : '<span class="pill">Waiting for an answer</span>';
+    return '<span class="pill st-' + esc(p.status) + '">' + esc(IB_ST[p.status] || "") + "</span>";
+  }
+  function ibRow(p) {
+    var li = document.createElement("li"), on = !!IB.mine[p.id];
+    li.className = "ib-post" + (p.hidden ? " hid" : "");
+    var left = p.kind === "idea"
+      ? '<button type="button" class="ib-vote" data-vote="' + p.id + '" aria-pressed="' + on + '" aria-label="' + (on ? "Take back your vote for: " : "Vote for: ") + esc(p.title) + '">' + IB_UP + "<span>" + p.vote_count + "</span></button>"
+      : '<span class="ib-q' + (p.answer_id ? " ok" : "") + '" aria-hidden="true">' + p.comment_count + "<small>" + (p.comment_count === 1 ? "reply" : "replies") + "</small></span>";
+    li.innerHTML = left + '<div class="ib-body"><a class="ib-t" href="#post/' + p.id + '">' + esc(p.title) + '</a><div class="ib-meta">' + ibPill(p) +
+      "<span>" + esc(IB_CAT[p.category] || "") + "</span>" +
+      (p.kind === "idea" ? "<span>" + p.comment_count + (p.comment_count === 1 ? " comment" : " comments") + "</span>" : "") +
+      "<span>" + esc(p.author_name) + " · " + esc(spAgo(p.created_at)) + "</span>" + (p.hidden ? '<span class="pill">Hidden</span>' : "") + "</div></div>";
+    return li;
+  }
+  function ibMatch(p, q) {
+    if (!q) return true; var h = (p.title + " " + p.body).toLowerCase();
+    return q.toLowerCase().split(/\s+/).filter(Boolean).every(function (w) { return h.indexOf(w) >= 0; });
+  }
+  function ibPaintAll() { ibPaintBoard(); ibPaintHome(); fqPaint(); if (IB.cur) ibOpen(IB.cur); }
+  function ibPaintBoard() {
+    if (!IB.posts) return;
+    var k = IB.kind;
+    ["idea", "question"].forEach(function (x) {
+      $("ib-t-" + x).setAttribute("aria-selected", String(x === k));
+      $("ib-n-" + x).textContent = "· " + IB.posts.filter(function (p) { return p.kind === x && !p.hidden; }).length;
+    });
+    $("ib-new").textContent = k === "idea" ? "Suggest an idea" : "Ask a question";
+    var chips = k === "idea" ? [["", "All"], ["review", "Under review"], ["planned", "Planned"], ["building", "Building"], ["live", "Live"]] : [["", "All"], ["open", "Waiting for an answer"], ["answered", "Answered"]];
+    if (!chips.some(function (c) { return c[0] === IB.filter; })) IB.filter = "";
+    $("ib-chips").innerHTML = chips.map(function (c) { return '<button type="button" data-f="' + c[0] + '" aria-pressed="' + (c[0] === IB.filter) + '">' + c[1] + "</button>"; }).join("");
+    var list = IB.posts.filter(function (p) {
+      if (p.kind !== k) return false;
+      if (IB.filter === "open") { if (p.answer_id) return false; }
+      else if (IB.filter === "answered") { if (!p.answer_id) return false; }
+      else if (IB.filter && p.status !== IB.filter) return false;
+      return ibMatch(p, IB.q);
+    });
+    list.sort(k === "idea"
+      ? function (a, b) { return ((a.status === "declined") - (b.status === "declined")) || (b.vote_count - a.vote_count) || (Date.parse(b.created_at) - Date.parse(a.created_at)); }
+      : function (a, b) { return Date.parse(b.created_at) - Date.parse(a.created_at); });
+    var ul = $("ib-list"); ul.innerHTML = ""; list.forEach(function (p) { ul.appendChild(ibRow(p)); });
+    $("ib-msg").textContent = list.length ? "" : (IB.q ? "Nothing matches that. Try other words, or post it." : (k === "idea" ? "No ideas here yet. Be the first." : "No questions here yet. Ask the first one."));
+  }
+  function ibPaintHome() {
+    var ul = $("sp-home-list"); ul.innerHTML = "";
+    var top = IB.posts.filter(function (p) { return p.kind === "idea" && !p.hidden && p.status !== "live" && p.status !== "declined"; })
+      .sort(function (a, b) { return (b.vote_count - a.vote_count) || (Date.parse(b.created_at) - Date.parse(a.created_at)); }).slice(0, 3);
+    top.forEach(function (p) { ul.appendChild(ibRow(p)); });
+    $("sp-home-msg").textContent = top.length ? "" : "No ideas yet. Be the first.";
+  }
+  // Questions page: members' answered questions fold in under the FAQ; unanswered ones are listed with a link.
   function fqPaint() {
-    if (!SP.posts) return;
-    var qs = SP.posts.filter(function (p) { return p.category === "q-a"; }), done = qs.filter(function (p) { return p.answered && p.answer; }), waiting = qs.filter(function (p) { return !p.answered; });
+    if (!IB.posts) return;
+    var qs = IB.posts.filter(function (p) { return p.kind === "question" && !p.hidden; });
+    var done = qs.filter(function (p) { return p.answer_id && IB.answers[p.answer_id]; }), waiting = qs.filter(function (p) { return !p.answer_id; });
     var box = $("fq-members"), list = $("fq-list"); box.hidden = !qs.length; list.innerHTML = "";
     done.sort(function (a, b) { return a.title.localeCompare(b.title); }).forEach(function (p) {
-      var d = document.createElement("details"); d.innerHTML = "<summary></summary><div class=\"fq-a\"></div><p class=\"small\"><a class=\"fq-gh\" target=\"_blank\" rel=\"noopener\">Open on GitHub</a>" + (p.replies > 1 ? " · " + p.replies + " replies" : "") + "</p>";
-      d.querySelector("summary").textContent = p.title; d.querySelector(".fq-a").innerHTML = spMd(p.answer.body); d.querySelector("a.fq-gh").href = p.url; list.appendChild(d);
+      var a = IB.answers[p.answer_id], d = document.createElement("details");
+      d.innerHTML = '<summary></summary><div class="fq-a"><p style="white-space:pre-wrap"></p></div><p class="small"><a></a></p>';
+      d.querySelector("summary").textContent = p.title; d.querySelector(".fq-a p").textContent = a.body;
+      var l = d.querySelector("p.small a"); l.href = "#post/" + p.id;
+      l.textContent = (a.is_team ? "Answered by the team" : "Answered by " + a.author_name) + (p.comment_count > 1 ? " · " + p.comment_count + " replies" : "") + " →";
+      list.appendChild(d);
     });
-    var w = $("fq-waiting"); w.hidden = !waiting.length;
-    if (waiting.length) { w.innerHTML = "Waiting for an answer: " + waiting.map(function (p) { return '<a target="_blank" rel="noopener"></a>'; }).join(", ") + "."; waiting.forEach(function (p, i) { var a = w.querySelectorAll("a")[i]; a.href = p.url; a.textContent = p.title; }); }
+    var w = $("fq-waiting"); w.hidden = !waiting.length; w.innerHTML = "";
+    if (waiting.length) {
+      w.appendChild(document.createTextNode("Waiting for an answer: "));
+      waiting.forEach(function (p, i) { var a = document.createElement("a"); a.href = "#post/" + p.id; a.textContent = p.title; w.appendChild(a); w.appendChild(document.createTextNode(i < waiting.length - 1 ? ", " : ". Know one? Tap it and reply.")); });
+    }
   }
-  function spAgo(iso) { var m = Math.round((Date.now() - Date.parse(iso)) / 60000); if (m < 60) return (m < 2 ? "just now" : m + " min ago"); var h = Math.round(m / 60); if (h < 36) return h + (h === 1 ? " hour ago" : " hours ago"); var d = Math.round(h / 24); return d + (d === 1 ? " day ago" : " days ago"); }
-  function spRow(p) {
-    var cat = { "q-a": ["Question", "q"], "ideas": ["Idea", "i"], "announcements": ["From us", "a"] }[p.category] || ["General", ""];
-    var li = document.createElement("li"), a = document.createElement("a"); a.href = p.url; a.target = "_blank"; a.rel = "noopener";
-    a.innerHTML = '<b></b><span class="sp-n"></span><span class="sp-meta"><span class="pill ' + cat[1] + '"></span><span class="sp-ans" hidden>&#10003; Answered</span><span class="sp-when"></span></span>';
-    a.querySelector("b").textContent = p.title; a.querySelector(".pill").textContent = cat[0];
-    a.querySelector(".sp-n").textContent = (p.replies ? p.replies + (p.replies === 1 ? " reply" : " replies") : "") + (p.category === "ideas" && p.upvotes ? (p.replies ? " · " : "") + p.upvotes + " \u{1F44D}" : "");
-    if (p.answered) a.querySelector(".sp-ans").hidden = false;
-    a.querySelector(".sp-when").textContent = spAgo(p.at); li.appendChild(a); return li;
+  // ---- votes: instant on screen, put back if the save fails
+  function ibVote(id) {
+    var p = ibFind(id); if (!p || !me.user_id) return;
+    var on = !IB.mine[id];
+    if (on) IB.mine[id] = 1; else delete IB.mine[id];
+    p.vote_count += on ? 1 : -1; ibPaintAll();
+    (on ? rest("community_votes", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ post_id: id }) })
+        : rest("community_votes?post_id=eq." + id + "&user_id=eq." + me.user_id, { method: "DELETE" }))
+      .then(function (r) { if (!r.ok && !(on && r.status === 409)) throw new Error(r.status); if (on) toast("Voted. You'll hear when it moves."); })
+      .catch(function () { if (on) delete IB.mine[id]; else IB.mine[id] = 1; p.vote_count += on ? -1 : 1; ibPaintAll(); toast("Couldn't save your vote. Check you're online."); });
   }
-  function spPaint() {
-    var home = $("sp-home-list"), full = $("sp-list"); if (!SP.posts) return;
-    home.innerHTML = ""; full.innerHTML = "";
-    var space = SP.posts.filter(function (p) { return p.category !== "q-a"; });   // 26 Oct 2026 (Amit): questions live on the Questions page
-    space.slice(0, 4).forEach(function (p) { home.appendChild(spRow(p)); });
-    var shown = space.filter(function (p) { return !SP.filter || p.category === SP.filter; });
-    shown.forEach(function (p) { full.appendChild(spRow(p)); });
-    $("sp-msg").textContent = shown.length ? "" : "Nothing here yet. Be the first.";
-    $("sp-home-msg").textContent = space.length ? "" : "Nothing posted yet. Be the first.";
-    fqPaint();
+  document.addEventListener("click", function (e) { var b = e.target.closest("[data-vote]"); if (!b) return; e.preventDefault(); ibVote(+b.dataset.vote); });
+  // ---- one post: progress, team updates, replies, and the team's tools
+  function ibOpen(id) {
+    IB.cur = id;
+    var box = $("ib-p-body");
+    if (!IB.posts) { box.innerHTML = '<p class="small">Loading…</p>'; return; }   // ibLoad repaints through ibPaintAll
+    var p = ibFind(id);
+    if (!p) { box.innerHTML = '<p class="lede">That post isn\'t here any more.</p>'; return; }
+    IB.kind = p.kind; $("ib-p-back").textContent = "← All " + (p.kind === "idea" ? "ideas" : "questions");
+    Promise.all([
+      rest("community_comments?select=id,author_name,is_team,body,created_at,user_id,hidden&post_id=eq." + id + "&order=created_at.asc").then(ibJson),
+      p.kind === "idea" ? rest("community_status_events?select=status,note,created_at&post_id=eq." + id + "&order=created_at.asc").then(ibJson) : Promise.resolve([])
+    ]).then(function (res) { if (IB.cur === id) ibPaintPost(p, res[0] || [], res[1] || []); })
+      .catch(function () { if (IB.cur === id) box.innerHTML = '<p class="small">Couldn\'t load this just now. Check you\'re online and try again.</p>'; });
   }
-  function spLoad() {
-    if (SP.posts || SP.loading) return; SP.loading = true;
-    $("sp-home-msg").textContent = "Loading the latest posts\u2026";
-    fresh().then(function (s) {
-      if (!s) throw new Error("signed out");
-      return fetch(SB + "/functions/v1/community-feed", { headers: { apikey: KEY, Authorization: "Bearer " + s.access_token } });
-    }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || r.status); return j; }); })
-      .then(function (j) { SP.posts = j.posts || []; if (j.ask) { $("sp-ask3").href = j.ask.q; $("sp-idea").href = $("sp-idea2").href = j.ask.idea; } spPaint(); })
-      .catch(function (e) { var t = "Couldn't load the latest posts just now. Open the members' space on GitHub instead."; $("sp-home-msg").textContent = t; $("sp-msg").textContent = t; })
-      .then(function () { SP.loading = false; });
+  function ibPaintPost(p, cs, ev) {
+    var own = ibOwner(), asker = p.user_id === me.user_id, h = "";
+    h += '<div class="ib-meta" style="margin-top:4px">' + ibPill(p) + "<span>" + esc(IB_CAT[p.category] || "") + "</span>" + (p.hidden ? '<span class="pill">Hidden</span>' : "") + "</div>";
+    h += '<h1 class="ib-h1" id="ib-p-title">' + esc(p.title) + '</h1><p class="small" style="margin:0">' + (p.kind === "idea" ? "Suggested by " : "Asked by ") + esc(p.author_name) + " · " + esc(spAgo(p.created_at)) + "</p>";
+    if (p.body) h += '<p class="ib-desc">' + esc(p.body) + "</p>";
+    if (p.kind === "idea") {
+      var on = !!IB.mine[p.id];
+      h += '<div class="row"><button type="button" class="btn' + (on ? "" : " ghost") + '" data-vote="' + p.id + '" aria-pressed="' + on + '">' + (on ? "Voted" : "Vote for this") + " · " + p.vote_count + "</button></div>";
+      if (p.status === "declined") {
+        h += '<div class="ib-box"><h3>Where it\'s at</h3><p>Not for now. We\'ve read it and it isn\'t on the plan at the moment. Votes still count if that changes.</p></div>';
+      } else {
+        var order = ["review", "planned", "building", "live"], at = order.indexOf(p.status), first = {};
+        ev.forEach(function (e) { if (!first[e.status]) first[e.status] = e.created_at; });
+        h += '<div class="ib-box"><h3>Where it\'s at</h3><ol class="ib-tl"><li class="done"><i></i><span>Suggested</span><time>' + ibDate(p.created_at) + "</time></li>" +
+          order.map(function (st, i) {
+            var cls = i < at ? "done" : i === at ? "now" : "next", d = i === 0 ? p.created_at : first[st];
+            return '<li class="' + cls + '"><i></i><span>' + IB_ST[st] + "</span><time>" + (i === at ? "Now" : (cls === "done" && d ? ibDate(d) : "")) + "</time></li>";
+          }).join("") + "</ol></div>";
+      }
+      ev.filter(function (e) { return e.note; }).reverse().forEach(function (e) {
+        h += '<div class="ib-box"><h3>Update from the team · ' + ibDate(e.created_at) + "</h3><p>" + esc(e.note) + "</p></div>";
+      });
+    }
+    var shown = cs.slice().sort(function (a, b) { return (b.id === p.answer_id) - (a.id === p.answer_id); });
+    h += '<h2 style="margin:22px 0 0;font-size:16px">' + (p.kind === "question" ? "Replies" : "Comments") + " · " + cs.filter(function (c) { return !c.hidden; }).length + "</h2>";
+    h += shown.length ? '<ul class="ib-c">' + shown.map(function (c) {
+      var ans = c.id === p.answer_id, acts = [];
+      if (p.kind === "question" && (own || asker)) acts.push('<button type="button" data-ans="' + (ans ? "" : c.id) + '">' + (ans ? "Not the answer" : "This answered it") + "</button>");
+      if (own) acts.push('<button type="button" data-hidec="' + c.id + '" data-h="' + (!c.hidden) + '">' + (c.hidden ? "Show" : "Hide") + "</button>");
+      else if (c.user_id === me.user_id) acts.push('<button type="button" data-delc="' + c.id + '">Delete</button>');
+      return '<li class="' + (ans ? "ans" : "") + (c.hidden ? " hid" : "") + '">' + (ans ? '<span class="pill g">Answer</span><br>' : "") +
+        '<span class="who">' + esc(c.author_name) + (c.is_team ? '<span class="pill p">Team</span>' : "") + "</span><time>" + esc(spAgo(c.created_at)) + "</time><p>" + esc(c.body) + "</p>" +
+        (acts.length ? '<div class="ib-act">' + acts.join("") + "</div>" : "") + "</li>";
+    }).join("") + "</ul>" : '<p class="small" style="margin:6px 0 0">' + (p.kind === "question" ? "No replies yet." : "No comments yet.") + "</p>";
+    h += '<form class="ib-form" id="ib-cf"><label for="ib-cb">' + (p.kind === "question" ? (asker ? "Add more detail" : "Know the answer? Reply") : "Add a comment") + '</label><textarea id="ib-cb" rows="3" maxlength="2000"></textarea><div class="row"><button class="btn" type="submit">Post</button></div></form>';
+    if (own) {
+      h += '<div class="ib-box"><h3>Team tools</h3><form class="ib-form" id="ib-own">' +
+        (p.kind === "idea" ? '<label for="ib-os" style="margin-top:0">Status</label><select id="ib-os">' + Object.keys(IB_ST).map(function (st) { return '<option value="' + st + '"' + (st === p.status ? " selected" : "") + ">" + IB_ST[st] + "</option>"; }).join("") + "</select>" +
+          '<label for="ib-on">Update for everyone who backed it <small>Optional with a status change</small></label><textarea id="ib-on" rows="3" maxlength="2000"></textarea>' +
+          '<div class="row"><button class="btn" type="submit">Save and tell backers</button></div>' : "") +
+        '<div class="row"><button class="btn ghost" type="button" id="ib-oh">' + (p.hidden ? "Show this post" : "Hide this post") + "</button></div></form>" +
+        '<p class="small" style="margin:8px 0 0">Backers get a Message in their members area. No email is sent.</p></div>';
+    }
+    $("ib-p-body").innerHTML = h;
   }
-  $("sp-filter").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; SP.filter = b.dataset.f; document.querySelectorAll("#sp-filter button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); }); spPaint(); });
+  $("ib-p-body").addEventListener("submit", function (e) {
+    e.preventDefault(); var p = ibFind(IB.cur); if (!p) return;
+    var btn = e.target.querySelector('button[type="submit"]'); btn.disabled = true;
+    var done = function (msg) { return function () { toast(msg); ibLoad(true); }; }, fail = function (err) { btn.disabled = false; toast(err.message); };
+    if (e.target.id === "ib-cf") {
+      var body = $("ib-cb").value.trim(); if (!body) { btn.disabled = false; $("ib-cb").focus(); return; }
+      rest("community_comments", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ post_id: p.id, body: body }) }).then(ibJson).then(done("Posted.")).catch(fail);
+    } else if (e.target.id === "ib-own") {
+      var st = $("ib-os").value, note = $("ib-on").value.trim();
+      if (st === p.status && !note) { btn.disabled = false; toast("Pick a new status or write an update."); return; }
+      (st !== p.status ? ibRpc("community_set_status", { p_post: p.id, p_status: st, p_note: note }) : ibRpc("community_team_update", { p_post: p.id, p_note: note }))
+        .then(done(st !== p.status ? "Status saved. Backers have a Message." : "Update posted. Backers have a Message.")).catch(fail);
+    }
+  });
+  $("ib-p-body").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return; var p = ibFind(IB.cur); if (!p) return;
+    var fail = function (err) { toast(err.message); };
+    if ("ans" in b.dataset) ibRpc("community_mark_answer", { p_post: p.id, p_comment: b.dataset.ans ? +b.dataset.ans : null }).then(function () { ibLoad(true); }).catch(fail);
+    else if (b.dataset.hidec) ibRpc("community_hide", { p_post: null, p_comment: +b.dataset.hidec, p_hidden: b.dataset.h === "true" }).then(function () { ibLoad(true); }).catch(fail);
+    else if (b.dataset.delc) { if (confirm("Delete your reply?")) rest("community_comments?id=eq." + b.dataset.delc, { method: "DELETE" }).then(ibJson).then(function () { ibLoad(true); }).catch(fail); }
+    else if (b.id === "ib-oh") ibRpc("community_hide", { p_post: p.id, p_comment: null, p_hidden: !p.hidden }).then(function () { toast(p.hidden ? "Shown again." : "Hidden from members."); ibLoad(true); }).catch(fail);
+  });
+  // ---- the board's own controls
+  document.querySelector(".ib-seg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; IB.kind = b.dataset.k; IB.filter = ""; ibPaintBoard(); });
+  $("ib-chips").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; IB.filter = b.dataset.f; ibPaintBoard(); });
+  $("ib-q").addEventListener("input", function () { IB.q = this.value.trim(); ibPaintBoard(); });
+  $("ib-new").addEventListener("click", function () { ibSheet(IB.kind); });
+  // ---- the sheet: suggest an idea or ask a question, with a look for ones already there
+  function ibSheet(kind) {
+    var idea = kind === "idea"; IB.sheetKind = kind; IB.cat = idea ? "robot" : "other";
+    $("ib-s-h").textContent = idea ? "Suggest an idea" : "Ask a question";
+    $("ib-s-tl").textContent = idea ? "Your idea in one line" : "Your question";
+    $("ib-s-title").placeholder = idea ? "e.g. Pause my robot while I'm away" : "e.g. How do I change my email address?";
+    $("ib-s-body").placeholder = idea ? "What would it help you do?" : "Anything that helps: what you tried, what you saw.";
+    $("ib-s-go").textContent = idea ? "Post my idea" : "Post my question"; $("ib-s-go").disabled = false;
+    $("ib-s-title").value = IB.q || ""; $("ib-s-body").value = ""; $("ib-s-msg").textContent = "";
+    ibCats(); ibDupes();
+    $("ib-sheet").hidden = false; document.documentElement.classList.add("ib-open");
+    setTimeout(function () { $("ib-s-title").focus(); }, 30);
+    if (!IB.posts) ibLoad().then(ibDupes);
+  }
+  function ibClose(fromRouter) {
+    $("ib-sheet").hidden = true; document.documentElement.classList.remove("ib-open");
+    if (!fromRouter && /^#ideas\/(new|ask)$/.test(location.hash)) { history.replaceState(null, "", "#ideas"); go("ideas"); }
+  }
+  function ibCats() { $("ib-cats").innerHTML = Object.keys(IB_CAT).map(function (c) { return '<button type="button" data-c="' + c + '" aria-pressed="' + (c === IB.cat) + '">' + IB_CAT[c] + "</button>"; }).join(""); }
+  function ibDupes() {
+    var words = $("ib-s-title").value.toLowerCase().split(/[^a-z0-9]+/).filter(function (w) { return w.length > 3 && IB_STOP.indexOf(w) < 0; });
+    var hits = !IB.posts || !words.length ? [] : IB.posts.filter(function (p) { return p.kind === IB.sheetKind && !p.hidden; }).map(function (p) {
+      var h = (p.title + " " + p.body).toLowerCase();
+      return { p: p, n: words.filter(function (w) { return h.indexOf(w.slice(0, Math.max(4, w.length - 2))) >= 0; }).length };
+    }).filter(function (x) { return x.n >= Math.min(2, words.length); }).sort(function (a, b) { return (b.n - a.n) || (b.p.vote_count - a.p.vote_count); }).slice(0, 3);
+    var box = $("ib-dupes"), ul = $("ib-dupe-list"); box.hidden = !hits.length; ul.innerHTML = "";
+    hits.forEach(function (x) { ul.appendChild(ibRow(x.p)); });
+    box.querySelector("b").textContent = IB.sheetKind === "idea" ? "Is it one of these?" : "Already asked?";
+    box.querySelector("p").textContent = IB.sheetKind === "idea" ? "Voting counts the same as posting, and it's quicker." : "Tap one to see its replies.";
+  }
+  var ibDupeT = null;
+  $("ib-s-title").addEventListener("input", function () { clearTimeout(ibDupeT); ibDupeT = setTimeout(ibDupes, 200); });
+  $("ib-cats").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; IB.cat = b.dataset.c; ibCats(); });
+  $("ib-s-x").addEventListener("click", function () { ibClose(); });
+  $("ib-sheet").addEventListener("click", function (e) { if (e.target === this) ibClose(); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !$("ib-sheet").hidden) ibClose(); });
+  $("ib-dupe-list").addEventListener("click", function (e) { if (e.target.closest("a.ib-t")) ibClose(true); });
+  $("ib-s-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var title = $("ib-s-title").value.trim(), body = $("ib-s-body").value.trim(), b = $("ib-s-go"), idea = IB.sheetKind === "idea";
+    if (title.length < 3) { $("ib-s-msg").textContent = idea ? "Give your idea a short title first." : "Type your question first."; $("ib-s-title").focus(); return; }
+    b.disabled = true; $("ib-s-msg").textContent = "Posting…";
+    rest("community_posts?select=" + IB_COLS, { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify({ kind: IB.sheetKind, title: title, body: body, category: IB.cat }) })
+      .then(ibJson).then(function (rows) {
+        var p = rows && rows[0]; if (!p) throw new Error("Posted. Refresh to see it.");
+        IB.posts = (IB.posts || []).concat([p]); IB.q = ""; $("ib-q").value = "";
+        ibClose(true); toast(idea ? "Thanks, it's posted. Updates arrive in your Messages." : "Posted. You'll get a Message when someone replies.");
+        location.hash = "post/" + p.id;
+      }).catch(function (err) { b.disabled = false; $("ib-s-msg").textContent = err.message; });
+  });
   function helpTab(v) { ["space", "memb"].forEach(function (k) { $("pane-" + k).hidden = k !== v; $("tab-" + k).setAttribute("aria-selected", String(k === v)); }); }
   document.querySelector(".help-seg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) helpTab(b.dataset.v); });
   // 26 Oct 2026 (Amit): the logo always goes to the site's home page. In the installed app there is no site around it,
@@ -1989,7 +2267,10 @@
   function go(page) {
     var gid = null;
     if (page.indexOf("guide/") === 0) { gid = page.slice(6); page = "guide"; }
-    if (page === "space") page = "help";   // 26 Oct 2026: the members' space lives on Help and membership
+    if (page === "space") page = "ideas";   // 27 Oct 2026: the members' space is the Ideas & questions board
+    var ibSheetKind = page === "ideas/new" ? "idea" : page === "ideas/ask" ? "question" : null; if (ibSheetKind) page = "ideas";
+    var ibPost = /^post\/\d+$/.test(page) ? +page.slice(5) : null; if (ibPost) page = "post";
+    if (!ibSheetKind && !$("ib-sheet").hidden) ibClose(true);
     if (page === "membership") { page = "help"; helpTab("memb"); }
     if (PAGES.indexOf(page) < 0) page = "home";
     if (page === "guide") { if (!window.GUIDES || !GUIDES[gid]) { page = "start"; } else { guideOpen(gid); } }
@@ -1998,14 +2279,15 @@
     document.querySelector('.mgroup .grp-h > a').classList.toggle("on", true);
     if (page === "lessons") $("les-fold").open = true;
     if (page === "questions") loadFaq();
-    if (page === "home" || page === "help" || page === "questions") spLoad();
+    if (page === "home" || page === "questions" || page === "ideas" || page === "post") ibLoad();
+    IB.cur = null; if (page === "post") ibOpen(ibPost); if (page === "ideas") { if (ibSheetKind) { IB.kind = ibSheetKind; ibPaintBoard(); ibSheet(ibSheetKind); } }
     if (page === "setup") suInit();
     if (page === "live") lvInit();
     if (page === "clips") { paintBench(); loadWants(); document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = "0"; }); setTimeout(function () { document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = b.dataset.w; }); }, 60); }
     $("preview").classList.toggle("off", page !== "home");
     document.documentElement.classList.toggle("dashview", page === "mydash"); document.documentElement.dataset.pg = page;
     if (page === "mydash") dashOpen(false);
-    window.scrollTo(0, 0);
+    if (!ibSheetKind) window.scrollTo(0, 0);
   }
   // Fold the members pages away under "Members area" (22 Oct 2026). Open by default, remembered in this browser.
   (function () {
