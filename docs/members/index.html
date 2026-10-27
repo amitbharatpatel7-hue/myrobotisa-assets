@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="74">
+<meta name="mri-version" content="75">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -503,7 +503,7 @@
         </div>
         <div class="row"><button class="btn" id="b-install" type="button" data-install>Install my dashboard</button></div>
         <p class="small" id="installed" hidden style="margin:12px 0 0;color:var(--green);font-weight:700">You're using the installed app.</p>
-        <p class="small" style="margin:12px 0 0">No dashboard yet? Set it up in <a href="#setup">Set up my robot</a> first. Signing in to the app uses the same emailed code, and Face ID or Touch ID where your device has it.</p>
+        <p class="small" style="margin:12px 0 0">No dashboard yet? Set it up in <a href="#setup">Set up my robot</a> first. The app opens with Face ID or your fingerprint once you've set it up there; the emailed code is the backup.</p>
       </section>
 
       <section class="card wide" aria-labelledby="h-les" data-page="lessons">
@@ -537,7 +537,7 @@
 
       <section class="card" aria-labelledby="h-dash" data-page="dashboard">
         <h2 id="h-dash">Your <span class="g">dashboard</span></h2>
-        <p class="lede">Holdings, every order and why, the daily report and Approve. It runs on your own free Cloudflare account, behind a login only you can pass, with a read-only broker key.</p>
+        <p class="lede">Holdings, every order and why, the daily report and Approve. It runs on your own free Cloudflare account, opens with Face ID or your fingerprint (an emailed code is the backup), asks again before any order goes, and only gets a read-only broker key.</p>
         <div id="dash-box"></div>
       </section>
 
@@ -700,14 +700,16 @@
             <p>One click puts your dashboard on your phone, Mac or PC, in its own window like any app. No App Store. It is the only app you need: this members area stays in your browser.</p>
             <div class="row"><button class="btn" type="button" data-install>Install my dashboard</button></div>
             <details id="sx3-more"><summary>Add your robot's live numbers to the app (about 10 minutes)</summary>
-              <p>Your plan, holdings and results on a private page only you can open. It runs on your own free Cloudflare account, so your numbers never pass through ours, and it only ever gets a read-only key.</p>
+              <p>Your plan, holdings, results and the Approve button, on a private page only you can open. It opens with Face ID or your fingerprint (an emailed code is the backup) and asks again before any order goes. It runs on your own free Cloudflare account, so your numbers never pass through ours, and it only ever gets a read-only broker key.</p>
               <ol>
                 <li><a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener">Make a free Cloudflare account</a>.</li>
-                <li><b>Account API tokens &rarr; Create Token &rarr; Custom token</b>. Call it <b>My Robot ISA</b>, add <b>Account &middot; Cloudflare Pages &middot; Edit</b> and <b>Account &middot; Access: Apps and Policies &middot; Edit</b>, create it and copy it.</li>
-                <li>In Trading 212 (the same Practice account), make one more key called <b>My Robot ISA dashboard</b> with only <b>Account data</b>, <b>Metadata</b> and <b>Portfolio</b>, IP access <b>Unrestricted</b>. No Orders switches: it can never place an order.</li></ol>
+                <li><b>Account API tokens &rarr; Create Token &rarr; Custom token</b>. Call it <b>My Robot ISA</b>, add <b>Account &middot; Cloudflare Pages &middot; Edit</b>, <b>Account &middot; Access: Apps and Policies &middot; Edit</b> and <b>Account &middot; Workers KV Storage &middot; Edit</b> (that one keeps your Face ID keys), create it and copy it.</li>
+                <li>In Trading 212 (the same Practice account), make one more key called <b>My Robot ISA dashboard</b> with only <b>Account data</b>, <b>Metadata</b> and <b>Portfolio</b>, IP access <b>Unrestricted</b>. No Orders switches: it can never place an order.</li>
+                <li>For the <b>Approve</b> button: on GitHub, <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">make a fine-grained token</a> called <b>My Robot ISA approve</b>. Repository access: <b>Only select repositories</b>, your copy. Permissions: <b>Actions: Read and write</b> and <b>Contents: Read-only</b>. Expiry: <b>1 year</b>. It can only start your Execute approved orders run with the orders you tapped, and only after Face ID.</li></ol>
               <label class="f" for="sx-cft">Cloudflare API token</label><input class="t" id="sx-cft" type="password" autocomplete="off" spellcheck="false">
               <label class="f" for="sx-rk">Read-only Trading 212 key</label><input class="t" id="sx-rk" type="password" autocomplete="off" spellcheck="false">
               <label class="f" for="sx-rs">Read-only Trading 212 secret</label><input class="t" id="sx-rs" type="password" autocomplete="off" spellcheck="false">
+              <label class="f" for="sx-ap">GitHub token for the Approve button</label><input class="t" id="sx-ap" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_...">
               <p class="small" id="sx-em-row">Only <b id="sx-em-show"></b> can open it. <a href="#" id="sx-em-edit" style="color:var(--green);font-weight:700">Change</a></p>
               <div id="sx-em-box" hidden><label class="f" for="sx-em">Who can open it</label><input class="t" id="sx-em" type="email" autocomplete="email"></div>
               <div class="row"><button class="btn" type="button" id="sx3-go" disabled>Add my numbers</button></div>
@@ -978,6 +980,9 @@
     document.querySelectorAll(".pv-only").forEach(function (el) { el.hidden = !m.preview_videos; });
     document.querySelectorAll(".npv-only").forEach(function (el) { el.hidden = !!m.preview_videos; });   // Start here folds into Set up my robot
     renderDash(); renderAll(); show("home"); if (gcur.id) guideVideo(gcur.id); passkeyCard(); loadNotes(); if (location.hash === "#mydash") dashOpen(false);
+    // #372: an Approve link from an email lands here (#approvals): approvals happen on your own dashboard, with Face ID.
+    if (location.hash === "#approvals") { var du = String(me.dashboard_url || "");
+      if (/^https:\/\/[A-Za-z0-9.-]+\.[a-z]{2,}\/?$/.test(du)) location.replace(du.replace(/\/+$/, "") + "/#approvals"); else { location.hash = "#setup"; } }
     rest("member_progress?select=item,done").then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
       rows.forEach(function (x) { done[x.item] = x.done; }); renderAll(); if (suReady) acctPaint(); paintBench(); if (gcur.id) { guideVideo(gcur.id); guideRender(); }
     }).catch(function () {});
@@ -1578,7 +1583,8 @@
     $("sx2-go").disabled = !(ok("sx2") && /^sk-ant-[A-Za-z0-9_-]{20,}$/.test($("sx-cl").value.trim()));
     $("sx-em-show").textContent = $("sx-em").value.trim();
     $("sx3-go").disabled = !(ok("sx3") && $("sx-cft").value.trim().length >= 30 &&
-      $("sx-rk").value.trim().length > 10 && $("sx-rs").value.trim().length > 10 && /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($("sx-em").value.trim()));
+      $("sx-rk").value.trim().length > 10 && $("sx-rs").value.trim().length > 10 && /^github_pat_[A-Za-z0-9_]{40,}$/.test($("sx-ap").value.trim()) &&
+      /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($("sx-em").value.trim()));
   }
 
   // ---- Robot Care (25 Oct 2026): one tap switches it on (robot-care-join), then GitHub installs the app on the copy.
@@ -1644,7 +1650,7 @@
   function sxInit() {
     if (sxReady) return; sxReady = true;
     $("sx-em-edit").addEventListener("click", function (e) { e.preventDefault(); $("sx-em-box").hidden = false; $("sx-em-row").hidden = true; $("sx-em").focus(); });
-    ["sx-dsn", "sx-cl", "sx-cft", "sx-rk", "sx-rs", "sx-em"].forEach(function (id) { $(id).addEventListener("input", sxCheck); });
+    ["sx-dsn", "sx-cl", "sx-cft", "sx-rk", "sx-rs", "sx-ap", "sx-em"].forEach(function (id) { $(id).addEventListener("input", sxCheck); });
     document.querySelector('.su-seg[data-k="cl"]').addEventListener("click", function () {
       var api = SU.cl === "api"; $("sx2-api").hidden = !api; $("sx2-sub").hidden = api;
       $("sx-cl-l").textContent = api ? "Claude API key" : "Claude subscription token"; });
@@ -1676,9 +1682,9 @@
     var full = sxCopy(), log = ghLog("sx3-log"), m = $("sx3-msg"); $("sx3-log").innerHTML = ""; m.textContent = ""; SU.busy = true; sxCheck();
     try {
       var k = log("Locking your Cloudflare token and read-only key into your copy");
-      var ok = await ghSeal(full, { CLOUDFLARE_API_TOKEN: $("sx-cft").value.trim(), T212_READ_API_KEY: $("sx-rk").value.trim(), T212_READ_API_SECRET: $("sx-rs").value.trim() });
+      var ok = await ghSeal(full, { CLOUDFLARE_API_TOKEN: $("sx-cft").value.trim(), T212_READ_API_KEY: $("sx-rk").value.trim(), GH_DASHBOARD_TOKEN: $("sx-ap").value.trim(), T212_READ_API_SECRET: $("sx-rs").value.trim() });
       if (!ok) k.bad("Couldn't lock your keys in just now. Press Add my numbers again.");
-      $("sx-cft").value = $("sx-rk").value = $("sx-rs").value = ""; k.ok("Keys locked in. They've been cleared from this page.");
+      $("sx-cft").value = $("sx-rk").value = $("sx-rs").value = $("sx-ap").value = ""; k.ok("Keys locked in. They've been cleared from this page.");
       var e = log("Saving who can open it"); if (!(await ghVar(full, "DASHBOARD_EMAIL", $("sx-em").value.trim()))) e.bad("Couldn't save your email just now. Press Add my numbers again: your keys are already saved."); e.ok("Only " + $("sx-em").value.trim() + " can open it");
       var c = log("Setting up your app on Cloudflare (about a minute)"), r = await ghRun(full, "dashboard-setup.yml");
       if (r.r === "missing" || r.r === "nostart") c.bad("Couldn't start the app setup. Press Add my numbers again in a minute.");
@@ -1688,6 +1694,7 @@
         c.ok("Set up on Cloudflare");
         var f = await gh("/repos/" + full + "/contents/dashboard-url.txt?ref=ci/dashboard-setup"), url = f.ok && f.j ? b64d(f.j.content).trim() : "";
         if (/^https:\/\/[A-Za-z0-9.-]+\.[a-z]{2,}(\/.*)?$/.test(url)) {
+          ghVar(full, "DASHBOARD_URL", url.replace(/\/+$/, ""));   // #372: the weekly email's Approve button opens this dashboard
           rest("rpc/set_my_dashboard", { method: "POST", body: JSON.stringify({ p_url: url }) }).then(function (x) { if (x && x.ok) { me.dashboard_url = x.j || url; renderDash(); } }).catch(function () {});
           m.innerHTML = 'Your numbers: <a href="' + esc(url) + '" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">' + esc(url.replace(/^https:\/\//, "")) + '</a>. It fills in after tonight\'s run, and it\'s saved under Your dashboard in this app.';
         } else m.textContent = "Set up. Open Actions → Dashboard setup on your copy to see your app's address.";
