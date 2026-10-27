@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="71">
+<meta name="mri-version" content="72">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -19,7 +19,11 @@
   try { if (q) sessionStorage.setItem("mri-app", "1"); } catch (e) {}
   var app = q || mm("standalone") || mm("fullscreen") || mm("minimal-ui") || mm("window-controls-overlay") || navigator.standalone === true;
   try { app = app || sessionStorage.getItem("mri-app") === "1"; } catch (e) {}
-  if (app) document.documentElement.classList.add("app");
+  // 27 Oct 2026: shown inside Robot Dash (the dashboard app opens Members area in an in-app view). Not "the old app":
+  // no move-to-the-dashboard notice, and "Open my dashboard" goes back to the dashboard in the same window.
+  var framed = false; try { framed = window.top !== window.self; } catch (e) { framed = true; }
+  if (framed) document.documentElement.classList.add("in-dash");
+  else if (app) document.documentElement.classList.add("app");
 })();
 </script>
 <link rel="icon" href="icon-192.png">
@@ -2071,6 +2075,20 @@
   })();
 
   start();
+})();
+</script>
+<script>
+// 27 Oct 2026: inside Robot Dash's in-app view, any link to the dashboard (and "Open my dashboard") asks Robot Dash to
+// close the view, so the dashboard never opens in a new window or inside this frame.
+(function () {
+  if (!document.documentElement.classList.contains("in-dash")) return;
+  var back = function () { try { window.parent.postMessage({ type: "mri-open-dash" }, "*"); } catch (e) {} };
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest && e.target.closest("a[href], #oldapp-go"); if (!t) return;
+    if (t.id === "oldapp-go") { e.preventDefault(); e.stopPropagation(); back(); return; }
+    var u; try { u = new URL(t.getAttribute("href"), location.href); } catch (x) { return; }
+    if (t.getAttribute("href") === "#mydash" || /^dash\./.test(u.host) || /\.pages\.dev$/.test(u.host)) { e.preventDefault(); e.stopPropagation(); back(); }
+  }, true);
 })();
 </script>
 <!-- INSTALL-KIT: one-click install where the browser allows it, otherwise a dialog with the steps for this device.
