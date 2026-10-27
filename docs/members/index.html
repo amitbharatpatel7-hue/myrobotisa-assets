@@ -7,7 +7,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="73">
+<meta name="mri-version" content="74">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -39,6 +39,9 @@
   *{box-sizing:border-box}
   html,body{margin:0;background:var(--deep);color:var(--ink);font-family:Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
   body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+  /* 27 Oct 2026 (Amit's iPhone): inside Robot Dash the app's own bar already clears the notch, and iOS sometimes hands the
+     frame the phone's top inset too, which left a band of empty space at the top. No top inset inside Robot Dash. */
+  html.in-dash body{padding-top:0}
   a{color:var(--green)}
   [hidden]{display:none!important}
   /* 22 Oct 2026 (Amit: members area out of line with the site): the same column as every site page,
