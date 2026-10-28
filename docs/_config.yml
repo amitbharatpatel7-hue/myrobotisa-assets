@@ -1,0 +1,2 @@
+# GitHub Pages builds this folder with Jekyll, which skips dot-folders unless they are listed here.
+include: [".well-known"]
