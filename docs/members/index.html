@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="81">
+<meta name="mri-version" content="82">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -254,6 +254,15 @@
   .ib-c p{margin:4px 0 0;white-space:pre-wrap;line-height:1.55}
   .ib-act{margin-top:6px;display:flex;gap:14px} .ib-act button{background:none;border:0;color:var(--green);font:inherit;font-size:13px;font-weight:700;padding:0;cursor:pointer;min-height:32px}
   .ib-form textarea,.ib-form input[type=text],.ib-form select{width:100%;border-radius:14px;border:1px solid var(--rule);background:var(--deep);color:var(--ink);font:inherit;font-size:16px;padding:12px 14px}
+  /* Robot Care fixes (28 Oct 2026, D25 stage 1): accept a fix here, never on GitHub */
+  .rcf-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:12px}
+  .rcf-item{border:1px solid var(--rule);border-radius:16px;padding:14px 16px;background:var(--deep)} .rcf-item.urgent{border-color:var(--pink-ink)}
+  .rcf-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px} .rcf-top b{font-size:16px;flex:1 1 220px} .rcf-top .pill{padding:3px 8px;font-size:10px}
+  .rcf-item p{margin:8px 0 0;line-height:1.55} .rcf-item .small{margin-top:6px}
+  .rcf-item .row{margin-top:12px} .rcf-item .row .btn{min-height:42px;padding:0 16px;font-size:14px}
+  .rcf-box{margin-top:12px;border-top:1px solid var(--rule);padding-top:12px} .rcf-box textarea{width:100%;border-radius:14px;border:1px solid var(--rule);background:var(--deep);color:var(--ink);font:inherit;font-size:16px;padding:12px 14px;resize:vertical}
+  .rcf-box label{display:block;font-weight:700;font-size:14px;margin:0 0 6px} .rcf-ans{border:1px solid var(--green);border-radius:14px;padding:10px 12px;white-space:pre-wrap}
+  .rcf-st{font-weight:700} .rcf-st.err{color:var(--amber)} .rcf-st.ok{color:var(--green)}
   .ib-form textarea{resize:vertical} .ib-form label{display:block;font-weight:700;font-size:14px;margin:14px 0 6px} .ib-form label small{font-weight:400;color:var(--muted)}
   #ib-sheet{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;justify-content:center;background:rgba(20,0,24,.72)}
   #ib-sheet .ib-panel{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:var(--deep);border:1px solid var(--rule);border-radius:24px 24px 0 0;padding:16px 20px calc(24px + env(safe-area-inset-bottom))}
@@ -456,6 +465,7 @@
         <li class="pv-only" hidden><a href="#setup" data-go="setup">Set up my robot <span class="pill g" style="margin-left:4px;padding:2px 7px;font-size:10px">New</span></a></li>
         <li class="npv-only"><a href="#start" data-go="start">Start here</a></li>
         <li><a href="#code" data-go="code">Your code</a></li>
+        <li><a href="#fixes" data-go="fixes">Robot Care fixes <span class="pill p" id="rcf-nav" style="margin-left:4px;padding:2px 7px;font-size:10px" hidden></span></a></li>
         <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
         <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
         <li><a href="#clips" data-go="clips">What's new</a></li>
@@ -475,6 +485,7 @@
     <li class="pv-only" hidden><a href="#setup" data-go="setup">Set up my robot</a></li>
     <li class="npv-only"><a href="#start" data-go="start">Start here</a></li>
     <li><a href="#code" data-go="code">Your code</a></li>
+    <li><a href="#fixes" data-go="fixes">Robot Care fixes</a></li>
     <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
     <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
     <li><a href="#clips" data-go="clips">What's new</a></li>
@@ -563,6 +574,15 @@
       <details class="fold" id="notes-older" hidden><summary><span class="fold-l">Show earlier messages</span></summary><ul class="notes" id="notes-old" style="margin-top:12px"></ul></details>
     </section>
 
+    <section class="card" aria-labelledby="h-rcf" id="rcf" data-page="home fixes" hidden>
+      <h2 id="h-rcf">Robot Care <span class="g">fixes</span></h2>
+      <p class="lede">When one of your robot's runs fails, Robot Care works out why and suggests a fix. Accept it here and it goes into your robot's code: your robot uses it from its next run. Nothing changes until you accept, and a fix can never place an order or touch your money settings.</p>
+      <ul class="rcf-list" id="rcf-list"></ul>
+      <p class="small" id="rcf-empty" hidden>No fixes waiting for you. If a run fails and Robot Care can fix it, the fix shows up here and in your Messages.</p>
+      <details class="fold" id="rcf-old" hidden><summary><span class="fold-l">Earlier</span></summary><ul class="rcf-list" id="rcf-old-list" style="margin-top:12px"></ul></details>
+      <p class="small" id="rcf-msg" role="status" aria-live="polite" style="margin:10px 0 0"></p>
+    </section>
+
     <section class="card" aria-labelledby="h-sph" id="sp-home" data-page="home">
       <h2 id="h-sph">The <span class="g">Moonshotters</span></h2>
       <p class="lede">Every member running their own robot. Vote for what you'd like built next, or suggest something. You'll see what happens to it in your Messages.</p>
@@ -641,6 +661,7 @@
         <h2 id="h-new">What's <span class="g">new</span></h2>
         <p class="lede">Shipped first, then what's on the bench. Tap <b>I want this</b> on anything you'd like sooner: it's saved to your account and counts.</p>
         <ol class="tl" id="wn-list">
+          <li><span class="tl-dot"></span><div><span class="tl-date">28 Oct 2026</span><span class="pill g">New</span><b>Accept Robot Care's fixes here</b><p>When Robot Care suggests a fix, you accept it in the members area with one tap: no GitHub needed. Not sure? Ask a question about the fix first and Robot Care explains it in plain words.</p><a class="tl-go" href="#fixes" data-go="fixes">See Robot Care fixes &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">28 Oct 2026</span><span class="pill g">New</span><b>Meet the Moonshotters</b><p>The members' space has a name: the Moonshotters, the members running their own robot. And the first 100 paying members are numbered: your founding number shows at the top of the members area.</p><a class="tl-go" href="#help" data-go="help">Open the Moonshotters &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">27 Oct 2026</span><span class="pill g">New</span><b>Ideas &amp; questions, right here</b><p>Vote for what we build next, suggest your own ideas and ask questions without leaving the members area. When an idea you backed moves, it shows up in your Messages.</p> <a href="#ideas">Open Ideas &amp; questions &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">23 Oct 2026</span><b>Step-by-step guides, with tips</b><p>Every QuickStart step and lesson, one step per card, real GitHub and Resend screens, a Copy button for anything you'd otherwise type.</p><a class="tl-go" href="#start" data-go="start">Open Start here &rarr;</a></div></li>
@@ -1113,7 +1134,7 @@
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
     document.querySelectorAll(".pv-only").forEach(function (el) { el.hidden = !m.preview_videos; });
     document.querySelectorAll(".npv-only").forEach(function (el) { el.hidden = !!m.preview_videos; });   // Start here folds into Set up my robot
-    renderDash(); renderAll(); show("home"); if (gcur.id) guideVideo(gcur.id); passkeyCard(); loadNotes(); loadGuides(); if (location.hash === "#mydash") dashOpen(false);
+    renderDash(); renderAll(); show("home"); if (gcur.id) guideVideo(gcur.id); passkeyCard(); loadNotes(); loadGuides(); rcfLoad(location.hash === "#fixes"); if (location.hash === "#mydash") dashOpen(false);
     // #372: an Approve link from an email lands here (#approvals): approvals happen on your own dashboard, with Face ID.
     if (location.hash === "#approvals") { var du = String(me.dashboard_url || "");
       if (/^https:\/\/[A-Za-z0-9.-]+\.[a-z]{2,}\/?$/.test(du)) location.replace(du.replace(/\/+$/, "") + "/#approvals"); else { location.hash = "#setup"; } }
@@ -1786,6 +1807,90 @@
       scRender();
     } catch (e) { if (w) w.close(); m.textContent = "No connection. Check you're online and try again."; $("sxc-go").disabled = false; }
   }
+  // ---- Robot Care fixes (28 Oct 2026, hub DECISIONS D25 stage 1). The list comes from my_robot_care_fixes() (only
+  // this member's own fixes); Accept fix calls robot-care-accept, which re-checks the fix with GitHub and merges it with
+  // Robot Care's own GitHub App, so the member never needs GitHub. Ask a question calls robot-care-ask.
+  var RCF = { rows: [], page: "", busy: {} };
+  function rcfCall(fn, body) {
+    return fresh().then(function (s) {
+      if (!s) throw new Error("signed out");
+      return fetch(SB + "/functions/v1/" + fn, { method: "POST", headers: { apikey: KEY, Authorization: "Bearer " + s.access_token, "Content-Type": "application/json" }, body: JSON.stringify(body) })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, status: r.status, j: j }; }); });
+    });
+  }
+  function rcfLoad(sync) {
+    return rest("rpc/my_robot_care_fixes", { method: "POST", body: "{}" }).then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
+      RCF.rows = Array.isArray(rows) ? rows : []; rcfPaint();
+      var waiting = RCF.rows.some(function (x) { return x.fix_state === "open" || x.fix_state === "declined"; });
+      if (sync && waiting) return rcfCall("robot-care-accept", { action: "sync" }).then(function (x) { if (x.ok && x.j && x.j.changed) return rcfLoad(false); }).catch(function () {});
+    }).catch(function () { rcfPaint(); });
+  }
+  function rcfFiles(f) { return (f || []).map(function (p) { return String(p).split("/").pop(); }).join(", "); }
+  function rcfItem(x) {
+    var st = x.fix_state, open = st === "open", later = st === "declined";
+    var pills = (x.urgent && (open || later) ? '<span class="pill p">Urgent</span>' : "") +
+      (open ? '<span class="pill g">Waiting for you</span>' : st === "accepted" ? '<span class="pill g">In your robot</span>' : later ? '<span class="pill">Not now</span>' : '<span class="pill">Closed</span>');
+    var h = '<li class="rcf-item' + (x.urgent && (open || later) ? " urgent" : "") + '" data-id="' + esc(x.id) + '">' +
+      '<div class="rcf-top"><b>' + esc(x.pr_title || "A fix for your robot") + "</b>" + pills + "</div>" +
+      (x.urgent && (open || later) ? '<p><b>Your robot can\u2019t do its main job until this is in.</b></p>' : "") +
+      "<p>" + esc(x.diagnosis || "Robot Care found why a run failed and made a small fix.") + "</p>" +
+      '<p class="small">' + (x.files && x.files.length ? "Changes " + esc(rcfFiles(x.files)) + ". " : "") +
+      (open || later ? "Robot Care checks it again, with GitHub, just before it goes in." : st === "accepted" ? "Accepted " + esc(fmtDate(String(x.decided_at || x.at).slice(0, 10))) + "." : "Closed on GitHub, so there's nothing to accept.") +
+      (x.pr ? ' <a href="' + esc(x.pr) + '" target="_blank" rel="noopener">See it on GitHub</a>' : "") + "</p>";
+    if (open || later) h += '<div class="row"><button class="btn" type="button" data-act="accept">Accept fix</button><button class="btn ghost" type="button" data-act="ask">Ask a question</button>' +
+      (open ? '<button class="btn ghost" type="button" data-act="decline">Not now</button>' : "") + "</div>" +
+      '<div class="rcf-box" data-box="confirm" hidden><p style="margin-top:0"><b>Put this fix into your robot?</b> It changes ' + esc(rcfFiles(x.files) || "one file") + ' in your copy of the code. Your robot uses it from its next run.</p>' +
+      '<div class="row"><button class="btn" type="button" data-act="yes">Yes, accept it</button><button class="btn ghost" type="button" data-act="cancel">Cancel</button></div></div>' +
+      '<div class="rcf-box" data-box="ask" hidden><label for="rcf-q-' + esc(x.id) + '">Your question about this fix</label><textarea id="rcf-q-' + esc(x.id) + '" rows="3" maxlength="600" placeholder="For example: is it safe to accept?"></textarea>' +
+      '<div class="row"><button class="btn" type="button" data-act="send">Send</button></div><p class="small">Robot Care answers about this fix only. ' + (5 - (x.questions || 0) > 0 ? (5 - (x.questions || 0)) + " questions left for this fix." : "") + "</p></div>";
+    return h + '<p class="small rcf-st" role="status" aria-live="polite"></p></li>';
+  }
+  function rcfPaint() {
+    var sec = $("rcf"); if (!sec) return;
+    var now = RCF.rows.filter(function (x) { return x.fix_state === "open"; }), old = RCF.rows.filter(function (x) { return x.fix_state !== "open"; });
+    var onPage = RCF.page === "fixes";
+    sec.hidden = !(onPage || now.length);
+    $("rcf-list").innerHTML = now.map(rcfItem).join("");
+    $("rcf-empty").hidden = !(onPage && !now.length);
+    $("rcf-old").hidden = !(onPage && old.length); $("rcf-old-list").innerHTML = onPage ? old.map(rcfItem).join("") : "";
+    var n = $("rcf-nav"); if (n) { n.hidden = !now.length; n.textContent = now.length ? String(now.length) : ""; }
+  }
+  function rcfSet(li, t, ok) { var p = li.querySelector(".rcf-st"); p.textContent = t || ""; p.className = "small rcf-st " + (t ? (ok ? "ok" : "err") : ""); }
+  async function rcfAct(li, act) {
+    var id = +li.dataset.id, row = RCF.rows.filter(function (x) { return x.id === id; })[0]; if (!row) return;
+    var box = function (k) { return li.querySelector('[data-box="' + k + '"]'); };
+    if (act === "accept") { box("ask").hidden = true; box("confirm").hidden = false; li.querySelector('[data-act="yes"]').focus(); return; }
+    if (act === "cancel") { box("confirm").hidden = true; return; }
+    if (act === "ask") { box("confirm").hidden = true; box("ask").hidden = !box("ask").hidden; if (!box("ask").hidden) box("ask").querySelector("textarea").focus(); return; }
+    if (RCF.busy[id]) return; RCF.busy[id] = true;
+    var btns = li.querySelectorAll("button"); btns.forEach(function (b) { b.disabled = true; });
+    try {
+      if (act === "yes" || act === "decline") {
+        rcfSet(li, act === "yes" ? "Checking the fix and putting it in\u2026" : "Saving\u2026", true);
+        var r = await rcfCall("robot-care-accept", act === "yes" ? { id: id } : { id: id, action: "decline" });
+        if (r.ok) { row.fix_state = r.j.fix_state || (act === "yes" ? "accepted" : "declined"); row.decided_at = new Date().toISOString(); RCF.busy[id] = false; rcfPaint();
+          $("rcf-msg").textContent = r.j.message || ""; if (act === "yes") loadNotes(); return; }
+        if (r.j && r.j.fix_state) { row.fix_state = r.j.fix_state; RCF.busy[id] = false; rcfPaint(); $("rcf-msg").textContent = r.j.error || ""; return; }
+        rcfSet(li, (r.j && r.j.error) || "That didn't work. Nothing changed. Try again in a minute.", false);
+      } else if (act === "send") {
+        var ta = box("ask").querySelector("textarea"), q = ta.value.trim();
+        if (!q) { rcfSet(li, "Type your question first.", false); return; }
+        rcfSet(li, "Asking Robot Care\u2026", true);
+        var a = await rcfCall("robot-care-ask", { id: id, question: q });
+        if (!a.ok) { rcfSet(li, (a.j && a.j.error) || "That didn't send. Try again in a minute.", false); return; }
+        row.questions = (row.questions || 0) + 1; ta.value = "";
+        var out = document.createElement("p"); out.className = "rcf-ans"; out.textContent = a.j.answered ? a.j.answer : a.j.message;
+        box("ask").insertBefore(out, box("ask").querySelector(".row")); rcfSet(li, a.j.answered ? "" : "Passed to a person.", true);
+        if (a.j.answered) loadNotes();
+      }
+    } catch (e) { rcfSet(li, "No connection. Check you're online and try again. Nothing changed.", false); }
+    finally { RCF.busy[id] = false; btns.forEach(function (b) { b.disabled = false; }); }
+  }
+  $("rcf").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-act]"); if (!b) return;
+    var li = b.closest(".rcf-item"); if (li) rcfAct(li, b.dataset.act);
+  });
+
   var sxReady = false;
   function sxInit() {
     if (sxReady) return; sxReady = true;
@@ -2080,7 +2185,7 @@
   });
 
   // ---- one section per page: Home (welcome and messages), Start here, Lessons, Code, Dashboard, Clips, Help
-  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "dashboard", "mydash", "clips", "passkeys", "help", "guide", "questions", "ideas", "post"];   // #space maps to ideas, #membership to help
+  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "fixes", "dashboard", "mydash", "clips", "passkeys", "help", "guide", "questions", "ideas", "post"];   // #space maps to ideas, #membership to help
   // Questions (23 Oct 2026): the public Questions page, shown inside the members area so the members menu stays put. Fetched once.
   var faqLoaded = false;
   function loadFaq() {
@@ -2389,6 +2494,7 @@
     IB.cur = null; if (page === "post") ibOpen(ibPost); if (page === "help") { if (ibSheetKind) { IB.kind = ibSheetKind; ibPaintBoard(); ibSheet(ibSheetKind); } }
     if (page === "setup") suInit();
     if (page === "live") lvInit();
+    RCF.page = page; if (page === "fixes") rcfLoad(true); else rcfPaint();
     if (page === "clips") { paintBench(); loadWants(); document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = "0"; }); setTimeout(function () { document.querySelectorAll("#bench .bar i").forEach(function (b) { b.style.width = b.dataset.w; }); }, 60); }
     $("preview").classList.toggle("off", page !== "home");
     document.documentElement.classList.toggle("dashview", page === "mydash"); document.documentElement.dataset.pg = page;
