@@ -705,7 +705,7 @@ const QS=[
 
 let qdone=new Set();
 function renderQS(){
-  $("qsteps").innerHTML=QS.map(([t,mins,pts],i)=>`<li class="${qdone.has(i)?'done':''}"><span class="qn">${qdone.has(i)?'✓':i+1}</span><div class="qt">${t}<small>${mins}</small></div><div class="qb"><button class="btn${qdone.has(i)?'':' go'}" type="button" data-q="${i}">${qdone.has(i)?'Undo':'Mark done'}</button></div><div class="qd"><ul>${pts.map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="qv"><details><summary>Watch this step (about a minute)</summary><video controls playsinline preload="none" poster="" src="../members/video-7b085e8e0a/${QS[i][3]}.mp4"></video></details></div></li>`).join("");
+  $("qsteps").innerHTML=QS.map(([t,mins,pts],i)=>`<li class="${qdone.has(i)?'done':''}"><span class="qn">${qdone.has(i)?'✓':i+1}</span><div class="qt">${t}<small>${mins}</small></div><div class="qb"><button class="btn${qdone.has(i)?'':' go'}" type="button" data-q="${i}">${qdone.has(i)?'Undo':'Mark done'}</button></div><div class="qd"><ul>${pts.map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="qv"><details><summary>Watch this step (about a minute)</summary><video controls playsinline preload="none" poster="" src="media/${QS[i][3]}.mp4"></video></details></div></li>`).join("");
   $("qsteps").querySelectorAll("button[data-q]").forEach(b=>b.addEventListener("click",()=>{const i=+b.dataset.q; qdone.has(i)?qdone.delete(i):qdone.add(i); renderQS();}));
   $("qfill").style.width=(qdone.size/QS.length*100)+"%";
   $("qcount").textContent=`${qdone.size} of ${QS.length} steps done · about ${QS.reduce((s,q,i)=>s+(qdone.has(i)?0:parseInt(q[1])),0)} minutes left`;
