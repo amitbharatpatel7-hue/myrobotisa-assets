@@ -636,6 +636,7 @@
       .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
       .then(function(res){
         if (res === "ok") { say("You're on the list. Your free test drive arrives in December, and we'll tell you when sales open in January.", true); f.reset(); }
+        else if (res === "rate_limited") say("Lots of sign-ups from your network just now. Try again in an hour, or email hello@myrobotisa.com.", false);
         else if (res === "invalid_email") say("That email doesn't look right.", false);
         else if (res === "consent_required") say("Tick the box so we're allowed to email you.", false);
         else say("Something went wrong. Try again in a minute.", false);

@@ -527,6 +527,7 @@
       .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
       .then(function(res){
         if (res === "ok") { say("You're on the list. A welcome email from hello@myrobotisa.com is on its way. Not in your inbox in a few minutes? Check junk or spam and mark it Not junk, so your December test drive reaches you.", true); f.reset(); }
+        else if (res === "rate_limited") say("Lots of sign-ups from your network just now. Try again in an hour, or email hello@myrobotisa.com.", false);
         else if (res === "invalid_email") say("That email doesn't look right.", false);
         else if (res === "consent_required") say("Tick the box so we're allowed to email you.", false);
         else say("Something went wrong. Try again in a minute.", false);

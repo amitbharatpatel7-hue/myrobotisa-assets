@@ -2,12 +2,14 @@
 <html lang="en-GB">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' blob: https:; connect-src 'self' https://vxnestmhtjotidhzzqbo.supabase.co wss://vxnestmhtjotidhzzqbo.supabase.co https://api.github.com https://github.com; frame-src https:; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Members · My Robot I.S.A.</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="77">
+<meta name="mri-version" content="78">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -1023,7 +1025,7 @@
     $("whoemail").textContent = session.email || m.email;
     var first = (PLAN[m.plan] || "Member");
     (function (u) { var b = $("oldapp-go"); if (!b) return; if (!u) { b.textContent = "Set up my dashboard"; b.onclick = function () { location.hash = "setup"; }; return; }
-      b.onclick = function () { window.open(u, "_blank", "noopener"); }; })(m.dashboard_url);
+      b.onclick = function () { if (safeHttps(u)) window.open(u, "_blank", "noopener"); else location.hash = "dashboard"; }; })(m.dashboard_url);
     $("hi").innerHTML = m.first_name ? 'Welcome back, <span class="g">' + esc(m.first_name) + '</span>'
       : m.plan === "founding" ? 'Welcome, <span class="g">founding member</span>' : 'Welcome <span class="g">back</span>';
     var lapsed = m.status !== "active";
@@ -1057,7 +1059,8 @@
   function start() {
     if (!session) { show("signin"); return; }
     show("wait");
-    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url,first_name,founding_no,preview_videos,repo_url").then(function (r) {
+    var sub = null; try { sub = JSON.parse(atob(session.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub; } catch (e) {}
+    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url,first_name,founding_no,preview_videos,repo_url" + (sub ? "&user_id=eq." + encodeURIComponent(sub) : "")).then(function (r) {
       if (r.status === 401) { clear(); session = null; show("signin"); say("Your sign-in ran out. Ask for a new code.", false); return; }
       return r.json().then(function (rows) {
         var uid = null; try { uid = JSON.parse(atob(session.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub; } catch (e) {}
@@ -1130,7 +1133,7 @@
       var when = new Date(n.starts_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
       return '<li class="note' + (isNew ? " new" : " read") + (n.kind === "action" ? " action" : "") + '" data-id="' + n.id + '"' + (isNew ? ' role="button" tabindex="0" title="Mark as read"' : "") + '>' +
         (isNew ? '<span class="dot" aria-label="Unread"></span>' : "") + '<b>' + (n.kind === "action" ? "Action needed: " : "") + esc(n.title) + '</b><time>' + esc(when) + (isNew ? " · tap to mark as read" : " · read") + '</time><p>' + esc(n.body) + '</p>' +
-        (n.link_url ? '<a href="' + esc(n.link_url) + '">' + esc(n.link_text || "Find out more") + " →</a>" : "") + "</li>";
+        (safeLink(n.link_url) ? '<a href="' + esc(n.link_url) + '">' + esc(n.link_text || "Find out more") + " →</a>" : "") + "</li>";
     };
     $("notes").innerHTML = shown.map(one).join("");
     var old = $("notes-older");
@@ -1181,13 +1184,17 @@
   // for other sites, so there it opens in a frame filling the app window instead (#mydash). In a browser tab it opens
   // in the same tab as before.
   function inApp() { return document.documentElement.classList.contains("app"); }
-  function dashHref(url) { return inApp() ? "#mydash" : url; }
+  // 27 Oct 2026 (security review): a link is only ever followed if it is https:// (dashboards) or one of our own
+  // link shapes (Messages), so a javascript: address can never run in this page, whoever wrote it.
+  function safeHttps(u) { u = String(u || ""); return /^https:\/\/[A-Za-z0-9.-]+(?::\d+)?(?:[\/?#][^\s"<>]*)?$/.test(u) ? u : ""; }
+  function safeLink(u) { u = String(u || ""); return /^(#[A-Za-z0-9\/_-]*|\/[^\s"<>]*|\.\.\/[^\s"<>]*|https:\/\/[^\s"<>]+)$/.test(u) ? u : ""; }
+  function dashHref(url) { return inApp() ? "#mydash" : (safeHttps(url) || "#dashboard"); }
   var dash = { origin: null, readyAt: 0, timer: null };
   function dashHelp(on) { $("dash-help").hidden = !on; }
   function dashArm(ms) { dashHelp(false); clearTimeout(dash.timer); dash.timer = setTimeout(function () { if (Date.now() - dash.readyAt > ms + 1000) dashHelp(true); }, ms); }
   function dashOpen(reload) {
     var url = me && me.dashboard_url, f = $("dash-frame");
-    if (!url) { if (me.user_id) location.hash = "dashboard"; return; }
+    if (!url || !safeHttps(url)) { if (me.user_id) location.hash = "dashboard"; return; }
     try { dash.origin = new URL(url).origin; } catch (e) { location.hash = "dashboard"; return; }
     $("dash-signin").href = url;
     if (reload || f.dataset.src !== url) { f.dataset.src = url; dash.readyAt = 0; f.src = url; dashArm(8000); }
@@ -1486,7 +1493,7 @@
   }
   function ghConnect(back) {
       if (!SU.cfg || !SU.cfg.client_id) return;
-      var state = Math.random().toString(36).slice(2) + Date.now().toString(36);
+      var state = Array.prototype.map.call(crypto.getRandomValues(new Uint8Array(16)), function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
       try { sessionStorage.setItem("mri-gh-state", state); sessionStorage.setItem("mri-gh-back", back); } catch (e) {}
       location.href = "https://github.com/login/oauth/authorize?client_id=" + encodeURIComponent(SU.cfg.client_id) + "&scope=" + encodeURIComponent("repo workflow") +
         "&state=" + state + "&allow_signup=true"; // no redirect_uri: GitHub returns to the callback registered on the OAuth App
@@ -1704,6 +1711,7 @@
   async function scGo() {
     var m = $("sxc-msg"); $("sxc-go").disabled = true; m.textContent = "Switching on…";
     var w = window.open("", "_blank");   // opened inside the tap so phones don't block it; pointed at GitHub below
+    try { if (w) w.opener = null; } catch (e) {}
     try {
       var r = await scFn("POST");
       if (!r.ok) { if (w) w.close(); m.textContent = (r.j && r.j.error) || "That didn't work. Try again in a minute."; $("sxc-go").disabled = false; return; }
