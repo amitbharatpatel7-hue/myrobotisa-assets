@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="79">
+<meta name="mri-version" content="80">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -224,6 +224,8 @@
   .ib-chips button,.ib-cats button{min-height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--muted);font:inherit;font-size:13px;font-weight:600;cursor:pointer}
   .ib-chips button[aria-pressed="true"],.ib-cats button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--deep)}
   .ib-list{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:10px}
+  .ib-morebtn{display:inline-flex;align-items:center;gap:8px;margin-top:12px;min-height:40px;padding:0;border:0;background:none;color:var(--green);font:inherit;font-weight:800;font-size:14px;cursor:pointer}
+  .ib-morebtn::before{content:'';width:8px;height:8px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-2px,-2px)}
   .ib-post{display:flex;gap:14px;align-items:flex-start;background:var(--deep3);border:1px solid var(--rule);border-radius:16px;padding:14px 16px}
   .ib-post.hid,.ib-c li.hid{opacity:.55}
   .ib-vote{flex:none;width:58px;min-height:64px;border-radius:12px;border:1px solid var(--rule);background:var(--deep);color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:inherit;font-weight:700;font-size:16px;cursor:pointer}
@@ -318,6 +320,27 @@
   #mtoast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--green);color:var(--deep);font-weight:800;font-size:14px;padding:12px 18px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.35);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:80;max-width:min(92vw,520px);text-align:center}
   #mtoast.on{opacity:1;transform:translate(-50%,0)}
   .tl-more{margin:4px 0 0} .tl-more>summary{margin-left:6px} .tl-old{margin-top:12px}
+  /* 27 Oct 2026 (Amit): only the latest two updates in full; earlier ones are one-line rows, grouped by month, tap to read */
+  .wn-n{font-size:12px;font-weight:800;color:var(--deep);background:var(--green);border-radius:999px;padding:1px 8px;margin-left:2px}
+  #wn-old{margin-top:10px}
+  .wn-month{margin-top:12px} .wn-month:first-child{margin-top:0}
+  .wn-month>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:36px;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .wn-month>summary::-webkit-details-marker{display:none}
+  .wn-month>summary::before{content:'';width:6px;height:6px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(-45deg);transition:transform .15s}
+  .wn-month[open]>summary::before{transform:rotate(45deg)} .wn-month>summary:hover{color:var(--ink)}
+  .wn-month>summary .wn-c{font-weight:700;letter-spacing:0;text-transform:none;color:var(--muted);opacity:.8}
+  .wn-rows{list-style:none;margin:4px 0 0;padding:0;display:grid;gap:6px}
+  .wn-row{background:var(--deep3);border:1px solid var(--rule);border-radius:12px;transition:border-color .12s}
+  .wn-row:hover,.wn-row[open]{border-color:var(--green)}
+  .wn-row>summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:58px 1fr 10px;gap:12px;align-items:center;min-height:46px;padding:8px 14px}
+  .wn-row>summary::-webkit-details-marker{display:none}
+  .wn-row>summary::after{content:'';width:7px;height:7px;border:solid var(--muted);border-width:0 2px 2px 0;transform:rotate(45deg);transition:transform .15s;justify-self:end}
+  .wn-row[open]>summary::after{transform:rotate(-135deg)}
+  .wn-d{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--green);white-space:nowrap}
+  .wn-t{font-weight:700;font-size:15px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .wn-row[open] .wn-t{white-space:normal}
+  .wn-b{padding:0 14px 12px 84px} .wn-b p{margin:0 0 6px;color:var(--muted);line-height:1.5;font-size:14px} .wn-b a{font-weight:700;font-size:14px}
+  @media(max-width:520px){.wn-row>summary{grid-template-columns:50px 1fr 10px;gap:10px} .wn-b{padding-left:14px}}
   .soc-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-top:22px;padding-top:16px;border-top:1px solid var(--rule)}
   .soc{display:flex;gap:10px} .soc a{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:14px;transition:transform .15s,box-shadow .15s}
   /* 23 Oct 2026 (Amit): keep the bounce, drop the brand colours: theme tiles, white glyphs, green on hover */
@@ -618,12 +641,11 @@
           <li><span class="tl-dot"></span><div><span class="tl-date">23 Oct 2026</span><b>Step-by-step guides, with tips</b><p>Every QuickStart step and lesson, one step per card, real GitHub and Resend screens, a Copy button for anything you'd otherwise type.</p><a class="tl-go" href="#start" data-go="start">Open Start here &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">22 Oct 2026</span><b>Lesson videos, re-cut</b><p>All 20 in the site's own look; the home-page clip now opens with what the robot was tested through.</p><a class="tl-go" href="#lessons" data-go="lessons">The 14 lessons &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">22 Oct 2026</span><b>Faster sign-in</b><p>Face ID, Touch ID or Windows Hello, one passkey per device. The email code still works.</p><a class="tl-go" href="#passkeys" data-go="passkeys">Set it up &rarr;</a></div></li>
-        </ol>
-        <details class="fold tl-more" id="wn-more"><summary><span class="fold-l">Show earlier updates</span></summary>
-        <ol class="tl tl-old">
           <li><span class="tl-dot"></span><div><span class="tl-date">21 Oct 2026</span><b>Members area opened</b><p>Start here, the 14 lessons, your dashboard link and messages, for the free test drive.</p></div></li>
         </ol>
-        </details>
+        <!-- 27 Oct 2026 (Amit): add new updates at the TOP of #wn-list, newest first, one <li> each. Only the latest two show
+             in full; the script below folds the rest into "Show earlier updates" as one-line rows grouped by month. -->
+        <details class="fold tl-more" id="wn-more" hidden><summary><span class="fold-l">Show earlier updates</span><span class="wn-n" id="wn-n"></span></summary><div id="wn-old"></div></details>
         <h3 class="wn-h">On the <span class="g">bench</span></h3>
         <div class="bench" id="bench">
           <div class="bch" data-want="moonshot"><div class="bch-top"><span class="pill g">In backtest</span><span class="bch-pct">40%</span></div><b>Moonshot pot, second go</b><p>A small side pot that picks from Trading 212's own top winners and losers. Backtest first, then a live trial on the founder's account. Earns its place, gets a lesson and a switch of its own.</p><div class="bar"><i style="width:40%" data-w="40%"></i></div><div class="want-row"><button class="want" type="button">I want this</button><span class="want-n"></span></div></div>
@@ -639,6 +661,41 @@
           </span></div>
       </section>
 
+      <script>
+  // ---- What's new (27 Oct 2026, Amit): the latest two updates stay in full; the rest fold into "Show earlier updates"
+  // as one-line rows (date + title, tap to read), grouped by month with the newest month open. Without JS, all show in full.
+  (function () {
+    var KEEP = 2, list = document.getElementById("wn-list"), more = document.getElementById("wn-more"), box = document.getElementById("wn-old");
+    if (!list || !more || !box) return;
+    var rest = [].slice.call(list.children).slice(KEEP); if (!rest.length) return;
+    var MON = { Jan: "January", Feb: "February", Mar: "March", Apr: "April", May: "May", Jun: "June", Jul: "July", Aug: "August", Sep: "September", Oct: "October", Nov: "November", Dec: "December" };
+    var groups = [], byKey = {};
+    rest.forEach(function (li) {
+      var dEl = li.querySelector(".tl-date"), d = dEl ? dEl.textContent.trim() : "", m = d.match(/^(\d+)\s+(\w{3})\w*\s+(\d{4})$/);
+      var key = m ? m[2] + " " + m[3] : "Earlier";
+      if (!byKey[key]) { byKey[key] = { label: m ? (MON[m[2]] || m[2]) + " " + m[3] : "Earlier", rows: [] }; groups.push(byKey[key]); }
+      var row = document.createElement("details"); row.className = "wn-row";
+      var sum = document.createElement("summary"), ds = document.createElement("span"), ts = document.createElement("span");
+      ds.className = "wn-d"; ds.textContent = m ? m[1] + " " + m[2] : d;
+      ts.className = "wn-t"; var b = li.querySelector("b"); ts.textContent = b ? b.textContent : "";
+      sum.appendChild(ds); sum.appendChild(ts); row.appendChild(sum);
+      var body = document.createElement("div"); body.className = "wn-b";
+      li.querySelectorAll("div > p, div > a").forEach(function (n) { body.appendChild(n); });
+      row.appendChild(body); li.parentNode.removeChild(li);
+      var item = document.createElement("li"); item.appendChild(row); byKey[key].rows.push(item);
+    });
+    groups.forEach(function (g, i) {
+      var ul = document.createElement("ul"); ul.className = "wn-rows"; g.rows.forEach(function (r) { ul.appendChild(r); });
+      if (groups.length === 1) { box.appendChild(ul); return; }
+      var wrap = document.createElement("details"); wrap.className = "wn-month"; if (i === 0) wrap.open = true;
+      var s = document.createElement("summary"); s.textContent = g.label + " ";
+      var c = document.createElement("span"); c.className = "wn-c"; c.textContent = "· " + g.rows.length + (g.rows.length === 1 ? " update" : " updates");
+      s.appendChild(c); wrap.appendChild(s); wrap.appendChild(ul); box.appendChild(wrap);
+    });
+    document.getElementById("wn-n").textContent = rest.length;
+    more.hidden = false;
+  })();
+</script>
       <section class="card wide" aria-labelledby="ib-p-title" data-page="post" id="ib-post">
         <a class="ib-back" href="#ideas" id="ib-p-back">&larr; All ideas</a>
         <div id="ib-p-body"><p class="small">Loading…</p></div>
@@ -665,6 +722,7 @@
         <div class="ib-seg" role="tablist" aria-label="Ideas or questions"><button type="button" role="tab" id="ib-t-idea" data-k="idea" aria-selected="true">Ideas <span id="ib-n-idea"></span></button><button type="button" role="tab" id="ib-t-question" data-k="question" aria-selected="false">Questions <span id="ib-n-question"></span></button></div>
         <div class="ib-tools"><div class="ib-chips" id="ib-chips" role="group" aria-label="Show"></div><label class="sr" for="ib-q">Search ideas and questions</label><input class="ib-search" id="ib-q" type="search" placeholder="Search ideas and questions"></div>
         <ul class="ib-list" id="ib-list" aria-live="polite"></ul>
+        <button type="button" class="ib-morebtn" id="ib-more" hidden>Show more <span class="wn-n" id="ib-more-n"></span></button>
         <p class="small" id="ib-msg" style="margin:12px 0 0">Loading…</p>
         <details class="fold" style="margin-top:14px"><summary><span class="fold-l">House rules</span></summary><p class="small" style="margin:10px 0 0">No stock tips and no "should I buy X": we can't answer it and it isn't what this space is for. One idea per post, so people can vote on it. Kind, specific, and say what you were trying to do when it went wrong. Only members can see this page.</p></details>
         <p class="small" style="margin:12px 0 0">Prefer email? <a href="mailto:hello@myrobotisa.com?subject=Members%20area" style="color:var(--green);font-weight:700">hello@myrobotisa.com</a> · replies within two working days.</p>
@@ -2030,7 +2088,7 @@
   // Members only (RLS on community_*). Votes, posts and replies go straight to the tables; status, team updates, answers
   // and hiding go through the community_* functions. What happens to a post reaches people as Messages, never email.
   // Schema: ops/supabase/2026-10-27-community.sql in this repo.
-  var IB = { posts: null, mine: {}, answers: {}, kind: "idea", filter: "", q: "", loading: null, cur: null, sheetKind: "idea", cat: "robot" };
+  var IB = { posts: null, mine: {}, answers: {}, kind: "idea", filter: "", q: "", more: false, loading: null, cur: null, sheetKind: "idea", cat: "robot" };
   var IB_ST = { review: "Under review", planned: "Planned", building: "Building", live: "Live", declined: "Not for now" };
   var IB_CAT = { robot: "Robot settings", lessons: "Lessons", dashboard: "Dashboard and app", emails: "Messages and emails", account: "Account", other: "Something else" };
   var IB_UP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>';
@@ -2106,7 +2164,11 @@
     list.sort(k === "idea"
       ? function (a, b) { return ((a.status === "declined") - (b.status === "declined")) || (b.vote_count - a.vote_count) || (Date.parse(b.created_at) - Date.parse(a.created_at)); }
       : function (a, b) { return Date.parse(b.created_at) - Date.parse(a.created_at); });
-    var ul = $("ib-list"); ul.innerHTML = ""; list.forEach(function (p) { ul.appendChild(ibRow(p)); });
+    // 28 Oct 2026 (Amit): three posts by default, then "Show more"; a search shows every match
+    var cut = (!IB.more && !IB.q && list.length > 3) ? 3 : list.length;
+    var ul = $("ib-list"); ul.innerHTML = ""; list.slice(0, cut).forEach(function (p) { ul.appendChild(ibRow(p)); });
+    var mb = $("ib-more"); mb.hidden = cut >= list.length; mb.firstChild.textContent = "Show more ";
+    $("ib-more-n").textContent = list.length - cut;
     $("ib-msg").textContent = list.length ? "" : (IB.q ? "Nothing matches that. Try other words, or post it." : (k === "idea" ? "No ideas here yet. Be the first." : "No questions here yet. Ask the first one."));
   }
   function ibPaintHome() {
@@ -2230,8 +2292,17 @@
     else if (b.id === "ib-oh") ibRpc("community_hide", { p_post: p.id, p_comment: null, p_hidden: !p.hidden }).then(function () { toast(p.hidden ? "Shown again." : "Hidden from members."); ibLoad(true); }).catch(fail);
   });
   // ---- the board's own controls
-  document.querySelector(".ib-seg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; IB.kind = b.dataset.k; IB.filter = ""; ibPaintBoard(); });
-  $("ib-chips").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; IB.filter = b.dataset.f; ibPaintBoard(); });
+  document.querySelector(".ib-seg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; IB.kind = b.dataset.k; IB.filter = ""; IB.more = false; ibPaintBoard(); });
+  $("ib-chips").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; IB.filter = b.dataset.f; IB.more = false; ibPaintBoard(); });
+  $("ib-more").addEventListener("click", function () { IB.more = true; ibPaintBoard(); });
+  // 28 Oct 2026 (Amit): Help and membership in the menu (or any link to the board, other than "All ideas" back from a post)
+  // always lands on the default view: Ideas & questions tab, Ideas, All, no search, the top three, top of the page.
+  function ibReset() { IB.kind = "idea"; IB.filter = ""; IB.q = ""; $("ib-q").value = ""; IB.more = false; helpTab("space"); ibPaintBoard(); }
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest('a[data-go="help"], a[href="#help"], a[href="#ideas"]');
+    if (!a || a.id === "ib-p-back") return;
+    ibReset(); if (location.hash === a.getAttribute("href")) window.scrollTo(0, 0);
+  });
   $("ib-q").addEventListener("input", function () { IB.q = this.value.trim(); ibPaintBoard(); });
   $("ib-new").addEventListener("click", function () { ibSheet(IB.kind); });
   // ---- the sheet: suggest an idea or ask a question, with a look for ones already there
