@@ -57,7 +57,7 @@ export async function presign(accountId: string, keyId: string, secret: string, 
   return signed.url;
 }
 
-if (import.meta.main) Deno.serve(async (req: Request) => {
+Deno.serve(async (req: Request) => {
   const origin = req.headers.get("origin");
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(origin) });
   if (req.method !== "GET") return reply(origin, 405, { error: "GET only" });
