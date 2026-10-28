@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="82">
+<meta name="mri-version" content="83">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -857,7 +857,7 @@
                 <li><a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener">Make a free Cloudflare account</a>.</li>
                 <li><b>Account API tokens &rarr; Create Token &rarr; Custom token</b>. Call it <b>My Robot ISA</b>, add <b>Account &middot; Cloudflare Pages &middot; Edit</b>, <b>Account &middot; Access: Apps and Policies &middot; Edit</b> and <b>Account &middot; Workers KV Storage &middot; Edit</b> (that one keeps your Face ID keys), create it and copy it.</li>
                 <li>In Trading 212 (the same Practice account), make one more key called <b>My Robot ISA dashboard</b> with only <b>Account data</b>, <b>Metadata</b> and <b>Portfolio</b>, IP access <b>Unrestricted</b>. No Orders switches: it can never place an order.</li>
-                <li>For the <b>Approve</b> button: on GitHub, <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">make a fine-grained token</a> called <b>My Robot ISA approve</b>. Repository access: <b>Only select repositories</b>, your copy. Permissions: <b>Actions: Read and write</b> and <b>Contents: Read-only</b>. Expiry: <b>1 year</b>. It can only start your Execute approved orders run with the orders you tapped, and only after Face ID.</li></ol>
+                <li>For the <b>Approve</b> button: on GitHub, <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">make a fine-grained token</a> called <b>My Robot ISA approve</b>. Repository access: <b>Only select repositories</b>, your copy. Permissions: <b>Actions: Read and write</b>, <b>Contents: Read-only</b> and <b>Pull requests: Read-only</b>. Expiry: <b>1 year</b>. It can only start your Execute approved orders run with the orders you tapped, or accept a Robot Care fix you tapped, and only after Face ID. Made this token before November 2026? Edit it on GitHub and add <b>Pull requests: Read-only</b>; nothing needs pasting again.</li></ol>
               <label class="f" for="sx-cft">Cloudflare API token</label><input class="t" id="sx-cft" type="password" autocomplete="off" spellcheck="false">
               <label class="f" for="sx-rk">Read-only Trading 212 key</label><input class="t" id="sx-rk" type="password" autocomplete="off" spellcheck="false">
               <label class="f" for="sx-rs">Read-only Trading 212 secret</label><input class="t" id="sx-rs" type="password" autocomplete="off" spellcheck="false">
