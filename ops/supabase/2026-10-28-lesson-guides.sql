@@ -14,3 +14,24 @@ revoke all on table public.lesson_guides from anon, authenticated;
 grant select on table public.lesson_guides to authenticated;
 drop policy if exists "members read guides" on public.lesson_guides;
 create policy "members read guides" on public.lesson_guides for select to authenticated using (public.is_member());
+
+-- Lesson video links: one row per link lesson-media issues (service role only). It caps each member at 60 links an
+-- hour, because R2 bills per read and has no spending cap. Rows older than a day are cleared as new ones arrive.
+create table if not exists public.lesson_link_log (
+  id bigint generated always as identity primary key,
+  user_id uuid not null,
+  video text not null,
+  at timestamptz not null default now()
+);
+create index if not exists lesson_link_log_user_at on public.lesson_link_log (user_id, at);
+alter table public.lesson_link_log enable row level security;
+revoke all on table public.lesson_link_log from anon, authenticated;
+create or replace function public.lesson_link_log_trim() returns trigger language plpgsql security definer
+  set search_path = public, pg_catalog as $$
+begin
+  if random() < 0.05 then delete from public.lesson_link_log where at < now() - interval '1 day'; end if;
+  return null;
+end $$;
+revoke all on function public.lesson_link_log_trim() from public, anon, authenticated;
+drop trigger if exists lesson_link_log_trim on public.lesson_link_log;
+create trigger lesson_link_log_trim after insert on public.lesson_link_log for each statement execute function public.lesson_link_log_trim();

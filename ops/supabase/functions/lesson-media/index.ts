@@ -3,6 +3,9 @@
 // The 20 lesson videos used to sit in the public website repo, so anyone could download them. They now live in the
 // private Cloudflare R2 bucket myrobotisa-lessons (key lessons/<slug>.mp4). The members page asks this function for
 // one video at a time and gets a presigned link that works for LINK_SECONDS, so a copied link soon stops working.
+// Cost guard (Amit, 28 Oct 2026: R2 bills his card and has no hard cap): links last 30 minutes and each member gets at
+// most LINKS_PER_HOUR, logged in public.lesson_link_log, so a leaked link or a script can't run up R2 reads for long.
+// To stop all video at once, delete the R2_SECRET_ACCESS_KEY secret: no new links are issued.
 //
 // GET ?v=<guide id>  (qs-1 … qs-6, day-1 … day-14)  ->  { url, expires_at }  or  { error }
 // Who may watch: the same rule as the page. An active member whose row has preview_videos on, or the owner. When the
@@ -12,7 +15,8 @@
 import { AwsClient } from "npm:aws4fetch@1.0.20";
 
 const BUCKET = "myrobotisa-lessons";
-const LINK_SECONDS = 2 * 60 * 60;
+const LINK_SECONDS = 30 * 60;
+const LINKS_PER_HOUR = 60;
 const VIDEOS: Record<string, string> = {
   "qs-1": "qs-01-copy-the-code", "qs-2": "qs-02-broker-key", "qs-3": "qs-03-email-key", "qs-4": "qs-04-setup-check",
   "qs-5": "qs-05-optional-extras", "qs-6": "qs-06-your-app",
@@ -69,6 +73,16 @@ if (import.meta.main) Deno.serve(async (req: Request) => {
     { headers: { apikey: SRK, Authorization: `Bearer ${SRK}` } });
   const m = r.ok ? (await r.json())[0] || null : null;
   if (!canWatch(m)) return reply(origin, 403, { error: "The lesson videos open to members in January 2027." });
+
+  const db = (path: string, init: RequestInit = {}) => fetch(`${URL_}/rest/v1/${path}`, { ...init,
+    headers: { apikey: SRK, Authorization: `Bearer ${SRK}`, "Content-Type": "application/json", ...(init.headers || {}) } });
+  const since = new Date(Date.now() - 3600e3).toISOString();
+  const used = await db(`lesson_link_log?select=id&user_id=eq.${sub}&at=gte.${encodeURIComponent(since)}`, { headers: { Prefer: "count=exact", Range: "0-0" } });
+  if (!used.ok) return reply(origin, 503, { error: "Videos are having a moment. Try again in a minute." });   // fail closed
+  if ((Number((used.headers.get("content-range") || "/0").split("/")[1]) || 0) >= LINKS_PER_HOUR) {
+    return reply(origin, 429, { error: "That's a lot of videos in an hour. Try again a bit later." });
+  }
+  await db("lesson_link_log", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ user_id: sub, video: slug }) });
 
   const url = await presign(acct, kid, sec, `lessons/${slug}.mp4`, LINK_SECONDS);
   return reply(origin, 200, { url, expires_at: new Date(Date.now() + LINK_SECONDS * 1000).toISOString() });
