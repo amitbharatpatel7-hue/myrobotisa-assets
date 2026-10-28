@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="80">
+<meta name="mri-version" content="81">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -83,6 +83,9 @@
   .pill.g{background:var(--green);border-color:var(--green);color:var(--deep)}
   .pill.p{border-color:var(--pink-ink);color:var(--pink-ink)}
   .pill.a{border-color:var(--amber);color:var(--amber)}
+  /* 28 Oct 2026 (Amit): every paying member of the first 100 is numbered, "Founding member #23 of 100" (hub DECISIONS D23) */
+  .fm-badge{display:inline-flex;align-items:center;gap:8px;margin:2px 0 10px;padding:6px 14px 6px 8px;border-radius:999px;background:var(--deep);border:1px solid var(--green);font-weight:800;font-size:14px;letter-spacing:.02em}
+  .fm-badge b{background:var(--green);color:var(--deep);border-radius:999px;padding:2px 9px;font-size:13px}
 
   /* sign in */
   .signin{max-width:460px;margin:6vh auto 0}
@@ -536,6 +539,7 @@
     <section class="hello" data-page="home">
       <div>
         <h1 id="hi">Welcome <span class="g">back</span></h1>
+        <p class="fm-badge" id="fm-badge" hidden></p>
         <p class="lede">Your lessons, your copy of the code, your app and your membership, in one place.</p>
       </div>
       <div class="card">
@@ -560,8 +564,8 @@
     </section>
 
     <section class="card" aria-labelledby="h-sph" id="sp-home" data-page="home">
-      <h2 id="h-sph">The members' <span class="g">space</span></h2>
-      <p class="lede">Vote for what you'd like built next, or suggest something. You'll see what happens to it in your Messages.</p>
+      <h2 id="h-sph">The <span class="g">Moonshotters</span></h2>
+      <p class="lede">Every member running their own robot. Vote for what you'd like built next, or suggest something. You'll see what happens to it in your Messages.</p>
       <div class="row"><a class="btn" id="sp-idea" href="#ideas/new">Share an idea</a><a class="btn ghost" id="sp-ask" href="#ideas/ask">Ask a question</a><a class="btn ghost" href="#ideas">See them all</a></div>
       <ul class="ib-list" id="sp-home-list" aria-live="polite"></ul>
       <p class="small" id="sp-home-msg" style="margin:10px 0 0"></p>
@@ -637,6 +641,7 @@
         <h2 id="h-new">What's <span class="g">new</span></h2>
         <p class="lede">Shipped first, then what's on the bench. Tap <b>I want this</b> on anything you'd like sooner: it's saved to your account and counts.</p>
         <ol class="tl" id="wn-list">
+          <li><span class="tl-dot"></span><div><span class="tl-date">28 Oct 2026</span><span class="pill g">New</span><b>Meet the Moonshotters</b><p>The members' space has a name: the Moonshotters, the members running their own robot. And the first 100 paying members are numbered: your founding number shows at the top of the members area.</p><a class="tl-go" href="#help" data-go="help">Open the Moonshotters &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">27 Oct 2026</span><span class="pill g">New</span><b>Ideas &amp; questions, right here</b><p>Vote for what we build next, suggest your own ideas and ask questions without leaving the members area. When an idea you backed moves, it shows up in your Messages.</p> <a href="#ideas">Open Ideas &amp; questions &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">23 Oct 2026</span><b>Step-by-step guides, with tips</b><p>Every QuickStart step and lesson, one step per card, real GitHub and Resend screens, a Copy button for anything you'd otherwise type.</p><a class="tl-go" href="#start" data-go="start">Open Start here &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">22 Oct 2026</span><b>Lesson videos, re-cut</b><p>All 20 in the site's own look; the home-page clip now opens with what the robot was tested through.</p><a class="tl-go" href="#lessons" data-go="lessons">The 14 lessons &rarr;</a></div></li>
@@ -715,9 +720,9 @@
 
       <section class="card wide" aria-labelledby="h-help" data-page="help">
         <h2 id="h-help">Help and <span class="g">membership</span></h2>
-        <div class="su-seg help-seg" role="tablist" aria-label="Help and membership"><button type="button" role="tab" id="tab-space" data-v="space" aria-selected="true">Ideas &amp; questions<small>vote, suggest, ask</small></button><button type="button" role="tab" id="tab-memb" data-v="memb" aria-selected="false">Your membership<small>plan, renewal, manage</small></button></div>
+        <div class="su-seg help-seg" role="tablist" aria-label="Help and membership"><button type="button" role="tab" id="tab-space" data-v="space" aria-selected="true">Moonshotters<small>ideas, questions, votes</small></button><button type="button" role="tab" id="tab-memb" data-v="memb" aria-selected="false">Your membership<small>plan, renewal, manage</small></button></div>
         <div id="pane-space" role="tabpanel">
-        <div class="ib-head"><div><p class="lede" style="margin-top:0">You use it every day, so you shape what we build next. Vote for the ideas you want, suggest your own, or ask anything. When something moves, it shows up in your Messages.</p></div>
+        <div class="ib-head"><div><p class="lede" style="margin-top:0"><b>The Moonshotters</b> are the members running their own robot. You use it every day, so you shape what we build next. Vote for the ideas you want, suggest your own, or ask anything. When something moves, it shows up in your Messages.</p></div>
         <button class="btn" type="button" id="ib-new">Suggest an idea</button></div>
         <div class="ib-seg" role="tablist" aria-label="Ideas or questions"><button type="button" role="tab" id="ib-t-idea" data-k="idea" aria-selected="true">Ideas <span id="ib-n-idea"></span></button><button type="button" role="tab" id="ib-t-question" data-k="question" aria-selected="false">Questions <span id="ib-n-question"></span></button></div>
         <div class="ib-tools"><div class="ib-chips" id="ib-chips" role="group" aria-label="Show"></div><label class="sr" for="ib-q">Search ideas and questions</label><input class="ib-search" id="ib-q" type="search" placeholder="Search ideas and questions"></div>
@@ -1085,10 +1090,14 @@
       b.onclick = function () { if (safeHttps(u)) window.open(u, "_blank", "noopener"); else location.hash = "dashboard"; }; })(m.dashboard_url);
     $("hi").innerHTML = m.first_name ? 'Welcome back, <span class="g">' + esc(m.first_name) + '</span>'
       : m.plan === "founding" ? 'Welcome, <span class="g">founding member</span>' : 'Welcome <span class="g">back</span>';
+    (function (b) {   // 28 Oct 2026: the founding number, shown wherever the member lands first
+      if (!b) return; var on = m.plan === "founding" && m.founding_no;
+      b.hidden = !on; if (on) b.innerHTML = "<b>#" + esc(String(m.founding_no)) + "</b>Founding member, " + esc(String(m.founding_no)) + " of 100";
+    })($("fm-badge"));
     var lapsed = m.status !== "active";
     $("mem").innerHTML =
       "<dt>Name</dt><dd id=\"name-dd\">" + (m.first_name ? esc(m.first_name) : '<span style="color:var(--muted)">Not set</span>') + ' <button class="linkbtn" type="button" id="name-edit" style="font-size:13px;margin-left:6px">' + (m.first_name ? "Change" : "Add") + "</button></dd>" +
-      "<dt>Membership</dt><dd>" + (m.plan === "founding" ? '<span class="pill g" style="margin-right:6px">Founding</span>' + (m.founding_no ? "No. " + m.founding_no + " of 100" : "Founding member") : esc(first)) + "</dd>" +
+      "<dt>Membership</dt><dd>" + (m.plan === "founding" ? '<span class="pill g" style="margin-right:6px">Founding</span>' + (m.founding_no ? "#" + m.founding_no + " of 100" : "Founding member") : esc(first)) + "</dd>" +
       "<dt>Status</dt><dd>" + (lapsed ? '<span class="pill a">Updates ended</span>' : '<span class="pill g">Active</span>') + "</dd>" +
       "<dt>Updates until</dt><dd>" + esc(fmtDate(m.updates_until)) + "</dd>" +
       "<dt>Member since</dt><dd>" + esc(fmtDate(m.joined_at)) + "</dd>" +
