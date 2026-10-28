@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="78">
+<meta name="mri-version" content="79">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -867,7 +867,6 @@
 </div>
 
 <script src="mri-seal.js" defer></script>
-<script src="guides.js?v=43"></script>
 <script>
 (function () {
   "use strict";
@@ -1047,7 +1046,7 @@
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
     document.querySelectorAll(".pv-only").forEach(function (el) { el.hidden = !m.preview_videos; });
     document.querySelectorAll(".npv-only").forEach(function (el) { el.hidden = !!m.preview_videos; });   // Start here folds into Set up my robot
-    renderDash(); renderAll(); show("home"); if (gcur.id) guideVideo(gcur.id); passkeyCard(); loadNotes(); if (location.hash === "#mydash") dashOpen(false);
+    renderDash(); renderAll(); show("home"); if (gcur.id) guideVideo(gcur.id); passkeyCard(); loadNotes(); loadGuides(); if (location.hash === "#mydash") dashOpen(false);
     // #372: an Approve link from an email lands here (#approvals): approvals happen on your own dashboard, with Face ID.
     if (location.hash === "#approvals") { var du = String(me.dashboard_url || "");
       if (/^https:\/\/[A-Za-z0-9.-]+\.[a-z]{2,}\/?$/.test(du)) location.replace(du.replace(/\/+$/, "") + "/#approvals"); else { location.hash = "#setup"; } }
@@ -1888,9 +1887,20 @@
     rest("member_progress?on_conflict=user_id,item", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
       body: JSON.stringify({ user_id: me.user_id, item: id, done: on, updated_at: new Date().toISOString() }) }).catch(function () {});
   }
-  // Lesson videos (22 Oct 2026): rendered from the same scripts as the guides. Shown only when the member row has preview_videos on;
-  // the folder name is unlisted. Proper gated hosting (Cloudflare Stream) is the launch to-do.
-  var VIDEO_DIR = "video-7b085e8e0a/", VIDEOS = { "qs-1": "qs-01-copy-the-code", "qs-2": "qs-02-broker-key", "qs-3": "qs-03-email-key", "qs-4": "qs-04-setup-check", "qs-5": "qs-05-optional-extras", "qs-6": "qs-06-your-app",
+  // Lesson guides (28 Oct 2026): the step-by-step text comes from the members-only lesson_guides table after sign-in
+  // (it used to be a public guides.js). A #guide/... link opened before they arrive is re-opened once they do.
+  var guidesLoading = false;
+  function loadGuides() {
+    if (window.GUIDES || guidesLoading) return; guidesLoading = true;
+    rest("lesson_guides?select=id,data&order=ord.asc").then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
+      if (!rows || !rows.length) return;
+      var g = {}; rows.forEach(function (x) { g[x.id] = x.data; }); window.GUIDES = g;
+      renderAll(); if (/^#guide\//.test(location.hash)) go(location.hash.slice(1));
+    }).catch(function () {}).then(function () { guidesLoading = false; });
+  }
+  // Lesson videos (22 Oct 2026; private since 28 Oct 2026): kept in the private R2 bucket. lesson-media checks the member
+  // (same rule as here: preview_videos or owner) and hands back a link that works for 30 minutes.
+  var VIDLINK = {}, VIDEOS = { "qs-1": "qs-01-copy-the-code", "qs-2": "qs-02-broker-key", "qs-3": "qs-03-email-key", "qs-4": "qs-04-setup-check", "qs-5": "qs-05-optional-extras", "qs-6": "qs-06-your-app",
     "day-1": "day-01-rules-not-tips", "day-2": "day-02-get-it-running", "day-3": "day-03-data-you-can-trust", "day-4": "day-04-make-it-yours", "day-5": "day-05-backtest-honestly", "day-6": "day-06-paper-money-first", "day-7": "day-07-the-plumbing",
     "day-8": "day-08-done-means-it-happened", "day-9": "day-09-make-it-explain-itself", "day-10": "day-10-keys-and-secrets", "day-11": "day-11-it-runs-while-you-sleep", "day-12": "day-12-limits-and-an-off-switch", "day-13": "day-13-small-and-real", "day-14": "day-14-keep-an-honest-record" };
   function guideVideo(id) {
@@ -1898,8 +1908,22 @@
     if (!box) return;
     if (!me.preview_videos || !slug) { box.hidden = true; box.innerHTML = ""; return; }
     box.hidden = false;
-    box.innerHTML = '<div class="gd-video"><video controls preload="metadata" playsinline src="' + VIDEO_DIR + slug + '.mp4"></video>' +
-      '<p class="small">Watch first, then do the steps below. <span style="color:var(--eye)">Owner preview: only your account sees the videos for now.</span></p></div>';
+    var note = '<p class="small">Watch first, then do the steps below. <span style="color:var(--eye)">Owner preview: only your account sees the videos for now.</span></p>';
+    function paint(url) {
+      if (gcur.id !== id) return;   // they moved on while the link was on its way
+      box.innerHTML = '<div class="gd-video"><video controls preload="metadata" playsinline src="' + esc(url) + '"></video>' + note + '</div>';
+    }
+    var c = VIDLINK[id]; if (c && c.until > Date.now() + 5 * 60000) { paint(c.url); return; }
+    box.innerHTML = '<div class="gd-video"><p class="small">Loading the video\u2026</p></div>';
+    fresh().then(function (s) {
+      if (!s) throw new Error("signed out");
+      return fetch(SB + "/functions/v1/lesson-media?v=" + encodeURIComponent(id), { headers: { apikey: KEY, Authorization: "Bearer " + s.access_token } });
+    }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); }).then(function (x) {
+      if (!x.ok || !/^https:\/\//.test(x.j.url || "")) throw new Error(x.j.error || "no link");
+      VIDLINK[id] = { url: x.j.url, until: Date.parse(x.j.expires_at) || Date.now() + 3600000 }; paint(x.j.url);
+    }).catch(function (e) {
+      if (gcur.id === id) box.innerHTML = '<div class="gd-video"><p class="small">The video didn\u2019t load. ' + esc(String((e && e.message) || "")) + ' Try again in a minute; the steps below are all you need.</p></div>';
+    });
   }
   // "I want this" (23 Oct 2026): saved to your account, counted across members (want_counts() returns totals only), with a toast.
   var WANT = {};
