@@ -1,0 +1,34 @@
+name: Site checks
+
+# Every pull request (29 Oct 2026, Amit). When this passes, auto-merge.yml decides whether the PR merges itself.
+# This repository is public, so its Actions minutes are free.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Merge rule tests
+        run: python3 tools/test_auto_merge_check.py
+      - name: Scripts parse, members versions agree
+        run: python3 tools/site_checks.py
+      - name: Members area menu, in a browser
+        run: |
+          npm install --no-save --no-audit --no-fund playwright@1.49.1
+          npx playwright install --with-deps chromium
+          node ops/members_sidebar_test.mjs

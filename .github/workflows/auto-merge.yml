@@ -1,0 +1,48 @@
+name: Auto-merge
+
+# 29 Oct 2026 (Amit): small site changes from a Claude session merge themselves once Site checks pass; anything
+# fundamental waits for him. The rule is tools/auto_merge_check.py. This workflow runs after Site checks finishes and
+# always from main (workflow_run), so a PR can't change the rule it is judged by. Free: this repository is public.
+
+on:
+  workflow_run:
+    workflows: ["Site checks"]
+    types: [completed]
+
+permissions:
+  contents: write
+  pull-requests: write
+  pages: write
+
+jobs:
+  merge:
+    if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.pull_requests[0].number
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+      REPO: ${{ github.repository }}
+      PR: ${{ github.event.workflow_run.pull_requests[0].number }}
+      HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Decide
+        id: rule
+        run: python3 tools/auto_merge_check.py
+      - name: Merge
+        if: steps.rule.outputs.merge == 'true'
+        run: |
+          gh api -X PUT "repos/$REPO/pulls/$PR/merge" -f merge_method=merge -f sha="$HEAD_SHA" \
+            -f commit_title="Merge pull request #$PR (auto-merge: checks passed, nothing fundamental)"
+          gh api -X POST "repos/$REPO/pages/builds" || echo "Pages build request refused; the merge should trigger it anyway"
+      - name: Say why it waits
+        if: steps.rule.outputs.merge != 'true'
+        env:
+          WHY: ${{ steps.rule.outputs.why }}
+        run: |
+          marker="<!-- auto-merge-wait -->"
+          if gh api "repos/$REPO/issues/$PR/comments" --jq '.[].body' | grep -qF "$marker"; then exit 0; fi
+          printf '%s\n**This one waits for you.** Checks passed, but it doesn'"'"'t merge itself because:\n\n%s\n\nPress **Merge pull request** when you'"'"'re happy.\n' "$marker" "$WHY" > body.md
+          gh api "repos/$REPO/issues/$PR/comments" -F body=@body.md > /dev/null

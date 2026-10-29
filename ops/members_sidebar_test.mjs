@@ -1,4 +1,5 @@
-// Members area sidebar (29 Oct 2026, Amit): Set up my robot folds its pages away (with a green "new" dot, not a pill),
+// Members area sidebar (29 Oct 2026, Amit): Set up my robot folds its pages away (no dot since v90; Your lessons and
+// Your updates since v86/v89, Your updates above Moonshotters),
 // Faster sign-in is a pill on Help and membership, the
 // Moonshotters have their own line, and "Your fixes" shows only once Robot Care is on or a fix exists.
 // Serves docs/ locally and signs in with a stub session; Supabase is stubbed. Needs playwright.
@@ -47,10 +48,9 @@ try {
   await run("menu order and groups (desktop)", {}, async (page) => {
     await page.goto(URL_ + "#home"); await page.waitForSelector("#v-home:not([hidden])");
     const top = await page.$$eval(`${side} > li:not([hidden])`, (lis) => lis.map((li) => li.querySelector("a:not([hidden])").textContent.trim()));
-    assert.deepEqual(top, ["Set up my robot (new)", "Your dashboard", "Moonshotters", "What's new", "Help and membership"]);
-    assert.equal(await page.$$eval(`${side} a[data-go="setup"] .ndot`, (d) => d.length), 1, "a green dot, not a New pill");
-    const dot = await page.$eval(`${side} a[data-go="setup"]`, (a) => { const r = a.querySelector(".ndot").getBoundingClientRect(), t = a.getBoundingClientRect(); return r.top - t.top < 20; });
-    assert.ok(dot, "the dot sits on the label's first line");
+    assert.deepEqual(top, ["Set up my robot", "Your dashboard", "Your updates", "Moonshotters", "Help and membership"]);
+    assert.equal(await page.$$eval(`${side} a[data-go="setup"] .ndot`, (d) => d.length), 0, "no green dot (Amit, 29 Oct 2026)");
+    assert.equal((await page.textContent(`${side} a[data-go="lessons"]`)).trim(), "Your lessons");
     assert.equal(await vis(page, `${side} a[data-go="code"]`), true);
     assert.equal(await vis(page, `${side} a[data-go="lessons"]`), true);
     assert.equal(await page.$(`${side} a[data-go="passkeys"]`), null, "Faster sign-in is not in the menu any more");
@@ -92,7 +92,7 @@ try {
     assert.equal(await vis(page, `${side} a[data-go="lessons"]`), true);
     assert.equal(await page.getAttribute(`${side} a[data-go="lessons"]`, "aria-current"), "page");
     await page.goto(URL_ + "#guide/day-1"); await page.waitForTimeout(300);
-    assert.equal(await page.getAttribute(`${side} a[data-go="lessons"]`, "aria-current"), "page", "a lesson guide lights The 14 lessons");
+    assert.equal(await page.getAttribute(`${side} a[data-go="lessons"]`, "aria-current"), "page", "a lesson guide lights Your lessons");
   });
   await run("Moonshotters opens the board; Help and membership opens membership", {}, async (page) => {
     await page.goto(URL_ + "#home"); await page.waitForSelector("#v-home:not([hidden])");
@@ -137,7 +137,7 @@ try {
   await run("installed app menu has the same group", { robotCare: true }, async (page) => {
     await page.goto(URL_ + "?app=1#home"); await page.waitForSelector("#v-home:not([hidden])");
     const items = await page.$$eval("#appnav > li", (lis) => lis.filter((li) => !li.hidden).map((li) => (li.querySelector("a:not([hidden])") || {}).textContent.trim()));
-    assert.deepEqual(items, ["Home", "Set up my robot (new)", "Your fixes", "Your dashboard", "Moonshotters", "What's new", "Help and membership"]);
+    assert.deepEqual(items, ["Home", "Set up my robot", "Your fixes", "Your dashboard", "Your updates", "Moonshotters", "Help and membership"]);
     assert.equal(await page.$$eval('#appnav .grp-t', (b) => b.length), 1);
   });
   console.log(`all passed (${passed})`);
