@@ -21,7 +21,7 @@ export const SQL_DIR = path.resolve(HERE, "../../..");
 
 export function buildDb() {
   execFileSync("su", ["postgres", "-c", "psql -X -q -v ON_ERROR_STOP=1"], { input: fs.readFileSync(path.join(HERE, "pg_mirror.sql")), stdio: ["pipe", "ignore", "pipe"] });
-  const sql = ["2026-10-27-community.sql", "2026-10-29-account.sql"].map((f) => fs.readFileSync(path.join(SQL_DIR, f), "utf8")).join("\n");
+  const sql = ["2026-10-27-community.sql", "2026-10-29-account.sql", "2026-10-29-account-export-readable.sql"].map((f) => fs.readFileSync(path.join(SQL_DIR, f), "utf8")).join("\n");
   execFileSync("su", ["postgres", "-c", "psql -X -q -v ON_ERROR_STOP=1 -d acct"], { input: sql, stdio: ["pipe", "ignore", "pipe"] });
 }
 

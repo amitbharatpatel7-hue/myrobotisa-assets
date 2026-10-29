@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="88">
+<meta name="mri-version" content="89">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -1584,8 +1584,9 @@
       }
     } catch (e) { acSay("ac-rb-msg", "Couldn't reach GitHub just now. Try again in a minute."); $("ac-rb-start").hidden = false; return; }
     $("ac-rb-name").hidden = false; $("ac-rb-show").hidden = true;
-    acSay("ac-rb-msg", name ? "Couldn't find a copy called " + name + " made by Set up my robot under @" + SU.login + ". Check the name: it's the one you typed in step 4 of Set up my robot."
-      : "Connected as @" + SU.login + ". Which copy is your robot? Type the name you gave it.", !name);
+    // 29 Oct 2026 (Amit's own account): someone who never ran Set up my robot has no copy, and that's fine, not a typo
+    acSay("ac-rb-msg", name ? "Couldn't find a copy called " + name + " made by Set up my robot under @" + SU.login + ". Haven't run Set up my robot yet? Then your robot has no addresses to change here. Otherwise, check the name: it's the one you typed in step 4 of Set up my robot."
+      : "Connected as @" + SU.login + ". Which copy is your robot? Type the name you gave it in Set up my robot. (Haven't run Set up my robot yet? Then there's nothing to change here.)", !name);
     $("ac-rb-repo").focus();
   }
   async function acRobotRead() {

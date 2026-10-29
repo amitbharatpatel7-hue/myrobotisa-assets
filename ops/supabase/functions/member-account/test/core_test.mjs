@@ -220,6 +220,15 @@ try {
     const a = await W.addMember({ first_name: "Priya" }), b = await W.addMember({ first_name: "Other" });
     const j = (await W.asUser(a.uid, "select my_data_export() j"))[0].j;
     assert.equal(j.membership.first_name, "Priya"); assert.equal(j.moonshotters_posts.length, 1);
+    assert.deepEqual(j.progress.map((x) => x.step), ["QuickStart step 1", "Lesson 1"], "steps in words, not codes");
+    const postId = (await W.one("select id from community_posts where user_id=$1", [b.uid])).id;
+    await W.asUser(a.uid, "insert into community_votes(post_id) values ($1)", [postId]);
+    await W.q("insert into member_notices(title,body) values ('Welcome to the test drive','hi')");
+    const nid = (await W.one("select max(id) id from member_notices")).id;
+    await W.q("insert into member_notice_reads(user_id,notice_id) values ($1,$2)", [a.uid, nid]);
+    const j2 = (await W.asUser(a.uid, "select my_data_export() j"))[0].j;
+    assert.equal(j2.moonshotters_votes[0].idea, "Idea from " + b.uid.slice(0, 6), "votes by idea name");
+    assert.equal(j2.messages_read[0].title, "Welcome to the test drive", "messages by title");
     assert.doesNotMatch(JSON.stringify(j), /Other/);
     await assert.rejects(W.asUser(a.uid, "select acct_purge($1)", [b.uid]), /permission denied/, "members can't call the service functions");
     await assert.rejects(W.asUser(a.uid, "select * from admin.member_codes"), /permission denied/);
