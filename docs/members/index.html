@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="84">
+<meta name="mri-version" content="85">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -221,6 +221,10 @@
   .ib-seg{display:inline-flex;gap:4px;padding:4px;background:var(--deep3);border:1px solid var(--rule);border-radius:999px;margin-top:16px}
   .ib-seg button{min-height:42px;padding:0 18px;border:0;border-radius:999px;background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:14px;cursor:pointer}
   .ib-seg button[aria-selected="true"]{background:var(--green);color:var(--deep)}
+  .ndot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-left:7px;vertical-align:middle;position:relative;top:-1px;flex:none}
+  .vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .hp-seg{margin:6px 0 4px}.hp-seg a{display:inline-flex;align-items:center;min-height:42px;padding:0 18px;border-radius:999px;color:var(--muted);font-weight:700;font-size:14px;text-decoration:none}
+  .hp-seg a[aria-selected="true"]{background:var(--green);color:var(--deep)}.hp-seg a:focus-visible{outline:2px solid var(--green);outline-offset:2px}
   .ib-tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-top:14px}
   .ib-search{flex:0 1 340px;min-width:200px;min-height:44px;border-radius:999px;border:1px solid var(--rule);background:var(--deep3);color:var(--ink);font:inherit;font-size:15px;padding:0 16px}
   .ib-chips,.ib-cats{display:flex;flex-wrap:wrap;gap:8px}
@@ -470,7 +474,7 @@
       <ol class="sub" id="mgroup-sub">
         <!-- 29 Oct 2026 (Amit): Set up my robot and Help and membership fold their pages under them; the Moonshotters
              get their own line; Robot Care fixes is now Your fixes, shown once Robot Care is on or a fix exists. -->
-        <li class="mgroup sgroup" data-grp="setup"><div class="grp-h"><a class="pv-only" hidden href="#setup" data-go="setup">Set up my robot <span class="pill g" style="margin-left:4px;padding:2px 7px;font-size:10px">New</span></a><a class="npv-only" href="#start" data-go="start">Start here</a><button type="button" class="grp-t" aria-expanded="true" aria-controls="g-setup-sub" aria-label="Hide Your code and the lessons"></button></div>
+        <li class="mgroup sgroup" data-grp="setup"><div class="grp-h"><a class="pv-only" hidden href="#setup" data-go="setup">Set up my robot<span class="ndot" aria-hidden="true"></span><span class="vh"> (new)</span></a><a class="npv-only" href="#start" data-go="start">Start here</a><button type="button" class="grp-t" aria-expanded="true" aria-controls="g-setup-sub" aria-label="Hide Your code and the lessons"></button></div>
           <ol class="sub" id="g-setup-sub">
             <li><a href="#code" data-go="code">Your code</a></li>
             <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
@@ -480,11 +484,7 @@
         <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
         <li><a href="#ideas" data-go="ideas">Moonshotters</a></li>
         <li><a href="#clips" data-go="clips">What's new</a></li>
-        <li class="mgroup sgroup" data-grp="help"><div class="grp-h"><a href="#help" data-go="help">Help and membership</a><button type="button" class="grp-t" aria-expanded="true" aria-controls="g-help-sub" aria-label="Hide Faster sign-in"></button></div>
-          <ol class="sub" id="g-help-sub">
-            <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
-          </ol>
-        </li>
+        <li><a href="#help" data-go="help">Help and membership</a></li>
       </ol>
     </li>
     <!-- 22 Oct 2026 (Amit): just Home and Questions. Same tab: the site pages show this Members area group too while you're signed in. -->
@@ -496,7 +496,7 @@
   <!-- In the installed app the menu is the members area only (21 Oct 2026) -->
   <ol class="app-only" id="appnav">
     <li><a href="#home" data-go="home" class="on">Home</a></li>
-        <li class="mgroup sgroup" data-grp="setup"><div class="grp-h"><a class="pv-only" hidden href="#setup" data-go="setup">Set up my robot</a><a class="npv-only" href="#start" data-go="start">Start here</a><button type="button" class="grp-t" aria-expanded="true" aria-controls="g-setup-sub-app" aria-label="Hide Your code and the lessons"></button></div>
+        <li class="mgroup sgroup" data-grp="setup"><div class="grp-h"><a class="pv-only" hidden href="#setup" data-go="setup">Set up my robot<span class="ndot" aria-hidden="true"></span><span class="vh"> (new)</span></a><a class="npv-only" href="#start" data-go="start">Start here</a><button type="button" class="grp-t" aria-expanded="true" aria-controls="g-setup-sub-app" aria-label="Hide Your code and the lessons"></button></div>
           <ol class="sub" id="g-setup-sub-app">
             <li><a href="#code" data-go="code">Your code</a></li>
             <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
@@ -506,11 +506,7 @@
         <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
         <li><a href="#ideas" data-go="ideas">Moonshotters</a></li>
         <li><a href="#clips" data-go="clips">What's new</a></li>
-        <li class="mgroup sgroup" data-grp="help"><div class="grp-h"><a href="#help" data-go="help">Help and membership</a><button type="button" class="grp-t" aria-expanded="true" aria-controls="g-help-sub-app" aria-label="Hide Faster sign-in"></button></div>
-          <ol class="sub" id="g-help-sub-app">
-            <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
-          </ol>
-        </li>
+        <li><a href="#help" data-go="help">Help and membership</a></li>
   </ol>
   <div class="side-cta"><p class="side-social"><a href="https://www.youtube.com/@myrobotisa" aria-label="My Robot I.S.A. on YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></svg></a><a href="https://www.instagram.com/myrobotisa/" aria-label="My Robot I.S.A. on Instagram" title="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg></a><a href="https://www.tiktok.com/@myrobotisa" aria-label="My Robot I.S.A. on TikTok" title="TikTok"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.8 3.6 4 3.8v3.1a7.2 7.2 0 0 1-4-1.2v6.2A5.9 5.9 0 1 1 10.7 9v3.2a2.8 2.8 0 1 0 2.8 2.8V3h3.1Z"/></svg></a></p></div>
 </nav>
@@ -681,7 +677,7 @@
         <h2 id="h-new">What's <span class="g">new</span></h2>
         <p class="lede">Shipped first, then what's on the bench. Tap <b>I want this</b> on anything you'd like sooner: it's saved to your account and counts.</p>
         <ol class="tl" id="wn-list">
-          <li><span class="tl-dot"></span><div><span class="tl-date">29 Oct 2026</span><span class="pill g">New</span><b>A tidier menu</b><p>Your code and the 14 lessons now fold under Set up my robot, and Faster sign-in under Help and membership: tap the arrow to open or close them. The Moonshotters have their own place in the menu. Robot Care's fixes are now called Your fixes, and show up once Robot Care is on.</p></div></li>
+          <li><span class="tl-dot"></span><div><span class="tl-date">29 Oct 2026</span><span class="pill g">New</span><b>A tidier menu</b><p>Your code and the 14 lessons now fold under Set up my robot: tap the arrow to open or close them. Faster sign-in is a tab on Help and membership. The Moonshotters have their own place in the menu. Robot Care's fixes are now called Your fixes, and show up once Robot Care is on.</p></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">28 Oct 2026</span><span class="pill g">New</span><b>Accept Robot Care's fixes here</b><p>When Robot Care suggests a fix, you accept it in the members area with one tap: no GitHub needed. Not sure? Ask a question about the fix first and Robot Care explains it in plain words.</p><a class="tl-go" href="#fixes" data-go="fixes">See your fixes &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">28 Oct 2026</span><span class="pill g">New</span><b>Meet the Moonshotters</b><p>The members' space has a name: the Moonshotters, the members running their own robot. And the first 100 paying members are numbered: your founding number shows at the top of the members area.</p><a class="tl-go" href="#ideas" data-go="ideas">Open the Moonshotters &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">27 Oct 2026</span><span class="pill g">New</span><b>Ideas &amp; questions, right here</b><p>Vote for what we build next, suggest your own ideas and ask questions without leaving the members area. When an idea you backed moves, it shows up in your Messages.</p> <a href="#ideas">Open Ideas &amp; questions &rarr;</a></div></li>
@@ -776,6 +772,7 @@
         <p class="small" style="margin:12px 0 0">Prefer email? <a href="mailto:hello@myrobotisa.com?subject=Members%20area" style="color:var(--green);font-weight:700">hello@myrobotisa.com</a> · replies within two working days.</p>
         </div>
         <div id="pane-memb" hidden>
+        <div class="ib-seg hp-seg" role="tablist" aria-label="Help and membership"><a role="tab" href="#help" data-go-tab="help" aria-selected="true">Membership</a><a role="tab" href="#passkeys" data-go-tab="passkeys" aria-selected="false">Faster sign-in</a></div>
         <div class="kv" id="mem-kv"></div>
         <div class="row"><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=My%20membership">Email about my membership</a></div>
         <p class="small" style="margin:12px 0 0">You keep every lesson and video released while your updates are included, and the version of the code you had. Renewing is optional and never automatic.</p>
@@ -944,7 +941,9 @@
       </section>
 
       <section class="card wide" aria-labelledby="h-pk" id="pk-card" data-page="passkeys">
-        <h2 id="h-pk">Faster <span class="g">sign-in</span></h2>
+        <h2 id="h-pk">Help and <span class="g">membership</span></h2>
+        <!-- 29 Oct 2026 (Amit): Faster sign-in is a pill on Help and membership, not its own menu line. -->
+        <div class="ib-seg hp-seg" role="tablist" aria-label="Help and membership"><a role="tab" href="#help" data-go-tab="help" aria-selected="false">Membership</a><a role="tab" href="#passkeys" data-go-tab="passkeys" aria-selected="true">Faster sign-in</a></div>
         <p class="lede">Add a passkey and next time you sign in with Face ID, Touch ID or Windows Hello: no email, no code. The email code always works too.</p>
         <div class="kv" id="pk-list"><div><span>Passkeys on your account</span><b id="pk-count">—</b></div></div>
         <p class="small" id="pk-here" hidden style="margin:12px 0 0;color:var(--green);font-weight:700">This device is already set up. You only need to add a passkey here again if you removed it.</p>
@@ -2521,6 +2520,7 @@
     if (hl === "space" || /^ideas\//.test(hl)) hl = "ideas";
     if (page === "guide") hl = /^day-/.test(gid || "") ? "lessons" : "start";
     if (hl === "membership") hl = "help";
+    if (hl === "passkeys") hl = "help";   // 29 Oct 2026: Faster sign-in is a pill on Help and membership
     if (["ideas", "help", "lessons", "start"].indexOf(hl) < 0) hl = page;
     document.querySelectorAll("[data-go]").forEach(function (a) { var on = a.dataset.go === hl; a.classList.toggle("on", on); on ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"); });
     sgOpenFor();
@@ -2549,6 +2549,7 @@
   // 29 Oct 2026 (Amit): Set up my robot and Help and membership fold their pages away too. Each group remembers
   // open or closed in this browser; the site menu and the app menu share the setting. Open by default.
   var SG = {};
+  try { localStorage.removeItem("mri-side-help"); } catch (e) {}   // 29 Oct 2026: Help and membership is a plain link now
   function sgSet(g, o, keep) {
     SG[g] = o;
     document.querySelectorAll('.sgroup[data-grp="' + g + '"]').forEach(function (li) {

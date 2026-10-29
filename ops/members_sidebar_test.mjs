@@ -1,4 +1,5 @@
-// Members area sidebar (29 Oct 2026, Amit): Set up my robot and Help and membership fold their pages away, the
+// Members area sidebar (29 Oct 2026, Amit): Set up my robot folds its pages away (with a green "new" dot, not a pill),
+// Faster sign-in is a pill on Help and membership, the
 // Moonshotters have their own line, and "Your fixes" shows only once Robot Care is on or a fix exists.
 // Serves docs/ locally and signs in with a stub session; Supabase is stubbed. Needs playwright.
 //   node ops/members_sidebar_test.mjs [screenshot-dir]
@@ -46,10 +47,14 @@ try {
   await run("menu order and groups (desktop)", {}, async (page) => {
     await page.goto(URL_ + "#home"); await page.waitForSelector("#v-home:not([hidden])");
     const top = await page.$$eval(`${side} > li:not([hidden])`, (lis) => lis.map((li) => li.querySelector("a:not([hidden])").textContent.trim()));
-    assert.deepEqual(top, ["Set up my robot New", "Your dashboard", "Moonshotters", "What's new", "Help and membership"]);
+    assert.deepEqual(top, ["Set up my robot (new)", "Your dashboard", "Moonshotters", "What's new", "Help and membership"]);
+    assert.equal(await page.$$eval(`${side} a[data-go="setup"] .ndot`, (d) => d.length), 1, "a green dot, not a New pill");
+    const dot = await page.$eval(`${side} a[data-go="setup"]`, (a) => { const r = a.querySelector(".ndot").getBoundingClientRect(), t = a.getBoundingClientRect(); return r.top - t.top < 20; });
+    assert.ok(dot, "the dot sits on the label's first line");
     assert.equal(await vis(page, `${side} a[data-go="code"]`), true);
     assert.equal(await vis(page, `${side} a[data-go="lessons"]`), true);
-    assert.equal(await vis(page, `${side} a[data-go="passkeys"]`), true);
+    assert.equal(await page.$(`${side} a[data-go="passkeys"]`), null, "Faster sign-in is not in the menu any more");
+    assert.equal(await page.$$eval(`${side} .grp-t`, (b) => b.length), 1, "Set up my robot is the only group under Members area");
     if (SHOTS) await page.locator("#side").screenshot({ path: path.join(SHOTS, "sidebar-1280.png") });
   });
   await run("Your fixes hidden without Robot Care and with no fixes", { robotCare: false, fixes: [] }, async (page) => {
@@ -79,11 +84,8 @@ try {
     assert.equal(await page.getAttribute(t, "aria-expanded"), "true");
     await page.focus(t); await page.keyboard.press("Space");
     assert.equal(await page.getAttribute(t, "aria-expanded"), "false");
-    const h = `${side} .sgroup[data-grp="help"] .grp-t`;
-    await page.click(h); assert.equal(await vis(page, `${side} a[data-go="passkeys"]`), false);
     await page.reload(); await page.waitForSelector("#v-home:not([hidden])");
     assert.equal(await page.getAttribute(t, "aria-expanded"), "false", "setup stays closed after reload");
-    assert.equal(await page.getAttribute(h, "aria-expanded"), "false", "help stays closed after reload");
   });
   await run("a closed group opens itself for a page inside it, and highlights it", { store: { "mri-side-setup": "closed" } }, async (page) => {
     await page.goto(URL_ + "#lessons"); await page.waitForSelector("#v-home:not([hidden])");
@@ -107,6 +109,19 @@ try {
     assert.equal(await page.getAttribute(`${side} a[data-go="help"]`, "aria-current"), "page");
     assert.equal(await page.getAttribute(`${side} a[data-go="ideas"]`, "aria-current"), null);
     assert.equal(await page.$(".help-seg"), null, "no Moonshotters tab inside Help any more");
+    assert.equal(await page.getAttribute('#pane-memb .hp-seg a[href="#help"]', "aria-selected"), "true");
+  });
+  await run("Faster sign-in is a pill on Help and membership", {}, async (page) => {
+    await page.goto(URL_ + "#passkeys"); await page.waitForSelector("#pk-card:not(.off)"); await page.waitForTimeout(200);
+    assert.equal(await vis(page, "#pk-card"), true);
+    assert.equal(await page.getAttribute('#pk-card .hp-seg a[href="#passkeys"]', "aria-selected"), "true");
+    assert.match(await page.textContent("#h-pk"), /Help and membership/);
+    assert.equal(await page.getAttribute(`${side} a[data-go="help"]`, "aria-current"), "page", "#passkeys lights Help and membership");
+    await page.click('#pk-card .hp-seg a[href="#help"]'); await page.waitForFunction(() => location.hash === "#help"); await page.waitForTimeout(200);
+    assert.equal(await vis(page, "#pane-memb"), true); assert.equal(await vis(page, "#pk-card"), false);
+    await page.click('#pane-memb .hp-seg a[href="#passkeys"]'); await page.waitForFunction(() => location.hash === "#passkeys"); await page.waitForTimeout(200);
+    assert.equal(await vis(page, "#pk-card"), true);
+    assert.equal(await page.evaluate(() => localStorage.getItem("mri-side-help")), null, "the old Help group setting is gone");
   });
   await run("phone: menu button opens the menu, groups work, no sideways scroll", { vp: { width: 390, height: 844 }, robotCare: true, fixes: [FIX] }, async (page) => {
     await page.goto(URL_ + "#home"); await page.waitForSelector("#v-home:not([hidden])");
@@ -119,11 +134,11 @@ try {
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "no sideways scroll with the menu open");
     if (SHOTS) await page.screenshot({ path: path.join(SHOTS, "sidebar-390.png") });
   });
-  await run("installed app menu has the same groups", { robotCare: true }, async (page) => {
+  await run("installed app menu has the same group", { robotCare: true }, async (page) => {
     await page.goto(URL_ + "?app=1#home"); await page.waitForSelector("#v-home:not([hidden])");
     const items = await page.$$eval("#appnav > li", (lis) => lis.filter((li) => !li.hidden).map((li) => (li.querySelector("a:not([hidden])") || {}).textContent.trim()));
-    assert.deepEqual(items, ["Home", "Set up my robot", "Your fixes", "Your dashboard", "Moonshotters", "What's new", "Help and membership"]);
-    assert.equal(await page.$$eval('#appnav .grp-t', (b) => b.length), 2);
+    assert.deepEqual(items, ["Home", "Set up my robot (new)", "Your fixes", "Your dashboard", "Moonshotters", "What's new", "Help and membership"]);
+    assert.equal(await page.$$eval('#appnav .grp-t', (b) => b.length), 1);
   });
   console.log(`all passed (${passed})`);
 } finally { srv.kill(); }
