@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="83">
+<meta name="mri-version" content="84">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -312,6 +312,12 @@
   .grp-t::after{content:"";width:7px;height:7px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px);transition:transform .15s}
   .grp-t[aria-expanded="false"]::after{transform:rotate(-45deg)}
   .mgroup.closed>.sub{display:none}
+  /* 29 Oct 2026: groups inside the members pages (Set up my robot, Help and membership) use the same chevron */
+  .side ol .sub .grp-h>a{padding:7px 2px 7px 10px;font-size:14px}
+  .side ol .sub .grp-h>a .pill{vertical-align:1px;margin-left:2px!important}
+  .side ol .sub .sub{margin:2px 0 4px 10px}
+  .sgroup .grp-t{width:28px;flex:none;align-self:flex-start;height:35px}
+  #mgroup-sub{margin-left:8px}
   /* 22 Oct 2026: lesson videos, shown only to accounts with preview_videos on (owner preview before launch) */
   .gd-video{margin:0 0 18px} .gd-video video{display:block;width:100%;aspect-ratio:16/9;border-radius:14px;background:#000;border:1px solid var(--rule)}
   .gd-video p{margin:8px 0 0}
@@ -462,15 +468,23 @@
   <ol class="site-only">
     <li class="mgroup" id="mgroup"><div class="grp-h"><a href="#home" data-go="home" class="on" aria-current="page">Members area</a><button type="button" class="grp-t" id="mgroup-t" aria-expanded="true" aria-controls="mgroup-sub" aria-label="Hide the members pages"></button></div>
       <ol class="sub" id="mgroup-sub">
-        <li class="pv-only" hidden><a href="#setup" data-go="setup">Set up my robot <span class="pill g" style="margin-left:4px;padding:2px 7px;font-size:10px">New</span></a></li>
-        <li class="npv-only"><a href="#start" data-go="start">Start here</a></li>
-        <li><a href="#code" data-go="code">Your code</a></li>
-        <li><a href="#fixes" data-go="fixes">Robot Care fixes <span class="pill p" id="rcf-nav" style="margin-left:4px;padding:2px 7px;font-size:10px" hidden></span></a></li>
-        <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
+        <!-- 29 Oct 2026 (Amit): Set up my robot and Help and membership fold their pages under them; the Moonshotters
+             get their own line; Robot Care fixes is now Your fixes, shown once Robot Care is on or a fix exists. -->
+        <li class="mgroup sgroup" data-grp="setup"><div class="grp-h"><a class="pv-only" hidden href="#setup" data-go="setup">Set up my robot <span class="pill g" style="margin-left:4px;padding:2px 7px;font-size:10px">New</span></a><a class="npv-only" href="#start" data-go="start">Start here</a><button type="button" class="grp-t" aria-expanded="true" aria-controls="g-setup-sub" aria-label="Hide Your code and the lessons"></button></div>
+          <ol class="sub" id="g-setup-sub">
+            <li><a href="#code" data-go="code">Your code</a></li>
+            <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
+          </ol>
+        </li>
+        <li class="rcf-only" hidden><a href="#fixes" data-go="fixes">Your fixes <span class="pill p rcf-n" id="rcf-nav" style="margin-left:4px;padding:2px 7px;font-size:10px" hidden></span></a></li>
         <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
+        <li><a href="#ideas" data-go="ideas">Moonshotters</a></li>
         <li><a href="#clips" data-go="clips">What's new</a></li>
-        <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
-        <li><a href="#help" data-go="help">Help and membership</a></li>
+        <li class="mgroup sgroup" data-grp="help"><div class="grp-h"><a href="#help" data-go="help">Help and membership</a><button type="button" class="grp-t" aria-expanded="true" aria-controls="g-help-sub" aria-label="Hide Faster sign-in"></button></div>
+          <ol class="sub" id="g-help-sub">
+            <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
+          </ol>
+        </li>
       </ol>
     </li>
     <!-- 22 Oct 2026 (Amit): just Home and Questions. Same tab: the site pages show this Members area group too while you're signed in. -->
@@ -482,15 +496,21 @@
   <!-- In the installed app the menu is the members area only (21 Oct 2026) -->
   <ol class="app-only" id="appnav">
     <li><a href="#home" data-go="home" class="on">Home</a></li>
-    <li class="pv-only" hidden><a href="#setup" data-go="setup">Set up my robot</a></li>
-    <li class="npv-only"><a href="#start" data-go="start">Start here</a></li>
-    <li><a href="#code" data-go="code">Your code</a></li>
-    <li><a href="#fixes" data-go="fixes">Robot Care fixes</a></li>
-    <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
-    <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
-    <li><a href="#clips" data-go="clips">What's new</a></li>
-    <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
-        <li><a href="#help" data-go="help">Help and membership</a></li>
+        <li class="mgroup sgroup" data-grp="setup"><div class="grp-h"><a class="pv-only" hidden href="#setup" data-go="setup">Set up my robot</a><a class="npv-only" href="#start" data-go="start">Start here</a><button type="button" class="grp-t" aria-expanded="true" aria-controls="g-setup-sub-app" aria-label="Hide Your code and the lessons"></button></div>
+          <ol class="sub" id="g-setup-sub-app">
+            <li><a href="#code" data-go="code">Your code</a></li>
+            <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
+          </ol>
+        </li>
+        <li class="rcf-only" hidden><a href="#fixes" data-go="fixes">Your fixes <span class="pill p rcf-n" style="margin-left:4px;padding:2px 7px;font-size:10px" hidden></span></a></li>
+        <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
+        <li><a href="#ideas" data-go="ideas">Moonshotters</a></li>
+        <li><a href="#clips" data-go="clips">What's new</a></li>
+        <li class="mgroup sgroup" data-grp="help"><div class="grp-h"><a href="#help" data-go="help">Help and membership</a><button type="button" class="grp-t" aria-expanded="true" aria-controls="g-help-sub-app" aria-label="Hide Faster sign-in"></button></div>
+          <ol class="sub" id="g-help-sub-app">
+            <li><a href="#passkeys" data-go="passkeys">Faster sign-in</a></li>
+          </ol>
+        </li>
   </ol>
   <div class="side-cta"><p class="side-social"><a href="https://www.youtube.com/@myrobotisa" aria-label="My Robot I.S.A. on YouTube" title="YouTube"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15V9l5.2 3L10 15Z"/></svg></a><a href="https://www.instagram.com/myrobotisa/" aria-label="My Robot I.S.A. on Instagram" title="Instagram"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg></a><a href="https://www.tiktok.com/@myrobotisa" aria-label="My Robot I.S.A. on TikTok" title="TikTok"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M16.6 3c.4 2.1 1.8 3.6 4 3.8v3.1a7.2 7.2 0 0 1-4-1.2v6.2A5.9 5.9 0 1 1 10.7 9v3.2a2.8 2.8 0 1 0 2.8 2.8V3h3.1Z"/></svg></a></p></div>
 </nav>
@@ -575,7 +595,7 @@
     </section>
 
     <section class="card" aria-labelledby="h-rcf" id="rcf" data-page="home fixes" hidden>
-      <h2 id="h-rcf">Robot Care <span class="g">fixes</span></h2>
+      <h2 id="h-rcf">Your <span class="g">fixes</span></h2>
       <p class="lede">When one of your robot's runs fails, Robot Care works out why and suggests a fix. Accept it here and it goes into your robot's code: your robot uses it from its next run. Nothing changes until you accept, and a fix can never place an order or touch your money settings.</p>
       <ul class="rcf-list" id="rcf-list"></ul>
       <p class="small" id="rcf-empty" hidden>No fixes waiting for you. If a run fails and Robot Care can fix it, the fix shows up here and in your Messages.</p>
@@ -661,8 +681,9 @@
         <h2 id="h-new">What's <span class="g">new</span></h2>
         <p class="lede">Shipped first, then what's on the bench. Tap <b>I want this</b> on anything you'd like sooner: it's saved to your account and counts.</p>
         <ol class="tl" id="wn-list">
-          <li><span class="tl-dot"></span><div><span class="tl-date">28 Oct 2026</span><span class="pill g">New</span><b>Accept Robot Care's fixes here</b><p>When Robot Care suggests a fix, you accept it in the members area with one tap: no GitHub needed. Not sure? Ask a question about the fix first and Robot Care explains it in plain words.</p><a class="tl-go" href="#fixes" data-go="fixes">See Robot Care fixes &rarr;</a></div></li>
-          <li><span class="tl-dot"></span><div><span class="tl-date">28 Oct 2026</span><span class="pill g">New</span><b>Meet the Moonshotters</b><p>The members' space has a name: the Moonshotters, the members running their own robot. And the first 100 paying members are numbered: your founding number shows at the top of the members area.</p><a class="tl-go" href="#help" data-go="help">Open the Moonshotters &rarr;</a></div></li>
+          <li><span class="tl-dot"></span><div><span class="tl-date">29 Oct 2026</span><span class="pill g">New</span><b>A tidier menu</b><p>Your code and the 14 lessons now fold under Set up my robot, and Faster sign-in under Help and membership: tap the arrow to open or close them. The Moonshotters have their own place in the menu. Robot Care's fixes are now called Your fixes, and show up once Robot Care is on.</p></div></li>
+          <li><span class="tl-dot"></span><div><span class="tl-date">28 Oct 2026</span><span class="pill g">New</span><b>Accept Robot Care's fixes here</b><p>When Robot Care suggests a fix, you accept it in the members area with one tap: no GitHub needed. Not sure? Ask a question about the fix first and Robot Care explains it in plain words.</p><a class="tl-go" href="#fixes" data-go="fixes">See your fixes &rarr;</a></div></li>
+          <li><span class="tl-dot"></span><div><span class="tl-date">28 Oct 2026</span><span class="pill g">New</span><b>Meet the Moonshotters</b><p>The members' space has a name: the Moonshotters, the members running their own robot. And the first 100 paying members are numbered: your founding number shows at the top of the members area.</p><a class="tl-go" href="#ideas" data-go="ideas">Open the Moonshotters &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">27 Oct 2026</span><span class="pill g">New</span><b>Ideas &amp; questions, right here</b><p>Vote for what we build next, suggest your own ideas and ask questions without leaving the members area. When an idea you backed moves, it shows up in your Messages.</p> <a href="#ideas">Open Ideas &amp; questions &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">23 Oct 2026</span><b>Step-by-step guides, with tips</b><p>Every QuickStart step and lesson, one step per card, real GitHub and Resend screens, a Copy button for anything you'd otherwise type.</p><a class="tl-go" href="#start" data-go="start">Open Start here &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">22 Oct 2026</span><b>Lesson videos, re-cut</b><p>All 20 in the site's own look; the home-page clip now opens with what the robot was tested through.</p><a class="tl-go" href="#lessons" data-go="lessons">The 14 lessons &rarr;</a></div></li>
@@ -741,8 +762,9 @@
 
       <section class="card wide" aria-labelledby="h-help" data-page="help">
         <h2 id="h-help">Help and <span class="g">membership</span></h2>
-        <div class="su-seg help-seg" role="tablist" aria-label="Help and membership"><button type="button" role="tab" id="tab-space" data-v="space" aria-selected="true">Moonshotters<small>ideas, questions, votes</small></button><button type="button" role="tab" id="tab-memb" data-v="memb" aria-selected="false">Your membership<small>plan, renewal, manage</small></button></div>
-        <div id="pane-space" role="tabpanel">
+        <!-- 29 Oct 2026 (Amit): the Moonshotters have their own menu line (#ideas); Help and membership (#help) is the
+             membership pane only. The two panes stay in one card so every #ideas link keeps working. -->
+        <div id="pane-space">
         <div class="ib-head"><div><p class="lede" style="margin-top:0"><b>The Moonshotters</b> are the members running their own robot. You use it every day, so you shape what we build next. Vote for the ideas you want, suggest your own, or ask anything. When something moves, it shows up in your Messages.</p></div>
         <button class="btn" type="button" id="ib-new">Suggest an idea</button></div>
         <div class="ib-seg" role="tablist" aria-label="Ideas or questions"><button type="button" role="tab" id="ib-t-idea" data-k="idea" aria-selected="true">Ideas <span id="ib-n-idea"></span></button><button type="button" role="tab" id="ib-t-question" data-k="question" aria-selected="false">Questions <span id="ib-n-question"></span></button></div>
@@ -753,10 +775,11 @@
         <details class="fold" style="margin-top:14px"><summary><span class="fold-l">House rules</span></summary><p class="small" style="margin:10px 0 0">No stock tips and no "should I buy X": we can't answer it and it isn't what this space is for. One idea per post, so people can vote on it. Kind, specific, and say what you were trying to do when it went wrong. Only members can see this page.</p></details>
         <p class="small" style="margin:12px 0 0">Prefer email? <a href="mailto:hello@myrobotisa.com?subject=Members%20area" style="color:var(--green);font-weight:700">hello@myrobotisa.com</a> · replies within two working days.</p>
         </div>
-        <div id="pane-memb" role="tabpanel" hidden>
+        <div id="pane-memb" hidden>
         <div class="kv" id="mem-kv"></div>
         <div class="row"><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=My%20membership">Email about my membership</a></div>
         <p class="small" style="margin:12px 0 0">You keep every lesson and video released while your updates are included, and the version of the code you had. Renewing is optional and never automatic.</p>
+        <p class="small" style="margin:12px 0 0">Need help? Ask the <a href="#ideas" style="color:var(--green);font-weight:700">Moonshotters</a>, see <a href="#questions" style="color:var(--green);font-weight:700">Questions</a>, or email <a href="mailto:hello@myrobotisa.com?subject=Members%20area" style="color:var(--green);font-weight:700">hello@myrobotisa.com</a> · replies within two working days.</p>
         </div>
       </section>
       <section class="card wide" aria-labelledby="h-su" id="su-card" data-page="setup">
@@ -1134,6 +1157,7 @@
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
     document.querySelectorAll(".pv-only").forEach(function (el) { el.hidden = !m.preview_videos; });
     document.querySelectorAll(".npv-only").forEach(function (el) { el.hidden = !!m.preview_videos; });   // Start here folds into Set up my robot
+    rcfNav();
     renderDash(); renderAll(); show("home"); if (gcur.id) guideVideo(gcur.id); passkeyCard(); loadNotes(); loadGuides(); rcfLoad(location.hash === "#fixes"); if (location.hash === "#mydash") dashOpen(false);
     // #372: an Approve link from an email lands here (#approvals): approvals happen on your own dashboard, with Face ID.
     if (location.hash === "#approvals") { var du = String(me.dashboard_url || "");
@@ -1147,7 +1171,7 @@
     if (!session) { show("signin"); return; }
     show("wait");
     var sub = null; try { sub = JSON.parse(atob(session.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub; } catch (e) {}
-    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url,first_name,founding_no,preview_videos,repo_url" + (sub ? "&user_id=eq." + encodeURIComponent(sub) : "")).then(function (r) {
+    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url,first_name,founding_no,preview_videos,repo_url,robot_care" + (sub ? "&user_id=eq." + encodeURIComponent(sub) : "")).then(function (r) {
       if (r.status === 401) { clear(); session = null; show("signin"); say("Your sign-in ran out. Ask for a new code.", false); return; }
       return r.json().then(function (rows) {
         var uid = null; try { uid = JSON.parse(atob(session.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub; } catch (e) {}
@@ -1773,7 +1797,7 @@
     if (!st.eligible) { pill.className = "pill o"; pill.textContent = "Coming soon"; go.hidden = true;
       m.textContent = "Robot Care's free year is for the first 100 founding members. Paid Robot Care opens soon, and we'll email you. Meanwhile your own Claude, just below, does the same job."; return; }
     if (st.robot_care && st.installed) { $("sxc").classList.add("done"); pill.textContent = "On"; go.hidden = true;
-      m.textContent = (other && SU.tok ? "You're connected as @" + SU.login + ", but Robot Care looks after @" + st.login + "'s copy. " : "") + "Robot Care is on for @" + st.login + (st.until ? ", free until " + niceDate(st.until) : "") + ". When a run fails, the fix waits on GitHub for your tap, and your daily digest reminds you."; return; }
+      m.textContent = (other && SU.tok ? "You're connected as @" + SU.login + ", but Robot Care looks after @" + st.login + "'s copy. " : "") + "Robot Care is on for @" + st.login + (st.until ? ", free until " + niceDate(st.until) : "") + ". When a run fails, the fix waits in Your fixes for your tap, and your daily digest reminds you."; return; }
     if (st.robot_care) { pill.textContent = "One more step"; go.hidden = true; inst.hidden = false; scInstallUrl().then(function (u) { inst.href = u; });
       m.textContent = "Switched on. Last step, on GitHub: check your copy is ticked, then press Install. Come back here and it shows On."; return; }
     if (!st.login) { $("sxc").classList.add("locked"); go.disabled = true; m.textContent = "Connect GitHub in step 1 first, so Robot Care knows which copy is yours."; return; }
@@ -1853,8 +1877,13 @@
     $("rcf-list").innerHTML = now.map(rcfItem).join("");
     $("rcf-empty").hidden = !(onPage && !now.length);
     $("rcf-old").hidden = !(onPage && old.length); $("rcf-old-list").innerHTML = onPage ? old.map(rcfItem).join("") : "";
-    var n = $("rcf-nav"); if (n) { n.hidden = !now.length; n.textContent = now.length ? String(now.length) : ""; }
+    document.querySelectorAll(".rcf-n").forEach(function (n) { n.hidden = !now.length; n.textContent = now.length ? String(now.length) : ""; });
+    // 29 Oct 2026: on the page it is "Your fixes"; on Home the card says who it's from
+    $("h-rcf").innerHTML = onPage ? 'Your <span class="g">fixes</span>' : 'Robot Care has ' + (now.length > 1 ? now.length + ' fixes' : 'a fix') + ' <span class="g">for you</span>';
+    rcfNav();
   }
+  // "Your fixes" is in the menu once Robot Care is switched on, or once there has ever been a fix (29 Oct 2026)
+  function rcfNav() { var on = !!(me && me.robot_care) || RCF.rows.length > 0; document.querySelectorAll(".rcf-only").forEach(function (el) { el.hidden = !on; }); }
   function rcfSet(li, t, ok) { var p = li.querySelector(".rcf-st"); p.textContent = t || ""; p.className = "small rcf-st " + (t ? (ok ? "ok" : "err") : ""); }
   async function rcfAct(li, act) {
     var id = +li.dataset.id, row = RCF.rows.filter(function (x) { return x.id === id; })[0]; if (!row) return;
@@ -2413,7 +2442,7 @@
   // always lands on the default view: Ideas & questions tab, Ideas, All, no search, the top three, top of the page.
   function ibReset() { IB.kind = "idea"; IB.filter = ""; IB.q = ""; $("ib-q").value = ""; IB.more = false; helpTab("space"); ibPaintBoard(); }
   document.addEventListener("click", function (e) {
-    var a = e.target.closest && e.target.closest('a[data-go="help"], a[href="#help"], a[href="#ideas"]');
+    var a = e.target.closest && e.target.closest('a[data-go="ideas"], a[href="#ideas"]');
     if (!a || a.id === "ib-p-back") return;
     ibReset(); if (location.hash === a.getAttribute("href")) window.scrollTo(0, 0);
   });
@@ -2469,24 +2498,32 @@
         location.hash = "post/" + p.id;
       }).catch(function (err) { b.disabled = false; $("ib-s-msg").textContent = err.message; });
   });
-  function helpTab(v) { ["space", "memb"].forEach(function (k) { $("pane-" + k).hidden = k !== v; $("tab-" + k).setAttribute("aria-selected", String(k === v)); }); }
-  document.querySelector(".help-seg").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) helpTab(b.dataset.v); });
+  function helpTab(v) {
+    ["space", "memb"].forEach(function (k) { $("pane-" + k).hidden = k !== v; });
+    $("h-help").innerHTML = v === "space" ? 'The <span class="g">Moonshotters</span>' : 'Help and <span class="g">membership</span>';
+  }
   // 26 Oct 2026 (Amit): the logo always goes to the site's home page. In the installed app there is no site around it,
   // so there it goes to the members' home instead.
   if (document.documentElement.classList.contains("app")) { ["brand", "side-brand"].forEach(function (id) { var br = $(id); br.href = "#home"; br.dataset.go = "home"; br.title = "Home"; }); }
   function go(page) {
-    var gid = null;
+    var gid = null, hl = page;   // hl: which menu line lights up (29 Oct 2026)
     if (page.indexOf("guide/") === 0) { gid = page.slice(6); page = "guide"; }
     if (page === "space") page = "ideas";   // 27 Oct 2026: the members' space is the Ideas & questions board
     var ibSheetKind = page === "ideas/new" ? "idea" : page === "ideas/ask" ? "question" : null; if (ibSheetKind) page = "ideas";
     var ibPost = /^post\/\d+$/.test(page) ? +page.slice(5) : null; if (ibPost) page = "post";
-    if (page === "ideas") { page = "help"; helpTab("space"); }   // 27 Oct 2026 (Amit): the board is the first tab of Help and membership
+    if (page === "ideas" || page === "post") hl = "ideas";
+    if (page === "ideas") { page = "help"; helpTab("space"); }   // the board lives in the Help card; 29 Oct 2026: it has its own menu line, Moonshotters
     if (!ibSheetKind && !$("ib-sheet").hidden) ibClose(true);
-    if (page === "membership") { page = "help"; helpTab("memb"); }
+    if (page === "membership" || (page === "help" && hl === "help")) { page = "help"; hl = "help"; helpTab("memb"); }
     if (PAGES.indexOf(page) < 0) page = "home";
     if (page === "guide") { if (!window.GUIDES || !GUIDES[gid]) { page = "start"; } else { guideOpen(gid); } }
     document.querySelectorAll("#v-home [data-page]").forEach(function (el) { el.classList.toggle("off", el.dataset.page.split(" ").indexOf(page) < 0); });
-    document.querySelectorAll("[data-go]").forEach(function (a) { var on = a.dataset.go === page; a.classList.toggle("on", on); on ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"); });
+    if (hl === "space" || /^ideas\//.test(hl)) hl = "ideas";
+    if (page === "guide") hl = /^day-/.test(gid || "") ? "lessons" : "start";
+    if (hl === "membership") hl = "help";
+    if (["ideas", "help", "lessons", "start"].indexOf(hl) < 0) hl = page;
+    document.querySelectorAll("[data-go]").forEach(function (a) { var on = a.dataset.go === hl; a.classList.toggle("on", on); on ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"); });
+    sgOpenFor();
     document.querySelector('.mgroup .grp-h > a').classList.toggle("on", true);
     if (page === "lessons") $("les-fold").open = true;
     if (page === "questions") loadFaq();
@@ -2509,6 +2546,26 @@
     set(open);
     t.addEventListener("click", function (e) { e.preventDefault(); set(!open); });
   })();
+  // 29 Oct 2026 (Amit): Set up my robot and Help and membership fold their pages away too. Each group remembers
+  // open or closed in this browser; the site menu and the app menu share the setting. Open by default.
+  var SG = {};
+  function sgSet(g, o, keep) {
+    SG[g] = o;
+    document.querySelectorAll('.sgroup[data-grp="' + g + '"]').forEach(function (li) {
+      li.classList.toggle("closed", !o); var t = li.querySelector(".grp-t");
+      t.setAttribute("aria-expanded", String(o));
+      t.setAttribute("aria-label", t.getAttribute("aria-label").replace(/^(Hide|Show)/, o ? "Hide" : "Show"));
+    });
+    if (keep) try { localStorage.setItem("mri-side-" + g, o ? "open" : "closed"); } catch (e) {}
+  }
+  function sgOpenFor() {   // the group holding the page you're on opens itself (not remembered)
+    document.querySelectorAll(".sgroup").forEach(function (li) { if (li.querySelector(".sub a.on") && !SG[li.dataset.grp]) sgSet(li.dataset.grp, true, false); });
+  }
+  document.querySelectorAll(".sgroup").forEach(function (li) {
+    var g = li.dataset.grp;
+    if (!(g in SG)) { var o = true; try { o = localStorage.getItem("mri-side-" + g) !== "closed"; } catch (e) {} sgSet(g, o, false); }
+    li.querySelector(".grp-t").addEventListener("click", function (e) { e.preventDefault(); sgSet(g, !SG[g], true); });
+  });
   addEventListener("hashchange", function () { go(location.hash.slice(1)); });
   go(location.hash.slice(1));
   // ---- installed app on a computer: ask for a portrait window (about 900 x 1200) on its very first launch only.
