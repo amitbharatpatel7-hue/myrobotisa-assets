@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="86">
+<meta name="mri-version" content="87">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -1859,12 +1859,12 @@
       '<div class="rcf-top"><b>' + esc(x.pr_title || "A fix for your robot") + "</b>" + pills + "</div>" +
       (x.urgent && (open || later) ? '<p><b>Your robot can\u2019t do its main job until this is in.</b></p>' : "") +
       "<p>" + esc(x.diagnosis || "Robot Care found why a run failed and made a small fix.") + "</p>" +
-      '<p class="small">' + (x.files && x.files.length ? "Changes " + esc(rcfFiles(x.files)) + ". " : "") +
-      (open || later ? "Robot Care checks it again, with GitHub, just before it goes in." : st === "accepted" ? "Accepted " + esc(fmtDate(String(x.decided_at || x.at).slice(0, 10))) + "." : "Closed on GitHub, so there's nothing to accept.") +
-      (x.pr ? ' <a href="' + esc(x.pr) + '" target="_blank" rel="noopener">See it on GitHub</a>' : "") + "</p>";
+      // 29 Oct 2026 (Amit): members never see GitHub or file names here; the fix is described in plain words only.
+      '<p class="small">' +
+      (open || later ? "Robot Care checks it again just before it goes in. It can never touch your keys, your money settings or anything that places orders." : st === "accepted" ? "Accepted " + esc(fmtDate(String(x.decided_at || x.at).slice(0, 10))) + "." : "This fix was closed, so there's nothing to accept.") + "</p>";
     if (open || later) h += '<div class="row"><button class="btn" type="button" data-act="accept">Accept fix</button><button class="btn ghost" type="button" data-act="ask">Ask a question</button>' +
       (open ? '<button class="btn ghost" type="button" data-act="decline">Not now</button>' : "") + "</div>" +
-      '<div class="rcf-box" data-box="confirm" hidden><p style="margin-top:0"><b>Put this fix into your robot?</b> It changes ' + esc(rcfFiles(x.files) || "one file") + ' in your copy of the code. Your robot uses it from its next run.</p>' +
+      '<div class="rcf-box" data-box="confirm" hidden><p style="margin-top:0"><b>Put this fix into your robot?</b> It\u2019s a small change to your copy of the code. Your robot uses it from its next run.</p>' +
       '<div class="row"><button class="btn" type="button" data-act="yes">Yes, accept it</button><button class="btn ghost" type="button" data-act="cancel">Cancel</button></div></div>' +
       '<div class="rcf-box" data-box="ask" hidden><label for="rcf-q-' + esc(x.id) + '">Your question about this fix</label><textarea id="rcf-q-' + esc(x.id) + '" rows="3" maxlength="600" placeholder="For example: is it safe to accept?"></textarea>' +
       '<div class="row"><button class="btn" type="button" data-act="send">Send</button></div><p class="small">Robot Care answers about this fix only. ' + (5 - (x.questions || 0) > 0 ? (5 - (x.questions || 0)) + " questions left for this fix." : "") + "</p></div>";
@@ -1910,7 +1910,7 @@
         if (!a.ok) { rcfSet(li, (a.j && a.j.error) || "That didn't send. Try again in a minute.", false); return; }
         row.questions = (row.questions || 0) + 1; ta.value = "";
         var out = document.createElement("p"); out.className = "rcf-ans"; out.textContent = a.j.answered ? a.j.answer : a.j.message;
-        box("ask").insertBefore(out, box("ask").querySelector(".row")); rcfSet(li, a.j.answered ? "" : "Passed to a person.", true);
+        box("ask").insertBefore(out, box("ask").querySelector("p.small"));   // the answer reads after Send (29 Oct 2026) rcfSet(li, a.j.answered ? "" : "Passed to a person.", true);
         if (a.j.answered) loadNotes();
       }
     } catch (e) { rcfSet(li, "No connection. Check you're online and try again. Nothing changed.", false); }
