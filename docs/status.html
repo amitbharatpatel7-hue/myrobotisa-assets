@@ -152,7 +152,7 @@
   footer{border-top:1px solid var(--rule);margin-top:48px;padding:24px 0 40px;color:var(--eye);font-size:13px;line-height:1.6}
   footer h3{color:var(--ink);font-size:14px;margin:18px 0 4px}
   .cmp h2{margin-top:44px} .vs-wrap{overflow-x:auto;margin:14px -16px 0;padding:0 16px} .vs-wrap:focus-visible{outline:3px solid var(--green);outline-offset:-3px}
-  .tl h2{margin-top:44px} .tl-week{background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px 16px;margin:10px 0} .tl-week h3,.tl-week h2.h3{margin:0 0 6px;font-size:17px;font-family:inherit;text-transform:none;letter-spacing:0;color:var(--ink)} .tl-week .fp{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--muted);word-break:break-all} .tl-week .pill{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;margin-left:8px;background:var(--deep);border:1px solid var(--rule);color:var(--green)} .tl-week .pill.wait{color:var(--muted)} .tl-week .pill.bad{color:var(--pink-ink)}
+  .tl h2{margin-top:44px} .tl-week{background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px 16px;margin:10px 0} .tl-week h3,.tl-week h2.h3{margin:0 0 6px;font-size:17px;font-family:inherit;text-transform:none;letter-spacing:0;color:var(--ink)} .tl-week .fp{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--muted);word-break:break-all} .tl-week .pill{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;margin-left:8px;background:var(--deep);border:1px solid var(--rule);color:var(--green)} .tl-week .pill.wait{color:var(--muted)} .tl-week .pill.bad{color:var(--pink-ink)} .tl-week .pill.late{color:#FFD27A}
   .tl-wrap{overflow-x:auto;margin:8px -16px 0;padding:0 16px} .tl-wrap:focus-visible{outline:3px solid var(--green);outline-offset:-3px} .tl-table{width:100%;min-width:560px;border-collapse:collapse;font-size:14px;margin-top:0} .tl-table th,.tl-table td{text-align:left;padding:6px 8px 6px 0;border-bottom:1px solid var(--rule);vertical-align:top} .tl-table th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
   .rec h2{margin-top:44px} .tr h3,.tr h2.h3{margin:0 0 10px;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:24px;letter-spacing:.02em;text-transform:uppercase;color:var(--green)} .tr p{margin:0 0 10px;color:var(--ink)} .tr ol{margin:0 0 12px;padding-left:22px;color:var(--ink)} .tr li{margin:0 0 8px;line-height:1.45} .tr .small{color:var(--muted)} .rec-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
   @media(min-width:640px){.rec-grid{grid-template-columns:repeat(4,1fr)}}
@@ -582,7 +582,17 @@
       var e=idx.weeks[w]; var box=document.createElement("div"); box.className="tl-week";
       var revealed = e.status==="revealed";
       var pill = revealed ? (e.commitment_matches===false ? '<span class="pill bad">fingerprint mismatch</span>' : '<span class="pill">revealed, fingerprint matches</span>') : '<span class="pill wait">sealed until ' + esc(ld(e.reveal_after)) + '</span>';
-      box.innerHTML = '<h2 class="h3">Week of ' + esc(ld(w)) + pill + '</h2><p class="small" style="margin:0 0 6px">' + esc(e.orders) + (e.orders===1?' order':' orders') + ' decided ' + esc(ld(e.decided_at,true)) + '. Fingerprint published ' + esc(ld(e.published_at||e.decided_at,true)) + '.</p><p class="fp">SHA-256 ' + esc(e.sha256) + '</p>';
+      // A fingerprint published more than an hour after the decision is shown as late, with how late (29 Oct 2026:
+      // the week of 25 Oct reached the site four days late because the publishing step failed). Never hidden.
+      var lateMs = Date.parse(e.published_at||e.decided_at) - Date.parse(e.decided_at), lateBy = "";
+      if(lateMs > 3600000){ var dd=Math.floor(lateMs/86400000), hh=Math.floor(lateMs/3600000), mm=Math.round((lateMs%3600000)/60000);
+        lateBy = dd>=1 ? dd+(dd===1?" day":" days") : hh+(hh===1?" hour":" hours")+(mm?" "+mm+(mm===1?" minute":" minutes"):""); }
+      if(e.late===true) pill += '<span class="pill late">published late</span>';
+      var pubLine = ' Fingerprint published ' + esc(ld(e.published_at||e.decided_at,true));
+      if(e.late===true) pubLine += ', ' + esc(lateBy||"some time") + ' late: the publishing step failed on the day. It proves the plan is unchanged since then, not since the decision.';
+      else if(lateBy) pubLine += ', ' + esc(lateBy) + ' after the decision.';
+      else pubLine += '.';
+      box.innerHTML = '<h2 class="h3">Week of ' + esc(ld(w)) + pill + '</h2><p class="small" style="margin:0 0 6px">' + esc(e.orders) + (e.orders===1?' order':' orders') + ' decided ' + esc(ld(e.decided_at,true)) + '.' + pubLine + '</p><p class="fp">SHA-256 ' + esc(e.sha256) + '</p>';
       list.appendChild(box);
       if(revealed){
         fetch("trades/"+w+".json",{cache:"no-store"}).then(function(r){return r.json();}).then(function(d){
