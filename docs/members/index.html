@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="87">
+<meta name="mri-version" content="88">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -434,6 +434,23 @@
   .su-log{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
   .su-log li{display:flex;gap:10px;align-items:center;font-size:15px} .su-log li i{width:22px;height:22px;border-radius:50%;flex:none;border:2px solid var(--rule)}
   .su-log li.run i{border-color:var(--green);border-top-color:transparent;animation:suspin .8s linear infinite} .su-log li.ok i{background:var(--green);border-color:var(--green)} .su-log li.bad i{background:var(--pink-ink);border-color:var(--pink-ink)}
+  /* 29 Oct 2026 (D28): your account, in Help and membership */
+  .ac-h{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;font-size:20px;letter-spacing:.01em;margin:28px 0 8px}
+  .ac-h .g{color:var(--green)}
+  .ac-row{display:flex;justify-content:space-between;align-items:center;gap:12px;background:var(--deep3);border:1px solid var(--rule);border-radius:14px;padding:12px 14px;margin-top:10px}
+  .ac-row > span{min-width:0} .ac-row small{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .ac-row b{display:block;overflow-wrap:break-word;font-size:15px;margin-top:2px} .ac-row .btn{flex:none}
+  .ac-box{border:1px solid var(--rule);border-radius:14px;padding:16px 14px;margin-top:10px;background:var(--deep)}
+  .ac-box p{font-size:14px;line-height:1.55;margin:0 0 10px}
+  .ac-list{margin:0 0 12px;padding-left:20px;font-size:14px;line-height:1.55} .ac-list li{margin:0 0 6px}
+  .ac-chk{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5;margin:12px 0 0;cursor:pointer} .ac-chk .tick{flex:none;margin-top:-2px}
+  .ac-note{border-left:3px solid var(--amber);padding:2px 0 2px 12px;margin:14px 0 0}
+  .ac-alert{border:2px solid var(--pink-ink);border-radius:14px;padding:12px 14px;margin:10px 0 16px;font-size:14px;line-height:1.5;background:var(--deep)}
+  .ac-alert b{color:var(--pink-ink)}
+  .ac-link{max-width:620px;margin:14px auto 18px}
+  .ac-done{border:1px solid var(--green);border-radius:14px;padding:12px 14px;margin-top:10px;font-size:14px;line-height:1.55}
+  .btn.danger{border-color:var(--pink-ink);color:var(--pink-ink);background:transparent} .btn.danger:hover{color:var(--pink-ink)}
+  .btn.danger.solid{background:var(--pink-ink);color:var(--deep)}
   @keyframes suspin{to{transform:rotate(360deg)}} @media (prefers-reduced-motion:reduce){.su-log li.run i{animation:none}}
   .su-done{margin-top:16px;padding:18px;border-radius:18px;background:#14402C;border:2px solid var(--green)} .su-done h3{margin:0 0 6px;font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;font-size:26px;color:var(--green)}
   .su-before{margin:0 0 14px} .su-pre{margin:12px 0 0;padding:0;list-style:none;counter-reset:acct}
@@ -534,6 +551,13 @@
   </div>
 
   <!-- SIGN IN -->
+  <!-- 29 Oct 2026 (D28): the Keep my account and "not you? put it back" email buttons land here. Nothing happens until
+       a tap, because mail apps' link scanners open every link in an email. Works signed in or not. -->
+  <div class="ac-alert ac-link" id="ac-link" role="dialog" aria-labelledby="ac-link-t" hidden>
+    <b id="ac-link-t"></b><p id="ac-link-p" style="margin:6px 0 0"></p>
+    <div class="row" id="ac-link-row"><button class="btn" type="button" id="ac-link-go"></button><button class="btn ghost" type="button" id="ac-link-no">Not now</button></div>
+    <p class="msg" id="ac-link-msg" role="status" aria-live="polite"></p>
+  </div>
   <main id="v-signin" class="signin" hidden>
     <div class="card">
       <h1>Sign <span class="g">in</span></h1>
@@ -564,6 +588,7 @@
       <div class="row"><button class="btn" type="button" id="oldapp-go">Open my dashboard</button></div></div>
     <div class="preview" id="preview"><span><b>Early preview.</b> The lessons, QuickStart videos and the code open when sales start in January 2027. Ticks you make here are saved to your account, so you can try it on your phone and your Mac and see them follow you.</span></div>
 
+    <div class="ac-alert" id="ac-home-del" data-page="home" role="alert" hidden><b>Your account will be deleted on <span id="ac-home-on"></span>.</b> Changed your mind? <a href="#help" style="font-weight:800">Keep my account</a></div>
     <section class="hello" data-page="home">
       <div>
         <h1 id="hi">Welcome <span class="g">back</span></h1>
@@ -778,6 +803,103 @@
         <div class="kv" id="mem-kv"></div>
         <div class="row"><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=My%20membership">Email about my membership</a></div>
         <p class="small" style="margin:12px 0 0">You keep every lesson and video released while your updates are included, and the version of the code you had. Renewing is optional and never automatic.</p>
+        <!-- 29 Oct 2026 (D28): members manage their own account. Sign-in email, GitHub account, where the robot reaches
+             them, download my data, delete my account (7 days to change their mind). -->
+        <div class="ac" id="ac">
+          <div class="ac-alert" id="ac-del-banner" role="alert" hidden><b>Your account will be deleted on <span id="ac-del-on"></span>.</b> Until then everything works as normal. Changed your mind?
+            <div class="row"><button class="btn" type="button" id="ac-keep">Keep my account</button></div></div>
+
+          <h3 class="ac-h">Your <span class="g">sign-in</span></h3>
+          <div class="ac-row"><span><small>Sign-in email</small><b id="ac-email"></b></span><button class="btn ghost sm" type="button" id="ac-email-edit">Change</button></div>
+          <div class="ac-box" id="ac-email-box" hidden>
+            <div id="ac-email-s1">
+              <label class="f" for="ac-email-new" style="margin-top:0">Your new email</label>
+              <input class="t" id="ac-email-new" type="email" autocomplete="email" inputmode="email" spellcheck="false" autocapitalize="off" placeholder="you@example.com">
+              <p class="small" style="margin:8px 0 0">We'll email a code to it, so we know it's yours. Nothing changes until you type the code here.</p>
+              <div class="row"><button class="btn" type="button" id="ac-email-send">Email me a code</button><button class="btn ghost" type="button" id="ac-email-cancel">Cancel</button></div>
+            </div>
+            <div id="ac-email-s2" hidden>
+              <p>We sent a 6-number code to <b id="ac-email-to"></b>. It lasts an hour.</p>
+              <label class="f" for="ac-email-code" style="margin-top:0">Code from that email</label>
+              <input class="t code" id="ac-email-code" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="000000">
+              <div class="row"><button class="btn" type="button" id="ac-email-ok">Change my email</button></div>
+              <p class="small" style="margin:10px 0 0">No email? Check spam, then <button class="linkbtn" type="button" id="ac-email-resend">send a new code</button> or <button class="linkbtn" type="button" id="ac-email-back">use a different email</button>.</p>
+            </div>
+            <p class="msg" id="ac-email-msg" role="status" aria-live="polite"></p>
+          </div>
+          <div class="ac-done" id="ac-email-done" hidden></div>
+
+          <div class="ac-row"><span><small>GitHub account</small><b id="ac-gh"></b></span><button class="btn ghost sm" type="button" id="ac-gh-edit">Change</button></div>
+          <div class="ac-box" id="ac-gh-box" hidden>
+            <p>Robot Care and the members' space on GitHub follow this account.</p>
+            <p id="ac-gh-copy"></p>
+            <ol class="ac-list" id="ac-gh-steps">
+              <li>On <a href="https://github.com/" target="_blank" rel="noopener">github.com</a>, make sure you're signed in as the account you want to use (your picture, top right, shows which).</li>
+              <li>Press <b>Connect GitHub</b> below and allow it.</li>
+            </ol>
+            <div class="row"><button class="btn" type="button" id="ac-gh-go">Connect GitHub</button><button class="btn ghost" type="button" id="ac-gh-cancel">Cancel</button></div>
+            <div class="row" id="ac-gh-ask" hidden><button class="btn" type="button" id="ac-gh-switch"></button><button class="btn ghost" type="button" id="ac-gh-keep"></button></div>
+            <p class="msg" id="ac-gh-msg" role="status" aria-live="polite"></p>
+          </div>
+
+          <h3 class="ac-h">Where your robot <span class="g">reaches you</span></h3>
+          <p class="small" style="margin:0">Your robot lives in your own GitHub, so it keeps two addresses of its own: where it emails you, and who can open Robot Dash. Changing your sign-in email doesn't change these.</p>
+          <div id="ac-rb">
+            <div id="ac-rb-start"><div class="row"><button class="btn ghost" type="button" id="ac-rb-go">Show my robot's addresses</button></div>
+              <p class="small" style="margin:8px 0 0">Connects GitHub for this visit only, like Set up my robot. The connection is forgotten when you close the page.</p></div>
+            <div id="ac-rb-name" hidden>
+              <label class="f" for="ac-rb-repo">What did you call your copy of the robot?</label>
+              <div style="display:flex;gap:8px;flex-wrap:wrap"><input class="t" id="ac-rb-repo" style="flex:1 1 200px" spellcheck="false" autocapitalize="off" value="my-robot-isa"><button class="btn" type="button" id="ac-rb-find">Find it</button></div>
+            </div>
+            <div id="ac-rb-show" hidden>
+              <div class="ac-row"><span><small>Robot emails go to</small><b id="ac-rb-notify"></b></span></div>
+              <div class="ac-row"><span><small>Robot Dash opens for</small><b id="ac-rb-dash"></b></span></div>
+              <div class="row"><button class="btn ghost" type="button" id="ac-rb-edit">Change these</button></div>
+            </div>
+            <div class="ac-box" id="ac-rb-box" hidden>
+              <label class="f" for="ac-rb-to" style="margin-top:0">New address for your robot</label>
+              <input class="t" id="ac-rb-to" type="email" autocomplete="email" inputmode="email" spellcheck="false" autocapitalize="off">
+              <label class="ac-chk" id="ac-rb-c-n-l"><input class="tick" type="checkbox" id="ac-rb-c-n" checked> <span>Robot emails (plans, orders and your P&amp;L)</span></label>
+              <label class="ac-chk" id="ac-rb-c-d-l"><input class="tick" type="checkbox" id="ac-rb-c-d" checked> <span>Robot Dash sign-in <span class="small" id="ac-rb-d-to"></span></span></label>
+              <div class="ac-note" id="ac-rb-resend">
+                <p><b>First, one change in Resend.</b> Your robot sends its emails through your free Resend account, and Resend only delivers to the address that account uses. So move Resend first:</p>
+                <ol class="ac-list"><li>Open <a href="https://resend.com/settings" target="_blank" rel="noopener">Resend</a>, then <b>Profile</b>, and under <b>Your email</b> type the new address and press <b>Update email</b>.</li>
+                  <li>Resend emails both addresses: click the link in each. (Signed up to Resend with Google or GitHub? Then invite the new address as a team member with the Admin role instead.)</li></ol>
+                <label class="ac-chk"><input class="tick" type="checkbox" id="ac-rb-c-r"> <span>I've changed my Resend email to <b id="ac-rb-r-to">the new address</b></span></label>
+                <details class="fold" id="ac-rb-alt"><summary><span class="fold-l">Made a new Resend account instead?</span></summary>
+                  <p class="small" style="margin:10px 0 6px">Paste its API key (Resend: API Keys, then Create API key, Sending access). It's locked into your copy like your other keys; we never see it.</p>
+                  <input class="t" id="ac-rb-key" placeholder="re_..." spellcheck="false" autocapitalize="off" autocomplete="off"></details>
+              </div>
+              <div class="row"><button class="btn" type="button" id="ac-rb-move">Move my robot to this address</button><button class="btn ghost" type="button" id="ac-rb-cancel">Cancel</button></div>
+              <p class="small" style="margin:8px 0 0">Takes about two minutes: your copy sends a test email to prove it works. If the test doesn't arrive, your robot goes back to its old address, so nothing breaks.</p>
+            </div>
+            <ul class="su-log" id="ac-rb-log" aria-live="polite"></ul>
+            <p class="msg" id="ac-rb-msg" role="status" aria-live="polite"></p>
+          </div>
+
+          <h3 class="ac-h">Your <span class="g">data</span></h3>
+          <div class="row"><button class="btn ghost" type="button" id="ac-dl">Download my data</button><button class="btn ghost danger" type="button" id="ac-del">Delete my account</button></div>
+          <p class="msg" id="ac-dl-msg" role="status" aria-live="polite"></p>
+          <div class="ac-box" id="ac-del-box" hidden>
+            <p><b>Before you go, here's exactly what happens.</b></p>
+            <ul class="ac-list">
+              <li><b>7 days to change your mind.</b> Nothing is deleted until <span id="ac-del-when">7 days from now</span>. One tap in the email, or here, keeps your account.</li>
+              <li><b>What goes:</b> your sign-in, name, passkeys, lesson ticks, Messages, Robot Care requests and your place in the members' space on GitHub.</li>
+              <li><b>What stays:</b> ideas and replies you posted to the Moonshotters, shown as "Former member". If you bought from us, a basic sales record, because the law asks us to keep it for six years.</li>
+              <li><b>Your robot is yours.</b> Your copy lives in your own GitHub and keeps running. To stop it: open your copy on GitHub, then <b>Settings</b>, and at the very bottom <b>Delete this repository</b>.</li>
+            </ul>
+            <p class="small">Want a copy first? Press <b>Download my data</b> above.</p>
+            <div id="ac-del-s1"><div class="row"><button class="btn danger" type="button" id="ac-del-send">Email me a code to confirm</button><button class="btn ghost" type="button" id="ac-del-cancel">Cancel</button></div></div>
+            <div id="ac-del-s2" hidden>
+              <p>We sent a 6-number code to <b id="ac-del-to"></b>.</p>
+              <label class="f" for="ac-del-code" style="margin-top:0">Code from that email</label>
+              <input class="t code" id="ac-del-code" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="000000">
+              <div class="row"><button class="btn danger solid" type="button" id="ac-del-ok">Delete my account in 7 days</button><button class="btn ghost" type="button" id="ac-del-cancel2">Cancel</button></div>
+              <p class="small" style="margin:10px 0 0">No email? Check spam, or <button class="linkbtn" type="button" id="ac-del-resend">send a new code</button>.</p>
+            </div>
+            <p class="msg" id="ac-del-msg" role="status" aria-live="polite"></p>
+          </div>
+        </div>
         <p class="small" style="margin:12px 0 0">Need help? Ask the <a href="#ideas" style="color:var(--green);font-weight:700">Moonshotters</a>, see <a href="#questions" style="color:var(--green);font-weight:700">Questions</a>, or email <a href="mailto:hello@myrobotisa.com?subject=Members%20area" style="color:var(--green);font-weight:700">hello@myrobotisa.com</a> · replies within two working days.</p>
         </div>
       </section>
@@ -1117,7 +1239,7 @@
     counts();
   }
   document.addEventListener("change", function (e) {
-    var t = e.target; if (!t.classList || !t.classList.contains("tick")) return;
+    var t = e.target; if (!t.classList || !t.classList.contains("tick") || !t.dataset.id) return;   // lesson ticks only (29 Oct 2026: other boxes share the look)
     var id = t.dataset.id, on = t.checked; done[id] = on; t.closest(".item").classList.toggle("done", on); counts();
     rest("member_progress?on_conflict=user_id,item", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
       body: JSON.stringify({ user_id: me.user_id, item: id, done: on, updated_at: new Date().toISOString() }) })
@@ -1158,7 +1280,7 @@
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
     document.querySelectorAll(".pv-only").forEach(function (el) { el.hidden = !m.preview_videos; });
     document.querySelectorAll(".npv-only").forEach(function (el) { el.hidden = !!m.preview_videos; });   // Start here folds into Set up my robot
-    rcfNav();
+    rcfNav(); acInit();
     renderDash(); renderAll(); show("home"); if (gcur.id) guideVideo(gcur.id); passkeyCard(); loadNotes(); loadGuides(); rcfLoad(location.hash === "#fixes"); if (location.hash === "#mydash") dashOpen(false);
     // #372: an Approve link from an email lands here (#approvals): approvals happen on your own dashboard, with Face ID.
     if (location.hash === "#approvals") { var du = String(me.dashboard_url || "");
@@ -1172,7 +1294,7 @@
     if (!session) { show("signin"); return; }
     show("wait");
     var sub = null; try { sub = JSON.parse(atob(session.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub; } catch (e) {}
-    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url,first_name,founding_no,preview_videos,repo_url,robot_care" + (sub ? "&user_id=eq." + encodeURIComponent(sub) : "")).then(function (r) {
+    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url,first_name,founding_no,preview_videos,repo_url,robot_care,github_login" + (sub ? "&user_id=eq." + encodeURIComponent(sub) : "")).then(function (r) {
       if (r.status === 401) { clear(); session = null; show("signin"); say("Your sign-in ran out. Ask for a new code.", false); return; }
       return r.json().then(function (rows) {
         var uid = null; try { uid = JSON.parse(atob(session.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub; } catch (e) {}
@@ -1291,6 +1413,376 @@
         .catch(function () { alertOnce("Couldn't save your name. Check you're online."); });
     });
   }
+  // ---- your account (29 Oct 2026, D28): sign-in email, GitHub account, where the robot reaches you, your data.
+  // Codes, the email change and deletion go through the member-account function; the robot's own addresses are
+  // variables in the member's copy, changed here with their GitHub connection (memory only, as on Set up my robot).
+  var AC = { bound: false, intent: "", full: "", notify: null, dash: null, busy: false, due: null };
+  function acFn(body) {
+    return fresh().then(function (s) {
+      if (!s) throw new Error("signed out");
+      return fetch(SB + "/functions/v1/member-account", { method: "POST", headers: { apikey: KEY, Authorization: "Bearer " + s.access_token, "Content-Type": "application/json" }, body: JSON.stringify(body) })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok && j.ok !== false, status: r.status, j: j }; }); });
+    });
+  }
+  function acSay(id, t, good) { var m = $(id); m.textContent = t || ""; m.className = "msg " + (t ? (good ? "ok" : "err") : ""); }
+  var ACOFF = "No connection. Check you're online and try again.";
+  function acBusy(ids, on) { ids.forEach(function (id) { var b = $(id); if (b) b.disabled = !!on; }); }
+  function acDigits(v) { return String(v || "").replace(/\D/g, "").slice(0, 6); }
+  function acAddr(v) { return esc(v).replace(/@/g, "<wbr>@"); }   // long addresses break at the @, not mid-word
+  function acValidEmail(v) { return /^[^@\s]{1,64}@[^@\s]{1,190}\.[a-z]{2,24}$/i.test(v); }
+  function acLondon(iso) { try { return new Date(iso).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/London" }); } catch (e) { return iso; } }
+  function acPaint() {
+    $("ac-email").innerHTML = acAddr(me.email || session.email || "");
+    $("ac-gh").textContent = me.github_login ? "@" + me.github_login : "Not connected yet";
+    $("ac-gh-edit").textContent = me.github_login ? "Change" : "Connect";
+    var owner = me.plan === "owner", due = AC.due;
+    $("ac-del").hidden = owner || !!due;
+    ["ac-email-edit", "ac-gh-edit"].forEach(function (id) { $(id).disabled = !!due; $(id).title = due ? "Keep your account first" : ""; });
+    if (due) { $("ac-email-box").hidden = true; $("ac-gh-box").hidden = true; }
+    $("ac-del-banner").hidden = !due; $("ac-home-del").hidden = !due;
+    if (due) { $("ac-del-on").textContent = acLondon(due); $("ac-home-on").textContent = acLondon(due); $("ac-del-box").hidden = true; }
+  }
+  function acInit() {
+    acPaint();
+    rest("rpc/my_account", { method: "POST", body: "{}" }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
+      if (!j) return; AC.due = j.deletion_due || null; acPaint();
+    }).catch(function () {});
+    if (!SU.cfg) suFn("GET").then(function (r) { SU.cfg = r.j || {}; }).catch(function () {});
+    if (AC.bound) return; AC.bound = true;
+    $("ac-email-edit").addEventListener("click", function () { var open = $("ac-email-box").hidden; acEmailReset(); $("ac-email-box").hidden = !open; if (open) $("ac-email-new").focus(); });
+    $("ac-email-cancel").addEventListener("click", function () { $("ac-email-box").hidden = true; });
+    $("ac-email-send").addEventListener("click", function () { acEmailSend($("ac-email-new").value); });
+    $("ac-email-new").addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); acEmailSend($("ac-email-new").value); } });
+    $("ac-email-resend").addEventListener("click", function () { acEmailSend(AC.emailTo || $("ac-email-new").value); });
+    $("ac-email-back").addEventListener("click", function () { acEmailReset(); $("ac-email-new").focus(); });
+    $("ac-email-ok").addEventListener("click", acEmailConfirm);
+    $("ac-email-code").addEventListener("input", function () { if (acDigits(this.value).length === 6) acEmailConfirm(); });
+    $("ac-gh-edit").addEventListener("click", function () { var box = $("ac-gh-box"); box.hidden = !box.hidden; acGhPaint(); acSay("ac-gh-msg", ""); });
+    $("ac-gh-cancel").addEventListener("click", function () { $("ac-gh-box").hidden = true; });
+    $("ac-gh-go").addEventListener("click", function () { acConnect("github"); });
+    $("ac-gh-switch").addEventListener("click", acGhSwitch);
+    $("ac-gh-keep").addEventListener("click", function () { $("ac-gh-ask").hidden = true; acSay("ac-gh-msg", "Kept @" + me.github_login + ". Nothing changed.", true); });
+    $("ac-rb-go").addEventListener("click", function () { if (SU.tok) acRobotFind(); else acConnect("robot"); });
+    $("ac-rb-find").addEventListener("click", function () { acRobotFind($("ac-rb-repo").value.trim()); });
+    $("ac-rb-edit").addEventListener("click", acRobotEdit);
+    $("ac-rb-cancel").addEventListener("click", function () { $("ac-rb-box").hidden = true; $("ac-rb-show").hidden = false; });
+    ["ac-rb-to", "ac-rb-c-n", "ac-rb-c-d", "ac-rb-c-r", "ac-rb-key"].forEach(function (id) { $(id).addEventListener("input", acRobotCheck); $(id).addEventListener("change", acRobotCheck); });
+    $("ac-rb-move").addEventListener("click", acRobotMove);
+    $("ac-dl").addEventListener("click", acDownload);
+    $("ac-del").addEventListener("click", function () { $("ac-del-box").hidden = !$("ac-del-box").hidden; acDelReset();
+      var d = new Date(Date.now() + 7 * 864e5); $("ac-del-when").textContent = acLondon(d.toISOString()); if (!$("ac-del-box").hidden) $("ac-del-box").scrollIntoView({ block: "nearest" }); });
+    ["ac-del-cancel", "ac-del-cancel2"].forEach(function (id) { $(id).addEventListener("click", function () { $("ac-del-box").hidden = true; acDelReset(); }); });
+    $("ac-del-send").addEventListener("click", acDelSend);
+    $("ac-del-resend").addEventListener("click", acDelSend);
+    $("ac-del-ok").addEventListener("click", acDelConfirm);
+    $("ac-keep").addEventListener("click", acKeep);
+  }
+
+  // -- sign-in email
+  function acEmailReset() { $("ac-email-s1").hidden = false; $("ac-email-s2").hidden = true; $("ac-email-code").value = ""; acSay("ac-email-msg", ""); acBusy(["ac-email-send", "ac-email-ok"], false); }
+  function acEmailSend(v) {
+    var to = String(v || "").trim().toLowerCase();
+    if (!acValidEmail(to)) { acSay("ac-email-msg", "That email doesn't look right. Check it and try again."); $("ac-email-new").focus(); return; }
+    if (to === String(me.email || "").toLowerCase()) { acSay("ac-email-msg", "That's already your sign-in email. Type the new address you want to use."); $("ac-email-new").select(); return; }
+    acBusy(["ac-email-send"], true); acSay("ac-email-msg", "Sending…", true);
+    acFn({ action: "email-start", email: to }).then(function (r) {
+      acBusy(["ac-email-send"], false);
+      if (!r.ok) { acSay("ac-email-msg", (r.j && r.j.error) || "That didn't work. Try again in a minute."); return; }
+      AC.emailTo = to; $("ac-email-to").textContent = to; $("ac-email-s1").hidden = true; $("ac-email-s2").hidden = false;
+      $("ac-email-code").value = ""; acSay("ac-email-msg", "Code sent. It can take a minute to arrive.", true); $("ac-email-code").focus();
+    }).catch(function () { acBusy(["ac-email-send"], false); acSay("ac-email-msg", ACOFF); });
+  }
+  function acEmailConfirm() {
+    var code = acDigits($("ac-email-code").value);
+    if (code.length !== 6) { acSay("ac-email-msg", "The code is 6 numbers. Copy it from the newest email from us."); return; }
+    if (AC.busy) return; AC.busy = true; acBusy(["ac-email-ok"], true); acSay("ac-email-msg", "Checking…", true);
+    acFn({ action: "email-confirm", code: code }).then(function (r) {
+      AC.busy = false; acBusy(["ac-email-ok"], false);
+      if (!r.ok) { acSay("ac-email-msg", (r.j && r.j.error) || "That didn't work. Try again in a minute.");
+        if (r.j && /expired|tries|none/.test(r.j.code || "")) $("ac-email-code").value = ""; return; }
+      var old = me.email; AC.prevSignin = old; me.email = r.j.email; if (session) { session.email = r.j.email; save(session); }
+      $("whoemail").textContent = r.j.email; home(me, me.user_id); show("home"); go("help");
+      $("ac-email-box").hidden = true; acEmailReset();
+      var done = $("ac-email-done"); done.hidden = false;
+      done.innerHTML = "<b>Done.</b> You now sign in with <b>" + esc(r.j.email) + "</b>. We've told " + esc(old) + " about the change. " +
+        "Your robot still has its own addresses: <button class=\"linkbtn\" type=\"button\" id=\"ac-email-robot\">move my robot's emails too</button>.";
+      $("ac-email-robot").addEventListener("click", function () { $("ac-rb").scrollIntoView({ block: "start" }); if (SU.tok) acRobotFind(); else acConnect("robot"); });
+      toast("Your sign-in email has changed");
+    }).catch(function () { AC.busy = false; acBusy(["ac-email-ok"], false); acSay("ac-email-msg", ACOFF); });
+  }
+
+  // -- GitHub: connect for this visit (the same OAuth as Set up my robot), coming back to #help
+  function acGhMsgEl() {
+    var it = ""; try { it = sessionStorage.getItem("mri-ac-intent") || ""; } catch (e) {}
+    AC.intent = it; if (it === "github") { $("ac-gh-box").hidden = false; return $("ac-gh-msg"); }
+    return $("ac-rb-msg");
+  }
+  function acConnect(intent) {
+    if (!SU.cfg || !SU.cfg.client_id) { acSay(intent === "github" ? "ac-gh-msg" : "ac-rb-msg", "The GitHub connection isn't switched on yet. Try again later, or email hello@myrobotisa.com."); return; }
+    try { sessionStorage.setItem("mri-ac-intent", intent); } catch (e) {}
+    ghConnect("help");
+  }
+  function acConnected() {
+    var tries = 0;
+    (function wait() {   // the membership loads asynchronously after the GitHub return
+      if (!me || !me.user_id) { if (tries++ < 60) setTimeout(wait, 250); return; }
+      var it = AC.intent; try { sessionStorage.removeItem("mri-ac-intent"); } catch (e) {}
+      if (it === "github") acGhBack(); else acRobotFind();
+    })();
+  }
+  function acGhPaint() {
+    $("ac-gh-copy").innerHTML = me.github_login
+      ? "Your robot is a copy that lives in <b>@" + esc(me.github_login) + "</b>'s GitHub, and it stays there. After switching, run <a href=\"#setup\">Set up my robot</a> while signed in to GitHub as the new account, and switch Robot Care on there."
+      : "Connect the GitHub account your robot will live in.";
+    $("ac-gh-steps").hidden = !me.github_login; $("ac-gh-ask").hidden = true; $("ac-gh-go").hidden = false;
+  }
+  function acGhBack() {
+    $("ac-gh-box").hidden = false; acGhPaint(); $("ac-gh-box").scrollIntoView({ block: "nearest" });
+    var prev = SU.saved || me.github_login || "", now = SU.login || "";
+    if (!now) { acSay("ac-gh-msg", "GitHub didn't say who you are. Press Connect GitHub again."); return; }
+    if (!prev || SU.link === "linked") { me.github_login = now; acPaint(); acSay("ac-gh-msg", "Connected: your membership uses @" + now + ".", true); return; }
+    if (prev.toLowerCase() === now.toLowerCase()) {
+      acSay("ac-gh-msg", "GitHub connected @" + now + " again: that's the account signed in on github.com right now. To use another one, sign out on github.com (or open a private window), sign in as the other account, then press Connect GitHub again.");
+      return;
+    }
+    if (SU.link === "taken") { acSay("ac-gh-msg", "@" + now + " is already linked to another membership. If that's you too, email hello@myrobotisa.com."); return; }
+    $("ac-gh-go").hidden = true; $("ac-gh-ask").hidden = false;
+    $("ac-gh-switch").textContent = "Switch to @" + now; $("ac-gh-keep").textContent = "Keep @" + prev;
+    acSay("ac-gh-msg", "You're connected as @" + now + ". Switch your membership from @" + prev + " to @" + now + "?", true);
+  }
+  function acGhSwitch() {
+    if (AC.busy) return; AC.busy = true; acBusy(["ac-gh-switch", "ac-gh-keep"], true); acSay("ac-gh-msg", "Switching…", true);
+    acFn({ action: "github-switch", token: SU.tok }).then(function (r) {
+      AC.busy = false; acBusy(["ac-gh-switch", "ac-gh-keep"], false);
+      if (!r.ok) { acSay("ac-gh-msg", (r.j && r.j.error) || "That didn't work. Try again in a minute."); return; }
+      var prev = r.j.previous; me.github_login = r.j.login; SU.saved = r.j.login; acPaint(); $("ac-gh-ask").hidden = true; $("ac-gh-go").hidden = true;
+      $("ac-gh-msg").className = "msg ok";
+      $("ac-gh-msg").innerHTML = "Done: your membership now uses <b>@" + esc(r.j.login) + "</b>." +
+        (r.j.invite === "invited" ? " GitHub has emailed @" + esc(r.j.login) + " an invite to the members' space: accept it there." : "") +
+        (prev && r.j.removed === "removed" ? " @" + esc(prev) + " has left the members' space." : "") +
+        " Next: <a href=\"#setup\" style=\"font-weight:800\">Set up my robot</a> as @" + esc(r.j.login) + ".";
+      if (typeof scState === "function") scState();
+    }).catch(function () { AC.busy = false; acBusy(["ac-gh-switch", "ac-gh-keep"], false); acSay("ac-gh-msg", ACOFF); });
+  }
+
+  // -- where the robot reaches you: NOTIFY_TO (its emails) and DASHBOARD_EMAIL (Robot Dash), in the member's copy
+  async function acRobotFind(name) {
+    $("ac-rb-start").hidden = true; $("ac-rb-msg").textContent = ""; $("ac-rb-log").innerHTML = "";
+    if (!SU.tok) { $("ac-rb-start").hidden = false; return; }
+    acSay("ac-rb-msg", "Looking for your copy…", true);
+    var tries = [];
+    if (name) tries.push(name);
+    else {
+      var m = /^https:\/\/github\.com\/([^/]+)\/([^/?#]+)/.exec(me.repo_url || ""); if (m && m[1].toLowerCase() === SU.login.toLowerCase()) tries.push(m[2]);
+      if (SU.full && SU.full.split("/")[0] === SU.login) tries.push(SU.full.split("/")[1]);
+      tries.push("my-robot-isa");
+    }
+    try {
+      for (var i = 0; i < tries.length; i++) {
+        var full = SU.login + "/" + tries[i], r = await gh("/repos/" + full);
+        if (r.ok && r.j && r.j.template_repository && r.j.template_repository.full_name === SU_TEMPLATE) { AC.full = full; return acRobotRead(); }
+      }
+    } catch (e) { acSay("ac-rb-msg", "Couldn't reach GitHub just now. Try again in a minute."); $("ac-rb-start").hidden = false; return; }
+    $("ac-rb-name").hidden = false; $("ac-rb-show").hidden = true;
+    acSay("ac-rb-msg", name ? "Couldn't find a copy called " + name + " made by Set up my robot under @" + SU.login + ". Check the name: it's the one you typed in step 4 of Set up my robot."
+      : "Connected as @" + SU.login + ". Which copy is your robot? Type the name you gave it.", !name);
+    $("ac-rb-repo").focus();
+  }
+  async function acRobotRead() {
+    var full = AC.full;
+    var a = await gh("/repos/" + full + "/actions/variables/NOTIFY_TO"), b = await gh("/repos/" + full + "/actions/variables/DASHBOARD_EMAIL");
+    AC.notify = a.ok && a.j ? a.j.value : null; AC.dash = b.ok && b.j ? b.j.value : null;
+    $("ac-rb-name").hidden = true; $("ac-rb-show").hidden = false; $("ac-rb-box").hidden = true;
+    $("ac-rb-notify").innerHTML = AC.notify ? acAddr(AC.notify) : "Not set";
+    $("ac-rb-dash").innerHTML = AC.dash ? acAddr(AC.dash.split(",").map(function (x) { return x.trim(); }).filter(Boolean).join(", ")) : "Robot Dash isn't set up yet";
+    $("ac-rb-edit").hidden = !AC.notify && !AC.dash;
+    acSay("ac-rb-msg", "Found your copy, " + full.split("/")[1] + ".", true);
+  }
+  function acDashFor(to) {   // the Robot Dash list with the robot's old address (or the old sign-in) swapped for the new one
+    var list = String(AC.dash || "").split(",").map(function (x) { return x.trim(); }).filter(Boolean);
+    var olds = [String(AC.notify || "").toLowerCase(), String(AC.prevSignin || "").toLowerCase()];
+    var hit = false; list = list.map(function (x) { if (olds.indexOf(x.toLowerCase()) >= 0) { hit = true; return to; } return x; });
+    if (!hit) list = list.length > 1 ? list.concat(to) : [to];
+    return list.filter(function (x, i, s) { return s.map(function (y) { return y.toLowerCase(); }).indexOf(x.toLowerCase()) === i; }).join(",");
+  }
+  function acRobotEdit() {
+    $("ac-rb-box").hidden = false; $("ac-rb-show").hidden = true; $("ac-rb-log").innerHTML = ""; acSay("ac-rb-msg", "");
+    var signin = String(me.email || "").toLowerCase(); AC.prevSignin = AC.prevSignin || "";
+    // the address they last tried (so a second go after the Resend step needs no retyping), else the sign-in email
+    $("ac-rb-to").value = AC.lastTo && AC.lastTo !== String(AC.notify || "").toLowerCase() ? AC.lastTo : signin && signin !== String(AC.notify || "").toLowerCase() ? signin : "";
+    $("ac-rb-c-n-l").hidden = !AC.notify; $("ac-rb-c-n").checked = !!AC.notify;
+    $("ac-rb-c-d-l").hidden = !AC.dash; $("ac-rb-c-d").checked = !!AC.dash;
+    $("ac-rb-c-r").checked = false; $("ac-rb-key").value = "";
+    acRobotCheck(); $("ac-rb-to").focus();
+  }
+  function acRobotCheck() {
+    var to = $("ac-rb-to").value.trim().toLowerCase(), valid = acValidEmail(to), n = $("ac-rb-c-n").checked && !!AC.notify, d = $("ac-rb-c-d").checked && !!AC.dash;
+    var moveN = n && valid && to !== String(AC.notify || "").toLowerCase();
+    $("ac-rb-resend").hidden = !moveN;
+    $("ac-rb-r-to").textContent = valid ? to : "the new address";
+    $("ac-rb-d-to").textContent = d && valid ? "(Robot Dash will open for " + acDashFor(to).split(",").join(", ") + ")" : "";
+    var key = $("ac-rb-key").value.trim(), keyOk = /^re_[A-Za-z0-9_]{10,}$/.test(key);
+    var resendOk = !moveN || $("ac-rb-c-r").checked || keyOk;
+    $("ac-rb-move").disabled = AC.busy || !valid || !(n || d) || !resendOk;
+  }
+  // Start a workflow in the member's copy and wait for THAT run (newer than the newest before it), not just any recent
+  // one: straight after a failed test, a retry must not read the old run (independent review, 29 Oct 2026).
+  // {r: "success" | "failure" | "missing" | "nostart" | "running"}
+  async function acRun(full, wf) {
+    var path = "/repos/" + full + "/actions/workflows/" + wf + "/runs?per_page=1&event=workflow_dispatch";
+    var b0 = await gh(path), last = b0.ok && b0.j && b0.j.workflow_runs && b0.j.workflow_runs[0] ? b0.j.workflow_runs[0].id : 0;
+    var d = await gh("/repos/" + full + "/actions/workflows/" + wf + "/dispatches", { method: "POST", body: { ref: "main" } });
+    if (d.status === 404) return { r: "missing" }; if (!d.ok) return { r: "nostart" };
+    for (var t = 0; t < 45; t++) {
+      await sleep(4000);
+      var rs = await gh(path), run = rs.j && rs.j.workflow_runs && rs.j.workflow_runs[0];
+      if (run && run.id > last && run.status === "completed") return { r: run.conclusion === "success" ? "success" : "failure" };
+    }
+    return { r: "running" };
+  }
+  function acLog(txt) { var li = document.createElement("li"); li.className = "run"; li.innerHTML = "<i></i><span></span>"; li.lastChild.textContent = txt; $("ac-rb-log").appendChild(li);
+    return { ok: function (t) { li.className = "ok"; if (t) li.lastChild.textContent = t; }, bad: function (t) { li.className = "bad"; li.lastChild.textContent = t; }, set: function (t) { li.lastChild.textContent = t; } }; }
+  async function acRobotMove() {
+    if (AC.busy) return;
+    var full = AC.full, to = $("ac-rb-to").value.trim().toLowerCase(); AC.lastTo = to;
+    var doN = $("ac-rb-c-n").checked && !!AC.notify && to !== String(AC.notify).toLowerCase();
+    var doD = $("ac-rb-c-d").checked && !!AC.dash, newD = doD ? acDashFor(to) : "";
+    if (doD && newD.toLowerCase() === String(AC.dash).toLowerCase()) doD = false;
+    if (!doN && !doD) { acSay("ac-rb-msg", "Your robot already uses " + to + ".", true); return; }
+    var key = $("ac-rb-key").value.trim(), useKey = doN && /^re_[A-Za-z0-9_]{10,}$/.test(key);
+    AC.busy = true; acRobotCheck(); $("ac-rb-box").hidden = true; $("ac-rb-log").innerHTML = ""; acSay("ac-rb-msg", "Keep this page open: about two minutes.", true);
+    var oldN = AC.notify, oldD = AC.dash, results = { n: null, d: null };
+    var jobN = !doN ? Promise.resolve() : (async function () {
+      var s = acLog("Robot emails: moving to " + to);
+      if (useKey) { var sealed = await ghSeal(full, { RESEND_API_KEY: key }); $("ac-rb-key").value = ""; if (!sealed) { s.bad("Couldn't lock in the new Resend key. Nothing changed: try again in a minute."); results.n = "fail"; return; } }
+      if (!(await ghVar(full, "NOTIFY_TO", to))) { s.bad("Couldn't save it just now. Nothing changed: try again in a minute."); results.n = "fail"; return; }
+      s.set("Robot emails: sending a test email to " + to + " (about a minute)");
+      var t = await acRun(full, "setup-check.yml");
+      if (t.r === "success") { s.ok("Robot emails now go to " + to + ". A test email is on its way: check your inbox (and spam)."); AC.notify = to; results.n = "ok"; return; }
+      if (useKey) {   // the old key is gone, so there is no address to go back to: say so plainly
+        s.bad(t.r === "failure" ? "Your robot can't send emails right now: the new Resend key didn't work. In Resend, open API Keys, make a new key with Sending access, and paste it here again. Until then, robot emails won't arrive."
+          : "We couldn't confirm the new Resend key (the test didn't finish). If no test email reaches " + to + " in 10 minutes, paste the key again here: until it works, robot emails won't arrive.");
+        AC.notify = to; results.n = "fail"; return; }
+      if (t.r !== "failure") {   // not confirmed (still running, or couldn't start): don't leave it on an address that may not work
+        await ghVar(full, "NOTIFY_TO", oldN);
+        s.bad("We couldn't confirm a test email in time, so your robot still emails " + oldN + " (nothing is broken). Try again in a few minutes.");
+        results.n = "unconfirmed"; return; }
+      s.set("Robot emails: the test didn't arrive, so putting back " + oldN + " and checking it");
+      await ghVar(full, "NOTIFY_TO", oldN);
+      var back = await acRun(full, "setup-check.yml");
+      if (back.r === "success" || back.r === "running") { s.bad("Resend won't send to " + to + " yet, so your robot still emails " + oldN + " (nothing is broken). Finish the change in Resend: click the links in both emails Resend sent, then try again."); results.n = "resend"; return; }
+      s.bad("Your robot's setup check is failing for a reason that isn't the address: its email to " + oldN + " says what. Fix that first, then move the address. Your robot still emails " + oldN + "."); results.n = "other";
+    })();
+    var jobD = !doD ? Promise.resolve() : (async function () {
+      var s = acLog("Robot Dash: updating who can open it (about a minute)");
+      if (!(await ghVar(full, "DASHBOARD_EMAIL", newD))) { s.bad("Couldn't save it just now. Nothing changed: try again in a minute."); results.d = "fail"; return; }
+      var t = await acRun(full, "dashboard-setup.yml");
+      if (t.r === "success") { s.ok("Robot Dash now opens for " + newD.split(",").join(", ") + "."); AC.dash = newD; results.d = "ok"; return; }
+      if (t.r === "running") { s.ok("Robot Dash is still updating: it opens for " + newD.split(",").join(", ") + " within a few minutes."); AC.dash = newD; results.d = "ok"; return; }
+      s.set("Robot Dash: that didn't finish, so putting back " + oldD);
+      await ghVar(full, "DASHBOARD_EMAIL", oldD);
+      if (t.r !== "missing" && t.r !== "nostart") await acRun(full, "dashboard-setup.yml");
+      s.bad(t.r === "missing" ? "Your copy is older and can't change Robot Dash from here. It still opens for " + oldD + ". Email hello@myrobotisa.com and we'll help."
+        : "Robot Dash couldn't be updated just now, so it still opens for " + oldD + ". Try again in a few minutes."); results.d = "fail";
+    })();
+    try { await Promise.all([jobN, jobD]); } catch (e) { acSay("ac-rb-msg", "Couldn't reach GitHub. Check you're online, then press Show my robot's addresses again."); }
+    AC.busy = false;
+    var good = (results.n === null || results.n === "ok") && (results.d === null || results.d === "ok");
+    $("ac-rb-notify").innerHTML = AC.notify ? acAddr(AC.notify) : "Not set"; $("ac-rb-dash").innerHTML = AC.dash ? acAddr(AC.dash.split(",").join(", ")) : "Robot Dash isn't set up yet";
+    $("ac-rb-show").hidden = false;
+    acSay("ac-rb-msg", good ? "All done."
+      : results.n === "resend" ? (results.d === "ok" ? "Robot Dash has moved. " : "") + "For your robot's emails there's one step left: finish the change in Resend, then press Change these again."
+      : "Some of it didn't change: check the line marked in pink above for what to do.", good);
+  }
+
+  // -- your data
+  function acDownload() {
+    acBusy(["ac-dl"], true); acSay("ac-dl-msg", "Gathering your data…", true);
+    rest("rpc/my_data_export", { method: "POST", body: "{}" }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); }).then(function (r) {
+      acBusy(["ac-dl"], false);
+      if (!r.ok) { acSay("ac-dl-msg", "Couldn't gather it just now. Try again in a minute."); return; }
+      var name = "my-robot-isa-data-" + new Date().toISOString().slice(0, 10) + ".json";
+      var url = URL.createObjectURL(new Blob([JSON.stringify(r.j, null, 2)], { type: "application/json" }));
+      var a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      acSay("ac-dl-msg", "Downloaded " + name + ". It's a plain text file you can open in any text editor.", true);
+    }).catch(function () { acBusy(["ac-dl"], false); acSay("ac-dl-msg", ACOFF); });
+  }
+  function acDelReset() { $("ac-del-s1").hidden = false; $("ac-del-s2").hidden = true; $("ac-del-code").value = ""; acSay("ac-del-msg", ""); acBusy(["ac-del-send", "ac-del-ok"], false); }
+  function acDelSend() {
+    acBusy(["ac-del-send", "ac-del-resend"], true); acSay("ac-del-msg", "Sending…", true);
+    acFn({ action: "delete-start" }).then(function (r) {
+      acBusy(["ac-del-send", "ac-del-resend"], false);
+      if (!r.ok) { acSay("ac-del-msg", (r.j && r.j.error) || "That didn't work. Try again in a minute."); return; }
+      $("ac-del-to").textContent = r.j.sent_to || me.email; $("ac-del-s1").hidden = true; $("ac-del-s2").hidden = false;
+      acSay("ac-del-msg", "Code sent. It can take a minute to arrive.", true); $("ac-del-code").focus();
+    }).catch(function () { acBusy(["ac-del-send", "ac-del-resend"], false); acSay("ac-del-msg", ACOFF); });
+  }
+  function acDelConfirm() {
+    var code = acDigits($("ac-del-code").value);
+    if (code.length !== 6) { acSay("ac-del-msg", "The code is 6 numbers. Copy it from the newest email from us."); return; }
+    if (AC.busy) return; AC.busy = true; acBusy(["ac-del-ok"], true); acSay("ac-del-msg", "Checking…", true);
+    acFn({ action: "delete-confirm", code: code }).then(function (r) {
+      AC.busy = false; acBusy(["ac-del-ok"], false);
+      if (!r.ok) { acSay("ac-del-msg", (r.j && r.j.error) || "That didn't work. Try again in a minute."); return; }
+      AC.due = r.j.due_at; acDelReset(); acPaint(); $("ac-del-banner").scrollIntoView({ block: "nearest" });
+      toast("Your account will be deleted on " + acLondon(r.j.due_at));
+    }).catch(function () { AC.busy = false; acBusy(["ac-del-ok"], false); acSay("ac-del-msg", ACOFF); });
+  }
+  function acKeep() {
+    acBusy(["ac-keep"], true);
+    acFn({ action: "delete-cancel" }).then(function (r) {
+      acBusy(["ac-keep"], false);
+      if (!r.ok) { toast((r.j && r.j.error) || "That didn't work. Try again in a minute."); return; }
+      AC.due = null; acPaint(); toast("Your account is staying");
+    }).catch(function () { acBusy(["ac-keep"], false); toast(ACOFF); });
+  }
+  // The two email buttons (D28): ?keep=<token> (Keep my account) and ?undo=<token> ("not you? put it back") land here.
+  // The address bar is cleaned at once; the member taps to confirm. These calls need the token, not a sign-in.
+  function acOpenFn(body) {
+    return fetch(SB + "/functions/v1/member-account", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok && j.ok !== false, j: j }; }); });
+  }
+  (function () {
+    var q = new URLSearchParams(location.search), keep = q.get("keep"), undo = q.get("undo");
+    if (!keep && !undo) return;
+    history.replaceState(null, "", location.pathname + location.hash);
+    var card = $("ac-link"), go = $("ac-link-go"), title = $("ac-link-t"), body = $("ac-link-p");
+    var bad = function (t) { $("ac-link-row").hidden = true; acSay("ac-link-msg", t); };
+    $("ac-link-no").addEventListener("click", function () { card.hidden = true; });
+    card.hidden = false;
+    if (keep) {
+      title.textContent = "Keep your account?";
+      body.textContent = "You asked us to delete your My Robot I.S.A. account. Press Keep my account and nothing will be deleted.";
+      go.textContent = "Keep my account";
+      go.addEventListener("click", function () {
+        go.disabled = true; acSay("ac-link-msg", "Keeping it…", true);
+        acOpenFn({ action: "keep-token", token: keep }).then(function (r) {
+          if (!r.ok) { go.disabled = false; bad((r.j && r.j.error) || "That didn't work. Try again in a minute."); return; }
+          $("ac-link-row").hidden = true; title.textContent = "Your account is staying"; body.textContent = "Nothing will be deleted. We've emailed you to confirm."; acSay("ac-link-msg", "");
+          if (me && me.user_id) { AC.due = null; acPaint(); }
+        }).catch(function () { go.disabled = false; acSay("ac-link-msg", ACOFF); });
+      });
+      return;
+    }
+    title.textContent = "Checking the link…"; body.textContent = ""; $("ac-link-row").hidden = true;
+    acOpenFn({ action: "undo-check", token: undo }).then(function (r) {
+      if (!r.ok) { title.textContent = "That link doesn't work any more"; bad((r.j && r.j.error) || "Email hello@myrobotisa.com and we'll help."); return; }
+      title.textContent = "Put your sign-in email back?";
+      body.textContent = "Your sign-in email was changed from " + r.j.old_email + " to " + r.j.new_email + ". If that wasn't you, put it back and you'll sign in with " + r.j.old_email + " again.";
+      go.textContent = "Put it back"; $("ac-link-row").hidden = false;
+      go.addEventListener("click", function () {
+        go.disabled = true; acSay("ac-link-msg", "Putting it back…", true);
+        acOpenFn({ action: "undo", token: undo }).then(function (x) {
+          if (!x.ok) { go.disabled = false; bad((x.j && x.j.error) || "That didn't work. Email hello@myrobotisa.com straight away."); return; }
+          $("ac-link-row").hidden = true; title.textContent = "Your sign-in email is back";
+          body.textContent = "You sign in with " + x.j.email + " again. Reply to the email we sent and we'll check the account with you.";
+          acSay("ac-link-msg", "");
+        }).catch(function () { go.disabled = false; acSay("ac-link-msg", ACOFF); });
+      });
+    }).catch(function () { bad(ACOFF); });
+  })();
+
   // ---- your dashboard: the member's own link (theirs runs on their own Cloudflare account)
   // In the installed app the dashboard (another address) would open under a white address bar that browsers always add
   // for other sites, so there it opens in a frame filling the app window instead (#mydash). In a browser tab it opens
@@ -1615,19 +2107,19 @@
     var q = new URLSearchParams(location.search); if (!q.get("code") || !q.get("state")) return;
     var code = q.get("code"), state = q.get("state"), want = ""; try { want = sessionStorage.getItem("mri-gh-state") || ""; sessionStorage.removeItem("mri-gh-state"); } catch (e) {}
     var back = "setup"; try { back = sessionStorage.getItem("mri-gh-back") || "setup"; sessionStorage.removeItem("mri-gh-back"); } catch (e) {}
-    if (back !== "live") back = "setup";
+    if (back !== "live" && back !== "help") back = "setup";   // 29 Oct 2026: Help and membership connects GitHub too (D28)
     history.replaceState(null, "", location.pathname + "#" + back);
     var tries = 0;
     (function wait() { // the session loads asynchronously; wait for it before calling the function
       if (typeof session === "undefined" || !session) { if (tries++ < 40) setTimeout(wait, 250); return; }
       suInit(); if (back === "live") lvInit();
-      var cm = back === "live" ? $("lv1-msg") : $("su1-msg");
+      var cm = back === "live" ? $("lv1-msg") : back === "help" ? acGhMsgEl() : $("su1-msg");
       if (!state || state !== want) { cm.textContent = "That GitHub sign-in didn't match this page. Press Connect GitHub again."; return; }
       cm.textContent = "Connecting…";
       suFn("POST", { code: code }).then(function (r) {
         if (!r.ok || !r.j.access_token) { cm.textContent = (r.j && r.j.error) || "That didn't work. Press Connect GitHub again."; return; }
         SU.tok = r.j.access_token; SU.invite = r.j.invite || ""; SU.link = r.j.link || ""; SU.saved = r.j.saved || "";
-        return gh("/user").then(function (u) { SU.login = u.j && u.j.login || ""; ghConnected(); });
+        return gh("/user").then(function (u) { SU.login = u.j && u.j.login || ""; ghConnected(); if (back === "help") acConnected(); });
       }).catch(function () { cm.textContent = "No connection. Check you're online and try again."; });
     })();
   })();
