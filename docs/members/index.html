@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="89">
+<meta name="mri-version" content="91">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -492,10 +492,10 @@
         <!-- 29 Oct 2026 (Amit, later): What's new is now Your updates (route #clips unchanged) and sits above Moonshotters.
              29 Oct 2026 (Amit): Set up my robot and Help and membership fold their pages under them; the Moonshotters
              get their own line; Robot Care fixes is now Your fixes, shown once Robot Care is on or a fix exists. -->
-        <li class="mgroup sgroup" data-grp="setup"><div class="grp-h"><a class="pv-only" hidden href="#setup" data-go="setup">Set up my robot<span class="ndot" aria-hidden="true"></span><span class="vh"> (new)</span></a><a class="npv-only" href="#start" data-go="start">Start here</a><button type="button" class="grp-t" aria-expanded="true" aria-controls="g-setup-sub" aria-label="Hide Your code and the lessons"></button></div>
+        <li class="mgroup sgroup" data-grp="setup"><div class="grp-h"><a class="pv-only" hidden href="#setup" data-go="setup">Set up my robot</a><a class="npv-only" href="#start" data-go="start">Start here</a><button type="button" class="grp-t" aria-expanded="true" aria-controls="g-setup-sub" aria-label="Hide Your code and the lessons"></button></div>
           <ol class="sub" id="g-setup-sub">
             <li><a href="#code" data-go="code">Your code</a></li>
-            <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
+            <li><a href="#lessons" data-go="lessons">Your lessons</a></li>
           </ol>
         </li>
         <li class="rcf-only" hidden><a href="#fixes" data-go="fixes">Your fixes <span class="pill p rcf-n" id="rcf-nav" style="margin-left:4px;padding:2px 7px;font-size:10px" hidden></span></a></li>
@@ -514,10 +514,10 @@
   <!-- In the installed app the menu is the members area only (21 Oct 2026) -->
   <ol class="app-only" id="appnav">
     <li><a href="#home" data-go="home" class="on">Home</a></li>
-        <li class="mgroup sgroup" data-grp="setup"><div class="grp-h"><a class="pv-only" hidden href="#setup" data-go="setup">Set up my robot<span class="ndot" aria-hidden="true"></span><span class="vh"> (new)</span></a><a class="npv-only" href="#start" data-go="start">Start here</a><button type="button" class="grp-t" aria-expanded="true" aria-controls="g-setup-sub-app" aria-label="Hide Your code and the lessons"></button></div>
+        <li class="mgroup sgroup" data-grp="setup"><div class="grp-h"><a class="pv-only" hidden href="#setup" data-go="setup">Set up my robot</a><a class="npv-only" href="#start" data-go="start">Start here</a><button type="button" class="grp-t" aria-expanded="true" aria-controls="g-setup-sub-app" aria-label="Hide Your code and the lessons"></button></div>
           <ol class="sub" id="g-setup-sub-app">
             <li><a href="#code" data-go="code">Your code</a></li>
-            <li><a href="#lessons" data-go="lessons">The 14 lessons</a></li>
+            <li><a href="#lessons" data-go="lessons">Your lessons</a></li>
           </ol>
         </li>
         <li class="rcf-only" hidden><a href="#fixes" data-go="fixes">Your fixes <span class="pill p rcf-n" style="margin-left:4px;padding:2px 7px;font-size:10px" hidden></span></a></li>
@@ -667,7 +667,7 @@
       </section>
 
       <section class="card wide" aria-labelledby="h-gd" data-page="guide" id="guide">
-        <p class="small" style="margin:0 0 8px"><a href="#start" id="gd-back-start" data-go="start">&larr; Start here</a> &nbsp;·&nbsp; <a href="#lessons" id="gd-other" data-go="lessons">The 14 lessons</a></p>
+        <p class="small" style="margin:0 0 8px"><a href="#start" id="gd-back-start" data-go="start">&larr; Start here</a> &nbsp;·&nbsp; <a href="#lessons" id="gd-other" data-go="lessons">Your lessons</a></p>
         <div class="gd-head"><span class="kind" id="gd-kind"></span><h2 id="h-gd" style="margin:0">Step by step</h2><span class="small" id="gd-mins"></span></div>
         <p class="lede" id="gd-lede">One step at a time. Tick each one as you go; your place is saved to your account.</p>
         <div class="gd-bar" aria-hidden="true"><i id="gd-bar"></i></div>
@@ -703,6 +703,7 @@
         <h2 id="h-new">Your <span class="g">updates</span></h2>
         <p class="lede">Shipped first, then what's on the bench. Tap <b>I want this</b> on anything you'd like sooner: it's saved to your account and counts.</p>
         <ol class="tl" id="wn-list">
+          <li><span class="tl-dot"></span><div><span class="tl-date">29 Oct 2026</span><span class="pill g">New</span><b>The 14 lessons are now Your lessons</b><p>Same 14 lessons, new name in the menu, next to Your code. Your progress through them still shows at the top of the page.</p><a class="tl-go" href="#lessons" data-go="lessons">Your lessons &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">29 Oct 2026</span><span class="pill g">New</span><b>What's new is now Your updates</b><p>Same page, new name, to match Your code, Your fixes and Your dashboard. It now sits just above the Moonshotters in the menu.</p></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">29 Oct 2026</span><span class="pill g">New</span><b>A tidier menu</b><p>Your code and the 14 lessons now fold under Set up my robot: tap the arrow to open or close them. Faster sign-in is a tab on Help and membership. The Moonshotters have their own place in the menu. Robot Care's fixes are now called Your fixes, and show up once Robot Care is on.</p></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">28 Oct 2026</span><span class="pill g">New</span><b>Accept Robot Care's fixes here</b><p>When Robot Care suggests a fix, you accept it in the members area with one tap: no GitHub needed. Not sure? Ask a question about the fix first and Robot Care explains it in plain words.</p><a class="tl-go" href="#fixes" data-go="fixes">See your fixes &rarr;</a></div></li>
@@ -2656,8 +2657,8 @@
     gcur = { id: id, n: gcur.id === id ? gcur.n : first, celebrate: complete };
     $("gd-kind").textContent = g.kind; $("h-gd").textContent = g.title; $("gd-mins").textContent = "about " + g.mins + " min";
     var isQs = id.indexOf("qs-") === 0, pv = !!(me && me.preview_videos), home = pv ? ["Set up my robot", "#setup", "setup"] : ["Start here", "#start", "start"];
-    $("gd-back-start").textContent = isQs ? "\u2190 " + home[0] : "\u2190 The 14 lessons"; $("gd-back-start").href = isQs ? home[1] : "#lessons"; $("gd-back-start").dataset.go = isQs ? home[2] : "lessons";
-    var other = $("gd-other"); other.textContent = isQs ? "The 14 lessons" : home[0]; other.href = isQs ? "#lessons" : home[1]; other.dataset.go = isQs ? "lessons" : home[2];
+    $("gd-back-start").textContent = isQs ? "\u2190 " + home[0] : "\u2190 Your lessons"; $("gd-back-start").href = isQs ? home[1] : "#lessons"; $("gd-back-start").dataset.go = isQs ? home[2] : "lessons";
+    var other = $("gd-other"); other.textContent = isQs ? "Your lessons" : home[0]; other.href = isQs ? "#lessons" : home[1]; other.dataset.go = isQs ? "lessons" : home[2];
     guideRender();
   }
   function guideRender() {
