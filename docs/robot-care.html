@@ -5,10 +5,10 @@
 <script>/* 23 Oct 2026: GitHub sign-in for Set up my robot lands here if the OAuth callback is the homepage; pass it to the members area */(function(){var q=location.search;if(/[?&]code=/.test(q)&&/[?&]state=/.test(q))location.replace("/members/"+q+"#setup");})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Robot Care: when your robot breaks, the fix is waiting for your tap · My Robot I.S.A.</title>
-<meta name="description" content="When a run fails, Claude reads the log, writes the smallest fix and opens a pull request you merge from your phone. Do it yourself with your own Claude, or let Robot Care do it: free for the first 100 founding members, then £10 a month.">
+<meta name="description" content="When a run fails, Robot Care reads the log, writes the smallest fix and puts it in your app for one tap to accept. Do it yourself with your own Claude, or let Robot Care do it: free for the first 100 founding members, then £10 a month.">
 <link rel="canonical" href="https://myrobotisa.com/robot-care.html">
 <meta property="og:title" content="Robot Care: when your robot breaks, the fix is waiting for your tap">
-<meta property="og:description" content="When a run fails, Claude reads the log, writes the smallest fix and opens a pull request you merge from your phone. Do it yourself with your own Claude, or let Robot Care do it: free for the first 100 founding members, then £10 a month.">
+<meta property="og:description" content="When a run fails, Robot Care reads the log, writes the smallest fix and puts it in your app for one tap to accept. Do it yourself with your own Claude, or let Robot Care do it: free for the first 100 founding members, then £10 a month.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://myrobotisa.com/robot-care.html">
 <meta property="og:site_name" content="My Robot I.S.A.">
@@ -395,12 +395,12 @@
     <h2>What happens <span class="p">when a run fails</span></h2>
     <ol class="care-steps">
       <li><b>It stops safely</b><span>A failed run places nothing. Orders always wait for your approval, so a broken robot is a quiet robot, not a dangerous one.</span></li>
-      <li><b>It raises its hand</b><span>Your copy opens one issue, <em>Robot run failed</em>, with the run log. GitHub's own notification is your alert.</span></li>
-      <li><b>Claude writes the fix</b><span>Claude reads the log and the files involved, works out the smallest change that mends it, and opens a proposed change on GitHub (a "pull request": the change and the reason, in plain words) for you to accept.</span></li>
-      <li><b>You tap merge</b><span>Nothing changes until you merge it, from your phone, in a minute. If it's a key or account problem, you get a comment saying exactly what to do instead.</span></li>
+      <li><b>Robot Care writes the fix</b><span>It reads the log and the files involved and works out the smallest change that mends it, checked against the rails below.</span></li>
+      <li><b>It lands in your app</b><span>Robot Dash and the members area show the fix in plain words: what broke and what changes. If it's urgent, your phone tells you. Not sure? Tap Ask a question and Robot Care explains.</span></li>
+      <li><b>You tap Accept</b><span>One tap and Face ID. Nothing changes until you do. If it's a key or account problem, you get a plain-words note saying exactly what to do instead.</span></li>
     </ol>
     <div class="care-row">
-      <div class="care-video"><video controls playsinline preload="metadata" poster="care-poster.jpg" width="960" height="540" aria-label="When a run fails: what happens, start to finish, in a minute and a half"><source src="clips/robot-care-fails.mp4?v=4" type="video/mp4">Your browser can't play this clip.</video><p class="small">Watch it happen, start to finish, in about 90 seconds. Example data, nothing here is a real account.</p></div>
+      <div class="care-video"><video controls playsinline preload="metadata" poster="care-poster.jpg" width="960" height="540" aria-label="The robot explains what happens when it breaks, start to finish, in under a minute"><source src="clips/robot-care-fails.mp4?v=5" type="video/mp4">Your browser can't play this clip.</video><p class="small">The robot tells you itself, in under a minute. Example fix, nothing here is a real account.</p></div>
       <div class="care-never">
         <h2 class="h3">A fix can <span class="p">never</span> touch</h2>
         <ul class="care-list">
@@ -422,7 +422,8 @@
           <li><i class="ci" aria-hidden="true">1</i><span><b>Built into every copy.</b> Add one key to your copy in Set up my robot (a Claude API key, or a token from a Claude Pro or Max plan; the free Claude plan can't do this) and it's on.</span></li>
           <li><i class="ci" aria-hidden="true">2</i><span><b>You pay Claude, not us.</b> Either pay as you go with a Claude API key, or use a Claude Pro or Max plan, from about &#163;18 a month. Plus a few of your GitHub Actions minutes.</span></li>
           <li><i class="ci" aria-hidden="true">3</i><span><b>Ask it anything.</b> Type <code>@claude</code> in a comment on GitHub and ask a question, say why your robot proposed a sell this week. Claude reads your own code and answers in plain words.</span></li>
-          <li><i class="ci" aria-hidden="true">4</i><span><b>We'll help you set it up.</b> The step-by-step guide in Set up my robot walks you through it, about ten minutes. Delete the key and it's off.</span></li>
+          <li><i class="ci" aria-hidden="true">4</i><span><b>Fixes arrive on GitHub.</b> Your own Claude proposes each fix on GitHub, where you merge it yourself.</span></li>
+          <li><i class="ci" aria-hidden="true">5</i><span><b>We'll help you set it up.</b> The step-by-step guide in Set up my robot walks you through it, about ten minutes. Delete the key and it's off.</span></li>
         </ul>
       </div>
       <div class="box care-us">
@@ -430,10 +431,10 @@
         <h2 class="h3">Robot Care</h2>
         <ul class="care-list">
           <li><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span><b>Nothing to set up.</b> No Claude account, no key, no bill from anyone else. Switch it on from the members area in one tap. We pay for Claude.</span></li>
-          <li><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span><b>Checked before you see it.</b> Every fix is run against the rails on our side, by the same code that looks after our own robot, before the pull request is opened.</span></li>
+          <li><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span><b>Checked before you see it.</b> Every fix is checked against the rails automatically before it reaches you, and again just before it goes in.</span></li>
           <li><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span><b>Every robot we look after teaches us.</b> A problem seen once is mended in yours in minutes next time, not worked out from scratch.</span></li>
           <li><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span><b>Hands free.</b> A fix is waiting by breakfast whether you're at work, asleep or on holiday. If a robot keeps failing, a person looks at it.</span></li>
-          <li><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span><b>Still yours, still your tap.</b> We never see your keys (GitHub doesn't show them to anyone, and the app doesn't ask) and nothing merges without you.</span></li>
+          <li><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></i><span><b>Still yours, still your tap.</b> We never see your keys (GitHub doesn't show them to anyone, and the app doesn't ask). You accept each fix in Robot Dash or the members area; nothing goes in without you.</span></li>
         </ul>
       </div>
     </div>
@@ -454,7 +455,7 @@
         <tr><th scope="row">Setting up</th><td>Make a Claude account, create a key, paste it into Set up my robot<span>about 10 minutes with the QuickStart</span></td><td><i class="y">One tap</i><span>from the members area</span></td></tr>
         <tr><th scope="row">Who pays for Claude</th><td>You</td><td><i class="y">We do</i></td></tr>
         <tr><th scope="row">What you pay</th><td>Claude's bill<span>pay as you go with an API key, or a Claude Pro or Max plan from about &#163;18 a month</span></td><td><i class="y">&#163;10 a month</i><span>a year free for the first 100 founding members</span></td></tr>
-        <tr><th scope="row">When a run fails</th><td>A fix from your Claude, for your tap</td><td>A fix checked by us first, for your tap</td></tr>
+        <tr><th scope="row">When a run fails</th><td>A fix from your Claude, merged on GitHub</td><td>A fix checked against the rails, accepted in your app</td></tr>
         <tr><th scope="row">Learns from other robots</th><td><i class="n">No</i><span>yours only</span></td><td><i class="y">Yes</i><span>every robot we look after</span></td></tr>
         <tr><th scope="row">Someone keeping an eye</th><td><i class="n">No</i><span>that's you</span></td><td><i class="y">Yes</i><span>a person, if it keeps failing</span></td></tr>
         <tr><th scope="row">Ask Claude about your robot<span>type @claude in a GitHub comment, e.g. "why did it sell this week?"</span></th><td><i class="y">Included</i></td><td><i class="y">Add your own Claude</i><span>Robot Care fixes failed runs; add your own Claude alongside it to ask questions too</span></td></tr>
