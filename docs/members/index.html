@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="87">
+<meta name="mri-version" content="88">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -447,6 +447,7 @@
   .ac-note{border-left:3px solid var(--amber);padding:2px 0 2px 12px;margin:14px 0 0}
   .ac-alert{border:2px solid var(--pink-ink);border-radius:14px;padding:12px 14px;margin:10px 0 16px;font-size:14px;line-height:1.5;background:var(--deep)}
   .ac-alert b{color:var(--pink-ink)}
+  .ac-link{max-width:620px;margin:14px auto 18px}
   .ac-done{border:1px solid var(--green);border-radius:14px;padding:12px 14px;margin-top:10px;font-size:14px;line-height:1.55}
   .btn.danger{border-color:var(--pink-ink);color:var(--pink-ink);background:transparent} .btn.danger:hover{color:var(--pink-ink)}
   .btn.danger.solid{background:var(--pink-ink);color:var(--deep)}
@@ -550,6 +551,13 @@
   </div>
 
   <!-- SIGN IN -->
+  <!-- 29 Oct 2026 (D28): the Keep my account and "not you? put it back" email buttons land here. Nothing happens until
+       a tap, because mail apps' link scanners open every link in an email. Works signed in or not. -->
+  <div class="ac-alert ac-link" id="ac-link" role="dialog" aria-labelledby="ac-link-t" hidden>
+    <b id="ac-link-t"></b><p id="ac-link-p" style="margin:6px 0 0"></p>
+    <div class="row" id="ac-link-row"><button class="btn" type="button" id="ac-link-go"></button><button class="btn ghost" type="button" id="ac-link-no">Not now</button></div>
+    <p class="msg" id="ac-link-msg" role="status" aria-live="polite"></p>
+  </div>
   <main id="v-signin" class="signin" hidden>
     <div class="card">
       <h1>Sign <span class="g">in</span></h1>
@@ -1429,6 +1437,8 @@
     $("ac-gh-edit").textContent = me.github_login ? "Change" : "Connect";
     var owner = me.plan === "owner", due = AC.due;
     $("ac-del").hidden = owner || !!due;
+    ["ac-email-edit", "ac-gh-edit"].forEach(function (id) { $(id).disabled = !!due; $(id).title = due ? "Keep your account first" : ""; });
+    if (due) { $("ac-email-box").hidden = true; $("ac-gh-box").hidden = true; }
     $("ac-del-banner").hidden = !due; $("ac-home-del").hidden = !due;
     if (due) { $("ac-del-on").textContent = acLondon(due); $("ac-home-on").textContent = acLondon(due); $("ac-del-box").hidden = true; }
   }
@@ -1615,6 +1625,21 @@
     var resendOk = !moveN || $("ac-rb-c-r").checked || keyOk;
     $("ac-rb-move").disabled = AC.busy || !valid || !(n || d) || !resendOk;
   }
+  // Start a workflow in the member's copy and wait for THAT run (newer than the newest before it), not just any recent
+  // one: straight after a failed test, a retry must not read the old run (independent review, 29 Oct 2026).
+  // {r: "success" | "failure" | "missing" | "nostart" | "running"}
+  async function acRun(full, wf) {
+    var path = "/repos/" + full + "/actions/workflows/" + wf + "/runs?per_page=1&event=workflow_dispatch";
+    var b0 = await gh(path), last = b0.ok && b0.j && b0.j.workflow_runs && b0.j.workflow_runs[0] ? b0.j.workflow_runs[0].id : 0;
+    var d = await gh("/repos/" + full + "/actions/workflows/" + wf + "/dispatches", { method: "POST", body: { ref: "main" } });
+    if (d.status === 404) return { r: "missing" }; if (!d.ok) return { r: "nostart" };
+    for (var t = 0; t < 45; t++) {
+      await sleep(4000);
+      var rs = await gh(path), run = rs.j && rs.j.workflow_runs && rs.j.workflow_runs[0];
+      if (run && run.id > last && run.status === "completed") return { r: run.conclusion === "success" ? "success" : "failure" };
+    }
+    return { r: "running" };
+  }
   function acLog(txt) { var li = document.createElement("li"); li.className = "run"; li.innerHTML = "<i></i><span></span>"; li.lastChild.textContent = txt; $("ac-rb-log").appendChild(li);
     return { ok: function (t) { li.className = "ok"; if (t) li.lastChild.textContent = t; }, bad: function (t) { li.className = "bad"; li.lastChild.textContent = t; }, set: function (t) { li.lastChild.textContent = t; } }; }
   async function acRobotMove() {
@@ -1632,26 +1657,31 @@
       if (useKey) { var sealed = await ghSeal(full, { RESEND_API_KEY: key }); $("ac-rb-key").value = ""; if (!sealed) { s.bad("Couldn't lock in the new Resend key. Nothing changed: try again in a minute."); results.n = "fail"; return; } }
       if (!(await ghVar(full, "NOTIFY_TO", to))) { s.bad("Couldn't save it just now. Nothing changed: try again in a minute."); results.n = "fail"; return; }
       s.set("Robot emails: sending a test email to " + to + " (about a minute)");
-      var t = await ghRun(full, "setup-check.yml", 45);
+      var t = await acRun(full, "setup-check.yml");
       if (t.r === "success") { s.ok("Robot emails now go to " + to + ". A test email is on its way: check your inbox (and spam)."); AC.notify = to; results.n = "ok"; return; }
-      if (t.r === "running") { s.ok("Robot emails now go to " + to + ". The test is still running: its email will arrive in a few minutes."); AC.notify = to; results.n = "ok"; return; }
-      if (t.r === "missing" || t.r === "nostart") { s.ok("Robot emails now go to " + to + ". We couldn't start a test email, so watch for tomorrow's email from your robot."); AC.notify = to; results.n = "ok"; return; }
-      if (useKey) { s.bad("The test email didn't send with the new Resend key. Check it's from the Resend account on " + to + ", then try again."); results.n = "fail"; return; }
+      if (useKey) {   // the old key is gone, so there is no address to go back to: say so plainly
+        s.bad(t.r === "failure" ? "Your robot can't send emails right now: the new Resend key didn't work. In Resend, open API Keys, make a new key with Sending access, and paste it here again. Until then, robot emails won't arrive."
+          : "We couldn't confirm the new Resend key (the test didn't finish). If no test email reaches " + to + " in 10 minutes, paste the key again here: until it works, robot emails won't arrive.");
+        AC.notify = to; results.n = "fail"; return; }
+      if (t.r !== "failure") {   // not confirmed (still running, or couldn't start): don't leave it on an address that may not work
+        await ghVar(full, "NOTIFY_TO", oldN);
+        s.bad("We couldn't confirm a test email in time, so your robot still emails " + oldN + " (nothing is broken). Try again in a few minutes.");
+        results.n = "unconfirmed"; return; }
       s.set("Robot emails: the test didn't arrive, so putting back " + oldN + " and checking it");
       await ghVar(full, "NOTIFY_TO", oldN);
-      var back = await ghRun(full, "setup-check.yml", 45);
+      var back = await acRun(full, "setup-check.yml");
       if (back.r === "success" || back.r === "running") { s.bad("Resend won't send to " + to + " yet, so your robot still emails " + oldN + " (nothing is broken). Finish the change in Resend: click the links in both emails Resend sent, then try again."); results.n = "resend"; return; }
       s.bad("Your robot's setup check is failing for a reason that isn't the address: its email to " + oldN + " says what. Fix that first, then move the address. Your robot still emails " + oldN + "."); results.n = "other";
     })();
     var jobD = !doD ? Promise.resolve() : (async function () {
       var s = acLog("Robot Dash: updating who can open it (about a minute)");
       if (!(await ghVar(full, "DASHBOARD_EMAIL", newD))) { s.bad("Couldn't save it just now. Nothing changed: try again in a minute."); results.d = "fail"; return; }
-      var t = await ghRun(full, "dashboard-setup.yml", 45);
+      var t = await acRun(full, "dashboard-setup.yml");
       if (t.r === "success") { s.ok("Robot Dash now opens for " + newD.split(",").join(", ") + "."); AC.dash = newD; results.d = "ok"; return; }
       if (t.r === "running") { s.ok("Robot Dash is still updating: it opens for " + newD.split(",").join(", ") + " within a few minutes."); AC.dash = newD; results.d = "ok"; return; }
       s.set("Robot Dash: that didn't finish, so putting back " + oldD);
       await ghVar(full, "DASHBOARD_EMAIL", oldD);
-      if (t.r !== "missing" && t.r !== "nostart") await ghRun(full, "dashboard-setup.yml", 45);
+      if (t.r !== "missing" && t.r !== "nostart") await acRun(full, "dashboard-setup.yml");
       s.bad(t.r === "missing" ? "Your copy is older and can't change Robot Dash from here. It still opens for " + oldD + ". Email hello@myrobotisa.com and we'll help."
         : "Robot Dash couldn't be updated just now, so it still opens for " + oldD + ". Try again in a few minutes."); results.d = "fail";
     })();
@@ -1707,11 +1737,50 @@
       AC.due = null; acPaint(); toast("Your account is staying");
     }).catch(function () { acBusy(["ac-keep"], false); toast(ACOFF); });
   }
-  // Back from the email's Keep my account button: ?kept=1 (kept) or ?kept=0 (link already used or out of date)
+  // The two email buttons (D28): ?keep=<token> (Keep my account) and ?undo=<token> ("not you? put it back") land here.
+  // The address bar is cleaned at once; the member taps to confirm. These calls need the token, not a sign-in.
+  function acOpenFn(body) {
+    return fetch(SB + "/functions/v1/member-account", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok && j.ok !== false, j: j }; }); });
+  }
   (function () {
-    var q = new URLSearchParams(location.search); if (!q.has("kept")) return;
-    var k = q.get("kept"); history.replaceState(null, "", location.pathname + location.hash);
-    setTimeout(function () { toast(k === "1" ? "Your account is staying: nothing will be deleted" : "That link has already been used. Sign in to check your account in Help and membership."); }, 600);
+    var q = new URLSearchParams(location.search), keep = q.get("keep"), undo = q.get("undo");
+    if (!keep && !undo) return;
+    history.replaceState(null, "", location.pathname + location.hash);
+    var card = $("ac-link"), go = $("ac-link-go"), title = $("ac-link-t"), body = $("ac-link-p");
+    var bad = function (t) { $("ac-link-row").hidden = true; acSay("ac-link-msg", t); };
+    $("ac-link-no").addEventListener("click", function () { card.hidden = true; });
+    card.hidden = false;
+    if (keep) {
+      title.textContent = "Keep your account?";
+      body.textContent = "You asked us to delete your My Robot I.S.A. account. Press Keep my account and nothing will be deleted.";
+      go.textContent = "Keep my account";
+      go.addEventListener("click", function () {
+        go.disabled = true; acSay("ac-link-msg", "Keeping it…", true);
+        acOpenFn({ action: "keep-token", token: keep }).then(function (r) {
+          if (!r.ok) { go.disabled = false; bad((r.j && r.j.error) || "That didn't work. Try again in a minute."); return; }
+          $("ac-link-row").hidden = true; title.textContent = "Your account is staying"; body.textContent = "Nothing will be deleted. We've emailed you to confirm."; acSay("ac-link-msg", "");
+          if (me && me.user_id) { AC.due = null; acPaint(); }
+        }).catch(function () { go.disabled = false; acSay("ac-link-msg", ACOFF); });
+      });
+      return;
+    }
+    title.textContent = "Checking the link…"; body.textContent = ""; $("ac-link-row").hidden = true;
+    acOpenFn({ action: "undo-check", token: undo }).then(function (r) {
+      if (!r.ok) { title.textContent = "That link doesn't work any more"; bad((r.j && r.j.error) || "Email hello@myrobotisa.com and we'll help."); return; }
+      title.textContent = "Put your sign-in email back?";
+      body.textContent = "Your sign-in email was changed from " + r.j.old_email + " to " + r.j.new_email + ". If that wasn't you, put it back and you'll sign in with " + r.j.old_email + " again.";
+      go.textContent = "Put it back"; $("ac-link-row").hidden = false;
+      go.addEventListener("click", function () {
+        go.disabled = true; acSay("ac-link-msg", "Putting it back…", true);
+        acOpenFn({ action: "undo", token: undo }).then(function (x) {
+          if (!x.ok) { go.disabled = false; bad((x.j && x.j.error) || "That didn't work. Email hello@myrobotisa.com straight away."); return; }
+          $("ac-link-row").hidden = true; title.textContent = "Your sign-in email is back";
+          body.textContent = "You sign in with " + x.j.email + " again. Reply to the email we sent and we'll check the account with you.";
+          acSay("ac-link-msg", "");
+        }).catch(function () { go.disabled = false; acSay("ac-link-msg", ACOFF); });
+      });
+    }).catch(function () { bad(ACOFF); });
   })();
 
   // ---- your dashboard: the member's own link (theirs runs on their own Cloudflare account)

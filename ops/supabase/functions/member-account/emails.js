@@ -45,13 +45,23 @@ export function emailCode(code) {
     text: `Confirm your new email: ${c.s}\n\nType it into the members area to finish. It works once and lasts an hour.\nDidn't ask for this? Ignore it: nothing changes without the code.\n\nmyrobotisa.com/members` };
 }
 
-export function emailChanged(old, to) {
+export function emailChanged(old, to, undoUrl) {
   return { subject: subject("Your sign-in email has changed"),
     html: shell({ pre: "From now on you sign in with " + to + ".", title: "Your sign-in email has changed",
       inner: P(`You now sign in to My Robot I.S.A. with <b>${esc(to)}</b> instead of ${esc(old)}. Your lessons, ticks, passkeys and membership all moved with it.`) +
-        P("<b>Was this you?</b> Then there's nothing to do. Your robot's own emails are separate: the members area showed you how to move those too.") +
-        P(`<b>Not you?</b> Reply to this email straight away and we'll lock the account and put it back.`, true) }),
-    text: `Your sign-in email has changed.\n\nYou now sign in with ${to} instead of ${old}. Everything moved with it.\nNot you? Reply to this email straight away and we'll lock the account and put it back.\n\nmyrobotisa.com/members` };
+        P("<b>Was this you?</b> Then there's nothing to do. Your robot's own emails are separate: the members area shows you how to move those too.") +
+        P("<b>Not you?</b> Put it back to this address now. The button works for 7 days:") +
+        button(undoUrl, "This wasn't me: put it back") +
+        P("Then reply to this email and we'll check the account with you.", true) }),
+    text: `Your sign-in email has changed.\n\nYou now sign in with ${to} instead of ${old}. Everything moved with it.\n\nNot you? Put it back to this address (works for 7 days): ${undoUrl}\nThen reply to this email and we'll check the account with you.\n\nmyrobotisa.com/members` };
+}
+
+export function emailRestored(old) {
+  return { subject: subject("Your sign-in email is back"),
+    html: shell({ pre: "You sign in with this address again.", title: "Your sign-in email is back",
+      inner: P(`You sign in with <b>${esc(old)}</b> again. If you didn't make the earlier change, reply to this email and we'll check everything with you.`) +
+        P("Signed in somewhere you don't recognise? Sign out there, and add a passkey (Face ID or Touch ID) in Help and membership: it only works on your own devices.", true) }),
+    text: `Your sign-in email is back: you sign in with ${old} again.\nIf you didn't make the earlier change, reply to this email and we'll check everything with you.\n\nmyrobotisa.com/members` };
 }
 
 export function deleteCode(code) {

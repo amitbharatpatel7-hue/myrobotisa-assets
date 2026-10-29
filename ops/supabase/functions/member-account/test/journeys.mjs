@@ -68,7 +68,8 @@ async function setupPage(browser, sim) {
     const alive = uid && (await W.one("select 1 from auth.users where id=$1", [uid]));
     try {
       if (p === "/functions/v1/member-account") {
-        if (req.method() === "GET") { const r = await W.call({ action: "cancel-link", token: u.searchParams.get("cancel") }); return route.fulfill({ status: 303, headers: { location: r.location } }); }
+        if (req.method() === "GET") { const undo = u.searchParams.has("undo");
+          const r = await W.call({ action: undo ? "undo-link" : "cancel-link", token: u.searchParams.get(undo ? "undo" : "cancel") }); return route.fulfill({ status: 303, headers: { location: r.location } }); }
         const body = JSON.parse(req.postData() || "{}");
         const user = body.action === "purge" ? null : (alive ? { id: uid, email: "" } : null);
         const r = await W.call({ ...body, user }); return json(r.body, r.status);
@@ -141,8 +142,8 @@ async function phoneFits(sim) {
 }
 const open = async (sim, hash = "help") => { await sim.page.goto(`${SITE}/members/#${hash}`); await sim.page.waitForFunction(() => document.getElementById("ac-email") && document.getElementById("ac-email").textContent.length > 3); await phoneFits(sim); };
 // SIM_SHOTS=1: a picture of the account section at each key moment, once per journey and device
-const shot = async (sim, name) => { if (!process.env.SIM_SHOTS || SHOTS.has(name + sim.device)) return; SHOTS.add(name + sim.device);
-  try { await sim.page.locator("#ac").screenshot({ path: path.join(OUT, `ui-${name}-${sim.device}.png`) }); } catch {} };
+const shot = async (sim, name, sel = "#ac") => { if (!process.env.SIM_SHOTS || SHOTS.has(name + sim.device)) return; SHOTS.add(name + sim.device);
+  try { await sim.page.locator(sel).screenshot({ path: path.join(OUT, `ui-${name}-${sim.device}.png`) }); } catch {} };
 const SHOTS = new Set();
 const messy = (sim, email) => sim.noise ? "  " + email.replace(/^./, (c) => c.toUpperCase()) + " " : email;
 const spaced = (sim, code) => sim.noise ? code.slice(0, 3) + " " + code.slice(3) : code;
@@ -211,7 +212,7 @@ async function requestDelete(sim, { wrongFirst = false } = {}) {
 
 // ---- the 24 journeys (weights add up to 100)
 const J = {
-  "email: change it": [10, {}, async (sim) => { await open(sim); await changeEmail(sim, "new-" + sim.m.email); }],
+  "email: change it": [8, {}, async (sim) => { await open(sim); await changeEmail(sim, "new-" + sim.m.email); }],
   "email: wrong code first": [5, {}, async (sim) => { await open(sim); await changeEmail(sim, "w-" + sim.m.email, { wrongFirst: true }); }],
   "email: code ran out, new code": [4, {}, async (sim) => { await open(sim); await changeEmail(sim, "e-" + sim.m.email, { expire: true }); }],
   "email: five wrong, new code": [3, {}, async (sim) => { await open(sim); await changeEmail(sim, "t-" + sim.m.email, { tooMany: true }); }],
@@ -298,8 +299,20 @@ const J = {
     await open(sim); await requestDelete(sim);
     const link = /https:\S+cancel=[0-9a-f-]+/.exec(W.sent(sim.m.email, "account_delete_scheduled")[0].text)[0];
     await act(sim, () => sim.page.goto(link)); await sim.page.waitForURL(/members\/#help$/);
-    await waitText(sim, "#mtoast", /staying/);
-    await sim.page.waitForFunction(() => document.getElementById("ac-del-banner").hidden); }],
+    assert.equal(await W.deps.store.deleting(sim.m.uid), true, "opening the link alone changes nothing");
+    await sim.page.waitForSelector("#ac-link:not([hidden])"); await shot(sim, "9-keep-link", "#ac-link");
+    await click(sim, "#ac-link-go"); await waitText(sim, "#ac-link-t", /staying/);
+    await sim.page.waitForFunction(() => document.getElementById("ac-del-banner").hidden);
+    assert.equal(await W.deps.store.deleting(sim.m.uid), false); }],
+  "email: not you? put it back": [2, {}, async (sim) => {
+    await open(sim); const to = "intruder-" + sim.m.email; await changeEmail(sim, to);
+    const link = /https:\S+undo=[0-9a-f-]+/.exec(W.sent(sim.m.email, "account_email_changed")[0].text)[0];
+    await act(sim, () => sim.page.goto(link)); await sim.page.waitForURL(/members\/#help$/);
+    assert.equal((await W.one("select email from members where user_id=$1", [sim.m.uid])).email, to, "opening the link alone changes nothing");
+    await sim.page.waitForSelector("#ac-link-row:not([hidden])"); await shot(sim, "10-undo-link", "#ac-link");
+    await click(sim, "#ac-link-go"); await waitText(sim, "#ac-link-t", /is back/);
+    assert.equal((await W.one("select email from members where user_id=$1", [sim.m.uid])).email, sim.m.email);
+    assert.equal((await W.one("select email from auth.users where id=$1", [sim.m.uid])).email, sim.m.email); }],
   "delete: wrong code, then 7 days pass": [4, { founding_no: null }, async (sim) => {
     await open(sim); await requestDelete(sim, { wrongFirst: true });
     await W.timeTravel(sim.m.uid, "deletion-due"); await W.call({ action: "purge" });

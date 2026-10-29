@@ -41,6 +41,8 @@ const deps = {
   sha,
   rand: () => crypto.getRandomValues(new Uint32Array(1))[0],
   cancelUrl: (token: string) => `${SELF}?cancel=${token}`,
+  undoUrl: (token: string) => `${SELF}?undo=${token}`,
+  log: (...a: unknown[]) => console.error(...a),
   send: async (to: string, m: { subject: string; html: string; text: string }, tag: string) => {
     if (!RESEND) return false;
     const r = await fetch("https://api.resend.com/emails", { method: "POST",
@@ -56,6 +58,8 @@ const deps = {
     codePut: (uid: string, purpose: string, email: string | null, hash: string) => rpc("acct_code_put", { p_user: uid, p_purpose: purpose, p_new_email: email, p_code_hash: hash }),
     codeCheck: (uid: string, purpose: string, hash: string) => rpc("acct_code_check", { p_user: uid, p_purpose: purpose, p_code_hash: hash }),
     emailSet: (uid: string, email: string) => rpc("acct_email_set", { p_user: uid, p_new_email: email }),
+    emailUndo: (token: string, apply: boolean) => rpc("acct_email_undo", { p_token: token, p_apply: apply }),
+    deleting: async (uid: string) => (await rpc("acct_is_deleting", { p_user: uid }).catch(() => true)) !== false,   // unsure = treat as deleting
     deleteRequest: (uid: string) => rpc("acct_delete_request", { p_user: uid }),
     deleteCancel: (uid: string | null, token: string | null) => rpc("acct_delete_cancel", { p_user: uid, p_token: token }),
     purgeDue: async () => (await rpc("acct_purge_due", {})) || [],
@@ -95,11 +99,11 @@ const deps = {
         body: JSON.stringify({ invitee_id: (await u.json()).id, role: "direct_member" }) });
       return r.status === 201 ? "invited" : r.status === 422 ? "already" : `error:${r.status}`;
     },
-    // Take a login out of the members' org (or cancel its invite). Never an org admin; with check, never a login that
-    // is still on any membership (so a member can only ever remove the account they just moved away from).
-    leave: async (login: string, opt: { check: boolean }) => {
+    // Take a login out of the members' org (or cancel its invite). Never an org admin, and never a login that is on any
+    // membership now (so leaving or switching can only ever remove the account no member holds any more).
+    leave: async (login: string) => {
       if (!INVITE || !login) return "skipped";
-      if (opt.check && (await deps.store.loginTaken(login))) return "kept";
+      if (await deps.store.loginTaken(login)) return "kept";
       const m = await gh(`/orgs/${ORG}/memberships/${encodeURIComponent(login)}`);
       if (m.status === 404) return "none";
       if (!m.ok) return `error:${m.status}`;
@@ -124,20 +128,23 @@ Deno.serve(async (req: Request) => {
   const headers = { ...cors(origin), "Content-Type": "application/json", "Cache-Control": "no-store" };
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(origin) });
   const url = new URL(req.url);
-  if (req.method === "GET" && url.searchParams.has("cancel")) {
-    const r: any = await handle({ action: "cancel-link", token: url.searchParams.get("cancel") }, deps);
+  if (req.method === "GET" && (url.searchParams.has("cancel") || url.searchParams.has("undo"))) {   // redirect only: see core.js
+    const isUndo = url.searchParams.has("undo");
+    const r: any = await handle({ action: isUndo ? "undo-link" : "cancel-link", token: url.searchParams.get(isUndo ? "undo" : "cancel") }, deps);
     return new Response(null, { status: 303, headers: { Location: r.location!, "Cache-Control": "no-store" } });
   }
   if (req.method !== "POST") return new Response(JSON.stringify({ ok: false, error: "POST only" }), { status: 405, headers });
   let body: any = {};
   try { body = await req.json(); } catch { /* fall through */ }
+  if (!body || typeof body !== "object" || Array.isArray(body)) body = {};
   const action = String(body?.action || "");
-  if (action !== "purge") {
+  const open = action === "purge" || action === "keep-token" || action === "undo-check" || action === "undo";   // no sign-in needed
+  if (action !== "purge") {   // everything a person does comes from the members page
     if (!origin || !ALLOWED.has(origin)) return new Response(JSON.stringify({ ok: false, error: "Use the members area at myrobotisa.com/members" }), { status: 403, headers });
-    body.user = await signedIn(req);
+    body.user = open ? null : await signedIn(req);
   }
   try {
-    const r: any = await handle({ ...body, action, user: action === "purge" ? null : body.user }, deps);
+    const r: any = await handle({ ...body, action, user: open ? null : body.user }, deps);
     return new Response(JSON.stringify(r.body), { status: r.status, headers });
   } catch (e) {
     console.error("member-account", action, String(e).slice(0, 200));

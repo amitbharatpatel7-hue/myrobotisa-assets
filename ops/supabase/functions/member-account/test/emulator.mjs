@@ -48,7 +48,7 @@ export function makeWorld() {
 
   const W = {
     pool, q, one, asUser,
-    outbox: [],
+    outbox: [], logs: [],
     org: { members: new Set(), admins: new Set(["amitbharatpatel7-hue"]), invites: new Set() },
     tokens: new Map(),      // GitHub token -> login
     repos: new Map(),       // "owner/name" -> { template, vars:{}, secrets:{}, runs:[], resendKeyFor, otherFailure, dashFails, dashMissing }
@@ -62,12 +62,16 @@ export function makeWorld() {
     sha: async (s) => createHash("sha256").update(s).digest("hex"),
     rand: () => randomInt(0, 2 ** 31),
     cancelUrl: (t) => `${W.fnBase || "http://fn.local"}/functions/v1/member-account?cancel=${t}`,
+    undoUrl: (t) => `${W.fnBase || "http://fn.local"}/functions/v1/member-account?undo=${t}`,
+    log: (...a) => { W.logs.push(a.join(" ")); },
     send: async (to, m, tag) => { if (W.mailDown) return false; W.outbox.push({ to, subject: m.subject, text: m.text, html: m.html, tag, at: Date.now() }); return true; },
     store: {
       member: (uid) => one("select id,email,plan,status,github_login from members where user_id=$1 and status in ('active','lapsed')", [uid]),
       codePut: (u, p, e, h) => rpc("acct_code_put", { p_user: u, p_purpose: p, p_new_email: e, p_code_hash: h }),
       codeCheck: (u, p, h) => rpc("acct_code_check", { p_user: u, p_purpose: p, p_code_hash: h }),
       emailSet: (u, e) => rpc("acct_email_set", { p_user: u, p_new_email: e }),
+      emailUndo: (t, a) => rpc("acct_email_undo", { p_token: t, p_apply: a }),
+      deleting: (u) => rpc("acct_is_deleting", { p_user: u }),
       deleteRequest: (u) => rpc("acct_delete_request", { p_user: u }),
       deleteCancel: (u, t) => rpc("acct_delete_cancel", { p_user: u, p_token: t }),
       purgeDue: () => q("select * from acct_purge_due()"),
@@ -87,9 +91,9 @@ export function makeWorld() {
     gh: {
       loginFromToken: async (t) => W.tokens.get(t) || "",
       invite: async (login) => { if (W.org.members.has(login.toLowerCase())) return "already"; W.org.members.add(login.toLowerCase()); W.org.invites.add(login.toLowerCase()); return "invited"; },
-      leave: async (login, opt) => {
+      leave: async (login) => {
         const l = login.toLowerCase();
-        if (opt.check && (await W.deps.store.loginTaken(login))) return "kept";
+        if (await W.deps.store.loginTaken(login)) return "kept";
         if (!W.org.members.has(l)) return "none";
         if (W.org.admins.has(l)) return "admin";
         W.org.members.delete(l); W.org.invites.delete(l); return "removed";

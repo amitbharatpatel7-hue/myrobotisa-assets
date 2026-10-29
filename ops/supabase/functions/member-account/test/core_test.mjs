@@ -77,24 +77,46 @@ try {
     finally { W.mailDown = false; }
   });
 
-  await t("delete: code to own address, 7 days on, cancel by page or by email link; the owner can't", async () => {
+  await t("delete: code to own address, 7 days on; the email link only redirects, a tap keeps it; the owner can't", async () => {
     const a = await W.addMember();
     let r = await W.call({ action: "delete-start", user: as(a) }); assert.equal(r.body.sent_to, a.email);
     r = await W.call({ action: "delete-confirm", user: as(a), code: W.lastCode(a.email, "account_delete_code") });
     assert.equal(r.status, 200);
     const days = (new Date(r.body.due_at) - Date.now()) / 864e5; assert.ok(days > 6.99 && days < 7.01, String(days));
-    const mailOut = W.sent(a.email, "account_delete_scheduled")[0]; assert.ok(mailOut);
-    const token = /cancel=([0-9a-f-]{36})/.exec(mailOut.text)[1];
-    assert.equal((await W.asUser(a.uid, "select my_account() j"))[0].j.deletion_due !== null, true);
-    r = await W.call({ action: "cancel-link", token }); assert.match(r.location, /kept=1/);
-    r = await W.call({ action: "cancel-link", token }); assert.match(r.location, /kept=0/, "a used link says so");
-    r = await W.call({ action: "cancel-link", token: "nonsense" }); assert.match(r.location, /kept=0/);
+    const token = /cancel=([0-9a-f-]{36})/.exec(W.sent(a.email, "account_delete_scheduled")[0].text)[1];
+    r = await W.call({ action: "cancel-link", token }); assert.match(r.location, new RegExp("\\?keep=" + token + "#help$"));
+    assert.equal(await W.deps.store.deleting(a.uid), true, "opening the link (or a mail scanner opening it) changes nothing");
+    r = await W.call({ action: "keep-token", token }); assert.equal(r.body.kept, true);
+    r = await W.call({ action: "keep-token", token }); assert.equal(r.body.code, "none");
+    r = await W.call({ action: "keep-token", token: "nonsense" }); assert.equal(r.body.code, "none");
     await W.call({ action: "delete-start", user: as(a) });
     await W.call({ action: "delete-confirm", user: as(a), code: W.lastCode(a.email, "account_delete_code") });
     r = await W.call({ action: "delete-cancel", user: as(a) }); assert.equal(r.body.kept, true);
     assert.equal(W.sent(a.email, "account_kept").length, 2);
     const o = await W.addMember({ plan: "owner" });
     assert.equal((await W.call({ action: "delete-start", user: as(o) })).body.code, "owner");
+  });
+
+  await t("while a deletion waits, the email and GitHub account can't change", async () => {
+    const a = await W.addMember();
+    await W.call({ action: "delete-start", user: as(a) });
+    await W.call({ action: "delete-confirm", user: as(a), code: W.lastCode(a.email, "account_delete_code") });
+    assert.equal((await W.call({ action: "email-start", user: as(a), email: "n" + a.email })).body.code, "deleting");
+    assert.equal((await W.call({ action: "github-switch", user: as(a), token: W.addGitHubAccount("dz-" + a.uid.slice(0, 5)) })).body.code, "deleting");
+  });
+
+  await t("a cancel can't race the purge: too late once claimed or purged", async () => {
+    const a = await W.addMember();
+    await W.call({ action: "delete-start", user: as(a) });
+    await W.call({ action: "delete-confirm", user: as(a), code: W.lastCode(a.email, "account_delete_code") });
+    await W.timeTravel(a.uid, "deletion-due");
+    await W.deps.store.purgeDue();                                  // a run has claimed it
+    assert.equal((await W.call({ action: "delete-cancel", user: as(a) })).body.code, "too-late");
+    await W.deps.store.purge(a.uid);                                 // and purged it; the auth delete hasn't happened yet
+    await W.q("update admin.member_deletions set claimed_at = now() - interval '1 hour' where user_id=$1", [a.uid]);
+    assert.equal((await W.call({ action: "delete-cancel", user: as(a) })).body.code, "too-late", "purged = too late, even after the claim lapses");
+    const r = await W.call({ action: "purge" }); assert.equal(r.body.done >= 1, true, "the next run finishes it");
+    assert.equal(W.sent(a.email, "account_kept").length, 0);
   });
 
   await t("purge: nothing before day 7; after it, data gone, posts kept as Former member, org left, sign-in gone", async () => {
@@ -134,6 +156,52 @@ try {
     for (const m of ms) assert.equal(W.sent(m.email, "account_deleted").length, 1);
   });
 
+  await t("deleting member A never touches member B, who now holds A's old GitHub login", async () => {
+    const a = await W.addMember(), b = await W.addMember({ login: null });
+    const oldA = a.login;
+    await W.call({ action: "github-switch", user: as(a), token: W.addGitHubAccount("a2-" + a.uid.slice(0, 5)) });
+    await W.oauthLink(b.uid, oldA); W.org.members.add(oldA.toLowerCase());
+    await W.q("insert into robot_care_runs(key,outcome,login) values ($1,'pr',$2)", ["b-run-" + b.uid, oldA]);
+    await W.call({ action: "delete-start", user: as(a) });
+    await W.call({ action: "delete-confirm", user: as(a), code: W.lastCode(a.email, "account_delete_code") });
+    await W.timeTravel(a.uid, "deletion-due"); await W.call({ action: "purge" });
+    assert.equal(W.org.members.has(oldA.toLowerCase()), true, "B stays in the org");
+    assert.ok(await W.one("select 1 from robot_care_runs where key=$1", ["b-run-" + b.uid]), "B's Robot Care history stays");
+    assert.equal(W.org.members.has(("a2-" + a.uid.slice(0, 5)).toLowerCase()), false, "A's current login leaves");
+  });
+
+  await t("finished deletions keep no address; an admin note on a sales record is kept", async () => {
+    const a = await W.addMember();
+    await W.q("update members set note='paid by bank transfer' where user_id=$1", [a.uid]);
+    await W.call({ action: "delete-start", user: as(a) });
+    await W.call({ action: "delete-confirm", user: as(a), code: W.lastCode(a.email, "account_delete_code") });
+    await W.timeTravel(a.uid, "deletion-due"); await W.call({ action: "purge" });
+    const d = await W.one("select email, github_login, first_name, done_at from admin.member_deletions where user_id=$1", [a.uid]);
+    assert.equal(d.email, "erased"); assert.equal(d.github_login, null); assert.ok(d.done_at);
+    assert.match((await W.one("select note from members where email=$1", [a.email])).note, /^paid by bank transfer · Account deleted/);
+  });
+
+  await t("'not you? put it back': the old address gets a link; a tap puts both records back, once", async () => {
+    const a = await W.addMember(), to = "thief" + a.email;
+    await W.call({ action: "email-start", user: as(a), email: to });
+    await W.call({ action: "email-confirm", user: as(a), code: W.lastCode(to) });
+    const token = /undo=([0-9a-f-]{36})/.exec(W.sent(a.email, "account_email_changed")[0].text)[1];
+    let r = await W.call({ action: "undo-link", token }); assert.match(r.location, /\?undo=/);
+    assert.equal((await W.one("select email from members where user_id=$1", [a.uid])).email, to, "the GET changes nothing");
+    r = await W.call({ action: "undo-check", token }); assert.equal(r.body.old_email, a.email);
+    r = await W.call({ action: "undo", token }); assert.equal(r.status, 200, JSON.stringify(r.body));
+    assert.equal((await W.one("select email from members where user_id=$1", [a.uid])).email, a.email);
+    assert.equal((await W.one("select email from auth.users where id=$1", [a.uid])).email, a.email);
+    assert.equal(W.sent(a.email, "account_email_restored").length, 1);
+    assert.equal((await W.call({ action: "undo", token })).body.code, "used");
+    const b = await W.addMember(), tb = "x" + b.email;
+    await W.call({ action: "email-start", user: as(b), email: tb });
+    await W.call({ action: "email-confirm", user: as(b), code: W.lastCode(tb) });
+    const tok2 = /undo=([0-9a-f-]{36})/.exec(W.sent(b.email, "account_email_changed")[0].text)[1];
+    await W.q("update admin.member_email_undo set created_at = now() - interval '8 days' where token=$1", [tok2]);
+    assert.equal((await W.call({ action: "undo", token: tok2 })).body.code, "old");
+  });
+
   await t("github switch: new login saved and invited, old one leaves the org; same/taken/foreign tokens refused", async () => {
     const a = await W.addMember(), b = await W.addMember();
     const tok = W.addGitHubAccount("alice-new");
@@ -145,7 +213,7 @@ try {
     assert.equal(W.org.members.has(b.login.toLowerCase()), true, "can't kick another member out");
     r = await W.call({ action: "github-switch", user: as(a), token: "gho_madeup" }); assert.equal(r.body.code, "token");
     W.org.members.add("amitbharatpatel7-hue");
-    assert.equal(await W.deps.gh.leave("amitbharatpatel7-hue", { check: true }), "admin", "never an org admin");
+    assert.equal(await W.deps.gh.leave("amitbharatpatel7-hue"), "admin", "never an org admin");
   });
 
   await t("download my data: own data only", async () => {
