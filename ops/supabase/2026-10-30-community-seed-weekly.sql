@@ -27,3 +27,15 @@ Day trading is allowed in a Trading 212 ISA, so weekly is the design, not a limi
   returning id into v_comment;
   update public.community_posts set answer_id = v_comment where id = v_post;
 end $$;
+
+-- Lesson guides, one tip each (Amit, 30 Oct 2026: "a sentence anywhere relevant"). Idempotent: skipped if present.
+-- Day 3 already says the robot ignores Monday-to-Thursday noise on purpose; this adds the evidence.
+update public.lesson_guides
+   set data = jsonb_set(data, '{tips}', (data->'tips') || to_jsonb('We tested checking every day instead: 4 in 10 holdings sold midweek were back above their stop by Friday.'::text)),
+       updated_at = now()
+ where id = 'day-3' and not (data->'tips') @> to_jsonb(array['We tested checking every day instead: 4 in 10 holdings sold midweek were back above their stop by Friday.']);
+-- Day 5 is backtesting honestly; this is the start-date lesson from the same test.
+update public.lesson_guides
+   set data = jsonb_set(data, '{tips}', (data->'tips') || to_jsonb('Try more than one start date. A daily stop check beat weekly from 2020, thanks to the Covid crash, and lost from 2021 and 2022.'::text)),
+       updated_at = now()
+ where id = 'day-5' and not (data->'tips') @> to_jsonb(array['Try more than one start date. A daily stop check beat weekly from 2020, thanks to the Covid crash, and lost from 2021 and 2022.']);
