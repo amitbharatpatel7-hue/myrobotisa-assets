@@ -10,7 +10,8 @@ fixed templates; the function only swaps in the recipient's unsubscribe link. Ch
 then deploy the function (Supabase MCP deploy_edge_function, or `supabase functions deploy waitlist-welcome`).
 Any change goes to Amit as a preview first and is deployed only when he says "send" (Amit, 1 Nov 2026).
 
-1 Nov 2026: moved onto the house template (Amit: "needs to conform to the same template ... no robot on this"),
+1 Nov 2026: moved onto the house template; numbered steps, ticks, the pink founding banner and a line from Amit (options B, D, E, F)
+were Amit's picks. Earlier the same day: (Amit: "needs to conform to the same template ... no robot on this"),
 and the test drive date is Monday 7 December.
 """
 import json
@@ -32,6 +33,9 @@ def link(path):
     return SITE + base + ("&" if "?" in base else "?") + "src=" + SRC + ("#" + hash_ if hash_ else "")
 
 
+QUOTE = ("I built this robot to run my own ISA, and I approve its plan from my phone each week. "
+         "The test drive lets you watch how it thinks before you spend a penny.")
+
 FOOT = ("You're getting this because you signed up at myrobotisa.com. We're @myrobotisa on YouTube, Instagram and "
         "TikTok. Questions? Just reply to this email. Not you, or changed your mind? " + UNSUB +
         " Software and a course, not financial advice. Capital at risk.")
@@ -49,14 +53,18 @@ def launch(newsletter):
         {"heading": "Does it need me?", "status": ("Not yet", "muted"), "accent": True,
          "prose": ["Not until Monday 7 December. We'll email you that morning with one link to start."]},
         {"heading": "Your free test drive", "status": ("7 Dec", "green"),
-         "prose": ["Seven days on your own robot dashboard with £10,000 of pretend money. It replays seven real past "
-                   "market weeks, one a day, good and bad, with the stock names hidden. Nothing to install, nothing to "
-                   "pay. Then you decide."]},
+         "ticks": ["£10,000 of pretend money, on your own robot dashboard",
+                   "Seven real past market weeks, one a day",
+                   "Good weeks and bad, with the stock names hidden",
+                   "Nothing to install, nothing to pay. Then you decide."]},
         {"heading": "What happens next",
-         "kv": [("Mon 7 December", "Your free 7-day test drive starts"),
-                ("January 2027", "Sales open: £99 for the first 100 founding members, then £199. You'll hear first."),
-                ("April 2027", "Tax on savings goes up. Inside an ISA, interest stays tax-free.")],
+         "steps": [("Mon 7 December", "Your free 7-day test drive starts. One link in your inbox that morning."),
+                   ("January 2027", "Sales open. £99 for the first 100 founding members, then £199. You'll hear first."),
+                   ("April 2027", "Tax on savings goes up. Inside an ISA, interest stays tax-free.")],
          "link": ("What changes in April", link("/#rules"))},
+        {"banner": {"text": "Founding members: £99, not £199.", "sub": "First 100 only, when sales open in January.",
+                    "link": ("What you get", link("/what-you-get.html"))}},
+        {"quote": {"text": QUOTE, "by": "Amit, founder", "img": L.MRI_LOGO}},
     ]
     if not newsletter:
         blocks.append({"heading": "Want the newsletter too?",
@@ -67,11 +75,13 @@ def launch(newsletter):
                     buttons=[("Open the demo", link("/demo/"), True), ("Watch on TikTok", "https://www.tiktok.com/@myrobotisa", False)])
     text = ("You're on the list\nYour free test drive starts Monday 7 December.\n\n"
             "DOES IT NEED ME?\nNot until Monday 7 December. We'll email you that morning with one link to start.\n\n"
-            "YOUR FREE TEST DRIVE\nSeven days on your own robot dashboard with £10,000 of pretend money. It replays seven real past "
-            "market weeks, one a day, good and bad, with the stock names hidden. Nothing to install, nothing to pay. Then you decide.\n\n"
-            "WHAT HAPPENS NEXT\nMon 7 December: your free 7-day test drive starts\n"
-            "January 2027: sales open, £99 for the first 100 founding members, then £199. You'll hear first.\n"
-            f"April 2027: tax on savings goes up. Inside an ISA, interest stays tax-free. {link('/#rules')}\n\n"
+            "YOUR FREE TEST DRIVE\n- £10,000 of pretend money, on your own robot dashboard\n- Seven real past market weeks, one a day\n"
+            "- Good weeks and bad, with the stock names hidden\n- Nothing to install, nothing to pay. Then you decide.\n\n"
+            "WHAT HAPPENS NEXT\n1. Mon 7 December: your free 7-day test drive starts. One link in your inbox that morning.\n"
+            "2. January 2027: sales open. £99 for the first 100 founding members, then £199. You'll hear first.\n"
+            f"3. April 2027: tax on savings goes up. Inside an ISA, interest stays tax-free. {link('/#rules')}\n\n"
+            f"FOUNDING MEMBERS: £99, NOT £199. First 100 only, when sales open in January. What you get: {link('/what-you-get.html')}\n\n"
+            f"\"{QUOTE}\"\nAmit, founder\n\n"
             + ("" if newsletter else f"WANT THE NEWSLETTER TOO?\nEvery fortnight: what the robot did, what it learned, and what's new. {link('/#news')}\n\n")
             + f"Open the demo: {link('/demo/')}\nWatch on TikTok: https://www.tiktok.com/@myrobotisa\n\n--\n"
             + FOOT.replace(UNSUB, "Unsubscribe: " + UNSUB + "."))

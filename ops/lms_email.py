@@ -378,6 +378,10 @@ def _block_body_inner(block: dict) -> str:
         return _checks(block["checks"]) + ('<div style="height:8px;line-height:8px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
     if "did" in block:
         return _did(block["did"])
+    if "steps" in block:
+        return _steps(block["steps"])
+    if "ticks" in block:
+        return _ticks(block["ticks"]) + (_prose(block["prose"]) if block.get("prose") else "")
     if "milestone" in block:
         return _milestone(block["milestone"])
     if "days" in block:
@@ -415,7 +419,57 @@ def button(label: str, url: str, primary: bool = True) -> str:
             f'border-radius:999px;margin:6px 8px 6px 0;font-family:{FONT_STACK};">{esc(label)}</a>')
 
 
+# v2.6.6 (1 Nov 2026, Amit picked options B, D, E and F for the welcome): website-style blocks.
+#   steps:  [(when, text), ...]       numbered cards with green number circles (the website's 1-2-3 cards)
+#   ticks:  [text, ...]               green-tick lines (the website's check list)
+#   banner: {"text", "sub", "link": (label, url)}   a pink box, the website's news banner; a whole card of its own
+#   quote:  {"text", "by", "img"}     a short line from a person, with their picture and name in green
+def _steps(rows) -> str:
+    out = []
+    for i, (when, text) in enumerate(rows, 1):
+        out.append(
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(CARD_DEEP)}border:1px solid {HAIRLINE};'
+            f'border-radius:{PANEL_RADIUS}px;margin:{0 if i == 1 else 10}px 0 0;"><tr><td style="padding:14px 16px;">'
+            f'<table role="presentation" cellpadding="0" cellspacing="0"><tr>'
+            f'<td width="28" height="28" align="center" {_bg(GREEN)}width:28px;height:28px;border-radius:14px;color:{ON_GREEN};'
+            f'font-size:14px;font-weight:900;font-family:{FONT_STACK};">{i}</td>'
+            f'<td style="padding-left:10px;font-size:15px;font-weight:800;color:{GREEN};font-family:{FONT_STACK};">{esc(when)}</td></tr></table>'
+            f'<div style="margin-top:6px;font-size:15px;line-height:1.55;color:{INK};font-family:{FONT_STACK};">{esc(text)}</div>'
+            f'</td></tr></table>')
+    return "".join(out)
+
+
+def _ticks(items) -> str:
+    rows = "".join(
+        f'<tr><td valign="top" width="24" style="width:24px;padding:0 0 8px;color:{GREEN};font-size:16px;font-weight:900;'
+        f'font-family:{FONT_STACK};">&#10003;</td><td style="padding:0 0 8px;font-size:15px;line-height:1.55;color:{INK};'
+        f'font-family:{FONT_STACK};">{esc(t)}</td></tr>' for t in items)
+    return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{rows}</table>'
+
+
+def _banner(b: dict) -> str:
+    link = (f' <a href="{esc(b["link"][1])}" style="color:#FFFFFF;font-weight:800;">{esc(b["link"][0])} &rarr;</a>'
+            if b.get("link") else "")
+    sub = f'<br><span style="font-weight:600;">{esc(b["sub"])}</span>' if b.get("sub") else ""
+    return (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(PINK)}border-radius:16px;margin:0 0 14px;">'
+            f'<tr><td style="padding:16px 18px;font-size:15px;line-height:1.5;font-weight:800;color:#FFFFFF;font-family:{FONT_STACK};">'
+            f'{esc(b["text"])}{sub}{link}</td></tr></table>')
+
+
+def _quote(q: dict) -> str:
+    img = (f'<td valign="top" width="52" style="width:52px;"><img src="{esc(q["img"])}" width="40" height="40" alt="" '
+           f'style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {GREEN};"></td>') if q.get("img") else ""
+    return panel(f'<tr><td style="padding:20px 24px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>{img}'
+                 f'<td style="font-size:15px;line-height:1.6;color:{INK};font-family:{FONT_STACK};">&ldquo;{esc(q["text"])}&rdquo;'
+                 f'<div style="margin-top:6px;font-size:13px;font-weight:800;color:{GREEN};font-family:{FONT_STACK};">{esc(q["by"])}</div>'
+                 f'</td></tr></table></td></tr>')
+
+
 def _block_html(block: dict) -> str:
+    if "banner" in block:
+        return _banner(block["banner"])
+    if "quote" in block:
+        return _quote(block["quote"])
     if "milestone" in block:
         inner = section(block.get("heading", ""), _block_body(block), block.get("status"))
         return (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(GREEN_BG)}'
