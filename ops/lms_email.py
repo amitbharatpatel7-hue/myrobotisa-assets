@@ -548,14 +548,19 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
         left = (f'<img src="{esc(logo)}" width="40" height="40" alt="{esc(word)}" style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {GREEN};">'
                 if logo else f'<span style="font-family:{HEAD_STACK};font-size:22px;text-transform:uppercase;color:{INK};">{esc(word)}{suffix_html}</span>')
         # v2.6.7 (Amit, 1 Nov 2026): the eyebrow (the date) sits centred between the logo and the label, filling the empty
-        # top bar, and leaves the header card. The two side cells share one width so the date stays centred.
-        mid = (f'<td align="center" style="vertical-align:middle;text-align:center;padding:0 8px;color:{PINK};font-size:12px;'
-               f'font-weight:800;letter-spacing:.14em;text-transform:uppercase;line-height:1.35;font-family:{FONT_STACK};">'
+        # top bar, on one line, and leaves the header card.
+        mid = (f'<td align="center" style="vertical-align:middle;text-align:center;padding:0 6px;color:{PINK};font-size:11px;'
+               f'font-weight:800;letter-spacing:.08em;text-transform:uppercase;line-height:1.35;white-space:nowrap;font-family:{FONT_STACK};">'
                f'{esc(eyebrow_text)}</td>') if (eyebrow_text and not hero) else '<td></td>'
+        # Centre the date: the logo cell is widened toward the label pill's width, but never so far that the date
+        # stops fitting on one line on a 360 px phone (340 px inside the page padding).
+        pill_w = round(len(label) * 8.8 + 28)
+        text_w = round(len(eyebrow_text or "") * 7.0 + 12) if (eyebrow_text and not hero) else 0
+        lw = max(40, min(pill_w, 340 - pill_w - text_w))
         brand_row = (
             f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 16px;"><tr>'
-            f'<td width="30%" style="width:30%;vertical-align:middle;">{left}</td>{mid}'
-            f'<td width="30%" align="right" style="width:30%;vertical-align:middle;text-align:right;white-space:nowrap;"><span style="display:inline-block;padding:6px 12px;'
+            f'<td width="{lw}" style="width:{lw}px;vertical-align:middle;">{left}</td>{mid}'
+            f'<td width="1%" align="right" style="width:1%;vertical-align:middle;text-align:right;white-space:nowrap;"><span style="display:inline-block;padding:6px 12px;'
             f'border-radius:999px;background:{GREEN};background-color:{GREEN};color:{ON_GREEN};font-size:12px;font-weight:900;letter-spacing:.12em;'
             f'text-transform:uppercase;font-family:{FONT_STACK};white-space:nowrap;">{esc(label)}</span></td></tr></table>')
         top_eyebrow = bool(eyebrow_text and not hero)
