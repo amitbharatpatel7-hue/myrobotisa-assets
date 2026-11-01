@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 """Which site PRs merge themselves (29 Oct 2026, Amit: "only ones making fundamental changes need me").
 
+1 Nov 2026 (hub DECISIONS D30, Amit: "only review important things that affect production"): 30 of the
+last 31 site PRs waited for him. Narrowed: ops/supabase/* and tools/* merge freely (merging deploys
+nothing there; deploying a function is a separate step that needs his "deploy it"); the line scan keeps
+only sign-in, keys, payments and new scripts; the size cap goes from 400 to 1,500 lines. Merges show in
+his daily digest.
+
 A PR merges itself after the Site checks pass only if ALL of these hold:
   - it is Claude's: opened by claude[bot], or by the repo owner with a https://claude.ai/code/session_ link
     in the body (a Claude session pushes with Amit's token);
@@ -18,14 +24,15 @@ import fnmatch
 import re
 
 OWNER = "amitbharatpatel7-hue"
-MAX_LINES = 400
+MAX_LINES = 1500
 
 # path patterns (fnmatch) and why they wait for Amit
 GUARDED = [
     (".github/*", "workflows, including this merge rule"),
-    ("ops/supabase/*", "the database and server functions"),
-    ("tools/*", "the scripts that run the site, including this merge rule"),
-    ("ops/*.py", "lms_email.py: every scheduled email in every project loads it from here"),
+    ("tools/auto_merge_check.py", "this merge rule"),
+    ("tools/test_auto_merge_check.py", "this merge rule's tests"),
+    ("ops/lms_email.py", "lms_email.py: every scheduled email in every project loads it from here"),
+    ("ops/supabase/migrations/*", "the live database schema"),
     ("docs/email/*.py", "the email template"),
     ("docs/terms.html", "legal: terms"),
     ("docs/privacy.html", "legal: privacy"),
@@ -38,13 +45,13 @@ GUARDED = [
 
 # changed lines matching these wait for Amit, wherever they are
 SENSITIVE = [
-    (re.compile(r"supabase", re.I), "the database (Supabase)"),
-    (re.compile(r"\.rpc\(|/rest/v1/|/functions/v1/|/auth/v1/"), "database or server calls"),
+    (re.compile(r"/auth/v1/"), "sign-in calls"),
     (re.compile(r"access_token|refresh_token|service_role|api[_-]?key", re.I), "sign-in tokens or keys"),
     (re.compile(r"verifyOtp|signInWith|signOut|navigator\.credentials|PublicKeyCredential|webauthn", re.I), "sign-in"),
     (re.compile(r"stripe|payment_intent|price_id", re.I), "payments"),
     (re.compile(r"<script[^>]*\bsrc\s*=", re.I), "a script loaded from a file or another site"),
-    (re.compile(r"\bfetch\(|XMLHttpRequest|sendBeacon"), "a network call"),
+    (re.compile(r"<script\b(?![^>]*application/ld\+json)", re.I), "a new script on a page"),
+    (re.compile(r"application/ld\+json", re.I), "a search summary with markup in it"),
 ]
 
 # browser tests stub the database and sign-in on purpose, so their lines aren't scanned (their paths still are)
