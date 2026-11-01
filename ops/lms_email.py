@@ -109,7 +109,9 @@ MOODS = {"up": _E + "robot-upchart.png", "milestone": _E + "robot-trophy.png", "
          "headset": _E + "robot-bulb.png", "sorry": _E + "robot-chatphone.png", "setup": _E + "robot-check.png",
          "reminder": _E + "robot-schedule.png", "sent": _E + "robot-paperplane.png", "refused": _E + "robot-wrench.png",
          "setupfix": _E + "robot-wrench.png", "answer": _E + "robot-bulb.png", "advice": _E + "robot-shrug.png",
-         "reply": _E + "robot-chatphone.png", "signin": _E + "robot-codecard.png"}
+         "reply": _E + "robot-chatphone.png", "signin": _E + "robot-codecard.png",
+         # v2.6.6 (1 Nov 2026, Amit): the welcome and the "sales open" email use the megaphone; newsletter mail the newspaper.
+         "welcome": _E + "robot-megaphone.png", "salesopen": _E + "robot-megaphone.png", "newsletter": _E + "robot-newspaper.png"}
 MOODS["steady"], MOODS["flat"] = MOODS["calm"], MOODS["quiet"]
 # v2.5 (23 Oct 2026): Stock Boom Hunter emails use the same robots with an S.B.H. tag (myrobotisa.com/email/sbh/);
 # render() swaps them in automatically whenever the brand is SBH_BRAND.
@@ -376,6 +378,10 @@ def _block_body_inner(block: dict) -> str:
         return _checks(block["checks"]) + ('<div style="height:8px;line-height:8px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
     if "did" in block:
         return _did(block["did"])
+    if "steps" in block:
+        return _steps(block["steps"])
+    if "ticks" in block:
+        return _ticks(block["ticks"]) + (_prose(block["prose"]) if block.get("prose") else "")
     if "milestone" in block:
         return _milestone(block["milestone"])
     if "days" in block:
@@ -413,7 +419,57 @@ def button(label: str, url: str, primary: bool = True) -> str:
             f'border-radius:999px;margin:6px 8px 6px 0;font-family:{FONT_STACK};">{esc(label)}</a>')
 
 
+# v2.6.6 (1 Nov 2026, Amit picked options B, D, E and F for the welcome): website-style blocks.
+#   steps:  [(when, text), ...]       numbered cards with green number circles (the website's 1-2-3 cards)
+#   ticks:  [text, ...]               green-tick lines (the website's check list)
+#   banner: {"text", "sub", "link": (label, url)}   a pink box, the website's news banner; a whole card of its own
+#   quote:  {"text", "by", "img"}     a short line from a person, with their picture and name in green
+def _steps(rows) -> str:
+    out = []
+    for i, (when, text) in enumerate(rows, 1):
+        out.append(
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(CARD_DEEP)}border:1px solid {HAIRLINE};'
+            f'border-radius:{PANEL_RADIUS}px;margin:{0 if i == 1 else 10}px 0 0;"><tr><td style="padding:14px 16px;">'
+            f'<table role="presentation" cellpadding="0" cellspacing="0"><tr>'
+            f'<td width="28" height="28" align="center" {_bg(GREEN)}width:28px;height:28px;border-radius:14px;color:{ON_GREEN};'
+            f'font-size:14px;font-weight:900;font-family:{FONT_STACK};">{i}</td>'
+            f'<td style="padding-left:10px;font-size:15px;font-weight:800;color:{GREEN};font-family:{FONT_STACK};">{esc(when)}</td></tr></table>'
+            f'<div style="margin-top:6px;font-size:15px;line-height:1.55;color:{INK};font-family:{FONT_STACK};">{esc(text)}</div>'
+            f'</td></tr></table>')
+    return "".join(out)
+
+
+def _ticks(items) -> str:
+    rows = "".join(
+        f'<tr><td valign="top" width="24" style="width:24px;padding:0 0 8px;color:{GREEN};font-size:16px;font-weight:900;'
+        f'font-family:{FONT_STACK};">&#10003;</td><td style="padding:0 0 8px;font-size:15px;line-height:1.55;color:{INK};'
+        f'font-family:{FONT_STACK};">{esc(t)}</td></tr>' for t in items)
+    return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{rows}</table>'
+
+
+def _banner(b: dict) -> str:
+    link = (f' <a href="{esc(b["link"][1])}" style="color:#FFFFFF;font-weight:800;">{esc(b["link"][0])} &rarr;</a>'
+            if b.get("link") else "")
+    sub = f'<br><span style="font-weight:600;">{esc(b["sub"])}</span>' if b.get("sub") else ""
+    return (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(PINK)}border-radius:16px;margin:0 0 14px;">'
+            f'<tr><td style="padding:16px 18px;font-size:15px;line-height:1.5;font-weight:800;color:#FFFFFF;font-family:{FONT_STACK};">'
+            f'{esc(b["text"])}{sub}{link}</td></tr></table>')
+
+
+def _quote(q: dict) -> str:
+    img = (f'<td valign="top" width="52" style="width:52px;"><img src="{esc(q["img"])}" width="40" height="40" alt="" '
+           f'style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {GREEN};"></td>') if q.get("img") else ""
+    return panel(f'<tr><td style="padding:20px 24px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>{img}'
+                 f'<td style="font-size:15px;line-height:1.6;color:{INK};font-family:{FONT_STACK};">&ldquo;{esc(q["text"])}&rdquo;'
+                 f'<div style="margin-top:6px;font-size:13px;font-weight:800;color:{GREEN};font-family:{FONT_STACK};">{esc(q["by"])}</div>'
+                 f'</td></tr></table></td></tr>')
+
+
 def _block_html(block: dict) -> str:
+    if "banner" in block:
+        return _banner(block["banner"])
+    if "quote" in block:
+        return _quote(block["quote"])
     if "milestone" in block:
         inner = section(block.get("heading", ""), _block_body(block), block.get("status"))
         return (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(GREEN_BG)}'
@@ -430,7 +486,8 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
            internal: bool = True,
            tone: str | None = None,
            badge: str | None = None,
-           label: str | None = None) -> str:
+           label: str | None = None,
+           hero: dict | None = None) -> str:
     # v2.5: badge overrides the green pill's text (default "Internal"), e.g. "Stock Boom Hunter" on the engine's own emails.
     b = tuple(brand) if brand else ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, "")
     tile, word, suffix = b[0], b[1], b[2]
@@ -480,7 +537,24 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
         f'</tr></table>')
     mood_td = (f'<td width="96" align="right" style="width:96px;padding:14px 18px 14px 0;vertical-align:middle;">'
                f'<img src="{esc(mood)}" width="96" height="96" alt="" style="display:block;width:96px;height:96px;"></td>') if mood else ""
-    header = panel(
+    if hero:
+        # v2.6.6 (1 Nov 2026, Amit chose "layout 2b" for the welcome): a centred, website-style header. The robot sits
+        # above the eyebrow, the title can end in a pink accent on its own line (the site's two-tone headline), and
+        # an optional button sits inside the card. hero = {"accent": "the list", "button": (label, url)}.
+        acc = f'<br><span style="color:{PINK}">{esc(hero["accent"])}</span>' if hero.get("accent") else ""
+        img = (f'<img src="{esc(mood)}" width="110" height="110" alt="" style="display:block;width:110px;height:110px;margin:0 auto;">'
+               if mood else "")
+        hb = button(*hero["button"]) if hero.get("button") else ""
+        header = (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(CARD)}border-radius:22px;margin:0 0 14px;">'
+                  f'<tr><td align="center" style="padding:24px 22px 22px;text-align:center;">{img}'
+                  f'<div style="color:{PINK};font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin:10px 0 6px;'
+                  f'font-family:{FONT_STACK};">{esc(eyebrow_text)}</div>'
+                  f'<div style="font-family:{HEAD_STACK};font-size:34px;font-weight:400;letter-spacing:.01em;text-transform:uppercase;'
+                  f'line-height:1.04;color:{INK};">{esc(title)}{acc}</div>'
+                  f'<div style="font-size:15px;color:{MUTED};margin:10px 0 14px;font-family:{FONT_STACK};">{_segments(subtitle)}</div>'
+                  f'{hb}</td></tr></table>')
+    else:
+      header = panel(
         f'<tr><td style="padding:24px 26px;">{eyebrow(eyebrow_text)}'
         f'<div style="font-family:{HEAD_STACK};font-size:32px;font-weight:400;letter-spacing:.01em;text-transform:uppercase;'
         f'line-height:1.08;color:{INK};margin:0 0 8px;">{esc(title)}</div>'
@@ -570,7 +644,7 @@ def _project_of(brand, eyebrow_text):
 
 
 def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand=None, buttons=None, mood=None,
-           internal=True, tone=None, badge=None, scheme=None, label=None):
+           internal=True, tone=None, badge=None, scheme=None, label=None, hero=None):
     # v2.6.3 (Amit, 24 Oct 2026: "the robot graphic is part of the brand and should be written into the theme"):
     # every email carries a robot. A caller that names no mood gets the up robot on an up day, otherwise the calm one;
     # the project tag (I.S.A., S.B.H., L.M.S., D.T.L.) is swapped in below as before. mood=False opts out explicitly.
@@ -582,7 +656,7 @@ def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand
         scheme = "internal" if internal else "night"
     if scheme != "internal":
         return _render_core(title, eyebrow_text, subtitle, blocks, cta=cta, footnote=footnote, brand=brand, buttons=buttons,
-                            mood=mood, internal=internal, tone=tone, badge=badge, label=label)
+                            mood=mood, internal=internal, tone=tone, badge=badge, label=label, hero=hero)
     proj = _project_of(brand, eyebrow_text)
     base = {"sbh": SBH_BRAND, "mri": MRI_BRAND, "lms": LMS_BRAND, "dtl": DTL_BRAND}.get(proj) or tuple(brand or ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, ""))
     logo = base[3] if len(base) > 3 else None
