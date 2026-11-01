@@ -662,11 +662,9 @@ function signalsReport(w){
   const satAct = w.id==="p4" ? `<ul><li><b>Buy Stock F</b> · power: rank score 0.74, 9% above its 40-week average</li></ul>` : `<p>Nothing to do. Hold.</p>`;
   const watch=`<div class="tablewrap"><table><tr><th>#</th><th>Stock</th><th>Theme</th><th class="n">Score</th><th class="n">vs 40-wk avg</th></tr>`+D.watchlist.map((r,i)=>`<tr><td>${i+1}</td><td><b>${r[0]}</b></td><td>${r[1]}</td><td class="n score">${r[2].toFixed(2)}</td><td class="n up">+${r[3]}%</td></tr>`).join("")+`</table></div>`;
   const hold=`<div class="tablewrap"><table><tr><th>Holding</th><th class="n">Entry</th><th class="n">Now</th><th class="n">Return</th></tr>`+D.stops.slice().reverse().map(s=>{const h=sat.find(x=>x[1]===s[0]); const entry=s[1]/(1+h[5]/100); return `<tr><td><b>${s[0]}</b></td><td class="n">${entry.toFixed(2)}</td><td class="n">${s[1].toFixed(2)}</td><td class="n ${h[5]>=0?'up':'down'}">${pct(h[5])}</td></tr>`;}).join("")+`</table></div>`;
-  const moon = w.kind==="live" ? `<ul><li><b>Buy Stock G</b> · optics: rank score 0.89</li><li><b>Buy Stock H</b> · cooling: rank score 0.78</li></ul><p class="muted-line">Moonshot pot: ${gbp(D.moonshot.pot)} if you approve it, 0 of ${D.moonshot.slots} slots used. Proposals only: nothing is bought until you say yes.</p>` : `<p>Pot not funded yet.</p>`;
   return `<section class="card"><h2>Signals report</h2><p class="muted-line">The weekly report behind this week's proposals, as emailed the Sunday before at 7pm.</p><div class="md">
     <h4>Satellite: actions this week</h4>${satAct}${hold}
     <h4>Satellite: watchlist, top eligible by rank</h4>${watch}
-    <h4>Moonshot pot: proposals this week</h4>${moon}
     <h4>Core: target portfolio (rebalanced on the first run of each month)</h4><p>Top 5 by blended 3, 6 and 12-month momentum, filtered by the 40-week average: <b>${top.join(", ")}</b>. Cash stand-in: short-term bonds fund.</p>
     <p class="muted-line">Full ranking: ${D.ranking.map(r=>`${r[0].replace(" fund","")} ${pct(r[1])}`).join(" · ")}</p>
     <p class="tag" style="margin-top:12px">Example report with invented names. Signals come from weekly closes. Not financial advice.</p></div></section>`;

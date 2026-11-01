@@ -70,7 +70,9 @@ try {
     assert.equal((await page.textContent("#rcf-nav")).trim(), "1");
     assert.match(await page.textContent("#h-rcf"), /Robot Care has a fix for you/);
     await page.click(`${side} a[data-go="fixes"]`);
-    await page.waitForFunction(() => /Your fixes/.test(document.getElementById("h-rcf").textContent), null, { timeout: 5000 });
+    // No waitForFunction on this page: when its condition isn't true at once, Playwright polls with eval, which the
+    // members page's CSP blocks ("unsafe-eval"), so it failed on slower CI runners only (30 Oct, 1 Nov 2026).
+    await page.waitForSelector('#h-rcf:has-text("Your fixes")', { timeout: 5000 });
     assert.equal(await page.getAttribute(`${side} a[data-go="fixes"]`, "aria-current"), "page");
   });
   await run("groups toggle by mouse and keyboard, and remember", {}, async (page) => {
@@ -96,13 +98,13 @@ try {
   });
   await run("Moonshotters opens the board; Help and membership opens membership", {}, async (page) => {
     await page.goto(URL_ + "#home"); await page.waitForSelector("#v-home:not([hidden])");
-    await page.click(`${side} a[data-go="ideas"]`); await page.waitForFunction(() => location.hash === "#ideas" && document.documentElement.dataset.pg === "help");
+    await page.click(`${side} a[data-go="ideas"]`); await page.waitForURL(/#ideas$/); await page.waitForSelector('html[data-pg="help"]', { state: "attached" });
     await page.waitForTimeout(200);
     assert.equal(await vis(page, "#pane-space"), true); assert.equal(await vis(page, "#pane-memb"), false);
     assert.match(await page.textContent("#h-help"), /Moonshotters/);
     assert.equal(await page.getAttribute(`${side} a[data-go="ideas"]`, "aria-current"), "page");
     assert.equal(await page.getAttribute(`${side} a[data-go="help"]`, "aria-current"), null);
-    await page.click(`${side} a[data-go="help"]`); await page.waitForFunction(() => location.hash === "#help");
+    await page.click(`${side} a[data-go="help"]`); await page.waitForURL(/#help$/);
     await page.waitForTimeout(200);
     assert.equal(await vis(page, "#pane-memb"), true); assert.equal(await vis(page, "#pane-space"), false);
     assert.match(await page.textContent("#h-help"), /Help and membership/);
@@ -117,9 +119,9 @@ try {
     assert.equal(await page.getAttribute('#pk-card .hp-seg a[href="#passkeys"]', "aria-selected"), "true");
     assert.match(await page.textContent("#h-pk"), /Help and membership/);
     assert.equal(await page.getAttribute(`${side} a[data-go="help"]`, "aria-current"), "page", "#passkeys lights Help and membership");
-    await page.click('#pk-card .hp-seg a[href="#help"]'); await page.waitForFunction(() => location.hash === "#help"); await page.waitForTimeout(200);
+    await page.click('#pk-card .hp-seg a[href="#help"]'); await page.waitForURL(/#help$/); await page.waitForTimeout(200);
     assert.equal(await vis(page, "#pane-memb"), true); assert.equal(await vis(page, "#pk-card"), false);
-    await page.click('#pane-memb .hp-seg a[href="#passkeys"]'); await page.waitForFunction(() => location.hash === "#passkeys"); await page.waitForTimeout(200);
+    await page.click('#pane-memb .hp-seg a[href="#passkeys"]'); await page.waitForURL(/#passkeys$/); await page.waitForTimeout(200);
     assert.equal(await vis(page, "#pk-card"), true);
     assert.equal(await page.evaluate(() => localStorage.getItem("mri-side-help")), null, "the old Help group setting is gone");
   });
