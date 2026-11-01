@@ -49,6 +49,9 @@ def _with_preheader(html, text):
 
 
 def launch(newsletter):
+    # Layout "2b", approved by Amit on 1 Nov 2026 ("send"): website-style hero with the megaphone robot, Does it need
+    # me?, the test drive as ticks, numbered next steps, the pink founding banner and a line from Amit. No newsletter
+    # card and no bottom buttons, exactly as he approved it (`newsletter` no longer changes the email).
     blocks = [
         {"heading": "Does it need me?", "status": ("Not yet", "muted"), "accent": True,
          "prose": ["Not until Monday 7 December. We'll email you that morning with one link to start."]},
@@ -60,30 +63,25 @@ def launch(newsletter):
         {"heading": "What happens next",
          "steps": [("Mon 7 December", "Your free 7-day test drive starts. One link in your inbox that morning."),
                    ("January 2027", "Sales open. £99 for the first 100 founding members, then £199. You'll hear first."),
-                   ("April 2027", "Tax on savings goes up. Inside an ISA, interest stays tax-free.")],
-         "link": ("What changes in April", link("/#rules"))},
+                   ("April 2027", "Tax on savings goes up. Inside an ISA, interest stays tax-free.")]},
         {"banner": {"text": "Founding members: £99, not £199.", "sub": "First 100 only, when sales open in January.",
                     "link": ("What you get", link("/what-you-get.html"))}},
         {"quote": {"text": QUOTE, "by": "Amit, founder", "img": L.MRI_LOGO}},
     ]
-    if not newsletter:
-        blocks.append({"heading": "Want the newsletter too?",
-                       "prose": ["Every fortnight: what the robot did, what it learned, and what's new."],
-                       "link": ("Sign up", link("/#news"))})
-    html = L.render("You're on the list", "Welcome", "Your free test drive starts Monday 7 December.", blocks,
+    html = L.render("You're on", "Welcome to My Robot I.S.A.",
+                    ["Your free test drive starts ", ("Monday 7 December", "gain"), "."], blocks,
                     footnote=FOOT, brand=L.MRI_BRAND, internal=False, label="Welcome", mood=L.MOODS["welcome"],
-                    buttons=[("Open the demo", link("/demo/"), True), ("Watch on TikTok", "https://www.tiktok.com/@myrobotisa", False)])
-    text = ("You're on the list\nYour free test drive starts Monday 7 December.\n\n"
+                    hero={"accent": "the list", "button": ("Open the demo", link("/demo/"), True)})
+    text = ("WELCOME TO MY ROBOT I.S.A.\nYou're on the list\nYour free test drive starts Monday 7 December.\n"
+            f"Open the demo: {link('/demo/')}\n\n"
             "DOES IT NEED ME?\nNot until Monday 7 December. We'll email you that morning with one link to start.\n\n"
             "YOUR FREE TEST DRIVE\n- £10,000 of pretend money, on your own robot dashboard\n- Seven real past market weeks, one a day\n"
             "- Good weeks and bad, with the stock names hidden\n- Nothing to install, nothing to pay. Then you decide.\n\n"
             "WHAT HAPPENS NEXT\n1. Mon 7 December: your free 7-day test drive starts. One link in your inbox that morning.\n"
             "2. January 2027: sales open. £99 for the first 100 founding members, then £199. You'll hear first.\n"
-            f"3. April 2027: tax on savings goes up. Inside an ISA, interest stays tax-free. {link('/#rules')}\n\n"
+            "3. April 2027: tax on savings goes up. Inside an ISA, interest stays tax-free.\n\n"
             f"FOUNDING MEMBERS: £99, NOT £199. First 100 only, when sales open in January. What you get: {link('/what-you-get.html')}\n\n"
-            f"\"{QUOTE}\"\nAmit, founder\n\n"
-            + ("" if newsletter else f"WANT THE NEWSLETTER TOO?\nEvery fortnight: what the robot did, what it learned, and what's new. {link('/#news')}\n\n")
-            + f"Open the demo: {link('/demo/')}\nWatch on TikTok: https://www.tiktok.com/@myrobotisa\n\n--\n"
+            f"\"{QUOTE}\"\nAmit, founder\n\n--\n"
             + FOOT.replace(UNSUB, "Unsubscribe: " + UNSUB + "."))
     return {"subject": "You're on the list: your test drive starts 7 December",
             "html": _with_preheader(html, "Your free test drive starts Monday 7 December. Here's what happens next."),
@@ -91,37 +89,43 @@ def launch(newsletter):
 
 
 def newsletter_only():
+    # Same look as the launch welcome (layout 2b), with the newspaper robot.
     blocks = [
         {"heading": "Does it need me?", "status": ("Nothing to do", "green"), "accent": True,
          "prose": ["No. The first one lands in your inbox. No tips, no signals, no hard sell."]},
         {"heading": "Want the free test drive?", "status": ("7 Dec", "green"),
-         "prose": ["Seven days from Monday 7 December on £10,000 of pretend money, replaying seven real past market "
-                   "weeks. Nothing to install, nothing to pay."],
+         "ticks": ["£10,000 of pretend money, on your own robot dashboard",
+                   "Seven real past market weeks, one a day, from Monday 7 December",
+                   "Nothing to install, nothing to pay"],
          "link": ("Join the test drive", link("/join.html"))},
+        {"quote": {"text": QUOTE, "by": "Amit, founder", "img": L.MRI_LOGO}},
     ]
-    html = L.render("You're on the newsletter", "Welcome", "Every fortnight: what the robot did, what it learned, and what's new.",
-                    blocks, footnote=FOOT, brand=L.MRI_BRAND, internal=False, label="Welcome", mood=L.MOODS["newsletter"],
-                    buttons=[("Open the demo", link("/demo/"), True), ("Watch on TikTok", "https://www.tiktok.com/@myrobotisa", False)])
-    text = ("You're on the newsletter\nEvery fortnight: what the robot did, what it learned, and what's new.\n\n"
+    html = L.render("You're on", "Welcome to My Robot I.S.A.",
+                    "Every fortnight: what the robot did, what it learned, and what's new.", blocks,
+                    footnote=FOOT, brand=L.MRI_BRAND, internal=False, label="Welcome", mood=L.MOODS["newsletter"],
+                    hero={"accent": "the newsletter", "button": ("Open the demo", link("/demo/"), True)})
+    text = ("WELCOME TO MY ROBOT I.S.A.\nYou're on the newsletter\nEvery fortnight: what the robot did, what it learned, and what's new.\n"
+            f"Open the demo: {link('/demo/')}\n\n"
             "DOES IT NEED ME?\nNo. The first one lands in your inbox. No tips, no signals, no hard sell.\n\n"
-            "WANT THE FREE TEST DRIVE?\nSeven days from Monday 7 December on £10,000 of pretend money, replaying seven real past "
-            f"market weeks. Nothing to install, nothing to pay. {link('/join.html')}\n\n"
-            f"Open the demo: {link('/demo/')}\nWatch on TikTok: https://www.tiktok.com/@myrobotisa\n\n--\n"
+            "WANT THE FREE TEST DRIVE?\n- £10,000 of pretend money, on your own robot dashboard\n"
+            "- Seven real past market weeks, one a day, from Monday 7 December\n- Nothing to install, nothing to pay\n"
+            f"Join the test drive: {link('/join.html')}\n\n"
+            f"\"{QUOTE}\"\nAmit, founder\n\n--\n"
             + FOOT.replace(UNSUB, "Unsubscribe: " + UNSUB + "."))
     return {"subject": "You're in: the My Robot I.S.A. newsletter",
             "html": _with_preheader(html, "Every fortnight: what the robot did and what it learned."), "text": text}
 
 
 def build():
-    t = {"launch": launch(False), "launch_nl": launch(True), "newsletter": newsletter_only()}
+    t = {"launch": launch(False), "newsletter": newsletter_only()}   # since layout 2b, launch(True) == launch(False)
     for v in t.values():
         assert v["html"].count(UNSUB) == 1 and v["text"].count(UNSUB) == 1
     js = ("// GENERATED by ops/build_welcome_email.py from ops/lms_email.py (the house email template). Do not edit by hand:\n"
           "// change the words in the builder, re-run it, preview to Amit, deploy on his \"send\".\n"
-          f"const T = {json.dumps(t, ensure_ascii=False, indent=1)};\n\n"
+          f"const T = {json.dumps(t, ensure_ascii=False)};\n\n"
           "const esc = (s) => String(s).replace(/[&<>\"']/g, (c) => ({ \"&\": \"&amp;\", \"<\": \"&lt;\", \">\": \"&gt;\", '\"': \"&quot;\", \"'\": \"&#39;\" }[c]));\n\n"
           "export function buildWelcome(row, unsubUrl) {\n"
-          "  const t = !row.launch_list ? T.newsletter : (row.newsletter ? T.launch_nl : T.launch);\n"
+          "  const t = row.launch_list ? T.launch : T.newsletter;\n"
           f"  const a = `<a href=\"${{esc(unsubUrl)}}\" style=\"color:{L.MUTED};text-decoration:underline;\">Unsubscribe</a>.`;\n"
           f"  return {{ subject: t.subject, html: t.html.replace(\"{UNSUB}\", a), text: t.text.replace(\"{UNSUB}\", unsubUrl) }};\n"
           "}\n")

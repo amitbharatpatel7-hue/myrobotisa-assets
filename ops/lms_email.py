@@ -486,7 +486,8 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
            internal: bool = True,
            tone: str | None = None,
            badge: str | None = None,
-           label: str | None = None) -> str:
+           label: str | None = None,
+           hero: dict | None = None) -> str:
     # v2.5: badge overrides the green pill's text (default "Internal"), e.g. "Stock Boom Hunter" on the engine's own emails.
     b = tuple(brand) if brand else ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, "")
     tile, word, suffix = b[0], b[1], b[2]
@@ -536,7 +537,24 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
         f'</tr></table>')
     mood_td = (f'<td width="96" align="right" style="width:96px;padding:14px 18px 14px 0;vertical-align:middle;">'
                f'<img src="{esc(mood)}" width="96" height="96" alt="" style="display:block;width:96px;height:96px;"></td>') if mood else ""
-    header = panel(
+    if hero:
+        # v2.6.6 (1 Nov 2026, Amit chose "layout 2b" for the welcome): a centred, website-style header. The robot sits
+        # above the eyebrow, the title can end in a pink accent on its own line (the site's two-tone headline), and
+        # an optional button sits inside the card. hero = {"accent": "the list", "button": (label, url)}.
+        acc = f'<br><span style="color:{PINK}">{esc(hero["accent"])}</span>' if hero.get("accent") else ""
+        img = (f'<img src="{esc(mood)}" width="110" height="110" alt="" style="display:block;width:110px;height:110px;margin:0 auto;">'
+               if mood else "")
+        hb = button(*hero["button"]) if hero.get("button") else ""
+        header = (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(CARD)}border-radius:22px;margin:0 0 14px;">'
+                  f'<tr><td align="center" style="padding:24px 22px 22px;text-align:center;">{img}'
+                  f'<div style="color:{PINK};font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin:10px 0 6px;'
+                  f'font-family:{FONT_STACK};">{esc(eyebrow_text)}</div>'
+                  f'<div style="font-family:{HEAD_STACK};font-size:34px;font-weight:400;letter-spacing:.01em;text-transform:uppercase;'
+                  f'line-height:1.04;color:{INK};">{esc(title)}{acc}</div>'
+                  f'<div style="font-size:15px;color:{MUTED};margin:10px 0 14px;font-family:{FONT_STACK};">{_segments(subtitle)}</div>'
+                  f'{hb}</td></tr></table>')
+    else:
+      header = panel(
         f'<tr><td style="padding:24px 26px;">{eyebrow(eyebrow_text)}'
         f'<div style="font-family:{HEAD_STACK};font-size:32px;font-weight:400;letter-spacing:.01em;text-transform:uppercase;'
         f'line-height:1.08;color:{INK};margin:0 0 8px;">{esc(title)}</div>'
@@ -626,7 +644,7 @@ def _project_of(brand, eyebrow_text):
 
 
 def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand=None, buttons=None, mood=None,
-           internal=True, tone=None, badge=None, scheme=None, label=None):
+           internal=True, tone=None, badge=None, scheme=None, label=None, hero=None):
     # v2.6.3 (Amit, 24 Oct 2026: "the robot graphic is part of the brand and should be written into the theme"):
     # every email carries a robot. A caller that names no mood gets the up robot on an up day, otherwise the calm one;
     # the project tag (I.S.A., S.B.H., L.M.S., D.T.L.) is swapped in below as before. mood=False opts out explicitly.
@@ -638,7 +656,7 @@ def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand
         scheme = "internal" if internal else "night"
     if scheme != "internal":
         return _render_core(title, eyebrow_text, subtitle, blocks, cta=cta, footnote=footnote, brand=brand, buttons=buttons,
-                            mood=mood, internal=internal, tone=tone, badge=badge, label=label)
+                            mood=mood, internal=internal, tone=tone, badge=badge, label=label, hero=hero)
     proj = _project_of(brand, eyebrow_text)
     base = {"sbh": SBH_BRAND, "mri": MRI_BRAND, "lms": LMS_BRAND, "dtl": DTL_BRAND}.get(proj) or tuple(brand or ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, ""))
     logo = base[3] if len(base) > 3 else None
