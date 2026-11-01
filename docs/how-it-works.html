@@ -327,6 +327,11 @@
   @media(min-width:640px){.job{grid-template-columns:150px 1fr}}
   .job h3{margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:22px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
   .job p{margin:0;font-size:16px;line-height:1.55;color:var(--ink)}
+  /* 1 Nov 2026: the retired moonshot stays on the page, crossed out, with the clips' pink "took the L" stamp. */
+  .job.retired{position:relative}
+  .job.retired h2.h3{text-decoration:line-through;text-decoration-thickness:3px;text-decoration-color:var(--pink);color:var(--muted)}
+  .job.retired .was{text-decoration:line-through;text-decoration-color:var(--pink);color:var(--muted);margin-bottom:8px}
+  .stamp{display:inline-block;margin:2px 0 10px;padding:4px 12px;border:3px solid var(--pink-ink);border-radius:8px;color:var(--pink-ink);font-family:Anton,Impact,sans-serif;font-size:20px;letter-spacing:.06em;text-transform:uppercase;transform:rotate(-4deg);line-height:1.2}
   .dial{margin:22px 0 0;padding:16px 18px;background:var(--deep2);border-radius:18px}
   .dial-k{margin:0 0 10px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
   .dial-btns{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
@@ -396,7 +401,7 @@
       <li><b>0</b>tips taken</li>
       <li><b>1</b>set of rules, tested before any money moved</li>
     </ul>
-    <p class="small" style="margin-top:14px">Worried about missing the next big run? So were we. We built a separate moonshot pot to catch it, then tested it out of a job: the hunter below did better without it. <a href="questions.html#faq-moonshot">What we found</a>.</p>
+    <p class="small" style="margin-top:14px">Worried about missing the next big run? So were we. That&rsquo;s the hunter&rsquo;s job, below, and we tested whether a separate moonshot pot would do it better. It didn&rsquo;t.</p>
     <div class="calm" id="calm">
       <h2 class="h3">When the headlines turn scary, <span class="g">it stays calm</span></h2>
       <p>A crash is when reading the news tends to cost people most: they sell near the bottom, then buy back after the bounce. The robot can't panic, because it never sees a headline. It watches the one thing every crisis has to show up in: prices.</p>
@@ -411,9 +416,10 @@
   </section>
 
   <section class="jobs" id="jobs">
-    <h2>One ISA. Two jobs. <span class="p">The robot does both.</span></h2>
+    <h2>One ISA. Two jobs. <span class="p">We tested a third.</span></h2>
     <div class="job"><h2 class="h3">The foundation</h2><p>In the default settings, most of the money goes into one low-cost fund that tracks the world's markets. Nothing to pick, nothing to watch. The robot invests new cash and keeps it in balance.</p></div>
     <div class="job"><h2 class="h3">The hunter</h2><p>A slice rides the market's strongest stocks while they're running and steps out by rule when they stop. The robot finds them, sizes them and sets the exit rule before it buys. You tap Approve. In our backtest it caught Sandisk, the biggest run of the past year, twice. <a href="questions.html#faq-bigrun">How much of it, honestly</a>.</p></div>
+    <div class="job retired"><h2 class="h3">The moonshot</h2><div><span class="stamp">Retired &middot; we took the L</span><p class="was">A small pot for the biggest swings, with its size capped and its exit set in advance.</p><p>Chasing the next big run is what the headlines sell. We built it, ran it with the founder&rsquo;s own money, then tested ten versions of it over six years of prices. None beat putting the same money in the hunter, so we switched it off and its money went back to the main robot. Data, not headlines. We took the L, so you don&rsquo;t have to. <a href="questions.html#faq-moonshot">What we found</a>.</p></div></div>
     <div class="dial">
       <p class="dial-k">Your risk dial sets the mix</p>
       <div class="dial-btns" role="group" aria-label="Risk profile">
