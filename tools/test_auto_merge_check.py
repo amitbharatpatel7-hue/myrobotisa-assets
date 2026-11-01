@@ -22,7 +22,18 @@ def f(name, patch='@@ -1 +1 @@\n-<a>What\'s new</a>\n+<a>Your updates</a>', **kw
     return d
 
 
+LD = '<script type="application/ld+json">{"@type":"FAQPage","mainEntity":[{"name":"How seriously do you take security?","text":"Supabase checks every sign-in."}]}</script>'
+LD2 = LD.replace("every sign-in", "each sign-in")
+
 cases = [
+    ("FAQ search-summary wording merges (it mentions Supabase but never runs)",
+     pr(), [f("docs/questions.html", patch=f"@@ -1 +1 @@\n-{LD}\n+{LD2}")], True),
+    ("a script hidden after the summary still waits",
+     pr(), [f("docs/questions.html", patch=f"@@ -1 +1 @@\n-{LD}\n+{LD2}<script>fetch('https://x.supabase.co')</script>")], False),
+    ("a summary with a tag inside it still waits",
+     pr(), [f("docs/questions.html", patch="@@ -1 +1 @@\n+<script type=\"application/ld+json\">{\"a\":\"<img src=x>supabase\"}</script>")], False),
+    ("supabase in ordinary page text still waits",
+     pr(), [f("docs/questions.html", patch="@@ -1 +1 @@\n+<p>We use Supabase for sign-in.</p>")], False),
     ("menu label merges", pr(), [f("docs/members/index.html"), f("docs/members/sw.js"), f("docs/members/version.json")], True),
     ("claude[bot] merges", pr(user={"login": "claude[bot]"}, body="x"), [f("docs/members/index.html")], True),
     ("Amit's own PR waits", pr(body="my change"), [f("docs/members/index.html")], False),

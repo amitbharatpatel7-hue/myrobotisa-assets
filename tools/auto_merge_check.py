@@ -50,6 +50,11 @@ SENSITIVE = [
 # browser tests stub the database and sign-in on purpose, so their lines aren't scanned (their paths still are)
 UNSCANNED = ["ops/*_test.mjs"]
 
+# A page's search summary (schema.org JSON-LD) is data browsers never run: one line of FAQ wording. Its text
+# mentions Supabase and payments (the security and cost answers), so any FAQ edit used to wait for Amit
+# (#24, #29, 1 Nov 2026). Exempt only a line that is exactly one ld+json block with no other tag inside it.
+LD_JSON_LINE = re.compile(r'^\s*<script type="application/ld\+json">[^<]*</script>\s*$')
+
 SESSION = re.compile(r"https://claude\.ai/code/session_\w+")
 
 
@@ -98,6 +103,8 @@ def reasons_to_wait(pr, files, checked_sha):
         if any(fnmatch.fnmatch(name, pat) for pat in UNSCANNED):
             continue
         for line in changed_lines(f.get("patch")):
+            if LD_JSON_LINE.match(line):
+                continue
             for rx, what in SENSITIVE:
                 if rx.search(line):
                     touched.setdefault(what, [])
