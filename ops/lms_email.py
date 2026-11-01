@@ -542,16 +542,23 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
     logo = b[3] if len(b) > 3 else None
     suffix_html = ('' if word.endswith('.') else ' ') + '<span style="color:%s">%s</span>' % (PINK, esc(suffix)) if suffix else ""
     stacked = len(word + suffix) > 14   # v2.5.2 (Amit): a long name (Stock Boom Hunter) stays on ONE line, a touch smaller, never wrapping
+    top_eyebrow = False
     if label and not (len(b) > 4 and b[4] == "internal"):
         # v2.6.4: member emails with a label: logo top left, what the email is for top right, no wordmark.
         left = (f'<img src="{esc(logo)}" width="40" height="40" alt="{esc(word)}" style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {GREEN};">'
                 if logo else f'<span style="font-family:{HEAD_STACK};font-size:22px;text-transform:uppercase;color:{INK};">{esc(word)}{suffix_html}</span>')
+        # v2.6.7 (Amit, 1 Nov 2026): the eyebrow (the date) sits centred between the logo and the label, filling the empty
+        # top bar, and leaves the header card. The two side cells share one width so the date stays centred.
+        mid = (f'<td align="center" style="vertical-align:middle;text-align:center;padding:0 8px;color:{PINK};font-size:12px;'
+               f'font-weight:800;letter-spacing:.14em;text-transform:uppercase;line-height:1.35;font-family:{FONT_STACK};">'
+               f'{esc(eyebrow_text)}</td>') if (eyebrow_text and not hero) else '<td></td>'
         brand_row = (
             f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 16px;"><tr>'
-            f'<td style="vertical-align:middle;">{left}</td>'
-            f'<td align="right" style="vertical-align:middle;text-align:right;white-space:nowrap;"><span style="display:inline-block;padding:6px 12px;'
+            f'<td width="30%" style="width:30%;vertical-align:middle;">{left}</td>{mid}'
+            f'<td width="30%" align="right" style="width:30%;vertical-align:middle;text-align:right;white-space:nowrap;"><span style="display:inline-block;padding:6px 12px;'
             f'border-radius:999px;background:{GREEN};background-color:{GREEN};color:{ON_GREEN};font-size:12px;font-weight:900;letter-spacing:.12em;'
             f'text-transform:uppercase;font-family:{FONT_STACK};white-space:nowrap;">{esc(label)}</span></td></tr></table>')
+        top_eyebrow = bool(eyebrow_text and not hero)
     elif len(b) > 4 and b[4] == "internal":
         # v2.6.1 (Amit, 24 Oct 2026): internal notices carry the project's logo top left and the INTERNAL NOTICE tag top
         # right; no wordmark (the logo, the sender and the eyebrow already say which project it is).
@@ -601,7 +608,7 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
                   f'{hb}</td></tr></table>')
     else:
       header = panel(
-        f'<tr><td style="padding:24px 26px;">{eyebrow(eyebrow_text)}'
+        f'<tr><td style="padding:24px 26px;">{"" if top_eyebrow else eyebrow(eyebrow_text)}'
         f'<div style="font-family:{HEAD_STACK};font-size:32px;font-weight:400;letter-spacing:.01em;text-transform:uppercase;'
         f'line-height:1.08;color:{INK};margin:0 0 8px;">{esc(title)}</div>'
         f'<div style="font-size:14px;color:{MUTED};font-family:{FONT_STACK};">{_segments(subtitle)}</div></td>{mood_td}</tr>')
