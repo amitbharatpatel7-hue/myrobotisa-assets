@@ -17,7 +17,6 @@ window.DEMO = {
     "2026-10-09":{us:102.1,tech:103.5,chips:105.6}
   },
   cash: 124.50,
-  moonshot: {pot: 500, held: 0, slots: 2},
   // name, short label, sleeve, theme, value £, return % since bought, target %, actual %
   holdings: [
     ["Chip-makers fund","Chips fund","core","Chip makers",690.20,13.7,13.0,13.1],
