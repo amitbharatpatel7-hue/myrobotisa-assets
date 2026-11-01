@@ -327,25 +327,27 @@ def _checks(rows) -> str:
 
 
 
-# v2.6.7 (1 Nov 2026, Amit picked option C for the Sunday plan and E for the orders-sent email): a receipt.
+# v2.6.7 (1 Nov 2026, Amit picked receipt C for the Sunday plan, and for the orders-sent email the receipt led by a
+# Face ID strip instead of a stamp, with the member's strategy in the top bar): a receipt.
 #   receipt: {"groups": [{"label": "Selling", "kind": "sell"|"buy", "rows": [(title, note, amount_text), ...]}, ...],
 #             "total": (label, amount_text, positive),            # the dashed bottom line, e.g. cash after this week
-#             "stamp": {"sub": "Approved with Face ID · Sun 1 Nov, 21:07 GMT"}}   # optional: the APPROVED stamp on top
-# Sell is pink and buy green, the same colours as the red and green solid tags. The stamp is an image (Gmail and
-# Outlook drop CSS rotation) with "Approved" as its alt text, so it still reads with images off.
-STAMP_APPROVED = _E + "stamp-approved.png"
+#             "approved": {"title": "Approved with Face ID", "sub": "Sun 1 Nov, 21:07 GMT · nothing left for you to do"}}
+# Sell is pink and buy green, the same colours as the red and green solid tags. The Face ID icon is a PNG (email apps
+# drop SVG); the words carry the meaning with images off.
+FACEID_ICON = _E + "icon-faceid.png"
+GREEN_BG_DARK = "#14402C"   # the green pill's background on dark
 _SIDE = {"sell": "#FF4D7A", "buy": "#00E87A"}
 
 
 def _receipt(r: dict) -> str:
     out = []
-    st = r.get("stamp")
-    if st:
-        sub = (f'<div style="margin-top:10px;font-size:12.5px;line-height:1.4;color:{MUTED};font-family:{FONT_STACK};">'
-               f'{esc(st["sub"])}</div>') if st.get("sub") else ""
-        out.append(f'<div style="text-align:center;margin:6px 0 16px;"><img src="{esc(st.get("img") or STAMP_APPROVED)}" '
-                   f'width="230" alt="Approved" style="display:inline-block;width:230px;max-width:80%;height:auto;border:0;'
-                   f'color:{GREEN};font-family:{HEAD_STACK};font-size:30px;">{sub}</div>')
+    ap = r.get("approved")
+    if ap:
+        sub = f'<div style="margin-top:1px;font-size:13px;line-height:1.45;color:{MUTED};">{esc(ap["sub"])}</div>' if ap.get("sub") else ""
+        out.append(f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(GREEN_BG_DARK)}border-radius:14px;margin:0 0 14px;">'
+                   f'<tr><td width="52" style="width:52px;padding:12px 0 12px 14px;"><img src="{esc(ap.get("icon") or FACEID_ICON)}" width="38" height="38" '
+                   f'alt="" style="display:block;width:38px;height:38px;border:0;"></td><td style="padding:12px 14px 12px 12px;font-family:{FONT_STACK};">'
+                   f'<div style="font-size:15px;font-weight:800;color:{GREEN};">{esc(ap.get("title") or "Approved")}</div>{sub}</td></tr></table>')
     rows = []
     for g in r.get("groups") or []:
         col = _SIDE.get(g.get("kind"), MUTED)
@@ -533,7 +535,8 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
            tone: str | None = None,
            badge: str | None = None,
            label: str | None = None,
-           hero: dict | None = None) -> str:
+           hero: dict | None = None,
+           chip: str | None = None) -> str:
     # v2.5: badge overrides the green pill's text (default "Internal"), e.g. "Stock Boom Hunter" on the engine's own emails.
     b = tuple(brand) if brand else ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, "")
     tile, word, suffix = b[0], b[1], b[2]
@@ -544,11 +547,16 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
     stacked = len(word + suffix) > 14   # v2.5.2 (Amit): a long name (Stock Boom Hunter) stays on ONE line, a touch smaller, never wrapping
     if label and not (len(b) > 4 and b[4] == "internal"):
         # v2.6.4: member emails with a label: logo top left, what the email is for top right, no wordmark.
+        # v2.6.7 (Amit, 1 Nov 2026, option B): chip="Adventurous" puts the member's strategy between the logo and the
+        # label, in a quiet outline chip.
+        mid = (f'<td align="center" style="vertical-align:middle;text-align:center;padding:0 8px;"><span style="display:inline-block;'
+               f'padding:5px 12px;border-radius:999px;border:1.5px solid {HAIRLINE};color:{INK};font-size:11px;font-weight:800;'
+               f'letter-spacing:.08em;text-transform:uppercase;font-family:{FONT_STACK};white-space:nowrap;">{esc(chip)}</span></td>') if chip else ""
         left = (f'<img src="{esc(logo)}" width="40" height="40" alt="{esc(word)}" style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {GREEN};">'
                 if logo else f'<span style="font-family:{HEAD_STACK};font-size:22px;text-transform:uppercase;color:{INK};">{esc(word)}{suffix_html}</span>')
         brand_row = (
             f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 16px;"><tr>'
-            f'<td style="vertical-align:middle;">{left}</td>'
+            f'<td style="vertical-align:middle;">{left}</td>{mid}'
             f'<td align="right" style="vertical-align:middle;text-align:right;white-space:nowrap;"><span style="display:inline-block;padding:6px 12px;'
             f'border-radius:999px;background:{GREEN};background-color:{GREEN};color:{ON_GREEN};font-size:12px;font-weight:900;letter-spacing:.12em;'
             f'text-transform:uppercase;font-family:{FONT_STACK};white-space:nowrap;">{esc(label)}</span></td></tr></table>')
@@ -690,7 +698,7 @@ def _project_of(brand, eyebrow_text):
 
 
 def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand=None, buttons=None, mood=None,
-           internal=True, tone=None, badge=None, scheme=None, label=None, hero=None):
+           internal=True, tone=None, badge=None, scheme=None, label=None, hero=None, chip=None):
     # v2.6.3 (Amit, 24 Oct 2026: "the robot graphic is part of the brand and should be written into the theme"):
     # every email carries a robot. A caller that names no mood gets the up robot on an up day, otherwise the calm one;
     # the project tag (I.S.A., S.B.H., L.M.S., D.T.L.) is swapped in below as before. mood=False opts out explicitly.
@@ -702,7 +710,7 @@ def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand
         scheme = "internal" if internal else "night"
     if scheme != "internal":
         return _render_core(title, eyebrow_text, subtitle, blocks, cta=cta, footnote=footnote, brand=brand, buttons=buttons,
-                            mood=mood, internal=internal, tone=tone, badge=badge, label=label, hero=hero)
+                            mood=mood, internal=internal, tone=tone, badge=badge, label=label, hero=hero, chip=chip)
     proj = _project_of(brand, eyebrow_text)
     base = {"sbh": SBH_BRAND, "mri": MRI_BRAND, "lms": LMS_BRAND, "dtl": DTL_BRAND}.get(proj) or tuple(brand or ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, ""))
     logo = base[3] if len(base) > 3 else None
