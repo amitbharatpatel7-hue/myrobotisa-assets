@@ -445,6 +445,31 @@
       </ul>
       <p>Weekly isn't a broker limit: day trading is allowed in a Trading 212 ISA. It's the design. The rules are built on weekly prices, like the 40-week average, so checking them daily doesn't make them sharper; it makes a different strategy, and on this history not a better one.</p>
       <p>The honest trade-off: a fall on a Tuesday waits until Sunday, and in a crash as fast as 2020 a daily check would have cushioned it (a fall of about 18.5% instead of 22.9%). On the evidence, that insurance costs more in ordinary years than it saves. The code is yours, so you can add a midweek check, and day 5 shows you how to test a change like this on past data first. These are backtest results on historical data, not a prediction. Capital at risk.</p></details>
+    <details id="faq-bigrun"><summary>Will it catch the next big one, like Sandisk?</summary>
+      <p>It caught the biggest one of the past year twice, and still missed most of it. That&rsquo;s the honest answer, so here&rsquo;s the detail.</p>
+      <p>Sandisk went from about $51 at the start of September 2025 to about $1,790 a year later, roughly 35 times. In our backtest the robot&rsquo;s rules:</p>
+      <ul class="not">
+        <li>bought it at about $200 in November 2025, and sold at about $662 in March 2026 when it dipped through its exit rule;</li>
+        <li>bought it back at about $1,408 in May 2026, and sold at about $1,916 in July.</li>
+      </ul>
+      <p>That&rsquo;s about 4.5 times the money on that one slot. Where the rest went:</p>
+      <ul class="not">
+        <li><strong>In late.</strong> A new share needs about six months of history before the rules trust it. By then it had already gone up about four times.</li>
+        <li><strong>Out on a dip.</strong> The exit rule sold it, and the rules only bought back once it was strong again.</li>
+        <li><strong>One slot.</strong> The hunter spreads its money over several stocks, so no single winner makes or breaks you, in either direction.</li>
+      </ul>
+      <p>We tested the fixes rather than guess: picking from Trading 212&rsquo;s top winners, buying breakouts earlier, wider stops, selling half at the double. The earliest breakout rule spotted Sandisk in early September 2025, near the start of the run, but its slots were already full of breakouts that went nowhere, so it never bought it. None of the fixes beat the rules the robot already uses across the start dates we tried. A rule that catches every big run early also buys every false start, and the false starts cost more than the winners pay.</p>
+      <p>So the honest promise is smaller: when a stock runs, the hunter is built to find it and ride part of it, with the exit set before it buys. It won&rsquo;t catch the bottom or sell the top. The founder&rsquo;s robot did not hold Sandisk when this was written (1 November 2026). <a href="#faq-moonshot">What happened to the moonshot pot</a>. Backtest results on historical data, not a prediction. Capital at risk.</p></details>
+    <details id="faq-moonshot"><summary>What happened to the moonshot pot?</summary>
+      <p>We retired it on 1 November 2026, because our own tests said the money does better without it. A pot for the next big run was the most exciting part of the product, and the part people asked about most. We switched it off anyway, because the robot follows the data, not the headlines, and that has to include our own ideas. We took the L, so you don&rsquo;t have to.</p>
+      <p>The moonshot was a small, ring-fenced pot for the biggest swings, run alongside the main robot. The founder funded it with his own money on 12 October 2026. Three weeks later it was down about 22%, while the rest of the account was down about 6%. Three weeks proves nothing, so we tested it properly:</p>
+      <ul class="not">
+        <li><strong>Ten rules, six years of prices.</strong> Picking from Trading 212&rsquo;s top winners and losers (rebuilt day by day from past prices), buying breakouts early, and different ways to sell, across about 1,300 UK and US shares.</li>
+        <li><strong>Written down first.</strong> Every rule and the test it had to pass were fixed before we saw any results, so we couldn&rsquo;t pick a winner after the fact.</li>
+        <li><strong>Three start dates.</strong> A rule had to win from 2020, 2021 and 2022, not just from a lucky one.</li>
+      </ul>
+      <p>One exit rule improved the moonshot, but none beat putting the same money in the hunter. The reason turned out to be simple: the pot picked from the same list as the hunter, so it was the same bet with fewer stocks and a deeper fall when it went wrong. Its worst fall in the backtest was 63%, against 51% for the hunter.</p>
+      <p>So the pot&rsquo;s money went back into the main robot, and new robots start without it. The lesson is the one the robot is built on: in our tests, patience with tested rules beat every shortcut we tried. The main robot still has bad months. Its worst fall in the backtest was 28%, October 2026 was a down month, and you can see every week of it on the <a href="status.html">trade log</a>. The members&rsquo; space keeps its name, the Moonshotters. Backtest results on historical data, not a prediction. Capital at risk.</p></details>
     <details id="faq-t212"><summary>Is a robot placing orders allowed on Trading 212?</summary>
       <p>Yes. Trading 212's terms for connected programs allow a program to propose orders as long as a person confirms each one, and Trading 212 confirmed this to us in writing in October 2026. That's exactly how the robot works: it proposes, you tap Approve, and only then does an order reach your account. My Robot I.S.A. isn't affiliated with Trading 212.</p></details>
     <details id="faq-safe"><summary>What can the robot do to my account, and what can't it?</summary>
@@ -639,7 +664,7 @@
         var m=b.getAttribute('data-mix').split(',');
         for(var i=0;i<segs.length;i++){ segs[i].style.flex=m[i]; segs[i].classList.toggle('q', +m[i]<15); }
         var ks=document.querySelectorAll('.mix-key .mk'); for(var j=0;j<ks.length;j++) ks[j].textContent=m[j]+'%';
-        document.getElementById('mixsay').textContent=b.textContent+': '+m[0]+'% foundation, '+m[1]+'% hunter, '+m[2]+'% moonshot.';
+        document.getElementById('mixsay').textContent=b.textContent+': '+m[0]+'% foundation, '+m[1]+'% hunter.';
       }); });
     })();
     function openFaq(){ var d=location.hash&&document.querySelector('details'+location.hash); if(d) d.open=true; }
