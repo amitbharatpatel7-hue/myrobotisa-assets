@@ -109,7 +109,9 @@ MOODS = {"up": _E + "robot-upchart.png", "milestone": _E + "robot-trophy.png", "
          "headset": _E + "robot-bulb.png", "sorry": _E + "robot-chatphone.png", "setup": _E + "robot-check.png",
          "reminder": _E + "robot-schedule.png", "sent": _E + "robot-paperplane.png", "refused": _E + "robot-wrench.png",
          "setupfix": _E + "robot-wrench.png", "answer": _E + "robot-bulb.png", "advice": _E + "robot-shrug.png",
-         "reply": _E + "robot-chatphone.png", "signin": _E + "robot-codecard.png"}
+         "reply": _E + "robot-chatphone.png", "signin": _E + "robot-codecard.png",
+         # v2.6.6 (1 Nov 2026, Amit): the welcome and the "sales open" email use the megaphone; newsletter mail the newspaper.
+         "welcome": _E + "robot-megaphone.png", "salesopen": _E + "robot-megaphone.png", "newsletter": _E + "robot-newspaper.png"}
 MOODS["steady"], MOODS["flat"] = MOODS["calm"], MOODS["quiet"]
 # v2.5 (23 Oct 2026): Stock Boom Hunter emails use the same robots with an S.B.H. tag (myrobotisa.com/email/sbh/);
 # render() swaps them in automatically whenever the brand is SBH_BRAND.

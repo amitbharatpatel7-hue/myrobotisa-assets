@@ -63,7 +63,7 @@ def launch(newsletter):
                        "prose": ["Every fortnight: what the robot did, what it learned, and what's new."],
                        "link": ("Sign up", link("/#news"))})
     html = L.render("You're on the list", "Welcome", "Your free test drive starts Monday 7 December.", blocks,
-                    footnote=FOOT, brand=L.MRI_BRAND, internal=False, label="Welcome",
+                    footnote=FOOT, brand=L.MRI_BRAND, internal=False, label="Welcome", mood=L.MOODS["welcome"],
                     buttons=[("Open the demo", link("/demo/"), True), ("Watch on TikTok", "https://www.tiktok.com/@myrobotisa", False)])
     text = ("You're on the list\nYour free test drive starts Monday 7 December.\n\n"
             "DOES IT NEED ME?\nNot until Monday 7 December. We'll email you that morning with one link to start.\n\n"
@@ -90,7 +90,7 @@ def newsletter_only():
          "link": ("Join the test drive", link("/join.html"))},
     ]
     html = L.render("You're on the newsletter", "Welcome", "Every fortnight: what the robot did, what it learned, and what's new.",
-                    blocks, footnote=FOOT, brand=L.MRI_BRAND, internal=False, label="Welcome",
+                    blocks, footnote=FOOT, brand=L.MRI_BRAND, internal=False, label="Welcome", mood=L.MOODS["newsletter"],
                     buttons=[("Open the demo", link("/demo/"), True), ("Watch on TikTok", "https://www.tiktok.com/@myrobotisa", False)])
     text = ("You're on the newsletter\nEvery fortnight: what the robot did, what it learned, and what's new.\n\n"
             "DOES IT NEED ME?\nNo. The first one lands in your inbox. No tips, no signals, no hard sell.\n\n"
