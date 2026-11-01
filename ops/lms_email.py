@@ -326,6 +326,50 @@ def _checks(rows) -> str:
     return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{"".join(out)}</table>'
 
 
+
+# v2.6.7 (1 Nov 2026, Amit picked option C for the Sunday plan and E for the orders-sent email): a receipt.
+#   receipt: {"groups": [{"label": "Selling", "kind": "sell"|"buy", "rows": [(title, note, amount_text), ...]}, ...],
+#             "total": (label, amount_text, positive),            # the dashed bottom line, e.g. cash after this week
+#             "stamp": {"sub": "Approved with Face ID · Sun 1 Nov, 21:07 GMT"}}   # optional: the APPROVED stamp on top
+# Sell is pink and buy green, the same colours as the red and green solid tags. The stamp is an image (Gmail and
+# Outlook drop CSS rotation) with "Approved" as its alt text, so it still reads with images off.
+STAMP_APPROVED = _E + "stamp-approved.png"
+_SIDE = {"sell": "#FF4D7A", "buy": "#00E87A"}
+
+
+def _receipt(r: dict) -> str:
+    out = []
+    st = r.get("stamp")
+    if st:
+        sub = (f'<div style="margin-top:10px;font-size:12.5px;line-height:1.4;color:{MUTED};font-family:{FONT_STACK};">'
+               f'{esc(st["sub"])}</div>') if st.get("sub") else ""
+        out.append(f'<div style="text-align:center;margin:6px 0 16px;"><img src="{esc(st.get("img") or STAMP_APPROVED)}" '
+                   f'width="230" alt="Approved" style="display:inline-block;width:230px;max-width:80%;height:auto;border:0;'
+                   f'color:{GREEN};font-family:{HEAD_STACK};font-size:30px;">{sub}</div>')
+    rows = []
+    for g in r.get("groups") or []:
+        col = _SIDE.get(g.get("kind"), MUTED)
+        rows.append(f'<tr><td colspan="2" style="padding:10px 0 2px;font-family:{FONT_STACK};">'
+                    f'<span style="display:inline-block;width:10px;height:10px;border-radius:5px;background:{col};'
+                    f'background-color:{col};margin-right:8px;"></span><span style="font-size:12px;font-weight:900;'
+                    f'letter-spacing:.1em;text-transform:uppercase;color:{col};">{esc(g.get("label", ""))}</span></td></tr>')
+        for title, note, amount in g.get("rows") or []:
+            rows.append(
+                f'<tr><td valign="top" style="padding:9px 10px 9px 0;font-family:{FONT_STACK};">'
+                f'<div style="font-size:15px;font-weight:700;line-height:1.35;color:{INK};">{esc(title)}</div>'
+                + (f'<div style="margin-top:2px;font-size:13px;line-height:1.45;color:{MUTED};">{esc(note)}</div>' if note else "")
+                + f'</td><td valign="top" align="right" style="padding:9px 0;font-size:15px;font-weight:800;color:{INK};'
+                f'font-family:{FONT_STACK};white-space:nowrap;">{esc(amount)}</td></tr>')
+    tot = r.get("total")
+    if tot:
+        label, amount, positive = tot
+        dashed = f"border-top:2px dashed {HAIRLINE};"
+        rows.append(f'<tr><td style="padding:12px 0 0;{dashed}font-size:14px;font-weight:800;color:{MUTED};font-family:{FONT_STACK};">'
+                    f'{esc(label)}</td><td align="right" style="padding:12px 0 0;{dashed}font-family:{HEAD_STACK};font-size:22px;'
+                    f'color:{GREEN if positive else INK};white-space:nowrap;">{esc(amount)}</td></tr>')
+    out.append(f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{"".join(rows)}</table>')
+    return "".join(out)
+
 def _link(link) -> str:
     """v2.5: a block can end with one green text link: ("Open the run", url)."""
     label, url = link
@@ -392,6 +436,8 @@ def _block_body_inner(block: dict) -> str:
         return _pill_row(block["pills"])
     if "tiles" in block:
         return _tiles(block["tiles"])
+    if "receipt" in block:
+        return _receipt(block["receipt"])
     if "kv" in block:
         return _kv(block["kv"])
     return _prose(block.get("prose", ""))
