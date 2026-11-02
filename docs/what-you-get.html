@@ -361,7 +361,12 @@
   .v2-next{margin:28px 0 8px}
   h1.pg{font-size:34px;margin:44px 0 6px;line-height:1.1} h1.pg .p{color:var(--pink)}
   h2.h3{font-family:inherit;text-transform:none;letter-spacing:0;line-height:1.3} footer h2.h3{color:var(--ink);font-size:14px;margin:18px 0 4px} .box h2.h3{margin:0 0 8px;font-size:18px} .box h2.h3 .n{color:var(--green)} .job h2.h3{margin:0;font-family:Anton,Impact,sans-serif;font-size:22px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
-  .chs-wrap{margin-top:12px} .chs-wrap>h2.h3{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 12px;margin:18px 0 10px;font-size:18px} .chs-wrap>h2 span{color:var(--muted);font-size:13px;font-weight:400}
+  .lessons-pop{width:min(860px,calc(100vw - 24px));max-height:calc(100dvh - 24px);padding:20px;box-sizing:border-box;background:var(--deep);color:var(--ink);border:1px solid var(--rule);border-radius:18px;overflow:auto}
+  .lessons-pop::backdrop{background:rgba(20,0,24,.72)}
+  .pop-t{margin:0;padding-right:40px;font:400 26px/1.15 Anton,Impact,sans-serif;letter-spacing:.02em;text-transform:uppercase}
+  .pop-s{margin:2px 0 12px;color:var(--muted);font-size:13px}
+  .lessons-pop .pop-x{position:sticky;top:0;z-index:1;float:right;display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:36px;min-width:36px;height:36px;margin:-8px -8px 0 0;padding:0;border-radius:50%;border:1px solid var(--rule);background:var(--deep2);color:var(--ink);font:400 22px/1 Poppins,sans-serif;cursor:pointer}
+  @media(max-width:799px){.lessons-pop{padding:16px}.lessons-pop .ch{padding:10px 12px}.lessons-pop .ch p{display:none}.lessons-pop .ch li{padding:3px 0}.lessons-pop .ch-h{margin-bottom:4px}.lessons-pop .chs{gap:8px}}
   .chs{display:grid;grid-template-columns:1fr;gap:10px} @media(min-width:800px){.chs{grid-template-columns:repeat(3,1fr)}}
   .ch{background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px}
   .ch-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px} .ch h3{margin:0;font:400 21px/1.2 Anton,Impact,sans-serif;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)} .ch-tot{color:var(--pink-ink);font-size:12px;font-weight:800;white-space:nowrap}
@@ -411,7 +416,7 @@
       <li><i class="gi" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-6 9 6"/><path d="M5 10v8M9.5 10v8M14.5 10v8M19 10v8"/><path d="M3 20h18"/></svg></i><b>Trading 212, ISA or Invest.</b> More brokers to come: let us cook, and we'll serve them once they're tested. 12 months of updates included.</li>
     </ul></div>
     <div class="box"><h2 class="h3"><span class="n">2.</span> The 14 lessons</h2><ul>
-      <li><i class="gi" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></i><b>About 6 hours, at your own pace.</b> What every part of the code does and why, one short lesson at a time.</li>
+      <li><i class="gi" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg></i><b>About 6 hours, at your own pace.</b> What every part of the code does and why, one short lesson at a time. <a href="#lessons" data-lessons style="color:var(--green);font-weight:700">See all 14</a></li>
       <li><i class="gi" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></i><b>Make it yours.</b> Change it safely with Claude as your build partner, and test your rules honestly before real money.</li>
       <li><i class="gi" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V5h6v3M3 13h18"/></svg></i><b>The tools, explained.</b> What each one your robot uses is for, including Claude (Anthropic's AI assistant), and what it costs. <a href="how-it-works.html#tools" style="color:var(--green);font-weight:700">What it runs on</a></li>
       <li><i class="gi" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.2L19 10l-5.1 1.8L12 17l-1.9-5.2L5 10l5.1-1.8z"/></svg></i><b>No coding experience needed.</b> Done some coding before? Skip ahead.</li>
@@ -422,10 +427,6 @@
       <li><i class="gi" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg></i><b>A helping hand.</b> The Moonshotters, a private board in the members area: common questions answered instantly, and a person reads every post. Or email us: a reply within two working days.</li>
     </ul></div>
   </div>
-  <section class="chs-wrap" id="lessons">
-    <h2 class="h3">The 14 lessons <span>About 6 hours, at your own pace</span></h2>
-    <div class="chs"><div class="ch"><div class="ch-h"><h3>Get it going</h3><span class="ch-tot">1h 40</span></div><p>Your robot, your rules.</p><ol><li value="1"><span class="ch-t">Rules, not tips <span class="ch-free">Free</span></span><span class="ch-m">10 min</span></li><li value="2"><span class="ch-t">Get it running</span><span class="ch-m">30 min</span></li><li value="3"><span class="ch-t">Data you can trust</span><span class="ch-m">20 min</span></li><li value="4"><span class="ch-t">Make it yours</span><span class="ch-m">40 min</span></li></ol></div><div class="ch"><div class="ch-h"><h3>Prove it works</h3><span class="ch-tot">2 hours</span></div><p>Test it before you trust it.</p><ol><li value="5"><span class="ch-t">Backtest honestly</span><span class="ch-m">45 min</span></li><li value="6"><span class="ch-t">Paper money first</span><span class="ch-m">25 min</span></li><li value="7"><span class="ch-t">The plumbing</span><span class="ch-m">25 min</span></li><li value="8"><span class="ch-t">Done means it happened</span><span class="ch-m">25 min</span></li></ol></div><div class="ch"><div class="ch-h"><h3>Run it safely</h3><span class="ch-tot">2h 10</span></div><p>So it looks after itself.</p><ol><li value="9"><span class="ch-t">Make it explain itself</span><span class="ch-m">20 min</span></li><li value="10"><span class="ch-t">Keys and secrets</span><span class="ch-m">25 min</span></li><li value="11"><span class="ch-t">It runs while you sleep</span><span class="ch-m">20 min</span></li><li value="12"><span class="ch-t">Limits and an off switch</span><span class="ch-m">15 min</span></li><li value="13"><span class="ch-t">Small and real</span><span class="ch-m">20 min</span></li><li value="14"><span class="ch-t">Keep an honest record</span><span class="ch-m">30 min</span></li></ol></div></div>
-  </section>
 
   <section class="cmp" id="vs">
     <h2>Why this, and <span class="p">not the others?</span></h2>
@@ -469,6 +470,26 @@
 
   <p class="v2-next"><a class="btn" href="robot-care.html">Next: Robot Care &rarr;</a></p>
 </main>
+<dialog class="lessons-pop" id="lessons" aria-labelledby="lessons-t">
+  <button class="pop-x" type="button" aria-label="Close">&times;</button>
+  <h2 class="pop-t" id="lessons-t">The 14 lessons</h2>
+  <p class="pop-s">About 6 hours, at your own pace</p>
+  <div class="chs"><div class="ch"><div class="ch-h"><h3>Get it going</h3><span class="ch-tot">1h 40</span></div><p>Your robot, your rules.</p><ol><li value="1"><span class="ch-t">Rules, not tips <span class="ch-free">Free</span></span><span class="ch-m">10 min</span></li><li value="2"><span class="ch-t">Get it running</span><span class="ch-m">30 min</span></li><li value="3"><span class="ch-t">Data you can trust</span><span class="ch-m">20 min</span></li><li value="4"><span class="ch-t">Make it yours</span><span class="ch-m">40 min</span></li></ol></div><div class="ch"><div class="ch-h"><h3>Prove it works</h3><span class="ch-tot">2 hours</span></div><p>Test it before you trust it.</p><ol><li value="5"><span class="ch-t">Backtest honestly</span><span class="ch-m">45 min</span></li><li value="6"><span class="ch-t">Paper money first</span><span class="ch-m">25 min</span></li><li value="7"><span class="ch-t">The plumbing</span><span class="ch-m">25 min</span></li><li value="8"><span class="ch-t">Done means it happened</span><span class="ch-m">25 min</span></li></ol></div><div class="ch"><div class="ch-h"><h3>Run it safely</h3><span class="ch-tot">2h 10</span></div><p>So it looks after itself.</p><ol><li value="9"><span class="ch-t">Make it explain itself</span><span class="ch-m">20 min</span></li><li value="10"><span class="ch-t">Keys and secrets</span><span class="ch-m">25 min</span></li><li value="11"><span class="ch-t">It runs while you sleep</span><span class="ch-m">20 min</span></li><li value="12"><span class="ch-t">Limits and an off switch</span><span class="ch-m">15 min</span></li><li value="13"><span class="ch-t">Small and real</span><span class="ch-m">20 min</span></li><li value="14"><span class="ch-t">Keep an honest record</span><span class="ch-m">30 min</span></li></ol></div></div>
+</dialog>
+<script>
+(function(){
+  var d=document.getElementById("lessons");
+  if(!d||!d.showModal)return;
+  function open(){if(!d.open){d.showModal();document.documentElement.style.overflow="hidden"}}
+  function shut(){d.close()}
+  document.querySelectorAll("[data-lessons]").forEach(function(a){a.addEventListener("click",function(e){e.preventDefault();open()})});
+  d.querySelector(".pop-x").addEventListener("click",shut);
+  d.addEventListener("click",function(e){if(e.target===d)shut()});
+  d.addEventListener("close",function(){document.documentElement.style.overflow="";if(location.hash==="#lessons")history.replaceState(null,"",location.pathname+location.search)});
+  if(location.hash==="#lessons")open();
+  addEventListener("hashchange",function(){if(location.hash==="#lessons")open()});
+})();
+</script>
   <footer>
     <p><strong>Not financial advice.</strong> This is education about building and testing software. Our founder runs the system with his own money, in an ISA, and holds positions in things we talk about. Investing puts your capital at risk and you may get back less than you put in. What a system did in the past, ours included, says nothing about what it will do next. We're software engineers, not financial advisers. My Robot I.S.A. sells software and lessons; it isn't an ISA manager, a broker or an investment adviser, and it isn't authorised or regulated by the FCA.</p>
     <h2 class="h3">Your email</h2>
