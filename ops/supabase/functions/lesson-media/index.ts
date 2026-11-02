@@ -19,7 +19,7 @@ const LINK_SECONDS = 30 * 60;
 const LINKS_PER_HOUR = 60;
 const VIDEOS: Record<string, string> = {
   "qs-1": "qs-01-copy-the-code", "qs-2": "qs-02-broker-key", "qs-3": "qs-03-email-key", "qs-4": "qs-04-setup-check",
-  "qs-5": "qs-05-optional-extras", "qs-6": "qs-06-your-app",
+  "qs-5": "qs-06-your-app", "qs-6": "qs-05-optional-extras",   // 2 Nov 2026: QuickStart 5 is now Robot Dash, 6 the extras
   "day-1": "day-01-rules-not-tips", "day-2": "day-02-get-it-running", "day-3": "day-03-data-you-can-trust",
   "day-4": "day-04-make-it-yours", "day-5": "day-05-backtest-honestly", "day-6": "day-06-paper-money-first",
   "day-7": "day-07-the-plumbing", "day-8": "day-08-done-means-it-happened", "day-9": "day-09-make-it-explain-itself",
