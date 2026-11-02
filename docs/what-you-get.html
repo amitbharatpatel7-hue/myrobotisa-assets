@@ -361,6 +361,16 @@
   .v2-next{margin:28px 0 8px}
   h1.pg{font-size:34px;margin:44px 0 6px;line-height:1.1} h1.pg .p{color:var(--pink)}
   h2.h3{font-family:inherit;text-transform:none;letter-spacing:0;line-height:1.3} footer h2.h3{color:var(--ink);font-size:14px;margin:18px 0 4px} .box h2.h3{margin:0 0 8px;font-size:18px} .box h2.h3 .n{color:var(--green)} .job h2.h3{margin:0;font-family:Anton,Impact,sans-serif;font-size:22px;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)}
+  .chs-wrap{margin-top:12px} .chs-wrap>h2.h3{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:2px 12px;margin:18px 0 10px;font-size:18px} .chs-wrap>h2 span{color:var(--muted);font-size:13px;font-weight:400}
+  .chs{display:grid;grid-template-columns:1fr;gap:10px} @media(min-width:800px){.chs{grid-template-columns:repeat(3,1fr)}}
+  .ch{background:var(--deep2);border:1px solid var(--rule);border-radius:16px;padding:14px}
+  .ch-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px} .ch h3{margin:0;font:400 21px/1.2 Anton,Impact,sans-serif;letter-spacing:.02em;text-transform:uppercase;color:var(--ink)} .ch-tot{color:var(--pink-ink);font-size:12px;font-weight:800;white-space:nowrap}
+  .ch p{margin:0 0 6px;color:var(--muted);font-size:13px}
+  .ch ol{list-style:none;margin:0;padding:0;counter-reset:none}
+  .ch li{display:grid;grid-template-columns:26px 1fr auto;align-items:baseline;gap:4px;padding:5px 0;border-top:1px solid rgba(255,255,255,.08);font-size:13.5px;font-weight:600}
+  .ch li::before{content:attr(value);font:400 16px Anton,Impact,sans-serif;color:var(--pink-ink)}
+  .ch-m{color:var(--muted);font-size:12px;font-weight:400;white-space:nowrap}
+  .ch-free{margin-left:4px;padding:1px 6px;border:1px solid var(--pink-ink);border-radius:999px;color:var(--pink-ink);font-size:9.5px;font-weight:800;text-transform:uppercase;vertical-align:1px}
 </style>
 </head>
 <body>
@@ -412,6 +422,10 @@
       <li><i class="gi" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 11h.01M12 11h.01M15 11h.01"/></svg></i><b>A helping hand.</b> The Moonshotters, a private board in the members area: common questions answered instantly, and a person reads every post. Or email us: a reply within two working days.</li>
     </ul></div>
   </div>
+  <section class="chs-wrap" id="lessons">
+    <h2 class="h3">The 14 lessons <span>About 6 hours, at your own pace</span></h2>
+    <div class="chs"><div class="ch"><div class="ch-h"><h3>Get it going</h3><span class="ch-tot">1h 40</span></div><p>Your robot, your rules.</p><ol><li value="1"><span class="ch-t">Rules, not tips <span class="ch-free">Free</span></span><span class="ch-m">10 min</span></li><li value="2"><span class="ch-t">Get it running</span><span class="ch-m">30 min</span></li><li value="3"><span class="ch-t">Data you can trust</span><span class="ch-m">20 min</span></li><li value="4"><span class="ch-t">Make it yours</span><span class="ch-m">40 min</span></li></ol></div><div class="ch"><div class="ch-h"><h3>Prove it works</h3><span class="ch-tot">2 hours</span></div><p>Test it before you trust it.</p><ol><li value="5"><span class="ch-t">Backtest honestly</span><span class="ch-m">45 min</span></li><li value="6"><span class="ch-t">Paper money first</span><span class="ch-m">25 min</span></li><li value="7"><span class="ch-t">The plumbing</span><span class="ch-m">25 min</span></li><li value="8"><span class="ch-t">Done means it happened</span><span class="ch-m">25 min</span></li></ol></div><div class="ch"><div class="ch-h"><h3>Run it safely</h3><span class="ch-tot">2h 10</span></div><p>So it looks after itself.</p><ol><li value="9"><span class="ch-t">Make it explain itself</span><span class="ch-m">20 min</span></li><li value="10"><span class="ch-t">Keys and secrets</span><span class="ch-m">25 min</span></li><li value="11"><span class="ch-t">It runs while you sleep</span><span class="ch-m">20 min</span></li><li value="12"><span class="ch-t">Limits and an off switch</span><span class="ch-m">15 min</span></li><li value="13"><span class="ch-t">Small and real</span><span class="ch-m">20 min</span></li><li value="14"><span class="ch-t">Keep an honest record</span><span class="ch-m">30 min</span></li></ol></div></div>
+  </section>
 
   <section class="cmp" id="vs">
     <h2>Why this, and <span class="p">not the others?</span></h2>
