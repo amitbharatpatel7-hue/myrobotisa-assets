@@ -331,15 +331,50 @@
   .kit-l dl{margin:10px 0 0;padding-top:10px;border-top:1px solid var(--rule);display:grid;grid-template-columns:92px 1fr;gap:4px 10px;font-size:14px;line-height:1.45}
   .kit-l dt{color:var(--muted);font-weight:700;white-space:nowrap}
   .kit-l dd{margin:0;color:var(--ink)}
-  @media(min-width:760px){.kit-l{grid-template-columns:repeat(2,1fr)}}
-  .kit-o{list-style:none;margin:0;padding:4px 16px;background:var(--deep2);border:1px solid var(--rule);border-radius:16px}
+    .kit-o{list-style:none;margin:0;padding:4px 16px;background:var(--deep2);border:1px solid var(--rule);border-radius:16px}
   .kit-o li{padding:10px 0;border-top:1px solid var(--rule);font-size:15px;line-height:1.5;color:var(--ink)}
   .kit-o li:first-child{border-top:0}
   .kit-o li>b{display:block;font-size:17px;font-weight:800}
   .kit-o span.j{display:block;margin-top:4px;font-size:15px;line-height:1.5;color:var(--ink)}
   .kit-o span.j b{color:var(--muted);font-weight:700}
-  .kit-p{display:inline-block;margin:4px 0 2px;padding:3px 10px;border-radius:999px;background:var(--deep);border:1px solid var(--green);color:var(--green);font-size:12px;font-weight:800}
+  .kit-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+  .kit-h b{font-size:16px;font-weight:800;white-space:nowrap}
+  @media(max-width:420px){.kit-h b{font-size:15px}.kit-p{font-size:11px;padding:3px 8px}}
+  .kit-p{flex:none;padding:3px 10px;border-radius:999px;border:1px solid var(--pink-ink);color:var(--pink-ink);font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap}
   .kit-rc{margin:10px 0 0;padding:14px 16px;border:2px solid var(--green);border-radius:16px;font-size:15px;line-height:1.5;color:var(--ink)}
+  /* What it runs on: a week as a journey (2 Nov 2026). The robot lights up stop by stop; still for anyone who asks for reduced motion. */
+  .jr-l{list-style:none;margin:14px 0 0;padding:0;position:relative;display:grid;gap:12px}
+  .jr-l::before{content:"";position:absolute;left:43px;top:30px;bottom:30px;width:3px;border-radius:3px;background:linear-gradient(var(--green),var(--pink))}
+  .jr-s{position:relative;display:grid;grid-template-columns:88px 1fr;gap:0 12px;align-items:start;padding:12px 14px 12px 0;border-radius:16px;border:1px solid transparent}
+  .jr-s img{width:72px;height:72px;margin-left:8px;padding:6px;box-sizing:border-box;border-radius:50%;background:var(--deep2);border:2px solid var(--rule);position:relative}
+  .jr-w{display:block;font-family:Anton,Impact,sans-serif;font-size:22px;letter-spacing:.02em;text-transform:uppercase;color:var(--green);line-height:1.1}
+  .jr-s b{display:block;font-size:16px;font-weight:800;line-height:1.25;color:var(--ink)}
+  .jr-s p{margin:2px 0 0;font-size:14px;line-height:1.45;color:var(--muted)}
+  .jr-s dl{margin:8px 0 0;font-size:13px;line-height:1.4}
+  .jr-s dt{color:var(--muted);font-weight:700;margin-top:4px}
+  .jr-s dd{margin:0;color:var(--ink)}
+  .jr-l .jr-home{box-shadow:0 0 0 2px var(--green),0 0 24px rgba(0,232,122,.3)}
+  .jr-s dd.jr-lock{display:flex;gap:5px;align-items:flex-start;color:var(--green);font-weight:700}
+  .jr-lock svg{flex:none;margin-top:2px}
+  @media(min-width:760px){
+    .jr-l{grid-template-columns:repeat(4,1fr);gap:10px}
+    .jr-l::before{left:12%;right:12%;top:46px;bottom:auto;width:auto;height:3px;background:linear-gradient(90deg,var(--green),var(--pink))}
+    .jr-s{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:8px}
+    .jr-s img{width:84px;height:84px;margin:0}
+    .jr-b{width:100%}
+    .jr-s dd.jr-lock{display:block}
+    .jr-lock svg{display:inline-block;vertical-align:-2px;margin:0 4px 0 0}
+    .jr-lock span{display:inline}
+  }
+  @media(prefers-reduced-motion:no-preference){
+    .jr-s{animation:jr-on 12s infinite}
+    .jr-s img{animation:jr-bot 12s infinite}
+    .jr-s:nth-child(2),.jr-s:nth-child(2) img{animation-delay:3s}
+    .jr-s:nth-child(3),.jr-s:nth-child(3) img{animation-delay:6s}
+    .jr-s:nth-child(4),.jr-s:nth-child(4) img{animation-delay:9s}
+  }
+  @keyframes jr-on{0%,25%,100%{background:transparent;border-color:transparent}3%,22%{background:var(--deep2);border-color:var(--green)}}
+  @keyframes jr-bot{0%,25%,100%{transform:scale(1);border-color:var(--rule);box-shadow:none}3%,22%{transform:scale(1.1);border-color:var(--green);box-shadow:0 0 22px rgba(0,232,122,.45)}}
   .jobs{margin:34px 0 8px}
   .jobs .lead{color:var(--ink)}
   .job{display:grid;grid-template-columns:1fr;gap:4px 18px;margin:18px 0 0}
@@ -469,18 +504,18 @@
   <section class="kit" id="tools">
     <h2>What it <span class="p">runs on</span></h2>
     <p class="lead">Four accounts run your robot, all free to open, and no code. Your money only ever sits in one of them: your own Trading 212 ISA. The QuickStart walks you through each one.</p>
-    <p class="kit-g">The four you need</p>
-    <ul class="kit-l">
-      <li><b class="n">Trading 212</b><p>Holds your ISA and your money, in your name.</p><dl><dt>Cost</dt><dd>No account fee and no commission. A 0.15% currency fee each way on shares priced outside pounds. UK shares also carry 0.5% stamp duty when you buy.</dd><dt>Your money</dt><dd>It lives here. The robot's key can't withdraw it.</dd></dl></li>
-      <li><b class="n">GitHub</b><p>Your robot's home. Your private copy runs here on a schedule, so your computer can be off.</p><dl><dt>Cost</dt><dd>Free plan.</dd><dt>Your money</dt><dd>No. It keeps the robot's key locked, and nothing is bought or sold until you approve.</dd></dl></li>
-      <li><b class="n">Resend</b><p>Sends your weekly plan and reports to your own inbox.</p><dl><dt>Cost</dt><dd>Free plan.</dd><dt>Your money</dt><dd>Never holds it.</dd></dl></li>
-      <li><b class="n">Cloudflare</b><p>Runs Robot Dash, your private app, where you see your live numbers and tap Approve. It's where your weekly email takes you.</p><dl><dt>Cost</dt><dd>Free plan.</dd><dt>Your money</dt><dd>No. The button only sends orders you approve.</dd></dl></li>
-    </ul>
+    <p class="kit-g">Who does what</p>
+    <ol class="jr-l">
+      <li class="jr-s"><img src="email/robot-bulb.png" alt="" width="84" height="84"><div class="jr-b"><span class="jr-w">GitHub</span><b>Runs your robot</b><p>Your private copy works out the plan on schedule, so your computer can be off.</p><dl><dt>Cost</dt><dd>Free plan.</dd><dt>Your money</dt><dd>No. It keeps the robot's key locked.</dd></dl></div></li>
+      <li class="jr-s"><img src="email/robot-paperplane.png" alt="" width="84" height="84"><div class="jr-b"><span class="jr-w">Resend</span><b>Emails you the plan</b><p>Your weekly plan and reports, in your own inbox.</p><dl><dt>Cost</dt><dd>Free plan.</dd><dt>Your money</dt><dd>Never holds it.</dd></dl></div></li>
+      <li class="jr-s"><img src="email/robot-phonetick.png" alt="" width="84" height="84"><div class="jr-b"><span class="jr-w">Cloudflare</span><b>Runs Robot Dash</b><p>Your private app, where you see live numbers and tap Approve. Your weekly email opens it.</p><dl><dt>Cost</dt><dd>Free plan.</dd><dt>Your money</dt><dd>No. The button only sends orders you approve.</dd></dl></div></li>
+      <li class="jr-s jr-home"><img src="email/robot-tea.png" alt="" width="84" height="84"><div class="jr-b"><span class="jr-w">Trading 212</span><b>Holds your ISA</b><p>In your name. Only the orders you approved reach it.</p><dl><dt>Cost</dt><dd>No account or commission fee. 0.15% currency fee each way outside pounds. 0.5% stamp duty buying UK shares.</dd><dt>Your money</dt><dd class="jr-lock"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>It lives here. The robot's key can't withdraw it.</span></dd></dl></div></li>
+    </ol>
     <p class="small" style="margin:10px 0 0">The 14 lessons also use Claude's free plan: you ask it about your copy as you go.</p>
     <p class="kit-g">Only for a specific job</p>
     <ul class="kit-o">
-      <li><b>Claude paid plan</b><span class="kit-p">Not needed with Robot Care</span><span class="j"><b>Only for:</b> fixing a failed run yourself. It takes a paid Claude plan or pay-as-you-go credit.</span></li>
-      <li><b>Sentry</b><span class="kit-p">Not needed with Robot Care</span><span class="j"><b>Only for:</b> a detailed report when a run fails. GitHub already tells you a run failed. Free plan.</span></li>
+      <li><div class="kit-h"><b>Claude paid plan</b><a class="kit-p" href="robot-care.html">Covered by Robot Care</a></div><span class="j"><b>Only for:</b> fixing a failed run yourself. It takes a paid Claude plan or pay-as-you-go credit.</span></li>
+      <li><div class="kit-h"><b>Sentry</b><a class="kit-p" href="robot-care.html">Covered by Robot Care</a></div><span class="j"><b>Only for:</b> a detailed report when a run fails. GitHub already tells you a run failed. Free plan.</span></li>
     </ul>
     <div class="kit-rc"><b>Robot Care covers both.</b> When a run fails, Claude reads the log and writes the smallest fix, and it waits on your phone for one tap. A year free for the first 100 founding members, then &pound;10 a month, only if you want it. <a href="robot-care.html" style="color:var(--green);font-weight:700">How Robot Care works</a></div>
     <p class="small">Neither can withdraw your money. Costs as we last checked them, in November 2026; each company sets its own and they can change. None of these companies endorses us. Software and a course, not financial advice. Capital at risk.</p>
