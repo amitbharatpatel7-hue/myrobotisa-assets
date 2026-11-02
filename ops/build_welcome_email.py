@@ -64,7 +64,7 @@ def launch(newsletter):
          "steps": [("Mon 7 December", "Your free 7-day test drive starts. One link in your inbox that morning."),
                    ("January 2027", "Sales open. £99 for the first 100 founding members, then £199. You'll hear first."),
                    ("April 2027", "Tax on savings goes up. Inside an ISA, interest stays tax-free.")]},
-        {"banner": {"text": "Founding members: £99, not £199.", "sub": "First 100 only, when sales open in January.",
+        {"banner": {"text": "Founding members: £99, not £199.", "sub": "First 100 only, when sales open in January. Plus your first year of Robot Care free, worth £120.",
                     "link": ("What you get", link("/what-you-get.html"))}},
         {"quote": {"text": QUOTE, "by": "Amit, founder", "img": L.MRI_LOGO}},
     ]
@@ -80,7 +80,7 @@ def launch(newsletter):
             "WHAT HAPPENS NEXT\n1. Mon 7 December: your free 7-day test drive starts. One link in your inbox that morning.\n"
             "2. January 2027: sales open. £99 for the first 100 founding members, then £199. You'll hear first.\n"
             "3. April 2027: tax on savings goes up. Inside an ISA, interest stays tax-free.\n\n"
-            f"FOUNDING MEMBERS: £99, NOT £199. First 100 only, when sales open in January. What you get: {link('/what-you-get.html')}\n\n"
+            f"FOUNDING MEMBERS: £99, NOT £199. First 100 only, when sales open in January. Plus your first year of Robot Care free, worth £120. What you get: {link('/what-you-get.html')}\n\n"
             f"\"{QUOTE}\"\nAmit, founder\n\n--\n"
             + FOOT.replace(UNSUB, "Unsubscribe: " + UNSUB + "."))
     return {"subject": "You're on the list: your test drive starts 7 December",
