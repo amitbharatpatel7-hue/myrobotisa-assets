@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="94">
+<meta name="mri-version" content="95">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -637,7 +637,7 @@
       <section class="card" aria-labelledby="h-qs" data-page="start">
         <h2 id="h-qs">Start <span class="g">here</span></h2>
         <p class="lede">The QuickStart: your first paper trade in about 30 minutes. A short video for each step.</p>
-        <a class="su-promo pv-only" hidden href="#setup" data-go="setup"><b>Short on time? Let us do steps 1 to 4 for you</b><span>Set up my robot builds your copy, locks in your keys and runs the setup check in about 10 minutes. The optional extras and your app (steps 5 and 6) are at the bottom of the same page.</span></a>
+        <a class="su-promo pv-only" hidden href="#setup" data-go="setup"><b>Short on time? Let us do steps 1 to 5 for you</b><span>Set up my robot builds your copy, locks in your keys and runs the setup check in about 10 minutes. The optional extras and your app (steps 5 and 6) are at the bottom of the same page.</span></a>
         <div class="bar" aria-hidden="true"><i id="qs-bar"></i></div>
         <p class="small" id="qs-count"></p>
         <ol class="steps" id="qs"></ol>
@@ -906,8 +906,8 @@
       </section>
       <section class="card wide" aria-labelledby="h-su" id="su-card" data-page="setup">
         <h2 id="h-su">Set up <span class="g">my robot</span></h2>
-        <p class="lede">About ten minutes once your Trading 212, GitHub and email accounts are open, and no typing into GitHub. You bring two keys; this page builds your copy, locks the keys away, switches on the schedule and runs the setup check. Then you watch it work on paper money, and the lessons explain what you just built.</p>
-        <details class="fold su-before" id="su-before"><summary><span class="fold-l">Before you start: three free accounts <span id="acct-count"></span></span></summary>
+        <p class="lede">About 20 minutes once your free accounts are open, and no typing into GitHub. You bring your keys; this page builds your copy, locks the keys away, switches on the schedule, runs the setup check and sets up Robot Dash, the app where you approve every order. Then you approve your first paper trade, and the lessons explain what you just built.</p>
+        <details class="fold su-before" id="su-before"><summary><span class="fold-l">Before you start: four free accounts <span id="acct-count"></span></span></summary>
           <ol class="su-pre">
             <li id="acct1"><div class="ah"><b>Trading 212</b><span class="pill" id="acct1-st"></span></div>
               <p>No account yet? <a href="https://www.trading212.com/" target="_blank" rel="noopener">Open one</a> (Invest or Stocks ISA; the ID check usually takes minutes, sometimes a day). Then <b>install the Trading 212 app on your phone and sign in with Face ID or your fingerprint first</b>: when you sign in on the website, the code appears in that app (tap <b>Display code</b>), so keep your phone with you. <a href="#guide/qs-2">Step-by-step guide and video</a></p>
@@ -917,6 +917,9 @@
               <div class="row acct-row"><button class="btn ghost acct-ok" type="button"></button></div></li>
             <li id="acct3"><div class="ah"><b>Resend</b><span class="pill" id="acct3-st"></span></div>
               <p>It sends your robot's emails. <a href="https://resend.com/signup" target="_blank" rel="noopener">Sign up free</a> with the inbox you want the emails in, and click the link in its confirmation email. <a href="#guide/qs-3">Guide</a></p>
+              <div class="row acct-row"><button class="btn ghost acct-ok" type="button"></button></div></li>
+            <li id="acct4"><div class="ah"><b>Cloudflare</b><span class="pill" id="acct4-st"></span></div>
+              <p>It runs Robot Dash, your private app, on your own account. <a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener">Sign up free</a>. <a href="#guide/qs-5">Guide</a></p>
               <div class="row acct-row"><button class="btn ghost acct-ok" type="button"></button></div></li>
           </ol>
         </details>
@@ -958,12 +961,34 @@
           <li class="su-step locked" id="su5"><div class="su-h"><b>Build my robot</b><span class="pill" id="su5-st">Ready when you are</span></div>
             <div class="row"><button class="btn" type="button" id="su-go" disabled>Build my robot</button></div>
             <ul class="su-log" id="su-log" aria-live="polite"></ul>
-            <div class="su-done" id="su-done" hidden><h3>Your robot is running</h3><p style="margin:0 0 12px">On paper money. The setup check email is on its way to you. Next: ask for its first weekly plan, then tap Approve in the email. Optional extras, including the app for your phone, are just below.</p>
-              <div class="row"><button class="btn" type="button" id="su-plan">Get my first weekly plan</button><a class="btn ghost" id="su-repo" target="_blank" rel="noopener">See my copy on GitHub</a></div>
-              <p class="small" id="su-plan-msg" role="status" aria-live="polite"></p></div></li>
+            <div class="su-done" id="su-done" hidden><h3>Your robot is built</h3><p style="margin:0 0 12px">On paper money. The setup check email is on its way to you. Next: Robot Dash, where you approve every order.</p>
+              <div class="row"><a class="btn ghost" id="su-repo" target="_blank" rel="noopener">See my copy on GitHub</a></div></div></li>
+          <li class="su-step locked" id="sx3"><div class="su-h"><b>Robot Dash, your own app</b><span class="pill" id="sx3-st">To do</span></div>
+            <div id="sx3-more"><p class="small" style="margin:0 0 8px">About 10 minutes.</p>
+              <p>Your plan, holdings, results and the Approve button, on a private page only you can open. It opens with Face ID or your fingerprint (an emailed code is the backup) and asks again before any order goes. It runs on your own free Cloudflare account, so your numbers never pass through ours, and it only ever gets a read-only broker key.</p>
+              <ol>
+                <li><a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener">Make a free Cloudflare account</a>.</li>
+                <li><b>Account API tokens &rarr; Create Token &rarr; Custom token</b>. Call it <b>My Robot ISA</b>, add <b>Account &middot; Cloudflare Pages &middot; Edit</b>, <b>Account &middot; Access: Apps and Policies &middot; Edit</b> and <b>Account &middot; Workers KV Storage &middot; Edit</b> (that one keeps your Face ID keys), create it and copy it.</li>
+                <li>In Trading 212 (the same Practice account), make one more key called <b>My Robot ISA dashboard</b> with only <b>Account data</b>, <b>Metadata</b> and <b>Portfolio</b>, IP access <b>Unrestricted</b>. No Orders switches: it can never place an order.</li>
+                <li>For the <b>Approve</b> button: on GitHub, <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">make a fine-grained token</a> called <b>My Robot ISA approve</b>. Repository access: <b>Only select repositories</b>, your copy. Permissions: <b>Actions: Read and write</b>, <b>Contents: Read-only</b> and <b>Pull requests: Read-only</b>. Expiry: <b>1 year</b>. It can only start your Execute approved orders run with the orders you tapped, or accept a Robot Care fix you tapped, and only after Face ID. Made this token before November 2026? Edit it on GitHub and add <b>Pull requests: Read-only</b>; nothing needs pasting again.</li></ol>
+              <label class="f" for="sx-cft">Cloudflare API token</label><input class="t" id="sx-cft" type="password" autocomplete="off" spellcheck="false">
+              <label class="f" for="sx-rk">Read-only Trading 212 key</label><input class="t" id="sx-rk" type="password" autocomplete="off" spellcheck="false">
+              <label class="f" for="sx-rs">Read-only Trading 212 secret</label><input class="t" id="sx-rs" type="password" autocomplete="off" spellcheck="false">
+              <label class="f" for="sx-ap">GitHub token for the Approve button</label><input class="t" id="sx-ap" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_...">
+              <p class="small" id="sx-em-row">Only <b id="sx-em-show"></b> can open it. <a href="#" id="sx-em-edit" style="color:var(--green);font-weight:700">Change</a></p>
+              <div id="sx-em-box" hidden><label class="f" for="sx-em">Who can open it</label><input class="t" id="sx-em" type="email" autocomplete="email"></div>
+              <div class="row"><button class="btn" type="button" id="sx3-go" disabled>Add my numbers</button></div>
+              <ul class="su-log" id="sx3-log" aria-live="polite"></ul>
+              <p class="small" id="sx3-msg" role="status" aria-live="polite"></p></div></li>
+          <li class="su-step locked" id="su7"><div class="su-h"><b>Your first paper trade</b><span class="pill" id="su7-st">To do</span></div>
+            <p>Your robot works out its first plan and emails it to you, usually within a few minutes. Tap Approve in the email: it opens Robot Dash, where you sign in, set up Face ID or your fingerprint and approve the orders.</p>
+            <div class="row"><button class="btn" type="button" id="su-plan" disabled>Get my first plan</button></div>
+            <p class="small" id="su-plan-msg" role="status" aria-live="polite"></p>
+            <div id="su-app" hidden><p>Now put it on your phone, Mac or PC, in its own window like any app. No App Store.</p>
+              <div class="row"><button class="btn" type="button" data-install>Install my dashboard</button></div></div></li>
         </ol>
-        <details class="fold su-xfold" id="su-extras"><summary><span class="fold-l">Optional extras: error alerts, Robot Care, your app</span></summary>
-        <p class="small" style="margin:10px 0 0">Add any of these now or on any later day. Your robot runs fine without them.</p>
+        <details class="fold su-xfold" id="su-extras"><summary><span class="fold-l">Optional extras: error alerts, Robot Care</span></summary>
+        <p class="small" style="margin:10px 0 0">Add these now or on any later day. Your robot runs fine without them.</p>
         <ol class="su-steps su-x">
           <li class="su-step locked" id="sx1"><div class="su-h"><b>Error alerts</b><span class="pill o" id="sx1-st">Optional</span></div>
             <p>If a run fails in the night, Sentry (free) tells you where and why.</p>
@@ -993,29 +1018,10 @@
             <div class="row"><button class="btn" type="button" id="sx2-go" disabled>Switch on Claude fixes</button></div>
             <p class="small" id="sx2-msg" role="status" aria-live="polite"></p>
             <p class="small">Each fix also uses a few GitHub minutes. To switch it off, delete the key from your copy's Settings &rarr; Secrets.</p></li>
-          <li class="su-step" id="sx3"><div class="su-h"><b>Your dashboard on your phone, Mac or PC</b><span class="pill o" id="sx3-st">Optional</span></div>
-            <p>One click puts your dashboard on your phone, Mac or PC, in its own window like any app. No App Store. It is the only app you need: this members area stays in your browser.</p>
-            <div class="row"><button class="btn" type="button" data-install>Install my dashboard</button></div>
-            <details id="sx3-more"><summary>Add your robot's live numbers to the app (about 10 minutes)</summary>
-              <p>Your plan, holdings, results and the Approve button, on a private page only you can open. It opens with Face ID or your fingerprint (an emailed code is the backup) and asks again before any order goes. It runs on your own free Cloudflare account, so your numbers never pass through ours, and it only ever gets a read-only broker key.</p>
-              <ol>
-                <li><a href="https://dash.cloudflare.com/sign-up" target="_blank" rel="noopener">Make a free Cloudflare account</a>.</li>
-                <li><b>Account API tokens &rarr; Create Token &rarr; Custom token</b>. Call it <b>My Robot ISA</b>, add <b>Account &middot; Cloudflare Pages &middot; Edit</b>, <b>Account &middot; Access: Apps and Policies &middot; Edit</b> and <b>Account &middot; Workers KV Storage &middot; Edit</b> (that one keeps your Face ID keys), create it and copy it.</li>
-                <li>In Trading 212 (the same Practice account), make one more key called <b>My Robot ISA dashboard</b> with only <b>Account data</b>, <b>Metadata</b> and <b>Portfolio</b>, IP access <b>Unrestricted</b>. No Orders switches: it can never place an order.</li>
-                <li>For the <b>Approve</b> button: on GitHub, <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">make a fine-grained token</a> called <b>My Robot ISA approve</b>. Repository access: <b>Only select repositories</b>, your copy. Permissions: <b>Actions: Read and write</b>, <b>Contents: Read-only</b> and <b>Pull requests: Read-only</b>. Expiry: <b>1 year</b>. It can only start your Execute approved orders run with the orders you tapped, or accept a Robot Care fix you tapped, and only after Face ID. Made this token before November 2026? Edit it on GitHub and add <b>Pull requests: Read-only</b>; nothing needs pasting again.</li></ol>
-              <label class="f" for="sx-cft">Cloudflare API token</label><input class="t" id="sx-cft" type="password" autocomplete="off" spellcheck="false">
-              <label class="f" for="sx-rk">Read-only Trading 212 key</label><input class="t" id="sx-rk" type="password" autocomplete="off" spellcheck="false">
-              <label class="f" for="sx-rs">Read-only Trading 212 secret</label><input class="t" id="sx-rs" type="password" autocomplete="off" spellcheck="false">
-              <label class="f" for="sx-ap">GitHub token for the Approve button</label><input class="t" id="sx-ap" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_...">
-              <p class="small" id="sx-em-row">Only <b id="sx-em-show"></b> can open it. <a href="#" id="sx-em-edit" style="color:var(--green);font-weight:700">Change</a></p>
-              <div id="sx-em-box" hidden><label class="f" for="sx-em">Who can open it</label><input class="t" id="sx-em" type="email" autocomplete="email"></div>
-              <div class="row"><button class="btn" type="button" id="sx3-go" disabled>Add my numbers</button></div>
-              <ul class="su-log" id="sx3-log" aria-live="polite"></ul>
-              <p class="small" id="sx3-msg" role="status" aria-live="polite"></p></details></li>
         </ol>
         </details>
         <a class="su-promo su-live-go" href="#live" data-go="live"><b>Ready for real money?</b><span>When you are, the real-money switch walks you through it step by step, just like this page.</span></a>
-        <p class="small" style="margin-top:14px">Set up my robot does QuickStart steps 1 to 4 for you. Can't use it, say GitHub won't connect? The <a href="#guide/qs-1" style="color:var(--green);font-weight:700">manual steps</a> do the same by hand.</p>
+        <p class="small" style="margin-top:14px">Set up my robot does QuickStart steps 1 to 5 for you. Can't use it, say GitHub won't connect? The <a href="#guide/qs-1" style="color:var(--green);font-weight:700">manual steps</a> do the same by hand.</p>
       </section>
 
       <section class="card wide" aria-labelledby="h-lv" id="lv-card" data-page="live">
@@ -1113,8 +1119,8 @@
     ["Your Trading 212 key, practice account first", "8 min", "Turn on the API in Trading 212's practice account, create a key and paste it into Set up my robot. Real orders stay off."],
     ["Your email key", "5 min", "A free Resend account and an API key. No domain needed: reports come to your own inbox."],
     ["Pick how bold, press Build", "5 min", "Cautious, balanced or adventurous, then Build my robot. The setup check lists anything missing in plain words, makes your first paper trade and sends your first report."],
-    ["Optional extras", "3 min", "Robot Care (free for your first year as a founding member), or your own Claude for fixes, and error alerts with a free Sentry account."],
-    ["Your app on your phone, Mac or PC", "10 min", "Install the app, then add your live numbers and the Approve button with a free Cloudflare account and two more keys."]
+    ["Robot Dash and your first paper trade", "10 min", "A free Cloudflare account and two more keys give you your own app. Ask for your first plan, then tap Approve: that's your first paper trade."],
+    ["Optional extras", "3 min", "Robot Care (free for your first year as a founding member), or your own Claude for fixes, and error alerts with a free Sentry account."]
   ];
   var LESSONS = [
     ["Rules, not tips", "What a robot ISA is and isn't; writing rules down so a machine can follow them"],
@@ -2049,19 +2055,19 @@
     $("su-go").disabled = !(SU.tok && t212 && mail && name) || SU.busy;
   }
   // 24 Oct 2026 (v53): the three free accounts go one at a time, like the QuickStart: the next one is highlighted,
-  // later ones wait, each tick is saved as acct:<n> in member_progress. Connecting GitHub ticks GitHub; a build ticks all three.
+  // later ones wait, each tick is saved as acct:<n> in member_progress. Connecting GitHub ticks GitHub; a build ticks the first three; adding Robot Dash ticks Cloudflare.
   function acctPaint() {
     var cur = 0, n = 0;
-    for (var i = 1; i <= 3; i++) { var on = !!done["acct:" + i]; if (on) n++; else if (!cur) cur = i; }
-    for (var j = 1; j <= 3; j++) {
+    for (var i = 1; i <= 4; i++) { var on = !!done["acct:" + i]; if (on) n++; else if (!cur) cur = i; }
+    for (var j = 1; j <= 4; j++) {
       var li = $("acct" + j), on2 = !!done["acct:" + j], st = $("acct" + j + "-st"), b = li.querySelector(".acct-ok");
       li.className = on2 ? "done" : (j === cur ? "now" : "later");
       st.textContent = on2 ? "Done" : (j === cur ? (j === 1 ? "Start here" : "Next") : "");
       st.className = "pill" + (on2 ? " g" : (j === cur ? " now-p" : ""));
-      b.textContent = on2 ? "Undo" : (j === 1 ? "I've got Trading 212 and its app" : j === 2 ? "I've got a GitHub account" : "I've signed up to Resend");
+      b.textContent = on2 ? "Undo" : (j === 1 ? "I've got Trading 212 and its app" : j === 2 ? "I've got a GitHub account" : j === 3 ? "I've signed up to Resend" : "I've got a Cloudflare account");
       b.dataset.acct = j;
     }
-    $("acct-count").textContent = n === 3 ? "· all done" : "· " + n + " of 3 done";
+    $("acct-count").textContent = n === 4 ? "· all done" : "· " + n + " of 4 done";
   }
   function acctSet(list, on) {
     var now = new Date().toISOString(), rows = list.filter(function (k) { return !!done[k] !== on; });
@@ -2228,7 +2234,7 @@
   function b64d(t) { try { return decodeURIComponent(escape(atob((t || "").replace(/\n/g, "")))); } catch (e) { return ""; } }
   function b64e(t) { return btoa(unescape(encodeURIComponent(t))); }
 
-  // ---- Optional extras (QuickStart 5 and 6, folded into Set up my robot). The member's copy says what it supports
+  // ---- Robot Dash (QuickStart 5, step 6 here) and the optional extras (QuickStart 6, folded). The member's copy says what it supports
   // in kit-features.json; error alerts also work on older copies, whose universe.json already has sentry_dsn.
   var SX = { feat: null, featFor: "" };
   function sxCopy() { return SU.full || (SU.have && SU.have.full) || ""; }
@@ -2241,12 +2247,12 @@
   var SX_NEED = { sx1: "sentry_dsn", sx2: "claude_fix", sx3: "dashboard_setup" }, SX_MIN = { sx1: 1, sx2: 2, sx3: 2 };   // claude_fix 2 = the per-fix cost cap is in the kit
   async function sxState() {
     var full = sxCopy(), on = !!(SU.tok && full);
-    ["sx1", "sx2"].forEach(function (id) { $(id).classList.toggle("locked", !on); });
+    ["sx1", "sx2", "sx3"].forEach(function (id) { $(id).classList.toggle("locked", !on); });
     if (!on) {   // 25 Oct 2026 (Amit: "I can't choose anything but Robot Care"): say what's missing
       var why = !SU.tok ? "Press Connect GitHub in step 1 first: the connection is forgotten when you close the page, so these extras unlock once you connect again."
                         : "These go into your copy of the code, and there's no copy called " + ($("su-name").value.trim() || "my-robot-isa") + " under @" + SU.login + " yet. Build it with step 5, or type your copy's name in step 4." +
                           (SC.st && SC.st.login && SC.st.login.toLowerCase() !== (SU.login || "").toLowerCase() ? " Your robot is under @" + SC.st.login + "? Sign out of GitHub, then press Connect GitHub and choose that account." : "");
-      ["sx1", "sx2"].forEach(function (id) { $(id + "-msg").textContent = why; });
+      ["sx1", "sx2", "sx3"].forEach(function (id) { $(id + "-msg").textContent = why; });
       sxCheck(); return; }
     var f = await sxFeatures(full);
     ["sx1", "sx2", "sx3"].forEach(function (id) {
@@ -2264,6 +2270,10 @@
     $("sx3-go").disabled = !(ok("sx3") && $("sx-cft").value.trim().length >= 30 &&
       $("sx-rk").value.trim().length > 10 && $("sx-rs").value.trim().length > 10 && /^github_pat_[A-Za-z0-9_]{40,}$/.test($("sx-ap").value.trim()) &&
       /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test($("sx-em").value.trim()));
+    // 2 Nov 2026 (Amit): Robot Dash comes first. The weekly run publishes it, and the email's Approve opens it.
+    var dash = !!(me && me.dashboard_url), ready = on && dash;
+    $("sx3").classList.toggle("done", dash); $("sx3-st").textContent = dash ? "On" : "To do"; $("sx3-st").className = "pill" + (dash ? " g" : "");
+    $("su7").classList.toggle("locked", !ready); if (!SU.planAsked) $("su-plan").disabled = !ready;
   }
 
   // ---- Robot Care (25 Oct 2026): one tap switches it on (robot-care-join), then GitHub installs the app on the copy.
@@ -2457,17 +2467,17 @@
       var e = log("Saving who can open it"); if (!(await ghVar(full, "DASHBOARD_EMAIL", $("sx-em").value.trim()))) e.bad("Couldn't save your email just now. Press Add my numbers again: your keys are already saved."); e.ok("Only " + $("sx-em").value.trim() + " can open it");
       var c = log("Setting up your app on Cloudflare (about a minute)"), r = await ghRun(full, "dashboard-setup.yml");
       if (r.r === "missing" || r.r === "nostart") c.bad("Couldn't start the app setup. Press Add my numbers again in a minute.");
-      if (r.r === "failure") c.bad("Cloudflare said no. Check the token has both permissions, then press Add my numbers again.");
+      if (r.r === "failure") c.bad("Cloudflare said no. Check the token has all three permissions, then press Add my numbers again.");
       if (r.r === "running") { c.ok("Still setting up: open Actions → Dashboard setup on your copy to see the address when it finishes."); }
       else {
         c.ok("Set up on Cloudflare");
         var f = await gh("/repos/" + full + "/contents/dashboard-url.txt?ref=ci/dashboard-setup"), url = f.ok && f.j ? b64d(f.j.content).trim() : "";
         if (/^https:\/\/[A-Za-z0-9.-]+\.[a-z]{2,}(\/.*)?$/.test(url)) {
           ghVar(full, "DASHBOARD_URL", url.replace(/\/+$/, ""));   // #372: the weekly email's Approve button opens this dashboard
-          rest("rpc/set_my_dashboard", { method: "POST", body: JSON.stringify({ p_url: url }) }).then(function (x) { if (x && x.ok) { me.dashboard_url = x.j || url; renderDash(); } }).catch(function () {});
-          m.innerHTML = 'Your numbers: <a href="' + esc(url) + '" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">' + esc(url.replace(/^https:\/\//, "")) + '</a>. It fills in after tonight\'s run, and it\'s saved under Your dashboard in this app.';
+          rest("rpc/set_my_dashboard", { method: "POST", body: JSON.stringify({ p_url: url }) }).then(function (x) { if (x && x.ok) { me.dashboard_url = x.j || url; renderDash(); sxCheck(); } }).catch(function () {});
+          m.innerHTML = 'Your numbers: <a href="' + esc(url) + '" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">' + esc(url.replace(/^https:\/\//, "")) + '</a>. It fills in with your first plan in the next step, and it\'s saved under Your dashboard in this app.';
         } else m.textContent = "Set up. Open Actions → Dashboard setup on your copy to see your app's address.";
-        $("sx3").classList.add("done"); $("sx3-st").textContent = "On";
+        acctSet(["acct:4"], true);
       }
     } catch (e) { if (e.message !== "stop") m.textContent = "Something went wrong. Press Add my numbers again."; }
     SU.busy = false; sxCheck();
@@ -2557,10 +2567,13 @@
     LV.busy = false; lvState();
   }
   async function suPlan() {
-    if (!SU.full) return; var b = $("su-plan"); b.disabled = true; $("su-plan-msg").textContent = "Asking your robot for its plan…";
-    var d = await gh("/repos/" + SU.full + "/actions/workflows/weekly-signals.yml/dispatches", { method: "POST", body: { ref: "main" } });
-    $("su-plan-msg").textContent = d.ok ? "On its way: the plan lands in your inbox in a few minutes. Open it and tap Approve: that's your first paper trade." : "Couldn't start it. Open Actions on your copy and run Weekly signals.";
-    if (!d.ok) b.disabled = false;
+    var full = sxCopy(); if (!full) return; var b = $("su-plan"); b.disabled = true; SU.planAsked = true; $("su-plan-msg").textContent = "Asking your robot for its plan…";
+    var d = await gh("/repos/" + full + "/actions/workflows/weekly-signals.yml/dispatches", { method: "POST", body: { ref: "main" } });
+    $("su-plan-msg").textContent = d.ok ? "On its way: the plan lands in your inbox, usually within a few minutes, and the same run fills in Robot Dash. Open the email and tap Approve: that's your first paper trade." : "Couldn't start it. Open Actions on your copy and run Weekly signals.";
+    if (!d.ok) { b.disabled = false; SU.planAsked = false; return; }
+    $("su-app").hidden = false; $("su7").classList.add("done"); $("su7-st").textContent = "Asked"; $("su7-st").className = "pill g";
+    done["qs:5"] = true; renderAll();
+    rest("member_progress?on_conflict=user_id,item", { method: "POST", headers: { Prefer: "resolution=merge-duplicates,return=minimal" }, body: JSON.stringify([{ user_id: me.user_id, item: "qs:5", done: true, updated_at: new Date().toISOString() }]) }).catch(function () {});
   }
 
   // ---- the site's side menu (drawer on phones)
@@ -2596,7 +2609,7 @@
   }
   // Lesson videos (22 Oct 2026; private since 28 Oct 2026): kept in the private R2 bucket. lesson-media checks the member
   // (same rule as here: preview_videos or owner) and hands back a link that works for 30 minutes.
-  var VIDLINK = {}, VIDEOS = { "qs-1": "qs-01-copy-the-code", "qs-2": "qs-02-broker-key", "qs-3": "qs-03-email-key", "qs-4": "qs-04-setup-check", "qs-5": "qs-05-optional-extras", "qs-6": "qs-06-your-app",
+  var VIDLINK = {}, VIDEOS = { "qs-1": "qs-01-copy-the-code", "qs-2": "qs-02-broker-key", "qs-3": "qs-03-email-key", "qs-4": "qs-04-setup-check", "qs-5": "qs-06-your-app", "qs-6": "qs-05-optional-extras",
     "day-1": "day-01-rules-not-tips", "day-2": "day-02-get-it-running", "day-3": "day-03-data-you-can-trust", "day-4": "day-04-make-it-yours", "day-5": "day-05-backtest-honestly", "day-6": "day-06-paper-money-first", "day-7": "day-07-the-plumbing",
     "day-8": "day-08-done-means-it-happened", "day-9": "day-09-make-it-explain-itself", "day-10": "day-10-keys-and-secrets", "day-11": "day-11-it-runs-while-you-sleep", "day-12": "day-12-limits-and-an-off-switch", "day-13": "day-13-small-and-real", "day-14": "day-14-keep-an-honest-record" };
   function guideVideo(id) {
@@ -2667,7 +2680,7 @@
     $("gd-bar").style.width = (ticked / total * 100) + "%";
     $("gd-count").textContent = ticked === total ? "All " + total + " steps done." : ticked + " of " + total + " steps done";
     var isDone = !!done[gkey(id, n)];
-    var ORDER = ["qs-1","qs-2","qs-3","qs-4","qs-5","qs-claude","qs-6","day-1","day-2","day-3","day-4","day-5","day-6","day-7","day-8","day-9","day-10","day-11","day-12","day-13","day-14"];
+    var ORDER = ["qs-1","qs-2","qs-3","qs-4","qs-5","qs-6","qs-claude","day-1","day-2","day-3","day-4","day-5","day-6","day-7","day-8","day-9","day-10","day-11","day-12","day-13","day-14"];
     var nextId = ORDER[ORDER.indexOf(id) + 1], nextG = nextId && GUIDES[nextId], backHref = id.indexOf("qs-") === 0 ? ((me && me.preview_videos) ? "#setup" : "#start") : "#lessons", backLabel = id.indexOf("qs-") === 0 ? ((me && me.preview_videos) ? "Back to Set up my robot" : "Back to Start here") : "Back to all lessons";
     if (ticked === total && gcur.celebrate) {
       $("gd-step").innerHTML = '<div class="gd-step gd-done"><div class="sn" style="color:var(--green)">All ' + total + ' steps done</div><h3>' + esc(g.kind) + ' finished &#10003;</h3>' +
