@@ -29,6 +29,9 @@ v2.6.1 (24 Oct 2026, approved by Amit: "go ahead with the black theme ... for in
   * new blocks: `items` [(tag, kind, title, note, link|None)] numbered rows with the tag pinned right (a tag that
     repeats the card's own tag is dropped), and `tiles` [(label, value, note)] in the website dashboard's tile style;
   * LMS_BRAND / LMS_LOGO added; solid_tag(label, kind) for callers that build their own rows.
+v2.6.8 (2 Nov 2026, Amit) — internal mail only: headings break long words so a phone layout can't overflow, and a black
+  outline covers the side strips the iPhone Gmail app adds. `light only` stays: declaring dark, or nothing, made that app
+  invert the black page to white. Member mail is unchanged.
 v2.6.5 (25 Oct 2026, Amit's robot picks) — member emails get one robot per email type, in the course style with
   hands and no tag: up day upchart, quieter day tea, all quiet sleep, your turn phone, paused pause sign, milestone trophy,
   setup check magnifier tick; new moods reminder (alarm clock), sent (paper plane), refused / setupfix (wrench), answer
@@ -734,6 +737,17 @@ def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand
     html = html.replace('<meta name="supported-color-schemes" content="light only">\n',
                         '<meta name="supported-color-schemes" content="light only">\n'
                         '<meta name="format-detection" content="telephone=no,date=no,address=no,email=no,url=no">\n', 1)
+    # v2.6.8 (Amit, 2 Nov 2026: "email is stretched ... Gmail adds the white border ... fill in with black"): a long
+    # unbroken word in a heading (CLAUDE_CODE_OAUTH_TOKEN) pushed a 375px phone layout to 691px, so the iPhone Gmail app
+    # shrank the whole email to fit. Headings may now break mid-word. Keep `light only`: declaring dark, or nothing, makes
+    # the iPhone Gmail app invert the black page to white (tested on Amit's phone, 2 Nov 2026). Member mail is untouched.
+    # The iPhone Gmail app also leaves a light strip down each side of the message: a black outline paints over it. The
+    # strips above and below the message are Gmail's own and can't be reached (Test D on Amit's phone, 2 Nov 2026).
+    html = html.replace("font-family:Impact,", "word-break:break-word;overflow-wrap:anywhere;font-family:Impact,")
+    page_bg = _INTERNAL["PAGE"]
+    html = html.replace(f'class="mri-page" width="100%" cellpadding="0" cellspacing="0" bgcolor="{page_bg}" style="',
+                        f'class="mri-page" width="100%" cellpadding="0" cellspacing="0" bgcolor="{page_bg}" style="'
+                        f'box-shadow:0 0 0 20px {page_bg};outline:20px solid {page_bg};', 1)
     html = html.replace("<style>", "<style>a[x-apple-data-detectors]{color:inherit !important;text-decoration:none !important;"
                         "font-size:inherit !important;font-family:inherit !important;font-weight:inherit !important;line-height:inherit !important}", 1)
     return html
