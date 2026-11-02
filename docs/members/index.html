@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="95">
+<meta name="mri-version" content="96">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -800,6 +800,15 @@
         <p class="small" style="margin:12px 0 0">Prefer email? <a href="mailto:hello@myrobotisa.com?subject=Members%20area" style="color:var(--green);font-weight:700">hello@myrobotisa.com</a> · replies within two working days.</p>
         </div>
         <div id="pane-memb" hidden>
+        <section id="ea-card" hidden aria-labelledby="ea-h" style="margin:0 0 22px;padding:16px;border:1px solid var(--rule);border-radius:16px">
+          <h3 id="ea-h" style="margin:0 0 4px">Early adopters</h3>
+          <p class="small" style="margin:0 0 10px">Only you see this. Adding someone opens everything for them: all lessons, a free licence and a year of Robot Care, outside the founding 100.</p>
+          <label class="f" for="ea-email">Their email</label><input class="t" id="ea-email" type="email" autocomplete="off" spellcheck="false">
+          <label class="f" for="ea-name">First name (optional)</label><input class="t" id="ea-name" autocomplete="off" maxlength="40">
+          <div class="row"><button class="btn" type="button" id="ea-add">Add</button></div>
+          <p class="small" id="ea-msg" role="status" aria-live="polite"></p>
+          <ul id="ea-list" style="list-style:none;margin:12px 0 0;padding:0"></ul>
+        </section>
         <div class="ib-seg hp-seg" role="tablist" aria-label="Help and membership"><a role="tab" href="#help" data-go-tab="help" aria-selected="true">Membership</a><a role="tab" href="#passkeys" data-go-tab="passkeys" aria-selected="false">Faster sign-in</a></div>
         <div class="kv" id="mem-kv"></div>
         <div class="row"><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=My%20membership">Email about my membership</a></div>
@@ -1138,7 +1147,7 @@
     ["Small and real", "Moving from paper to real money carefully"],
     ["Keep an honest record", "Reviewing wins and Ls without fooling yourself"]
   ];
-  var PLAN = { founding: "Founding member", standard: "Member", owner: "Owner (test account)", test: "Test account" };
+  var PLAN = { founding: "Founding member", standard: "Member", owner: "Owner (test account)", test: "Test account", early: "Early adopter" };
 
   // ---- session (kept in this browser or app only; it's the sign-in itself, nothing else)
   function load() { try { return JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) { return null; } }
@@ -1240,7 +1249,7 @@
     renderList($("qs"), QS, "qs", function (i) { var g = window.GUIDES && GUIDES["qs-" + (i + 1)]; return ' <span class="pill">' + QS[i][1] + '</span>' + (g ? ' <span class="small">about ' + g.mins + ' min</span>' : "") + '<br><a class="gd-link" href="#guide/qs-' + (i + 1) + '">Step by step &rarr;</a>'; });
     renderList($("lessons"), LESSONS, "day", function (i) {
       var g = window.GUIDES && GUIDES["day-" + (i + 1)], mins = g ? ' <span class="small">about ' + g.mins + ' min</span>' : "";
-      var pill = i === 0 ? ' <span class="pill g">Free to watch</span>' : (me.preview_videos ? ' <span class="pill g">Open (preview)</span>' : ' <span class="pill a">Opens January 2027</span>');
+      var pill = i === 0 ? ' <span class="pill g">Free to watch</span>' : (me.plan === "early" ? ' <span class="pill g">Open</span>' : me.preview_videos ? ' <span class="pill g">Open (preview)</span>' : ' <span class="pill a">Opens January 2027</span>');
       return pill + mins + '<br><a class="gd-link" href="#guide/day-' + (i + 1) + '">Step by step &rarr;</a>';
     });
     counts();
@@ -1279,15 +1288,15 @@
       "<dt>Dashboard</dt><dd>" + (m.dashboard_url ? '<a class="pill g pill-link" href="' + esc(dashHref(m.dashboard_url)) + '">Open my dashboard</a>' : '<a href="#dashboard" style="font-size:14px;font-weight:700">Add your link</a>') + "</dd>";
     $("name-edit").addEventListener("click", editName);
     $("code-kv").innerHTML =
-      "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : (m.repo_url ? "Preview account" : "Arrives in January 2027")) + "</b></div>" +
-      "<div><span>Version</span><b>" + (m.repo_invited_at ? "Latest" : "Preview") + "</b></div>";
+      "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : m.plan === "early" ? "Your own copy, from Set up my robot" : (m.repo_url ? "Preview account" : "Arrives in January 2027")) + "</b></div>" +
+      "<div><span>Version</span><b>" + (m.repo_invited_at || m.plan === "early" ? "Latest" : "Preview") + "</b></div>";
     var br = $("b-repo"); if (m.repo_url) { br.href = m.repo_url; br.removeAttribute("aria-disabled"); br.target = "_blank"; br.rel = "noopener"; br.classList.remove("ghost"); } else { br.removeAttribute("href"); br.setAttribute("aria-disabled", "true"); }
     $("mem-kv").innerHTML =
       "<div><span>Updates included until</span><b>" + esc(fmtDate(m.updates_until)) + "</b></div>" +
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
     document.querySelectorAll(".pv-only").forEach(function (el) { el.hidden = !m.preview_videos; });
     document.querySelectorAll(".npv-only").forEach(function (el) { el.hidden = !!m.preview_videos; });   // Start here folds into Set up my robot
-    rcfNav(); acInit();
+    rcfNav(); acInit(); eaInit();
     renderDash(); renderAll(); show("home"); if (gcur.id) guideVideo(gcur.id); passkeyCard(); loadNotes(); loadGuides(); rcfLoad(location.hash === "#fixes"); if (location.hash === "#mydash") dashOpen(false);
     // #372: an Approve link from an email lands here (#approvals): approvals happen on your own dashboard, with Face ID.
     if (location.hash === "#approvals") { var du = String(me.dashboard_url || "");
@@ -2127,7 +2136,7 @@
       suFn("POST", { code: code }).then(function (r) {
         if (!r.ok || !r.j.access_token) { cm.textContent = (r.j && r.j.error) || "That didn't work. Press Connect GitHub again."; return; }
         SU.tok = r.j.access_token; SU.invite = r.j.invite || ""; SU.link = r.j.link || ""; SU.saved = r.j.saved || "";
-        return gh("/user").then(function (u) { SU.login = u.j && u.j.login || ""; ghConnected(); if (back === "help") acConnected(); });
+        return suTemplateInvite().then(function () { return gh("/user"); }).then(function (u) { SU.login = u.j && u.j.login || ""; ghConnected(); if (back === "help") acConnected(); });
       }).catch(function () { cm.textContent = "No connection. Check you're online and try again."; });
     })();
   })();
@@ -2154,6 +2163,7 @@
         a.ok("Using your existing copy, " + name); }
       else if (g.status === 403 && /rate limit/i.test((g.j && g.j.message) || "")) suFail(a, "GitHub is busy right now. Wait a minute and press Build again.");
       else if (g.status === 403 || g.status === 401) suFail(a, "GitHub didn't let this page make your copy. Press Connect GitHub again and allow access to your repositories, then press Build.");
+      else if (g.status === 404) suFail(a, "GitHub says you don't have access to the robot's code yet. Press Connect GitHub again, then Build. Still stuck? Email hello@myrobotisa.com.");
       else if (!g.ok) suFail(a, "GitHub had a hiccup (" + g.status + "). Wait a minute and press Build again: nothing has been changed yet.");
       else a.ok("Created your private copy, " + name);
       var w = suLog("Waiting for GitHub to finish copying");
@@ -2203,6 +2213,12 @@
     } catch (e) { if (e.message !== "stop") { SU.busy = false; suCheck(); } }
   }
   // 24 Oct 2026 (v50): one connection serves both pages; whichever page asked shows it.
+  // 2 Nov 2026 (D32): an early adopter is invited to the private template when they connect. Accept it here, with their own
+  // connection, so they never have to find GitHub's invite email. Best effort: Build says so if access is still missing.
+  async function suTemplateInvite() {
+    try { var l = await gh("/user/repository_invitations?per_page=30"), i = (l.j || []).filter(function (x) { return x.repository && x.repository.full_name === SU_TEMPLATE; })[0];
+      if (i) await gh("/user/repository_invitations/" + i.id, { method: "PATCH" }); } catch (e) {}
+  }
   function ghConnected() {
     acctSet(["acct:2"], true);
     suState(1, "Connected", true); $("su1-msg").textContent = "Connected as @" + SU.login + "." + (SU.invite === "invited" ? " You're also invited to the members' space on GitHub: accept it from GitHub's email, or at github.com/myrobotisa." : ""); $("su-gh").hidden = true; suUnlock(); suLookup();
@@ -2481,6 +2497,41 @@
       }
     } catch (e) { if (e.message !== "stop") m.textContent = "Something went wrong. Press Add my numbers again."; }
     SU.busy = false; sxCheck();
+  }
+
+  // ---- Early adopters (2 Nov 2026, D32): the owner's card in Help and membership, so it shows inside Robot Dash too.
+  function eaRpc(name, body) { return rest("rpc/" + name, { method: "POST", body: JSON.stringify(body || {}) }).then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); }); }
+  function eaLoad() {
+    eaRpc("owner_early_list").then(function (r) {
+      var rows = r.ok && Array.isArray(r.j) ? r.j : [], ul = $("ea-list"); ul.innerHTML = "";
+      rows.forEach(function (p) {
+        var bits = [p.invited_at ? "Invited" : "Not invited", p.signed_in ? "Signed in" : "Not signed in", p.github_login ? "GitHub @" + p.github_login : "", p.has_dash ? "Robot Dash on" : "", p.robot_care ? "Robot Care on" : "", p.qs_done + " of 6 steps", p.minutes != null ? p.minutes + " min to first plan" : ""].filter(Boolean);
+        var li = document.createElement("li"); li.style.cssText = "padding:10px 0;border-top:1px solid var(--rule)";
+        li.innerHTML = "<b>" + esc(p.first_name || p.email) + "</b>" + (p.first_name ? ' <span class="small">' + esc(p.email) + "</span>" : "") + '<p class="small" style="margin:2px 0 8px">' + esc(bits.join(" · ")) + '</p><div class="row"><button class="btn ghost sm" type="button" data-ea="inv">' + (p.invited_at ? "Send again" : "Send invite") + '</button><button class="btn ghost sm" type="button" data-ea="rm">Remove</button></div>';
+        li.querySelector('[data-ea="inv"]').addEventListener("click", function () { eaInvite(p.id); });
+        var rm = li.querySelector('[data-ea="rm"]'); rm.addEventListener("click", function () {
+          if (rm.textContent !== "Sure?") { rm.textContent = "Sure?"; return; }
+          eaRpc("owner_early_remove", { p_id: p.id }).then(eaLoad); });
+        ul.appendChild(li);
+      });
+    }).catch(function () { $("ea-msg").textContent = "Couldn't load the list. Check you're online."; });
+  }
+  function eaInvite(id) {
+    var m = $("ea-msg"); m.textContent = "Sending…";
+    fresh().then(function (s) { return fetch(SB + "/functions/v1/early-invite", { method: "POST", headers: { apikey: KEY, Authorization: "Bearer " + s.access_token, "Content-Type": "application/json" }, body: JSON.stringify({ id: id }) }); })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { m.textContent = r.ok ? "Invite sent." : j.error || "The invite email isn't switched on yet."; if (r.ok) eaLoad(); }); })
+      .catch(function () { m.textContent = "The invite email isn't switched on yet."; });
+  }
+  function eaInit() {
+    if (!me || me.plan !== "owner") return; $("ea-card").hidden = false; eaLoad();
+    if ($("ea-add").dataset.on) return; $("ea-add").dataset.on = "1";
+    $("ea-add").addEventListener("click", function () {
+      var m = $("ea-msg"), e = $("ea-email").value.trim(); if (!e) { m.textContent = "Type their email first."; return; }
+      eaRpc("owner_early_add", { p_email: e, p_first_name: $("ea-name").value.trim() || null }).then(function (r) {
+        if (r.ok && r.j && r.j.ok) { m.textContent = e + " is in. They can sign in now."; $("ea-email").value = $("ea-name").value = ""; eaLoad(); }
+        else m.textContent = (r.j && r.j.error) || "That didn't save. Try again in a minute.";
+      }).catch(function () { m.textContent = "No connection. Try again."; });
+    });
   }
 
   // ---- Real money (v50): its own step-by-step page. The go-live check is advice, not a gate (Amit, 24 Oct 2026).
