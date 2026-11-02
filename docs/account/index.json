@@ -24,7 +24,13 @@
    "sealed_at": "2026-10-30T21:31:05Z",
    "ots": true,
    "status": "sealed"
+  },
+  "2026-11-02-live": {
+   "sha256": "5b6c55082b42e36b675425e046b5a385b7ec7b6a80ee5248d4acca9f32ac4e7e",
+   "sealed_at": "2026-11-02T21:31:06Z",
+   "ots": true,
+   "status": "sealed"
   }
  },
- "updated_at": "2026-10-30T21:31:05Z"
+ "updated_at": "2026-11-02T21:31:06Z"
 }
