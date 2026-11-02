@@ -330,7 +330,7 @@
   .kit-l dl{margin:10px 0 0;padding-top:10px;border-top:1px solid var(--rule);display:grid;grid-template-columns:92px 1fr;gap:4px 10px;font-size:14px;line-height:1.45}
   .kit-l dt{color:var(--muted);font-weight:700;white-space:nowrap}
   .kit-l dd{margin:0;color:var(--ink)}
-  @media(min-width:760px){.kit-l{grid-template-columns:repeat(3,1fr)}.kit-l dl{grid-template-columns:1fr;gap:0}.kit-l dd{margin-bottom:8px}}
+  @media(min-width:760px){.kit-l{grid-template-columns:repeat(2,1fr)}}
   .kit-o{list-style:none;margin:0;padding:4px 16px;background:var(--deep2);border:1px solid var(--rule);border-radius:16px}
   .kit-o li{padding:10px 0;border-top:1px solid var(--rule);font-size:15px;line-height:1.5;color:var(--ink)}
   .kit-o li:first-child{border-top:0}
@@ -465,20 +465,20 @@
 
   <section class="kit" id="tools">
     <h2>What it <span class="p">runs on</span></h2>
-    <p class="lead">Three accounts run your robot, all free to open, and no code. Your money only ever sits in one of them: your own Trading 212 ISA. The QuickStart walks you through each one.</p>
-    <p class="kit-g">The three you need</p>
+    <p class="lead">Four accounts run your robot, all free to open, and no code. Your money only ever sits in one of them: your own Trading 212 ISA. The QuickStart walks you through each one.</p>
+    <p class="kit-g">The four you need</p>
     <ul class="kit-l">
-      <li><b class="n">Trading 212</b><p>Holds your ISA and your money, in your name.</p><dl><dt>Cost</dt><dd>No account fee and no commission. A 0.15% currency fee on shares priced outside pounds.</dd><dt>Your money</dt><dd>It lives here. The robot's key can't withdraw it.</dd></dl></li>
+      <li><b class="n">Trading 212</b><p>Holds your ISA and your money, in your name.</p><dl><dt>Cost</dt><dd>No account fee and no commission. A 0.15% currency fee each way on shares priced outside pounds. UK shares also carry 0.5% stamp duty when you buy.</dd><dt>Your money</dt><dd>It lives here. The robot's key can't withdraw it.</dd></dl></li>
       <li><b class="n">GitHub</b><p>Your robot's home. Your private copy runs here on a schedule, so your computer can be off.</p><dl><dt>Cost</dt><dd>Free plan.</dd><dt>Your money</dt><dd>No. It keeps the robot's key locked, and nothing is bought or sold until you approve.</dd></dl></li>
       <li><b class="n">Resend</b><p>Sends your weekly plan and reports to your own inbox.</p><dl><dt>Cost</dt><dd>Free plan.</dd><dt>Your money</dt><dd>Never holds it.</dd></dl></li>
+      <li><b class="n">Cloudflare</b><p>Runs Robot Dash, your private app, where you see your live numbers and tap Approve. It's where your weekly email takes you.</p><dl><dt>Cost</dt><dd>Free plan.</dd><dt>Your money</dt><dd>No. The button only sends orders you approve.</dd></dl></li>
     </ul>
     <p class="kit-g">Only for a specific job</p>
     <ul class="kit-o">
       <li><b>Claude</b><span class="j"><b>For the 14 lessons:</b> you ask it about your copy as you go. The free plan is enough, with or without Robot Care.</span><span class="j"><b>For fixing a failed run:</b> not needed with <a href="robot-care.html" style="color:var(--green);font-weight:700">Robot Care</a>, which runs Claude on our account. Without Robot Care, you'd need a paid Claude plan or pay-as-you-go credit.</span></li>
       <li><b>Sentry</b><span class="j"><b>Only for:</b> a detailed report when a run fails. GitHub already tells you a run failed. Not needed with Robot Care, which reads the log for you. Free plan.</span></li>
-      <li><b>Cloudflare</b><span class="j"><b>Only for:</b> live numbers and the Approve button in your dashboard app. Without it, you approve from the weekly email. Free plan.</span></li>
     </ul>
-    <p class="small">None of these three can withdraw your money. Costs as we last checked them, in November 2026; each company sets its own and they can change. None of these companies endorses us. Software and a course, not financial advice. Capital at risk.</p>
+    <p class="small">Neither can withdraw your money. Costs as we last checked them, in November 2026; each company sets its own and they can change. None of these companies endorses us. Software and a course, not financial advice. Capital at risk.</p>
   </section>
 
   <h2 id="days">The 14 <span class="p">days</span></h2>
