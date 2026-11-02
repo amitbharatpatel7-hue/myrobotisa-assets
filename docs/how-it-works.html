@@ -340,7 +340,7 @@
   .kit-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
   .kit-h b{font-size:16px;font-weight:800;white-space:nowrap}
   @media(max-width:420px){.kit-h b{font-size:15px}.kit-p{font-size:11px;padding:3px 8px}}
-  .kit-p{flex:none;padding:3px 10px;border-radius:999px;background:var(--rule);color:var(--ink);font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap}
+  .kit-p{flex:none;padding:3px 10px;border-radius:999px;border:1px solid var(--pink-ink);color:var(--pink-ink);font-size:12px;font-weight:700;text-decoration:none;white-space:nowrap}
   .kit-rc{margin:10px 0 0;padding:14px 16px;border:2px solid var(--green);border-radius:16px;font-size:15px;line-height:1.5;color:var(--ink)}
   /* What it runs on: a week as a journey (2 Nov 2026). The robot lights up stop by stop; still for anyone who asks for reduced motion. */
   .jr-l{list-style:none;margin:14px 0 0;padding:0;position:relative;display:grid;gap:12px}
@@ -353,14 +353,16 @@
   .jr-s dl{margin:8px 0 0;font-size:13px;line-height:1.4}
   .jr-s dt{color:var(--muted);font-weight:700;margin-top:4px}
   .jr-s dd{margin:0;color:var(--ink)}
-  .jr-home .jr-b{padding:10px 12px;margin-top:-4px;border:2px solid var(--green);border-radius:14px;box-shadow:0 0 22px rgba(0,232,122,.28)}
+  .jr-l .jr-home{box-shadow:0 0 0 2px var(--green),0 0 24px rgba(0,232,122,.3)}
+  .jr-s dd.jr-lock{display:flex;gap:5px;align-items:flex-start;color:var(--green);font-weight:700}
+  .jr-lock svg{flex:none;margin-top:2px}
   @media(min-width:760px){
     .jr-l{grid-template-columns:repeat(4,1fr);gap:10px}
     .jr-l::before{left:12%;right:12%;top:46px;bottom:auto;width:auto;height:3px;background:linear-gradient(90deg,var(--green),var(--pink))}
     .jr-s{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:8px}
     .jr-s img{width:84px;height:84px;margin:0}
     .jr-b{width:100%}
-    .jr-home .jr-b{margin-top:0;padding:8px}
+    .jr-s dd.jr-lock{justify-content:center}
   }
   @media(prefers-reduced-motion:no-preference){
     .jr-s{animation:jr-on 12s infinite}
@@ -371,7 +373,6 @@
   }
   @keyframes jr-on{0%,25%,100%{background:transparent;border-color:transparent}3%,22%{background:var(--deep2);border-color:var(--green)}}
   @keyframes jr-bot{0%,25%,100%{transform:scale(1);border-color:var(--rule);box-shadow:none}3%,22%{transform:scale(1.1);border-color:var(--green);box-shadow:0 0 22px rgba(0,232,122,.45)}}
-  .kit-lock{display:flex;width:max-content;max-width:100%;align-items:center;gap:6px;margin:0 0 6px;padding:3px 10px;border-radius:999px;background:var(--green);color:var(--deep);font-size:12px;font-weight:800}
   .jobs{margin:34px 0 8px}
   .jobs .lead{color:var(--ink)}
   .job{display:grid;grid-template-columns:1fr;gap:4px 18px;margin:18px 0 0}
@@ -506,7 +507,7 @@
       <li class="jr-s"><img src="email/robot-bulb.png" alt="" width="84" height="84"><div class="jr-b"><span class="jr-w">GitHub</span><b>Runs your robot</b><p>Your private copy works out the plan on schedule, so your computer can be off.</p><dl><dt>Cost</dt><dd>Free plan.</dd><dt>Your money</dt><dd>No. It keeps the robot's key locked.</dd></dl></div></li>
       <li class="jr-s"><img src="email/robot-paperplane.png" alt="" width="84" height="84"><div class="jr-b"><span class="jr-w">Resend</span><b>Emails you the plan</b><p>Your weekly plan and reports, in your own inbox.</p><dl><dt>Cost</dt><dd>Free plan.</dd><dt>Your money</dt><dd>Never holds it.</dd></dl></div></li>
       <li class="jr-s"><img src="email/robot-phonetick.png" alt="" width="84" height="84"><div class="jr-b"><span class="jr-w">Cloudflare</span><b>Runs Robot Dash</b><p>Your private app, where you see live numbers and tap Approve. Your weekly email opens it.</p><dl><dt>Cost</dt><dd>Free plan.</dd><dt>Your money</dt><dd>No. The button only sends orders you approve.</dd></dl></div></li>
-      <li class="jr-s jr-home"><img src="email/robot-tea.png" alt="" width="84" height="84"><div class="jr-b"><span class="kit-lock"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Your money lives here</span><span class="jr-w">Trading 212</span><b>Holds your ISA</b><p>In your name. Only the orders you approved reach it.</p><dl><dt>Cost</dt><dd>No account or commission fee. 0.15% currency fee each way outside pounds. 0.5% stamp duty buying UK shares.</dd><dt>Your money</dt><dd>It lives here. The robot's key can't withdraw it.</dd></dl></div></li>
+      <li class="jr-s jr-home"><img src="email/robot-tea.png" alt="" width="84" height="84"><div class="jr-b"><span class="jr-w">Trading 212</span><b>Holds your ISA</b><p>In your name. Only the orders you approved reach it.</p><dl><dt>Cost</dt><dd>No account or commission fee. 0.15% currency fee each way outside pounds. 0.5% stamp duty buying UK shares.</dd><dt>Your money</dt><dd class="jr-lock"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>It lives here. The robot's key can't withdraw it.</span></dd></dl></div></li>
     </ol>
     <p class="small" style="margin:10px 0 0">The 14 lessons also use Claude's free plan: you ask it about your copy as you go.</p>
     <p class="kit-g">Only for a specific job</p>
