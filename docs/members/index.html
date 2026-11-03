@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="101">
+<meta name="mri-version" content="102">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -451,6 +451,9 @@
   .su-seg button{flex:1 1 120px;min-height:46px;border-radius:14px;border:2px solid var(--rule);background:var(--deep);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
   .su-seg button[aria-pressed="true"]{border-color:var(--green);background:#14402C;color:var(--green)}
   .su-seg small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+  .su-bt table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13.5px} .su-bt th,.su-bt td{padding:8px 6px;border-top:1px solid var(--rule);text-align:left;vertical-align:top}
+  .su-bt thead th{color:var(--green);border-top:0} .su-bt tbody th{font-weight:500;color:var(--muted)} .su-bt td{color:var(--ink);font-weight:700;white-space:nowrap}
+  .su-step .su-bt-w{font-size:13px}
   .su-lock{display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding:12px 14px;border-radius:14px;background:var(--deep);border:1px solid var(--rule);font-size:13.5px;color:var(--muted)} .su-lock b{color:var(--ink)}
   .su-log{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
   .su-log li{display:flex;gap:10px;align-items:center;font-size:15px} .su-log li i{width:22px;height:22px;border-radius:50%;flex:none;border:2px solid var(--rule)}
@@ -975,6 +978,17 @@
             <p>Both can be changed later.</p>
             <label class="f">How bold?</label>
             <div class="su-seg" data-k="risk"><button type="button" data-v="balanced" aria-pressed="true">Balanced<small>the default</small></button><button type="button" data-v="adventurous" aria-pressed="false">Adventurous<small>bigger bold slice</small></button></div>
+            <details class="su-bt"><summary>How each did in our backtest</summary>
+              <p class="su-bt-w"><b>Past results from a backtest, not a forecast.</b> Weekly prices from 2020 to October 2026, after costs, starting fresh every week. Real results can be worse, and you can get back less than you put in.</p>
+              <table><thead><tr><th scope="col"></th><th scope="col">Balanced</th><th scope="col">Adventurous</th></tr></thead><tbody>
+                <tr><th scope="row">Worst fall</th><td>about 23%</td><td>about 30%</td></tr>
+                <tr><th scope="row">Fell 10%+ in year one</th><td>2 in 3</td><td>4 in 5</td></tr>
+                <tr><th scope="row">Safety stop at a fall of</th><td>15%</td><td>20%</td></tr>
+                <tr><th scope="row">Longest stop</th><td>9 weeks</td><td>24 weeks</td></tr>
+                <tr><th scope="row">Growth a year*</th><td>21% to 25%</td><td>25% to 27%</td></tr>
+              </tbody></table>
+              <p class="su-bt-w">*Starting in 2020, 2021 or 2022. "Fell 10%+" counts starts that dropped that far below their high at some point. Adventurous grew a little more and fell further on the way. Neither is the right answer for everyone: pick the fall you could sit through. A cautious option is being re-tested and isn't offered for now.</p>
+            </details>
             <label class="f">How often should it email you?</label>
             <div class="su-seg" data-k="freq"><button type="button" data-v="daily" aria-pressed="true">Every day<small>the default</small></button><button type="button" data-v="weekly" aria-pressed="false">Once a week<small>Fridays, plus anything that needs you</small></button></div>
             <label class="f" for="su-name">Name for your copy</label><input class="t" id="su-name" value="my-robot-isa" autocomplete="off" spellcheck="false">
