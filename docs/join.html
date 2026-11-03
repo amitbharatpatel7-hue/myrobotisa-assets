@@ -403,7 +403,7 @@
       <li class="ps" hidden>Robot Care, &pound;10 a month, only if you want it</li>
       <li>A private members' space for questions and ideas</li>
       <li>Opens January 2027, before the new tax year on 6 April. UK only at launch</li>
-      <li>No payment now. Day 1 is free to watch before you buy</li>
+      <li>No payment now. Lesson 1 is free to watch before you buy</li>
       <li>The QuickStart gets most people to their first paper trade in about 30 minutes. The promise: within 60 minutes, with our help, or your money back</li>
     </ul>
     <form id="f" novalidate>
@@ -616,7 +616,7 @@
   fetch("status.json",{cache:"no-store"}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(d){
     var f=function(id,v){ document.getElementById(id).textContent=v; };
     f("r-weeks", d.weeks_run); f("r-missed", d.missed_weeks); f("r-orders", d.orders_sent);
-    var st=document.getElementById("r-state"); st.textContent = d.trading==="halted" ? "Halted" : "Running"; if(d.trading==="halted") st.classList.add("off");
+    var st=document.getElementById("r-state"); st.textContent = d.trading==="halted" ? "Paused" : "Running"; if(d.trading==="halted") st.classList.add("off");
     var ld=function(iso){ try{ return new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Europe/London",timeZoneName:"short"}).format(new Date(iso)); }catch(e){ return iso; } };
     meta.textContent = "Last weekly run: " + ld(d.last_run_at) + ". Record since " + new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/London"}).format(new Date(d.first_run_at)) + ". Updated " + ld(d.generated_at) + ".";
     g.hidden=false;
@@ -674,7 +674,7 @@
 <script>
 // 22 Oct 2026: signed-in members see "Members area" instead of "Log in" in the header (the side menu stays the site's; Amit, 23 Oct).
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
-var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
+var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");l.textContent="Members area";}document.querySelectorAll("[data-guest],.side-cta .pf,.side-cta .ps,.side-cta [data-places],.side-cta .side-nl").forEach(function(x){x.style.display="none";});var b=document.querySelector(".side-cta a.btn");if(b&&l){b.textContent="Members area";b.href=l.href;}}catch(e){}})();
 </script>
 </body>
 </html>

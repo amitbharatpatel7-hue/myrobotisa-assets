@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="101">
+<meta name="mri-version" content="102">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -658,7 +658,7 @@
       <section class="card" aria-labelledby="h-qs" data-page="start">
         <h2 id="h-qs">Start <span class="g">here</span></h2>
         <p class="lede">The QuickStart: your first paper trade in about 30 minutes. A short video for each step.</p>
-        <a class="su-promo pv-only" hidden href="#setup" data-go="setup"><b>Short on time? Let us do steps 1 to 5 for you</b><span>Set up my robot builds your copy, locks in your keys and runs the setup check in about 10 minutes. The optional extras and your app (steps 5 and 6) are at the bottom of the same page.</span></a>
+        <a class="su-promo pv-only" hidden href="#setup" data-go="setup"><b>Short on time? Let us do steps 1 to 4 for you</b><span>Set up my robot builds your copy, locks in your keys and runs the setup check in about 10 minutes. Your app and the optional extras (steps 5 and 6) are at the bottom of the same page.</span></a>
         <div class="bar" aria-hidden="true"><i id="qs-bar"></i></div>
         <p class="small" id="qs-count"></p>
         <ol class="steps" id="qs"></ol>
@@ -927,7 +927,7 @@
       </section>
       <section class="card wide" aria-labelledby="h-su" id="su-card" data-page="setup">
         <h2 id="h-su">Set up <span class="g">my robot</span></h2>
-        <p class="lede">About 20 minutes once your free accounts are open, and no typing into GitHub. You bring your keys; this page builds your copy, locks the keys away, switches on the schedule, runs the setup check and sets up Robot Dash, the app where you approve every order. Then you approve your first paper trade, and the lessons explain what you just built.</p>
+        <p class="lede">About 10 minutes once your free accounts are open, and no typing into GitHub. You bring your keys; this page builds your copy, locks the keys away, switches on the schedule, runs the setup check and sets up Robot Dash, the app where you approve every order. Then you approve your first paper trade, and the lessons explain what you just built.</p>
         <details class="fold su-before" id="su-before"><summary><span class="fold-l">Before you start: four free accounts <span id="acct-count"></span></span></summary>
           <ol class="su-pre">
             <li id="acct1"><div class="ah"><b>Trading 212</b><span class="pill" id="acct1-st"></span></div>
@@ -951,7 +951,7 @@
             <div class="row"><button class="btn" type="button" id="su-gh">Connect GitHub</button></div>
             <p class="small" id="su1-msg" role="status" aria-live="polite"></p></li>
           <li class="su-step locked" id="su2"><div class="su-h"><b>Your Trading 212 practice key</b><span class="pill" id="su2-st">To do</span></div>
-            <p>Practice account first: no real money until Lesson 13.</p>
+            <p>Practice account first. Switching to real money is your choice, any week: we suggest four weekly plans, including a month end, first (Lesson 13).</p>
             <details open><summary>Where do I find this?</summary><ol>
               <li>In the Trading 212 app, or at <a href="https://app.trading212.com" target="_blank" rel="noopener">app.trading212.com</a> (it sends a sign-in code to your app), open the menu (&#9776;, bottom right in the app) and tap <b>Switch to Practice</b>, then choose <b>INVEST &middot; Practice</b> (not CFD). Each account has its own keys, so make the key in Practice.</li>
               <li><b>Settings &rarr; API (Beta) &rarr; Generate API key.</b> If it asks for a name, call it <b>My Robot ISA</b>.</li>
@@ -1021,7 +1021,7 @@
             <div class="row"><button class="btn" type="button" id="sx1-go" disabled>Switch on error alerts</button></div>
             <p class="small" id="sx1-msg" role="status" aria-live="polite">Press Connect GitHub in step 1 first; then the extras can go into your copy.</p></li>
           <li class="su-step locked" id="sxc"><div class="su-h"><b>Robot Care</b><span class="pill g" id="sxc-st">Free for a year</span></div>
-            <p>When a run fails, our Claude reads the log and writes the smallest fix, and it's checked against the safety rails. It waits on GitHub for your one tap: nothing changes until you merge, and it never touches your keys, your money settings or anything that places orders. The first 100 founding members get the first year free. <a href="../robot-care.html">How Robot Care works</a></p>
+            <p>When a run fails, our Claude reads the log and writes the smallest fix, and it's checked against the safety rails. It waits in Robot Dash for your one tap: nothing changes until you accept it, and it never touches your keys, your money settings or anything that places orders. The first 100 founding members get the first year free. <a href="../robot-care.html">How Robot Care works</a></p>
             <div class="row"><button class="btn" type="button" id="sxc-go" disabled>Switch on Robot Care</button><a class="btn" id="sxc-inst" target="_blank" rel="noopener" hidden>Install it on my copy</a><button class="btn ghost" type="button" id="sxc-sw" hidden>Use this account instead</button></div>
             <p class="small" id="sxc-msg" role="status" aria-live="polite">Connect GitHub in step 1 first, so Robot Care knows which copy is yours.</p></li>
           <li class="su-step locked" id="sx2"><div class="su-h"><b>Or use your own Claude</b><span class="pill o" id="sx2-st">Paid Claude</span></div>
@@ -1061,7 +1061,7 @@
           <li class="su-step locked" id="lv3"><div class="su-h"><b>Before you switch</b><span class="pill" id="lv3-st">To do</span></div>
             <div class="su-chk">
               <label><input type="checkbox" id="lv-c1"><span>I've watched <a href="#guide/day-13">Lesson 13, Small and real</a></span></label>
-              <label><input type="checkbox" id="lv-c2"><span>I know how to halt my robot (<a href="#guide/day-12">Lesson 12</a>)</span></label>
+              <label><input type="checkbox" id="lv-c2"><span>I know how to pause my robot (<a href="#guide/day-12">Lesson 12</a>)</span></label>
               <label><input type="checkbox" id="lv-c3"><span>My real Invest or Stocks ISA has the money I want the robot to use</span></label></div></li>
           <li class="su-step locked" id="lv4"><div class="su-h"><b>Your Trading 212 live key</b><span class="pill" id="lv4-st">To do</span></div>
             <p>Live and practice accounts have separate keys, so this is a new one.</p>
@@ -1084,7 +1084,7 @@
             <div class="su-done" id="lv-done" hidden><h3>You're on real money</h3><p style="margin:0">The setup check email confirms your live key. Your next weekly plan waits for your Approve, as always: nothing is bought or sold without your tap.</p></div></li>
         </ol>
         <details class="fold" id="lv-back" style="margin-top:16px"><summary><span class="fold-l">Going back to practice</span></summary>
-          <p class="small">Halt first if any orders are waiting (Lesson 12). Then make a practice key as in Set up my robot step 2, paste it here and press Back to practice.</p>
+          <p class="small">Pause my robot first if any orders are waiting (Lesson 12). Then make a practice key as in Set up my robot step 2, paste it here and press Back to practice.</p>
           <label class="f" for="lv-pk">Practice API key</label><input class="t" id="lv-pk" type="password" autocomplete="off" spellcheck="false">
           <label class="f" for="lv-ps">Practice API secret</label><input class="t" id="lv-ps" type="password" autocomplete="off" spellcheck="false">
           <div class="row"><button class="btn ghost" type="button" id="lv-bk" disabled>Back to practice</button></div>
@@ -1152,7 +1152,7 @@
     ["Connect GitHub", "5 min", "Create a free GitHub account, then press Connect GitHub in Set up my robot: your own private copy of the robot is made for you."],
     ["Your Trading 212 key, practice account first", "8 min", "Turn on the API in Trading 212's practice account, create a key and paste it into Set up my robot. Real orders stay off."],
     ["Your email key", "5 min", "A free Resend account and an API key. No domain needed: reports come to your own inbox."],
-    ["Pick how bold, press Build", "5 min", "Balanced or adventurous, then Build my robot. The setup check lists anything missing in plain words, makes your first paper trade and sends your first report."],
+    ["Pick how bold, press Build", "5 min", "Balanced or adventurous, then Build my robot. The setup check lists anything missing in plain words and emails you the result."],
     ["Robot Dash and your first paper trade", "10 min", "A free Cloudflare account and two more keys give you your own app. Ask for your first plan, then tap Approve: that's your first paper trade."],
     ["Optional extras", "3 min", "Robot Care (free for your first year as a founding member), or your own Claude for fixes, and error alerts with a free Sentry account."]
   ];
@@ -1162,13 +1162,13 @@
     ["Data you can trust", "Where the prices come from, and how the robot makes sure every number is real"],
     ["Make it yours", "Changing rules, limits and what it trades: settings file first, then code"],
     ["Backtest honestly", "No hindsight, no peeking: testing your own rules fairly before any real money"],
-    ["Paper money first", "A practice account that behaves like the real thing"],
+    ["Paper money first", "Real prices, pretend money: it tests the plumbing, not your first real month"],
     ["The plumbing", "Orders, rounding and the exchange's rules (the six-decimal L)"],
     ["Done means it happened", "Confirming an order landed before calling the job done"],
     ["Make it explain itself", "Logs that give the reason and what to do, and a review that's allowed to say red"],
     ["Keys and secrets", "The five keys, what each can do, and four habits that keep them safe"],
     ["It runs while you sleep", "Scheduling, alerts and a daily digest you'll read"],
-    ["Limits and an off switch", "Position limits, sanity checks, stopping everything in one move"],
+    ["Limits and an off switch", "Position limits, sanity checks, the safety stop and Pause my robot"],
     ["Small and real", "Moving from paper to real money carefully"],
     ["Keep an honest record", "Reviewing wins and Ls without fooling yourself"]
   ];
@@ -3144,7 +3144,7 @@
     var idea = kind === "idea"; IB.sheetKind = kind; IB.cat = idea ? "robot" : "other";
     $("ib-s-h").textContent = idea ? "Suggest an idea" : "Ask a question";
     $("ib-s-tl").textContent = idea ? "Your idea in one line" : "Your question";
-    $("ib-s-title").placeholder = idea ? "e.g. Pause my robot while I'm away" : "e.g. How do I change my email address?";
+    $("ib-s-title").placeholder = idea ? "e.g. Show the safety-stop line on the Overview" : "e.g. How do I change my email address?";
     $("ib-s-body").placeholder = idea ? "What would it help you do?" : "Anything that helps: what you tried, what you saw.";
     $("ib-s-go").textContent = idea ? "Post my idea" : "Post my question"; $("ib-s-go").disabled = false;
     $("ib-s-title").value = IB.q || ""; $("ib-s-body").value = ""; $("ib-s-msg").textContent = "";

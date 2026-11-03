@@ -407,7 +407,7 @@
           <li><i class="ci x" aria-hidden="true">&#215;</i><span>Your keys, or any secret</span></li>
           <li><i class="ci x" aria-hidden="true">&#215;</i><span>Your money settings: practice or real money, whether orders go out at all, how bold it is</span></li>
           <li><i class="ci x" aria-hidden="true">&#215;</i><span>Anything that places orders, or the schedules</span></li>
-          <li><i class="ci x" aria-hidden="true">&#215;</i><span>A safety rail: the halt, the drawdown stop, the position cap, the stale-data check</span></li>
+          <li><i class="ci x" aria-hidden="true">&#215;</i><span>A safety rail: Pause my robot, the safety stop, the position cap, the stale-data check</span></li>
         </ul>
         <p class="small">At most four files and eighty lines. The same rails hold whichever route you choose, and a fix that would break one is refused before you ever see it.</p>
       </div>
@@ -465,7 +465,7 @@
     </table>
     </div>
     <p class="small vs-note">What neither can do: fix an expired Trading 212 key or an account with no cash in it. Those aren't code, so you get a plain-words comment saying exactly what to do. Neither decides what to buy or sell; that's the rules, and you. Robot Care is software support, not financial advice, and investing puts your capital at risk.</p>
-    <p class="small">Questions about Robot Care? Ask in the members' space once you've joined, or email <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. Not a member yet? <a href="join.html#join" style="color:var(--green);font-weight:700">Get the free test drive</a>.</p>
+    <p class="small">Questions about Robot Care? Ask in the members' space once you've joined, or email <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a>. <span data-guest>Not a member yet? <a href="join.html#join" style="color:var(--green);font-weight:700">Get the free test drive</a>.</span></p>
   </section>
 
 
@@ -661,7 +661,7 @@
   fetch("status.json",{cache:"no-store"}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(d){
     var f=function(id,v){ document.getElementById(id).textContent=v; };
     f("r-weeks", d.weeks_run); f("r-missed", d.missed_weeks); f("r-orders", d.orders_sent);
-    var st=document.getElementById("r-state"); st.textContent = d.trading==="halted" ? "Halted" : "Running"; if(d.trading==="halted") st.classList.add("off");
+    var st=document.getElementById("r-state"); st.textContent = d.trading==="halted" ? "Paused" : "Running"; if(d.trading==="halted") st.classList.add("off");
     var ld=function(iso){ try{ return new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Europe/London",timeZoneName:"short"}).format(new Date(iso)); }catch(e){ return iso; } };
     meta.textContent = "Last weekly run: " + ld(d.last_run_at) + ". Record since " + new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/London"}).format(new Date(d.first_run_at)) + ". Updated " + ld(d.generated_at) + ".";
     g.hidden=false;
@@ -719,7 +719,7 @@
 <script>
 // 22 Oct 2026: signed-in members see "Members area" instead of "Log in" in the header (the side menu stays the site's; Amit, 23 Oct).
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
-var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
+var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");l.textContent="Members area";}document.querySelectorAll("[data-guest],.side-cta .pf,.side-cta .ps,.side-cta [data-places],.side-cta .side-nl").forEach(function(x){x.style.display="none";});var b=document.querySelector(".side-cta a.btn");if(b&&l){b.textContent="Members area";b.href=l.href;}}catch(e){}})();
 </script>
 </body>
 </html>
