@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="98">
+<meta name="mri-version" content="99">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -81,7 +81,8 @@
   .lx-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .lx-len{font-size:13px;color:var(--muted)}
   .lx-words{margin:0;line-height:1.6}
-  .lx-words.on span{opacity:.42;transition:opacity .12s} .lx-words.on span.said{opacity:1}
+  .lx-screen{aspect-ratio:16/9;width:100%;max-width:100%;background:var(--deep);border-radius:12px;overflow:hidden}
+  .lx-video{display:block;width:100%;height:100%}
   .lx-try{display:flex;flex-direction:column;gap:12px;background:var(--deep2);border-radius:16px;padding:16px;margin:12px 0}
   .lx-try h4{margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:21px;letter-spacing:.03em;text-transform:uppercase}
   .lx-try p{margin:0}
@@ -2750,32 +2751,33 @@
   function lxStop() {
     cancelAnimationFrame(LX.raf); LX.raf = 0;
     if (LX.audio) LX.audio.pause();
-    var w = document.querySelector(".lx-words"); if (w) w.classList.remove("on");
   }
   function lxFollow(st, btn) {
-    var a = LX.audio, w = document.querySelector(".lx-words"); if (!a || !w) return;
-    var spans = w.children, n = Math.floor((a.currentTime - st.lx.from) / (st.lx.to - st.lx.from) * spans.length);
-    for (var i = 0; i < spans.length; i++) spans[i].classList.toggle("said", i <= n);
-    if (a.currentTime >= st.lx.to) { lxStop(); btn.textContent = "Play again"; return; }
+    var v = LX.audio; if (!v || !btn.isConnected) return;
+    if (v.currentTime >= st.lx.to) { lxStop(); btn.textContent = "Play again"; return; }
     LX.raf = requestAnimationFrame(function () { lxFollow(st, btn); });
   }
+  function lxVideo() {   // one video element for the whole lesson, made inside a tap so a phone lets later steps play too
+    if (!LX.audio) { var v = LX.audio = document.createElement("video"); v.playsInline = true; v.setAttribute("playsinline", ""); v.preload = "metadata"; v.className = "lx-video"; }
+    return LX.audio;
+  }
   function lxPlay() {
-    var st = GUIDES[gcur.id].steps[gcur.n], btn = document.querySelector(".lx-play"), w = document.querySelector(".lx-words");
+    var st = GUIDES[gcur.id].steps[gcur.n], btn = document.querySelector(".lx-play");
     if (!btn || !st.lx) return;
     if (LX.raf) { lxStop(); btn.textContent = "Play"; return; }
     btn.textContent = "Loading\u2026"; LX.started = true;
-    var a = LX.audio || (LX.audio = new Audio());   // made inside the tap, so a phone lets the next steps play too
-    var id = gcur.id, n = gcur.n;
+    var v = lxVideo(), id = gcur.id, n = gcur.n, box = $("lx-screen");
+    if (box && v.parentNode !== box) { box.innerHTML = ""; box.appendChild(v); }
     function go() {
       if (gcur.id !== id || gcur.n !== n) return;
-      if (a.currentTime < st.lx.from || a.currentTime >= st.lx.to) { try { a.currentTime = st.lx.from; } catch (e) {} }
-      a.play().then(function () { w.classList.add("on"); btn.textContent = "Pause"; LX.raf = requestAnimationFrame(function () { lxFollow(st, btn); }); })
+      if (v.currentTime < st.lx.from || v.currentTime >= st.lx.to) { try { v.currentTime = st.lx.from; } catch (e) {} }
+      v.play().then(function () { btn.textContent = "Pause"; LX.raf = requestAnimationFrame(function () { lxFollow(st, btn); }); })
         .catch(function () { btn.textContent = "Play"; });
     }
     lxLink(id).then(function (url) {
       if (LX.url === url) return go();
-      LX.url = url; a.src = url; a.addEventListener("loadedmetadata", go, { once: true }); a.load();
-    }).catch(function () { btn.textContent = "Play"; toast("The voice didn't load. The words are all here."); });
+      LX.url = url; v.src = url; v.addEventListener("loadedmetadata", go, { once: true }); v.load();
+    }).catch(function () { btn.textContent = "Play"; toast("The video didn't load. The words are all here."); });
   }
   function lxPause() {
     var p = LX.pz, ask = LX.ask, line = p ? (ask ? "Your robot goes back to its usual weekly plan." : "Your robot is paused. Nothing new is proposed or sent, and what you hold stays as it is.")
@@ -2798,9 +2800,9 @@
     return '<div class="lx-try">' + h + '</div>';
   }
   function lxStep(st) {
-    var canPlay = !!(me && me.preview_videos);
-    return '<div class="lx-voice">' + (canPlay ? '<div class="lx-bar"><button class="btn sm lx-play" type="button" data-lx="play">Play</button><span class="lx-len">About ' + Math.round(st.lx.to - st.lx.from) + ' seconds</span></div>' : "") +
-      '<p class="lx-words">' + esc(st.d).split(" ").map(function (w) { return "<span>" + w + " </span>"; }).join("") + '</p></div>' + lxTry(st.lx.try);
+    var canPlay = !!(me && me.preview_videos), words = '<p class="lx-words">' + esc(st.d) + '</p>';
+    return (canPlay ? '<div class="lx-voice"><div class="lx-screen" id="lx-screen"></div><div class="lx-bar"><button class="btn sm lx-play" type="button" data-lx="play">Play</button><span class="lx-len">About ' + Math.round(st.lx.to - st.lx.from) + ' seconds</span></div></div><details class="fold"><summary><span class="fold-l">Read the words</span></summary>' + words + '</details>'
+      : '<div class="lx-voice">' + words + '</div>') + lxTry(st.lx.try);
   }
   document.addEventListener("click", function (e) {
     var b = e.target.closest("[data-lx]"); if (!b) return;
@@ -2827,7 +2829,7 @@
     var g = GUIDES[id]; if (!g) return;
     lxStop(); LX.url = ""; LX.audio = null; LX.started = false;
     if (lxOn(g)) { $("gd-video").hidden = true; $("gd-video").innerHTML = ""; } else guideVideo(id);
-    $("gd-lede").textContent = lxOn(g) ? "Listen, try it, tap next. Your place is saved to your account." : "One step at a time. Tick each one as you go; your place is saved to your account.";
+    $("gd-lede").textContent = lxOn(g) ? "Watch, try it, tap next. Your place is saved to your account." : "One step at a time. Tick each one as you go; your place is saved to your account.";
     var tb = $("gd-tips"); if (tb) { tb.hidden = !(g.tips && g.tips.length); $("gd-tiplist").innerHTML = (g.tips || []).map(function (t) { return "<li>" + esc(t) + "</li>"; }).join(""); }
     var first = 0; for (var i = 0; i < g.steps.length; i++) { if (!done[gkey(id, i)]) { first = i; break; } first = g.steps.length - 1; }
     var complete = g.steps.every(function (_, i) { return done[gkey(id, i)]; });
@@ -2868,7 +2870,19 @@
       var d = !!done[gkey(id, i)];
       return '<li class="' + (i === n ? "on " : "") + (d ? "done" : "") + '" data-gd-go="' + i + '"><span class="k">' + (d ? "&#10003;" : (i + 1)) + '</span><span>' + esc(x.t) + '</span></li>';
     }).join("");
-    if (st.lx) { if (LX.raf) lxStop(); if (LX.started) lxPlay(); } else lxStop();
+    if (st.lx) {
+      if (LX.raf) lxStop();
+      if ($("lx-screen")) {
+        var v = lxVideo(), n0 = gcur.n, id0 = gcur.id; $("lx-screen").appendChild(v);
+        if (LX.started) lxPlay();
+        else lxLink(id0).then(function (url) {   // show the step's first frame rather than an empty box
+          if (gcur.id !== id0 || gcur.n !== n0 || LX.started) return;
+          if (LX.url !== url) { LX.url = url; v.src = url; }
+          var seek = function () { try { v.currentTime = st.lx.from + 0.05; } catch (e) {} };
+          if (v.readyState >= 1) seek(); else v.addEventListener("loadedmetadata", seek, { once: true });
+        }).catch(function () {});
+      }
+    } else lxStop();
   }
   document.addEventListener("click", function (e) {
     var cp = e.target.closest("[data-copy]");

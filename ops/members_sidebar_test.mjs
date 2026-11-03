@@ -53,7 +53,7 @@ const vis = (page, sel) => page.isVisible(sel);
 
 try {
   await run("interactive lesson: touch everything, no marks, no sideways scroll", { guides: [LX], vp: { width: 390, height: 844 } }, async (page) => {
-    await page.goto(URL_ + "#guide/day-12"); await page.waitForSelector(".lx-words");
+    await page.goto(URL_ + "#guide/day-12"); await page.waitForSelector("#lx-screen");
     assert.equal((await page.textContent("#h-gd")).trim(), "Limits and an off switch");
     await page.click('[data-lx="tile"]'); assert.equal(await page.getAttribute('[data-lx="tile"]', "aria-expanded"), "true");
     await page.click('[data-gd="next"]'); await page.waitForSelector("#lx-fall");
