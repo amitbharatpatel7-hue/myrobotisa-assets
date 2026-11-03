@@ -79,14 +79,17 @@ header .sub{color:var(--chrome-sub);font-size:13px}
 section.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;min-width:0}
 h2{font-family:var(--display);font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--fg);margin:0 0 2px;padding-left:10px;border-left:4px solid var(--brand-green)}
 .lede{color:var(--muted);font-size:14px;margin:4px 0 14px;max-width:68ch}
-.findings{display:grid;gap:10px}
-.f{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start;padding:12px 0;border-top:1px solid var(--line)}
+.findings{display:grid;grid-template-columns:auto 1fr;gap:10px 0}
+/* 3 Nov 2026 (Amit): one shared pill column, so every heading starts on the same line */
+.f{display:grid;grid-column:1/-1;grid-template-columns:subgrid;gap:4px 16px;align-items:start;padding:12px 0;border-top:1px solid var(--line)}
+.f .pill{justify-self:start}
+@supports not (grid-template-columns:subgrid){.f{grid-template-columns:9.5rem 1fr}}
 .f:first-child{border-top:0;padding-top:2px}
 .pill{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;white-space:nowrap;margin-top:2px;display:inline-block}
 .p-warn{background:var(--warn-bg);color:var(--warn)} .p-bad{background:var(--bad-bg);color:var(--loss)} .p-info{background:var(--info-bg);color:var(--info)} .p-good{background:var(--good-bg);color:var(--gain)}
 .f b{display:block;font-weight:700}
 .f p{margin:2px 0 0;color:var(--muted);font-size:14px;max-width:72ch}
-@media (max-width:560px){.f{grid-template-columns:minmax(0,1fr)}.f .pill{justify-self:start}}
+@media (max-width:560px){.findings{grid-template-columns:minmax(0,1fr)}.f{grid-template-columns:minmax(0,1fr)}}
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin-bottom:6px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .sw{width:18px;height:3px;border-radius:2px;display:inline-block}
@@ -343,6 +346,7 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
     <li><a href="../status.html">Nothing to hide</a></li>
     <li><a href="../isa-rules.html">ISA rules</a></li>
     <li><a href="../questions.html">Questions</a></li>
+    <li data-member hidden><a href="../members/#home">Members area</a></li>
     <li data-guest><a href="../join.html">Free test drive</a></li>
     <li data-guest><a href="../newsletter.html">Newsletter</a></li>
   </ol>
@@ -357,7 +361,7 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
 
 <main class="wrap">
   <div class="sitehdr"><a class="handle" href="https://www.instagram.com/myrobotisa/">@myrobotisa</a><span class="hdr-r"><a class="login" href="../members/">Log in</a><span class="tag" data-launch><span class="t-long">Launching </span>January 2027</span><a class="tag" data-live href="../join.html#join" hidden>We're live</a></span></div>
-  <div class="demo" role="note">Demo with made-up example data. Not a real account, not real investments and not a recommendation. <a href="../join.html#join">Get early access</a></div>
+  <div class="demo" role="note">Demo with made-up example data. Not a real account, not real investments and not a recommendation. <a data-guest href="../join.html#join">Get early access</a></div>
 
   <header class="hero">
     <div>
@@ -429,7 +433,7 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
     </section>
     <section class="card">
       <h2>Setup check</h2>
-      <p class="lede">Runs in your own GitHub. It checks every key, then makes your first paper trade and sends your first report.</p>
+      <p class="lede">Runs in your own GitHub. It checks every key and emails you the result. Your first paper trade comes next, when you tap Approve on your first plan.</p>
       <button class="btn go" id="qrun" type="button">Run the setup check</button>
       <ul class="checks" id="qchecks"></ul>
     </section>
@@ -466,12 +470,12 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
   <!-- CONTROLS -->
   <div class="pane" id="p-controls" hidden>
     <section class="card">
-      <h2>Controls <span class="soon" style="margin-left:8px">COMING IN AN UPDATE</span></h2>
-      <p class="lede">The app can stop trading. It can never start a trade or move money: that only happens through your own rules.</p>
-      <div class="ctl"><div><b>Trading</b><p>Status: <span class="state" id="tstate">Running</span></p></div><div><button class="btn danger" id="haltbtn" type="button">Halt trading</button></div></div>
-      <div class="ctl"><div><b>Restart after a halt</b><p>Asks you to confirm, then the next scheduled run carries on.</p></div><div><button class="btn go" id="rearmbtn" type="button" disabled>Restart</button></div></div>
-      <div class="ctl"><div><b>Automatic halt</b><p>Trading also stops on its own if the account falls below £4,250. You get an email straight away.</p></div><div><span class="pill p-good">On</span></div></div>
-      <div class="ctl"><div><b>Real orders</b><p>On since 5 Oct, after four practice weeks. Switched on deliberately in your own GitHub settings, never from the app.</p></div><div><span class="pill p-good">Live</span></div></div>
+      <h2>Controls</h2>
+      <p class="lede">The app can pause your robot. It never places an order you haven't approved and it never moves money.</p>
+      <div class="ctl"><div><b>Your robot</b><p>Status: <span class="state" id="tstate">Running</span></p></div><div><button class="btn danger" id="haltbtn" type="button">Pause my robot</button></div></div>
+      <div class="ctl"><div><b>Restart my robot</b><p>Asks you to confirm, then the next scheduled run carries on.</p></div><div><button class="btn go" id="rearmbtn" type="button" disabled>Restart</button></div></div>
+      <div class="ctl"><div><b>Safety stop</b><p>Pauses the weekly plan by itself if the account falls 20% below its high (£4,208 now), and restarts by itself once it climbs back. You get an email straight away.</p></div><div><span class="pill p-good">On</span></div></div>
+      <div class="ctl"><div><b>Real orders</b><p>On since 5 Oct. Switched on in Switch to real money, when you chose to.</p></div><div><span class="pill p-good">Live</span></div></div>
     </section>
   </div>
 
@@ -490,9 +494,9 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
 </div>
 
 <dialog id="dlg" aria-labelledby="dlg-t">
-  <h3 id="dlg-t">Halt all trading?</h3>
+  <h3 id="dlg-t">Pause your robot?</h3>
   <p id="dlg-p"></p>
-  <div class="row"><button class="btn" id="dlg-no" type="button">Cancel</button><button class="btn danger" id="dlg-yes" type="button">Halt trading</button></div>
+  <div class="row"><button class="btn" id="dlg-no" type="button">Cancel</button><button class="btn danger" id="dlg-yes" type="button">Pause my robot</button></div>
 </dialog>
 
 <script src="data.js"></script>
@@ -527,7 +531,7 @@ function renderTiles(flash){
     ["Account value", gbp(v), `<span class="${ret>=0?'up':'down'}">${pct(ret)}</span> since ${dm(D.opened)}`],
     ["Against US large caps", `<span class="${ret-us>=0?'up':'down'}">${(ret-us>=0?"+":"−")+Math.abs(ret-us).toFixed(1)} pts</span>`, `US large caps ${pct(us)} · chip makers ${pct(chips)}`],
     ["Cash not invested", gbp(D.cash), `${(D.cash/v*100).toFixed(1)}% of the account`],
-    ["Room before the halt", `${((v-D.halt)/v*100).toFixed(1)}%`, `Halts itself below ${gbp(D.halt)}`]
+    ["Room before the safety stop", `${((v-D.halt)/v*100).toFixed(1)}%`, `Pauses itself below ${gbp(D.halt)}`]
   ];
   $("tiles").innerHTML=T.map(([k,val,d])=>`<div class="tile${flash?' flash':''}"><div class="k">${k}</div><div class="v">${val}</div><div class="d">${d}</div></div>`).join("");
 }
@@ -709,7 +713,7 @@ function renderQS(){
   $("qcount").textContent=`${qdone.size} of ${QS.length} steps done · about ${QS.reduce((s,q,i)=>s+(qdone.has(i)?0:parseInt(q[1])),0)} minutes left`;
 }
 $("qrun").addEventListener("click",()=>{
-  const L=[["✓","GitHub copy found, private","up"],["✓","Broker key works · practice account · read and trade allowed","up"],["✓","Email key works · a test email went to you@example.com","up"],["–","Error alerts: optional, skipped","tag"],["–","Robot Care or your own Claude: optional, skipped","tag"],["✓","Real orders are off (practice money)","up"],["✓","First paper trade placed: Global shares fund, £50, filled","up"],["✓","First daily report sent. You're set up.","up"]];
+  const L=[["✓","GitHub copy found, private","up"],["✓","Broker key works · practice account · read and trade allowed","up"],["✓","Email key works · a test email went to you@example.com","up"],["–","Error alerts: optional, skipped","tag"],["–","Robot Care or your own Claude: optional, skipped","tag"],["✓","Real orders are off (practice money)","up"],["✓","Result emailed to you. Next: tap Approve on your first plan.","up"]];
   const ul=$("qchecks"); ul.innerHTML=""; $("qrun").disabled=true;
   L.forEach((r,i)=>setTimeout(()=>{ ul.insertAdjacentHTML("beforeend",`<li><span class="ic ${r[2]}">${r[0]}</span><span>${r[1]}</span></li>`); if(i===L.length-1){ $("qrun").disabled=false; $("qrun").textContent="Run it again"; } },350*(i+1)));
 });
@@ -717,7 +721,7 @@ renderQS();
 
 // ---- render
 function renderAll(flash){ syncAccount(); renderTiles(flash); renderFindings(); renderThemes(); renderStops(); renderDigest(); draw1(); draw2(); draw3(); }
-function setChips(){ $("chips").innerHTML=`<span class="chip live">Live</span><span class="chip">Example data</span>`+(halted?`<span class="chip halt">Halted</span>`:""); }
+function setChips(){ $("chips").innerHTML=`<span class="chip live">Live</span><span class="chip">Example data</span>`+(halted?`<span class="chip halt">Paused</span>`:""); }
 $("asof").textContent=`Example data · last close ${wdm(lastDay)}`;
 setChips(); renderWeekList(); renderOrders(); renderAll(false);
 let rz; addEventListener("resize",()=>{clearTimeout(rz);rz=setTimeout(()=>{draw1();draw2();draw3();},150);});
@@ -750,9 +754,9 @@ addEventListener("keydown",e=>{ if(e.key==="Escape") closeMenu(); });
 
 // halt / restart (demo only)
 const dlg=$("dlg");
-function setHalt(h){ halted=h; $("tstate").textContent=h?"Halted":"Running"; $("tstate").className="state "+(h?"down":"up"); $("haltbtn").disabled=h; $("rearmbtn").disabled=!h; setChips(); }
-$("haltbtn").addEventListener("click",()=>{ $("dlg-t").textContent="Halt all trading?"; $("dlg-p").textContent="No new orders will be placed until you restart. Holdings stay as they are. (Demo: nothing real happens.)"; $("dlg-yes").textContent="Halt trading"; $("dlg-yes").className="btn danger"; dlg.dataset.a="halt"; dlg.showModal(); });
-$("rearmbtn").addEventListener("click",()=>{ $("dlg-t").textContent="Restart trading?"; $("dlg-p").textContent="The next scheduled run carries on with your rules. (Demo: nothing real happens.)"; $("dlg-yes").textContent="Restart"; $("dlg-yes").className="btn go"; dlg.dataset.a="rearm"; dlg.showModal(); });
+function setHalt(h){ halted=h; $("tstate").textContent=h?"Paused":"Running"; $("tstate").className="state "+(h?"down":"up"); $("haltbtn").disabled=h; $("rearmbtn").disabled=!h; setChips(); }
+$("haltbtn").addEventListener("click",()=>{ $("dlg-t").textContent="Pause your robot?"; $("dlg-p").textContent="No new orders will be placed until you restart. Holdings stay as they are. (Demo: nothing real happens.)"; $("dlg-yes").textContent="Pause my robot"; $("dlg-yes").className="btn danger"; dlg.dataset.a="halt"; dlg.showModal(); });
+$("rearmbtn").addEventListener("click",()=>{ $("dlg-t").textContent="Restart your robot?"; $("dlg-p").textContent="The next scheduled run carries on with your rules. (Demo: nothing real happens.)"; $("dlg-yes").textContent="Restart"; $("dlg-yes").className="btn go"; dlg.dataset.a="rearm"; dlg.showModal(); });
 $("dlg-no").addEventListener("click",()=>dlg.close());
 $("dlg-yes").addEventListener("click",()=>{ setHalt(dlg.dataset.a==="halt"); dlg.close(); });
 setHalt(false);
@@ -981,7 +985,7 @@ if ("serviceWorker" in navigator && location.protocol==="https:") { navigator.se
 </script>
 <script>/* 23 Oct 2026 (Amit): same as the site pages: a signed-in member sees "Members area" instead of "Log in" */
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
-document.querySelectorAll("[data-guest]").forEach(function(x){x.style.display="none";});var l=document.querySelector(".sitehdr a.login");if(l){l.textContent="Members area";l.href="../members/#home";}}catch(e){}})();</script>
+document.querySelectorAll("[data-guest]").forEach(function(x){x.style.display="none";});document.querySelectorAll("[data-member]").forEach(function(x){x.hidden=false;});var l=document.querySelector(".sitehdr a.login");if(l){l.textContent="Members area";l.href="../members/#home";}}catch(e){}})();</script>
 <script>/* 23 Oct 2026: tap a step to read its email right below; the frame grows to the email's full height */
 (function(){var tl=document.getElementById("tl"),f=document.getElementById("tl-f"),tag=document.getElementById("tl-vtag"),view=document.getElementById("tl-view");if(!tl||!f)return;
 var fw=document.getElementById("tl-fw");

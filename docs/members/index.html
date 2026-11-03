@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="101">
+<meta name="mri-version" content="103">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -529,7 +529,7 @@
     <!-- 22 Oct 2026 (Amit): just Home and Questions. Same tab: the site pages show this Members area group too while you're signed in. -->
     <li class="sep">The site</li>
     <li><a href="../">Home</a></li>
-    <li><a href="../robot-care.html">Robot Care</a></li>
+    <li><a href="#care" data-go="care">Robot Care</a></li>
     <li><a href="#questions" data-go="questions">Questions</a></li>
   </ol>
   <!-- In the installed app the menu is the members area only (21 Oct 2026) -->
@@ -658,7 +658,7 @@
       <section class="card" aria-labelledby="h-qs" data-page="start">
         <h2 id="h-qs">Start <span class="g">here</span></h2>
         <p class="lede">The QuickStart: your first paper trade in about 30 minutes. A short video for each step.</p>
-        <a class="su-promo pv-only" hidden href="#setup" data-go="setup"><b>Short on time? Let us do steps 1 to 5 for you</b><span>Set up my robot builds your copy, locks in your keys and runs the setup check in about 10 minutes. The optional extras and your app (steps 5 and 6) are at the bottom of the same page.</span></a>
+        <a class="su-promo pv-only" hidden href="#setup" data-go="setup"><b>Short on time? Let us do steps 1 to 4 for you</b><span>Set up my robot builds your copy, locks in your keys and runs the setup check in about 10 minutes. Your app and the optional extras (steps 5 and 6) are at the bottom of the same page.</span></a>
         <div class="bar" aria-hidden="true"><i id="qs-bar"></i></div>
         <p class="small" id="qs-count"></p>
         <ol class="steps" id="qs"></ol>
@@ -674,7 +674,7 @@
         </div>
         <div class="row"><button class="btn" id="b-install" type="button" data-install>Install my dashboard</button></div>
         <p class="small" id="installed" hidden style="margin:12px 0 0;color:var(--green);font-weight:700">You're using the installed app.</p>
-        <p class="small" style="margin:12px 0 0">No dashboard yet? Set it up in <a href="#setup">Set up my robot</a> first. The app opens with Face ID or your fingerprint once you've set it up there; the emailed code is the backup.</p>
+        <p class="small" style="margin:12px 0 0">No dashboard yet? Set it up in <a class="pv-only" hidden href="#setup">Set up my robot</a><a class="npv-only" href="#start">Start here, step 5</a> first. The app opens with Face ID or your fingerprint once you've set it up there; the emailed code is the backup.</p>
       </section>
 
       <section class="card wide" aria-labelledby="h-les" data-page="lessons">
@@ -793,6 +793,10 @@
         <div id="ib-p-body"><p class="small">Loading…</p></div>
       </section>
 
+      <section class="card wide" aria-labelledby="h-care" data-page="care" id="care-page">
+        <h2 id="h-care">Robot <span class="p">Care</span></h2>
+        <div id="care-body"><p class="small">Loading…</p></div>
+      </section>
       <section class="card wide faq" aria-labelledby="h-faq" data-page="questions" id="faq-page">
         <h2 id="h-faq">Questions people <span class="p">ask</span></h2>
         <p class="lede">Tap a question for its answer. Not here? Ask it: a person reads every question, other members can help, and once it's answered it appears below.</p>
@@ -951,7 +955,7 @@
             <div class="row"><button class="btn" type="button" id="su-gh">Connect GitHub</button></div>
             <p class="small" id="su1-msg" role="status" aria-live="polite"></p></li>
           <li class="su-step locked" id="su2"><div class="su-h"><b>Your Trading 212 practice key</b><span class="pill" id="su2-st">To do</span></div>
-            <p>Practice account first: no real money until Lesson 13.</p>
+            <p>Practice account first. Switching to real money is your choice, any week: we suggest four weekly plans, including a month end, first (Lesson 13).</p>
             <details open><summary>Where do I find this?</summary><ol>
               <li>In the Trading 212 app, or at <a href="https://app.trading212.com" target="_blank" rel="noopener">app.trading212.com</a> (it sends a sign-in code to your app), open the menu (&#9776;, bottom right in the app) and tap <b>Switch to Practice</b>, then choose <b>INVEST &middot; Practice</b> (not CFD). Each account has its own keys, so make the key in Practice.</li>
               <li><b>Settings &rarr; API (Beta) &rarr; Generate API key.</b> If it asks for a name, call it <b>My Robot ISA</b>.</li>
@@ -1021,7 +1025,7 @@
             <div class="row"><button class="btn" type="button" id="sx1-go" disabled>Switch on error alerts</button></div>
             <p class="small" id="sx1-msg" role="status" aria-live="polite">Press Connect GitHub in step 1 first; then the extras can go into your copy.</p></li>
           <li class="su-step locked" id="sxc"><div class="su-h"><b>Robot Care</b><span class="pill g" id="sxc-st">Free for a year</span></div>
-            <p>When a run fails, our Claude reads the log and writes the smallest fix, and it's checked against the safety rails. It waits on GitHub for your one tap: nothing changes until you merge, and it never touches your keys, your money settings or anything that places orders. The first 100 founding members get the first year free. <a href="../robot-care.html">How Robot Care works</a></p>
+            <p>When a run fails, our Claude reads the log and writes the smallest fix, and it's checked against the safety rails. It waits in Robot Dash for your one tap: nothing changes until you accept it, and it never touches your keys, your money settings or anything that places orders. The first 100 founding members get the first year free. <a href="../robot-care.html">How Robot Care works</a></p>
             <div class="row"><button class="btn" type="button" id="sxc-go" disabled>Switch on Robot Care</button><a class="btn" id="sxc-inst" target="_blank" rel="noopener" hidden>Install it on my copy</a><button class="btn ghost" type="button" id="sxc-sw" hidden>Use this account instead</button></div>
             <p class="small" id="sxc-msg" role="status" aria-live="polite">Connect GitHub in step 1 first, so Robot Care knows which copy is yours.</p></li>
           <li class="su-step locked" id="sx2"><div class="su-h"><b>Or use your own Claude</b><span class="pill o" id="sx2-st">Paid Claude</span></div>
@@ -1042,7 +1046,7 @@
         </ol>
         </details>
         <a class="su-promo su-live-go" href="#live" data-go="live"><b>Ready for real money?</b><span>When you are, the real-money switch walks you through it step by step, just like this page.</span></a>
-        <p class="small" style="margin-top:14px">Set up my robot does QuickStart steps 1 to 5 for you. Can't use it, say GitHub won't connect? The <a href="#guide/qs-1" style="color:var(--green);font-weight:700">manual steps</a> do the same by hand.</p>
+        <p class="small" style="margin-top:14px">Set up my robot does QuickStart steps 1 to 4 for you. Can't use it, say GitHub won't connect? The <a href="#guide/qs-1" style="color:var(--green);font-weight:700">manual steps</a> do the same by hand.</p>
       </section>
 
       <section class="card wide" aria-labelledby="h-lv" id="lv-card" data-page="live">
@@ -1061,7 +1065,7 @@
           <li class="su-step locked" id="lv3"><div class="su-h"><b>Before you switch</b><span class="pill" id="lv3-st">To do</span></div>
             <div class="su-chk">
               <label><input type="checkbox" id="lv-c1"><span>I've watched <a href="#guide/day-13">Lesson 13, Small and real</a></span></label>
-              <label><input type="checkbox" id="lv-c2"><span>I know how to halt my robot (<a href="#guide/day-12">Lesson 12</a>)</span></label>
+              <label><input type="checkbox" id="lv-c2"><span>I know how to pause my robot (<a href="#guide/day-12">Lesson 12</a>)</span></label>
               <label><input type="checkbox" id="lv-c3"><span>My real Invest or Stocks ISA has the money I want the robot to use</span></label></div></li>
           <li class="su-step locked" id="lv4"><div class="su-h"><b>Your Trading 212 live key</b><span class="pill" id="lv4-st">To do</span></div>
             <p>Live and practice accounts have separate keys, so this is a new one.</p>
@@ -1084,7 +1088,7 @@
             <div class="su-done" id="lv-done" hidden><h3>You're on real money</h3><p style="margin:0">The setup check email confirms your live key. Your next weekly plan waits for your Approve, as always: nothing is bought or sold without your tap.</p></div></li>
         </ol>
         <details class="fold" id="lv-back" style="margin-top:16px"><summary><span class="fold-l">Going back to practice</span></summary>
-          <p class="small">Halt first if any orders are waiting (Lesson 12). Then make a practice key as in Set up my robot step 2, paste it here and press Back to practice.</p>
+          <p class="small">Pause my robot first if any orders are waiting (Lesson 12). Then make a practice key as in Set up my robot step 2, paste it here and press Back to practice.</p>
           <label class="f" for="lv-pk">Practice API key</label><input class="t" id="lv-pk" type="password" autocomplete="off" spellcheck="false">
           <label class="f" for="lv-ps">Practice API secret</label><input class="t" id="lv-ps" type="password" autocomplete="off" spellcheck="false">
           <div class="row"><button class="btn ghost" type="button" id="lv-bk" disabled>Back to practice</button></div>
@@ -1104,7 +1108,7 @@
         <p class="small" id="pk-tip" style="margin:12px 0 0"></p>
         <p class="small" id="pk-unsupported" hidden style="margin:12px 0 0">This browser can't save passkeys. Use Safari, Chrome or Edge, or keep signing in with the emailed code.</p>
       </section>
-      <section class="card wide" aria-labelledby="ea-h" id="ea-card" data-page="early">
+      <section class="card wide" aria-labelledby="ea-h" id="ea-card" data-page="early" hidden>
         <h2>Help and <span class="g">membership</span></h2>
         <!-- 3 Nov 2026 (Amit): Early adopters is a third tab here, owner only, not a card above Membership. -->
         <div class="ib-seg hp-seg" role="tablist" aria-label="Help and membership"><a role="tab" href="#help" data-go-tab="help" aria-selected="false">Membership</a><a role="tab" href="#passkeys" data-go-tab="passkeys" aria-selected="false">Faster sign-in</a><a role="tab" href="#early" data-go-tab="early" aria-selected="true" class="ea-tab" hidden>Early adopters</a></div>
@@ -1152,9 +1156,9 @@
     ["Connect GitHub", "5 min", "Create a free GitHub account, then press Connect GitHub in Set up my robot: your own private copy of the robot is made for you."],
     ["Your Trading 212 key, practice account first", "8 min", "Turn on the API in Trading 212's practice account, create a key and paste it into Set up my robot. Real orders stay off."],
     ["Your email key", "5 min", "A free Resend account and an API key. No domain needed: reports come to your own inbox."],
-    ["Pick how bold, press Build", "5 min", "Balanced or adventurous, then Build my robot. The setup check lists anything missing in plain words, makes your first paper trade and sends your first report."],
+    ["Pick how bold, press Build", "5 min", "Balanced or adventurous, then Build my robot. The setup check lists anything missing in plain words and emails you the result."],
     ["Robot Dash and your first paper trade", "10 min", "A free Cloudflare account and two more keys give you your own app. Ask for your first plan, then tap Approve: that's your first paper trade."],
-    ["Optional extras", "3 min", "Robot Care (free for your first year as a founding member), or your own Claude for fixes, and error alerts with a free Sentry account."]
+    ["Optional extras", "3 min", "Robot Care (a year free for founding members), or your own Claude for fixes, and error alerts with a free Sentry account."]
   ];
   var LESSONS = [
     ["Rules, not tips", "What a robot ISA is and isn't; writing rules down so a machine can follow them"],
@@ -1162,17 +1166,17 @@
     ["Data you can trust", "Where the prices come from, and how the robot makes sure every number is real"],
     ["Make it yours", "Changing rules, limits and what it trades: settings file first, then code"],
     ["Backtest honestly", "No hindsight, no peeking: testing your own rules fairly before any real money"],
-    ["Paper money first", "A practice account that behaves like the real thing"],
+    ["Paper money first", "Real prices, pretend money: it tests the plumbing, not your first real month"],
     ["The plumbing", "Orders, rounding and the exchange's rules (the six-decimal L)"],
     ["Done means it happened", "Confirming an order landed before calling the job done"],
     ["Make it explain itself", "Logs that give the reason and what to do, and a review that's allowed to say red"],
     ["Keys and secrets", "The five keys, what each can do, and four habits that keep them safe"],
     ["It runs while you sleep", "Scheduling, alerts and a daily digest you'll read"],
-    ["Limits and an off switch", "Position limits, sanity checks, stopping everything in one move"],
+    ["Limits and an off switch", "Position limits, sanity checks, the safety stop and Pause my robot"],
     ["Small and real", "Moving from paper to real money carefully"],
     ["Keep an honest record", "Reviewing wins and Ls without fooling yourself"]
   ];
-  var PLAN = { founding: "Founding member", standard: "Member", owner: "Owner (test account)", test: "Test account", early: "Early adopter" };
+  var PLAN = { founding: "Founding member", standard: "Member", owner: "Founding member · owner", test: "Test account", early: "Early adopter" };
 
   // ---- session (kept in this browser or app only; it's the sign-in itself, nothing else)
   function load() { try { return JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) { return null; } }
@@ -1274,7 +1278,7 @@
     renderList($("qs"), QS, "qs", function (i) { var g = window.GUIDES && GUIDES["qs-" + (i + 1)]; return ' <span class="pill">' + QS[i][1] + '</span>' + (g ? ' <span class="small">about ' + g.mins + ' min</span>' : "") + '<br><a class="gd-link" href="#guide/qs-' + (i + 1) + '">Step by step &rarr;</a>'; });
     renderList($("lessons"), LESSONS, "day", function (i) {
       var g = window.GUIDES && GUIDES["day-" + (i + 1)], mins = g ? ' <span class="small">about ' + g.mins + ' min</span>' : "";
-      var pill = i === 0 ? ' <span class="pill g">Free to watch</span>' : ((me.plan === "early" || me.preview_videos) ? ' <span class="pill g">Open</span>' : ' <span class="pill a">Opens January 2027</span>');
+      var pill = i === 0 ? ((me.plan === "early" || me.preview_videos) ? ' <span class="pill g">Open</span>' : ' <span class="pill g">Free to read</span>') : ((me.plan === "early" || me.preview_videos) ? ' <span class="pill g">Open</span>' : ' <span class="pill a">Opens January 2027</span>');
       return pill + mins + '<br><a class="gd-link" href="#guide/day-' + (i + 1) + '">Step by step &rarr;</a>';
     });
     counts();
@@ -1292,9 +1296,10 @@
   var me = {};
   function home(m, uid) {
     me = m; me.user_id = uid;
+    if (m.plan === "owner" || m.plan === "early") $("preview").hidden = true;   // 3 Nov 2026 (Amit): everything is open to these accounts, so no 'Early preview' banner
     $("whoemail").textContent = session.email || m.email;
     var first = (PLAN[m.plan] || "Member");
-    (function (u) { var b = $("oldapp-go"); if (!b) return; if (!u) { b.textContent = "Set up my dashboard"; b.onclick = function () { location.hash = "setup"; }; return; }
+    (function (u) { var b = $("oldapp-go"); if (!b) return; if (!u) { b.textContent = "Set up my dashboard"; b.onclick = function () { location.hash = (me && me.preview_videos) ? "setup" : "start"; }; return; }
       b.onclick = function () { if (safeHttps(u)) window.open(u, "_blank", "noopener"); else location.hash = "dashboard"; }; })(m.dashboard_url);
     $("hi").innerHTML = m.first_name ? 'Welcome back, <span class="g">' + esc(m.first_name) + '</span>'
       : m.plan === "founding" ? 'Welcome, <span class="g">founding member</span>' : 'Welcome <span class="g">back</span>';
@@ -1314,8 +1319,8 @@
     $("name-edit").addEventListener("click", editName);
     $("code-kv").innerHTML =
       "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : (m.plan === "early" || m.plan === "owner") ? "Your own copy, from Set up my robot" : (m.repo_url ? "Preview account" : "Arrives in January 2027")) + "</b></div>" +
-      "<div><span>Version</span><b>" + (m.repo_invited_at || m.plan === "early" || m.plan === "owner" ? "Latest" : "Preview") + "</b></div>";
-    var br = $("b-repo"); if (m.repo_url) { br.href = m.repo_url; br.removeAttribute("aria-disabled"); br.target = "_blank"; br.rel = "noopener"; br.classList.remove("ghost"); } else { br.removeAttribute("href"); br.setAttribute("aria-disabled", "true"); }
+      "<div><span>Version</span><b>" + (m.repo_invited_at || m.plan === "early" || m.plan === "owner" ? "Latest" : "The latest, when your invite arrives") + "</b></div>";
+    var br = $("b-repo"); if (m.repo_url) { br.href = m.repo_url; br.removeAttribute("aria-disabled"); br.target = "_blank"; br.rel = "noopener"; br.classList.remove("ghost"); } else { br.removeAttribute("href"); br.setAttribute("aria-disabled", "true"); br.textContent = (m.plan === "early" || m.plan === "owner") ? "Build it in Set up my robot" : "Your repo opens with your invite"; }
     $("mem-kv").innerHTML =
       "<div><span>Updates included until</span><b>" + esc(fmtDate(m.updates_until)) + "</b></div>" +
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
@@ -2129,7 +2134,9 @@
     });
     suFn("GET").then(function (r) {
       SU.cfg = r.j || {};
-      if (!SU.cfg.configured) { $("su-gh").disabled = true; $("su1-msg").textContent = "Coming soon: the GitHub connection switches on before launch. You can look through the steps now."; }
+      // 3 Nov 2026: "Coming soon" only when the service says so; a service that can't be reached says that instead
+      if (!r.ok) { $("su1-msg").textContent = "GitHub can't be reached just now. Try again in a minute."; }
+      else if (!SU.cfg.configured) { $("su-gh").disabled = true; $("su1-msg").textContent = "Coming soon: the GitHub connection switches on before launch. You can look through the steps now."; }
     }).catch(function () {});
     $("su-gh").addEventListener("click", function () { ghConnect("setup"); });
     $("su-go").addEventListener("click", suBuild);
@@ -2138,7 +2145,7 @@
     suUnlock();
   }
   function ghConnect(back) {
-      if (!SU.cfg || !SU.cfg.client_id) return;
+      if (!SU.cfg || !SU.cfg.client_id) { toast("GitHub can't be reached just now. Try again in a minute."); return; }
       var state = Array.prototype.map.call(crypto.getRandomValues(new Uint8Array(16)), function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
       try { sessionStorage.setItem("mri-gh-state", state); sessionStorage.setItem("mri-gh-back", back); } catch (e) {}
       location.href = "https://github.com/login/oauth/authorize?client_id=" + encodeURIComponent(SU.cfg.client_id) + "&scope=" + encodeURIComponent("repo workflow") +
@@ -2548,7 +2555,9 @@
       .catch(function () { m.textContent = "The invite email isn't switched on yet."; });
   }
   function eaInit() {
-    if (!me || me.plan !== "owner") return; document.querySelectorAll(".ea-tab").forEach(function (t) { t.hidden = false; }); eaLoad();
+    // 3 Nov 2026 (visitor simulation): the card is the owner's alone; anyone else who lands on #early goes to Help.
+    if (!me || me.plan !== "owner") { if (location.hash === "#early") location.hash = "help"; return; }
+    $("ea-card").hidden = false; document.querySelectorAll(".ea-tab").forEach(function (t) { t.hidden = false; }); eaLoad();
     if ($("ea-add").dataset.on) return; $("ea-add").dataset.on = "1";
     $("ea-add").addEventListener("click", function () {
       var m = $("ea-msg"), e = $("ea-email").value.trim(); if (!e) { m.textContent = "Type their email first."; return; }
@@ -2691,9 +2700,9 @@
   function guideVideo(id) {
     var box = $("gd-video"), slug = VIDEOS[id];
     if (!box) return;
-    if (!me.preview_videos || !slug) { box.hidden = true; box.innerHTML = ""; return; }
+    if (!me.preview_videos || !slug || lxOn(window.GUIDES && GUIDES[id])) { box.hidden = true; box.innerHTML = ""; return; }   // an interactive lesson plays inside its steps
     box.hidden = false;
-    var note = '<p class="small">Watch first, then do the steps below. <span style="color:var(--eye)">Owner preview: only your account sees the videos for now.</span></p>';
+    var note = '<p class="small">Watch first, then do the steps below.' + (me.plan === "owner" ? ' <span style="color:var(--eye)">Owner preview: only owner and early-adopter accounts see the videos for now.</span>' : '') + '</p>';
     function paint(url) {
       if (gcur.id !== id) return;   // they moved on while the link was on its way
       box.innerHTML = '<div class="gd-video"><video controls preload="metadata" playsinline src="' + esc(url) + '"></video>' + note + '</div>';
@@ -2707,7 +2716,7 @@
       if (!x.ok || !/^https:\/\//.test(x.j.url || "")) throw new Error(x.j.error || "no link");
       VIDLINK[id] = { url: x.j.url, until: Date.parse(x.j.expires_at) || Date.now() + 3600000 }; paint(x.j.url);
     }).catch(function (e) {
-      if (gcur.id === id) box.innerHTML = '<div class="gd-video"><p class="small">The video didn\u2019t load. ' + esc(String((e && e.message) || "")) + ' Try again in a minute; the steps below are all you need.</p></div>';
+      if (gcur.id === id) box.innerHTML = '<div class="gd-video"><p class="small">The video didn\u2019t load just now. Try again in a minute; the steps below are all you need.</p></div>';
     });
   }
   // "I want this" (23 Oct 2026): saved to your account, counted across members (want_counts() returns totals only), with a toast.
@@ -2781,7 +2790,7 @@
     lxLink(id).then(function (url) {
       if (LX.url === url) return go();
       LX.url = url; v.src = url; v.addEventListener("loadedmetadata", go, { once: true }); v.load();
-    }).catch(function () { btn.textContent = "Play"; toast("The video didn't load. The words are all here."); });
+    }).catch(function () { btn.textContent = "Play"; var sc = $("lx-screen"); if (sc) sc.hidden = true; var fo = document.querySelector(".lx-voice + details.fold"); if (fo) fo.open = true; toast("The video didn't load. The words are open below."); });
   }
   function lxPause() {
     var p = LX.pz, ask = LX.ask, line = p ? (ask ? "Your robot goes back to its usual weekly plan." : "Your robot is paused. Nothing new is proposed or sent, and what you hold stays as it is.")
@@ -2905,9 +2914,35 @@
   });
 
   // ---- one section per page: Home (welcome and messages), Start here, Lessons, Code, Dashboard, Clips, Help
-  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "fixes", "dashboard", "mydash", "clips", "passkeys", "early", "help", "guide", "questions", "ideas", "post"];   // #space maps to ideas, #membership to help
+  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "fixes", "dashboard", "mydash", "clips", "passkeys", "early", "help", "guide", "questions", "care", "ideas", "post"];   // #space maps to ideas, #membership to help
   // Questions (23 Oct 2026): the public Questions page, shown inside the members area so the members menu stays put. Fetched once.
   var faqLoaded = false;
+  // 3 Nov 2026 (Amit): Robot Care opens in the members area like Questions, so the sidebar stays on the members' menu.
+  // The public page is the one source: its section is copied in, links and media re-pointed, and only its own
+  // care-/vs- styles carried over, scoped to #care-body.
+  var careLoaded = false;
+  function loadCare() {
+    if (careLoaded) return; careLoaded = true;
+    fetch("../robot-care.html", { cache: "no-cache" }).then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); }).then(function (html) {
+      var doc = new DOMParser().parseFromString(html, "text/html"), sec = doc.getElementById("care");
+      if (!sec) throw 0;
+      sec.querySelectorAll("script, .pghead, .v2-next, [data-guest]").forEach(function (x) { x.remove(); });
+      sec.querySelectorAll("[href], [src], [poster]").forEach(function (el) { ["href", "src", "poster"].forEach(function (k) {
+        var v = el.getAttribute(k); if (!v || /^(https?:|mailto:|#|data:)/.test(v)) return; el.setAttribute(k, "../" + v.replace(/^\.\//, "")); }); });
+      try {
+        var css = Array.prototype.map.call(doc.querySelectorAll("style"), function (x) { return x.textContent; }).join("\n"), sh = new CSSStyleSheet(); sh.replaceSync(css);
+        var keep = function (sel) { return /\.(care|vs-)/.test(sel); }, scope = function (sel) { return sel.split(",").map(function (x) { return "#care-body " + x.trim(); }).join(","); };
+        var out = [];
+        Array.prototype.forEach.call(sh.cssRules, function (r) {
+          if (r.selectorText && keep(r.selectorText)) out.push(scope(r.selectorText) + "{" + r.style.cssText + "}");
+          else if (r.media && r.cssRules) { var inner = Array.prototype.filter.call(r.cssRules, function (x) { return x.selectorText && keep(x.selectorText); }).map(function (x) { return scope(x.selectorText) + "{" + x.style.cssText + "}"; });
+            if (inner.length) out.push("@media " + r.media.mediaText + "{" + inner.join("") + "}"); }
+        });
+        var st = document.createElement("style"); st.textContent = out.join("\n"); document.head.appendChild(st);
+      } catch (e) {}
+      $("care-body").innerHTML = sec.innerHTML;
+    }).catch(function () { careLoaded = false; $("care-body").innerHTML = '<p class="small">Couldn\'t load Robot Care just now. <a href="../robot-care.html">Open the public page</a>.</p>'; });
+  }
   function loadFaq() {
     if (faqLoaded) return; faqLoaded = true;
     fetch("../questions.html", { cache: "no-cache" }).then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); }).then(function (html) {
@@ -3144,7 +3179,7 @@
     var idea = kind === "idea"; IB.sheetKind = kind; IB.cat = idea ? "robot" : "other";
     $("ib-s-h").textContent = idea ? "Suggest an idea" : "Ask a question";
     $("ib-s-tl").textContent = idea ? "Your idea in one line" : "Your question";
-    $("ib-s-title").placeholder = idea ? "e.g. Pause my robot while I'm away" : "e.g. How do I change my email address?";
+    $("ib-s-title").placeholder = idea ? "e.g. Show the safety-stop line on the Overview" : "e.g. How do I change my email address?";
     $("ib-s-body").placeholder = idea ? "What would it help you do?" : "Anything that helps: what you tried, what you saw.";
     $("ib-s-go").textContent = idea ? "Post my idea" : "Post my question"; $("ib-s-go").disabled = false;
     $("ib-s-title").value = IB.q || ""; $("ib-s-body").value = ""; $("ib-s-msg").textContent = "";
@@ -3206,6 +3241,8 @@
     if (page === "ideas") { page = "help"; helpTab("space"); }   // the board lives in the Help card; 29 Oct 2026: it has its own menu line, Moonshotters
     if (!ibSheetKind && !$("ib-sheet").hidden) ibClose(true);
     if (page === "membership" || (page === "help" && hl === "help")) { page = "help"; hl = "help"; helpTab("memb"); }
+    if (page === "early" && me && me.plan && me.plan !== "owner") { page = "help"; hl = "help"; helpTab("memb"); }
+    if (/^(q-|faq-)/.test(page)) { var qa = page; page = "questions"; setTimeout(function jump(n) { n = n || 0; var t = document.querySelector("#faq-body #" + qa); if (t) { if (t.tagName === "DETAILS") t.open = true; t.scrollIntoView({ block: "start" }); } else if (n < 20) setTimeout(function () { jump(n + 1); }, 150); }, 150); }   // the FAQ's own jump links (3 Nov 2026)
     if (PAGES.indexOf(page) < 0) page = "home";
     if (page === "guide") { if (!window.GUIDES || !GUIDES[gid]) { page = "start"; } else { guideOpen(gid); } }
     document.querySelectorAll("#v-home [data-page]").forEach(function (el) { el.classList.toggle("off", el.dataset.page.split(" ").indexOf(page) < 0); });
@@ -3219,6 +3256,7 @@
     document.querySelector('.mgroup .grp-h > a').classList.toggle("on", true);
     if (page === "lessons") $("les-fold").open = true;
     if (page === "questions") loadFaq();
+    if (page === "care") loadCare();
     if (page === "home" || page === "questions" || page === "help" || page === "post") ibLoad();
     IB.cur = null; if (page === "post") ibOpen(ibPost); if (page === "help") { if (ibSheetKind) { IB.kind = ibSheetKind; ibPaintBoard(); ibSheet(ibSheetKind); } }
     if (page === "setup") suInit();

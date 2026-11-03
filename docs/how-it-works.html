@@ -458,7 +458,7 @@
       <div class="calm-grid">
         <div><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 17 9 11 13 15 21 7"/><polyline points="15 7 21 7 21 13"/></svg></i><b>Prices move first</b><span>By the time a crisis makes the front page, it's already in the price. The robot checks every holding every week and acts on what the market is doing, not on what anyone fears it might do.</span></div>
         <div><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></i><b>The exit plan already exists</b><span>Every holding gets its exit rule before it's bought: a trailing stop under its peak, and a sale if it closes below its 40-week average. No decisions at 3am.</span></div>
-        <div><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 18 0z"/><path d="M12 12v7a2 2 0 0 0 4 0"/></svg></i><b>It sits out the slide</b><span>It only buys while prices are above their long-term average, so in a fall it holds cash rather than guessing the bottom. A circuit breaker stops all trading if the account drops past a limit you set.</span></div>
+        <div><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 18 0z"/><path d="M12 12v7a2 2 0 0 0 4 0"/></svg></i><b>It sits out the slide</b><span>It only buys while prices are above their long-term average, so in a fall it holds cash rather than guessing the bottom. A safety stop pauses the weekly plan if the account falls a set amount below its high, and restarts by itself once it climbs back.</span></div>
         <div><i class="ci" aria-hidden="true"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="8 12 11 15 16 9"/></svg></i><b>You keep the final say</b><span>Nothing trades without your tap. If the news worries you, don't approve. The robot brings the calm; you stay in charge.</span></div>
       </div>
       <p class="small">The Covid crash of 2020 is in the backtest for exactly this reason. A backtest shows how the rules behaved, not how they'll behave next time; nothing can see a crash coming, and the robot checks once a week (<a href="questions.html#faq-weekly">we tested checking every day</a>). Capital at risk. <a href="questions.html#faq-crash">More in the FAQ</a>.</p>
@@ -467,7 +467,7 @@
 
   <section class="jobs" id="jobs">
     <h2>One ISA. Two jobs. <span class="p">We tested a third.</span></h2>
-    <div class="job"><h2 class="h3">The foundation</h2><p>In the default settings, most of the money goes into one low-cost fund that tracks the world's markets. Nothing to pick, nothing to watch. The robot invests new cash and keeps it in balance.</p></div>
+    <div class="job"><h2 class="h3">The foundation</h2><p>In the default settings, most of the money goes into five low-cost index funds, chosen by rule from a fixed list of index funds. Nothing to pick, nothing to watch. The robot invests new cash and keeps it in balance.</p></div>
     <div class="job"><h2 class="h3">The hunter</h2><p>A slice rides the market's strongest stocks while they're running and steps out by rule when they stop. The robot finds them, sizes them and sets the exit rule before it buys. You tap Approve. In our backtest it caught Sandisk, the biggest run of the past year, twice. <a href="questions.html#faq-bigrun">How much of it, honestly</a>.</p></div>
     <div class="job retired"><h2 class="h3">The moonshot</h2><div><span class="stamp">Retired &middot; we took the L</span><p class="was">A small pot for the biggest swings, with its size capped and its exit set in advance.</p><p>Chasing the next big run is what the headlines sell. We built it, ran it with the founder&rsquo;s own money, then tested ten versions of it over six years of prices. Some made more money, but only with much bigger falls along the way; none gave a better trade-off than the hunter. So we switched it off and its money went back to the main robot. Data, not headlines. We took the L, so you don&rsquo;t have to. <a href="questions.html#faq-moonshot">What we found</a>.</p></div></div>
     <div class="dial">
@@ -479,7 +479,7 @@
       <div class="mix" id="mix" aria-hidden="true"><span class="m1" style="flex:75">Foundation</span><span class="m2" style="flex:25">Hunter</span></div>
       <p class="mix-key" aria-hidden="true"><span><i style="background:var(--green)"></i>Foundation <b class="mk">75%</b></span><span><i style="background:var(--pink-bg)"></i>Hunter <b class="mk">25%</b></span></p>
       <p class="vh" id="mixsay" aria-live="polite">Balanced: 75% foundation, 25% hunter.</p>
-      <p class="small">Three built-in starting points, not a recommendation for you: pick one or set your own split in your settings file, change it any time, and the robot proposes the rest. Capital at risk: it can lose money as well as make it.</p>
+      <p class="small">Two built-in starting points, not a recommendation for you: pick one or set your own split in your settings file, change it any time, and the robot proposes the rest. Capital at risk: it can lose money as well as make it.</p>
     </div>
     <p class="small" style="margin-top:18px;color:var(--ink)"><strong>Already have an ISA with Vanguard or similar?</strong> You don't have to move it. A tracker follows the market. My Robot I.S.A. can do that too, and adds one more job: finding strong stocks while they're running, with the exit rule set before it buys. Both accounts can sit side by side.</p>
   </section>
@@ -488,7 +488,7 @@
     <h2>Built for people with a <span class="p">day job</span></h2>
     <p class="lead">You see the stock everyone's talking about at lunchtime. By the time you've finished work it's old news, and you've no time to sit watching charts anyway. So you do nothing, and the ISA allowance sits there.</p>
     <p class="lead">A robot ISA is the other way round. You set the rules once: what it's allowed to buy, how much risk you'll take, when it should sell. Every Sunday at 7pm it puts the week's proposed moves on your phone or computer, the maths already done. You tap approve by 2pm on Monday, with a reminder if you forget. No chart-watching, no chasing, no deciding at midnight.</p>
-    <p class="small">Its job is to make sure your plan actually runs, every week, while you get on with your life. It won't catch every runaway stock and it doesn't promise to beat anything, and that's deliberate: a plan you'll stick to beats a hunch you won't. Capital at risk: it can lose money as well as make it.</p>
+    <p class="small">Its job is to make sure your plan actually runs, every week, while you get on with your life. It won't catch every runaway stock and it doesn't promise to beat anything, and that's deliberate: a plan written down in advance is one you can stick to. Capital at risk: it can lose money as well as make it.</p>
   </section>
 
   <div class="road" id="road">
@@ -711,7 +711,7 @@
   fetch("status.json",{cache:"no-store"}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(d){
     var f=function(id,v){ document.getElementById(id).textContent=v; };
     f("r-weeks", d.weeks_run); f("r-missed", d.missed_weeks); f("r-orders", d.orders_sent);
-    var st=document.getElementById("r-state"); st.textContent = d.trading==="halted" ? "Halted" : "Running"; if(d.trading==="halted") st.classList.add("off");
+    var st=document.getElementById("r-state"); st.textContent = d.trading==="halted" ? "Paused" : "Running"; if(d.trading==="halted") st.classList.add("off");
     var ld=function(iso){ try{ return new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Europe/London",timeZoneName:"short"}).format(new Date(iso)); }catch(e){ return iso; } };
     meta.textContent = "Last weekly run: " + ld(d.last_run_at) + ". Record since " + new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/London"}).format(new Date(d.first_run_at)) + ". Updated " + ld(d.generated_at) + ".";
     g.hidden=false;
@@ -769,7 +769,7 @@
 <script>
 // 22 Oct 2026: signed-in members see "Members area" instead of "Log in" in the header (the side menu stays the site's; Amit, 23 Oct).
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
-var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
+var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");l.textContent="Members area";}document.querySelectorAll("[data-guest],.side-cta .pf,.side-cta .ps,.side-cta [data-places],.side-cta .side-nl").forEach(function(x){x.style.display="none";});var b=document.querySelector(".side-cta a.btn");if(b&&l){b.textContent="Members area";b.href=l.href;}document.querySelectorAll("[data-member]").forEach(function(x){x.hidden=false;});document.querySelectorAll("footer a[href='members/']").forEach(function(x){if(x.textContent==="Member log in"){x.textContent="Members area";x.href="members/#home";}});}catch(e){}})();
 </script>
 </body>
 </html>
