@@ -79,14 +79,17 @@ header .sub{color:var(--chrome-sub);font-size:13px}
 section.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;min-width:0}
 h2{font-family:var(--display);font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--fg);margin:0 0 2px;padding-left:10px;border-left:4px solid var(--brand-green)}
 .lede{color:var(--muted);font-size:14px;margin:4px 0 14px;max-width:68ch}
-.findings{display:grid;gap:10px}
-.f{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start;padding:12px 0;border-top:1px solid var(--line)}
+.findings{display:grid;grid-template-columns:auto 1fr;gap:10px 0}
+/* 3 Nov 2026 (Amit): one shared pill column, so every heading starts on the same line */
+.f{display:grid;grid-column:1/-1;grid-template-columns:subgrid;gap:4px 16px;align-items:start;padding:12px 0;border-top:1px solid var(--line)}
+.f .pill{justify-self:start}
+@supports not (grid-template-columns:subgrid){.f{grid-template-columns:9.5rem 1fr}}
 .f:first-child{border-top:0;padding-top:2px}
 .pill{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;white-space:nowrap;margin-top:2px;display:inline-block}
 .p-warn{background:var(--warn-bg);color:var(--warn)} .p-bad{background:var(--bad-bg);color:var(--loss)} .p-info{background:var(--info-bg);color:var(--info)} .p-good{background:var(--good-bg);color:var(--gain)}
 .f b{display:block;font-weight:700}
 .f p{margin:2px 0 0;color:var(--muted);font-size:14px;max-width:72ch}
-@media (max-width:560px){.f{grid-template-columns:minmax(0,1fr)}.f .pill{justify-self:start}}
+@media (max-width:560px){.findings{grid-template-columns:minmax(0,1fr)}.f{grid-template-columns:minmax(0,1fr)}}
 .legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--muted);margin-bottom:6px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
 .sw{width:18px;height:3px;border-radius:2px;display:inline-block}

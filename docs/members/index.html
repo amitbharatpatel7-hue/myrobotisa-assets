@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="102">
+<meta name="mri-version" content="103">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -529,7 +529,7 @@
     <!-- 22 Oct 2026 (Amit): just Home and Questions. Same tab: the site pages show this Members area group too while you're signed in. -->
     <li class="sep">The site</li>
     <li><a href="../">Home</a></li>
-    <li><a href="../robot-care.html">Robot Care</a></li>
+    <li><a href="#care" data-go="care">Robot Care</a></li>
     <li><a href="#questions" data-go="questions">Questions</a></li>
   </ol>
   <!-- In the installed app the menu is the members area only (21 Oct 2026) -->
@@ -793,6 +793,10 @@
         <div id="ib-p-body"><p class="small">Loading…</p></div>
       </section>
 
+      <section class="card wide" aria-labelledby="h-care" data-page="care" id="care-page">
+        <h2 id="h-care">Robot <span class="p">Care</span></h2>
+        <div id="care-body"><p class="small">Loading…</p></div>
+      </section>
       <section class="card wide faq" aria-labelledby="h-faq" data-page="questions" id="faq-page">
         <h2 id="h-faq">Questions people <span class="p">ask</span></h2>
         <p class="lede">Tap a question for its answer. Not here? Ask it: a person reads every question, other members can help, and once it's answered it appears below.</p>
@@ -1172,7 +1176,7 @@
     ["Small and real", "Moving from paper to real money carefully"],
     ["Keep an honest record", "Reviewing wins and Ls without fooling yourself"]
   ];
-  var PLAN = { founding: "Founding member", standard: "Member", owner: "Owner (test account)", test: "Test account", early: "Early adopter" };
+  var PLAN = { founding: "Founding member", standard: "Member", owner: "Founding member · owner", test: "Test account", early: "Early adopter" };
 
   // ---- session (kept in this browser or app only; it's the sign-in itself, nothing else)
   function load() { try { return JSON.parse(localStorage.getItem(STORE) || "null"); } catch (e) { return null; } }
@@ -1292,6 +1296,7 @@
   var me = {};
   function home(m, uid) {
     me = m; me.user_id = uid;
+    if (m.plan === "owner" || m.plan === "early") $("preview").hidden = true;   // 3 Nov 2026 (Amit): everything is open to these accounts, so no 'Early preview' banner
     $("whoemail").textContent = session.email || m.email;
     var first = (PLAN[m.plan] || "Member");
     (function (u) { var b = $("oldapp-go"); if (!b) return; if (!u) { b.textContent = "Set up my dashboard"; b.onclick = function () { location.hash = (me && me.preview_videos) ? "setup" : "start"; }; return; }
@@ -2909,9 +2914,35 @@
   });
 
   // ---- one section per page: Home (welcome and messages), Start here, Lessons, Code, Dashboard, Clips, Help
-  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "fixes", "dashboard", "mydash", "clips", "passkeys", "early", "help", "guide", "questions", "ideas", "post"];   // #space maps to ideas, #membership to help
+  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "fixes", "dashboard", "mydash", "clips", "passkeys", "early", "help", "guide", "questions", "care", "ideas", "post"];   // #space maps to ideas, #membership to help
   // Questions (23 Oct 2026): the public Questions page, shown inside the members area so the members menu stays put. Fetched once.
   var faqLoaded = false;
+  // 3 Nov 2026 (Amit): Robot Care opens in the members area like Questions, so the sidebar stays on the members' menu.
+  // The public page is the one source: its section is copied in, links and media re-pointed, and only its own
+  // care-/vs- styles carried over, scoped to #care-body.
+  var careLoaded = false;
+  function loadCare() {
+    if (careLoaded) return; careLoaded = true;
+    fetch("../robot-care.html", { cache: "no-cache" }).then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); }).then(function (html) {
+      var doc = new DOMParser().parseFromString(html, "text/html"), sec = doc.getElementById("care");
+      if (!sec) throw 0;
+      sec.querySelectorAll("script, .pghead, .v2-next, [data-guest]").forEach(function (x) { x.remove(); });
+      sec.querySelectorAll("[href], [src], [poster]").forEach(function (el) { ["href", "src", "poster"].forEach(function (k) {
+        var v = el.getAttribute(k); if (!v || /^(https?:|mailto:|#|data:)/.test(v)) return; el.setAttribute(k, "../" + v.replace(/^\.\//, "")); }); });
+      try {
+        var css = Array.prototype.map.call(doc.querySelectorAll("style"), function (x) { return x.textContent; }).join("\n"), sh = new CSSStyleSheet(); sh.replaceSync(css);
+        var keep = function (sel) { return /\.(care|vs-)/.test(sel); }, scope = function (sel) { return sel.split(",").map(function (x) { return "#care-body " + x.trim(); }).join(","); };
+        var out = [];
+        Array.prototype.forEach.call(sh.cssRules, function (r) {
+          if (r.selectorText && keep(r.selectorText)) out.push(scope(r.selectorText) + "{" + r.style.cssText + "}");
+          else if (r.media && r.cssRules) { var inner = Array.prototype.filter.call(r.cssRules, function (x) { return x.selectorText && keep(x.selectorText); }).map(function (x) { return scope(x.selectorText) + "{" + x.style.cssText + "}"; });
+            if (inner.length) out.push("@media " + r.media.mediaText + "{" + inner.join("") + "}"); }
+        });
+        var st = document.createElement("style"); st.textContent = out.join("\n"); document.head.appendChild(st);
+      } catch (e) {}
+      $("care-body").innerHTML = sec.innerHTML;
+    }).catch(function () { careLoaded = false; $("care-body").innerHTML = '<p class="small">Couldn\'t load Robot Care just now. <a href="../robot-care.html">Open the public page</a>.</p>'; });
+  }
   function loadFaq() {
     if (faqLoaded) return; faqLoaded = true;
     fetch("../questions.html", { cache: "no-cache" }).then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); }).then(function (html) {
@@ -3225,6 +3256,7 @@
     document.querySelector('.mgroup .grp-h > a').classList.toggle("on", true);
     if (page === "lessons") $("les-fold").open = true;
     if (page === "questions") loadFaq();
+    if (page === "care") loadCare();
     if (page === "home" || page === "questions" || page === "help" || page === "post") ibLoad();
     IB.cur = null; if (page === "post") ibOpen(ibPost); if (page === "help") { if (ibSheetKind) { IB.kind = ibSheetKind; ibPaintBoard(); ibSheet(ibSheetKind); } }
     if (page === "setup") suInit();
