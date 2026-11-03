@@ -927,7 +927,7 @@
       </section>
       <section class="card wide" aria-labelledby="h-su" id="su-card" data-page="setup">
         <h2 id="h-su">Set up <span class="g">my robot</span></h2>
-        <p class="lede">About 10 minutes once your free accounts are open, and no typing into GitHub. You bring your keys; this page builds your copy, locks the keys away, switches on the schedule, runs the setup check and sets up Robot Dash, the app where you approve every order. Then you approve your first paper trade, and the lessons explain what you just built.</p>
+        <p class="lede">About 20 minutes once your free accounts are open, and no typing into GitHub. You bring your keys; this page builds your copy, locks the keys away, switches on the schedule, runs the setup check and sets up Robot Dash, the app where you approve every order. Then you approve your first paper trade, and the lessons explain what you just built.</p>
         <details class="fold su-before" id="su-before"><summary><span class="fold-l">Before you start: four free accounts <span id="acct-count"></span></span></summary>
           <ol class="su-pre">
             <li id="acct1"><div class="ah"><b>Trading 212</b><span class="pill" id="acct1-st"></span></div>
@@ -1042,7 +1042,7 @@
         </ol>
         </details>
         <a class="su-promo su-live-go" href="#live" data-go="live"><b>Ready for real money?</b><span>When you are, the real-money switch walks you through it step by step, just like this page.</span></a>
-        <p class="small" style="margin-top:14px">Set up my robot does QuickStart steps 1 to 5 for you. Can't use it, say GitHub won't connect? The <a href="#guide/qs-1" style="color:var(--green);font-weight:700">manual steps</a> do the same by hand.</p>
+        <p class="small" style="margin-top:14px">Set up my robot does QuickStart steps 1 to 4 for you. Can't use it, say GitHub won't connect? The <a href="#guide/qs-1" style="color:var(--green);font-weight:700">manual steps</a> do the same by hand.</p>
       </section>
 
       <section class="card wide" aria-labelledby="h-lv" id="lv-card" data-page="live">
@@ -1315,7 +1315,7 @@
     $("code-kv").innerHTML =
       "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : (m.plan === "early" || m.plan === "owner") ? "Your own copy, from Set up my robot" : (m.repo_url ? "Preview account" : "Arrives in January 2027")) + "</b></div>" +
       "<div><span>Version</span><b>" + (m.repo_invited_at || m.plan === "early" || m.plan === "owner" ? "Latest" : "The latest, when your invite arrives") + "</b></div>";
-    var br = $("b-repo"); if (m.repo_url) { br.href = m.repo_url; br.removeAttribute("aria-disabled"); br.target = "_blank"; br.rel = "noopener"; br.classList.remove("ghost"); } else { br.removeAttribute("href"); br.setAttribute("aria-disabled", "true"); br.textContent = "Your repo opens with your invite"; }
+    var br = $("b-repo"); if (m.repo_url) { br.href = m.repo_url; br.removeAttribute("aria-disabled"); br.target = "_blank"; br.rel = "noopener"; br.classList.remove("ghost"); } else { br.removeAttribute("href"); br.setAttribute("aria-disabled", "true"); br.textContent = (m.plan === "early" || m.plan === "owner") ? "Build it in Set up my robot" : "Your repo opens with your invite"; }
     $("mem-kv").innerHTML =
       "<div><span>Updates included until</span><b>" + esc(fmtDate(m.updates_until)) + "</b></div>" +
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
@@ -2785,7 +2785,7 @@
     lxLink(id).then(function (url) {
       if (LX.url === url) return go();
       LX.url = url; v.src = url; v.addEventListener("loadedmetadata", go, { once: true }); v.load();
-    }).catch(function () { btn.textContent = "Play"; var sc = $("lx-screen"); if (sc) sc.hidden = true; var fo = document.querySelector("#lx-step details.fold, .lx-voice + details.fold"); if (fo) fo.open = true; toast("The video didn't load. The words are open below."); });
+    }).catch(function () { btn.textContent = "Play"; var sc = $("lx-screen"); if (sc) sc.hidden = true; var fo = document.querySelector(".lx-voice + details.fold"); if (fo) fo.open = true; toast("The video didn't load. The words are open below."); });
   }
   function lxPause() {
     var p = LX.pz, ask = LX.ask, line = p ? (ask ? "Your robot goes back to its usual weekly plan." : "Your robot is paused. Nothing new is proposed or sent, and what you hold stays as it is.")

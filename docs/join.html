@@ -402,11 +402,11 @@
       <li class="pf">Robot Care free for your first year (worth &pound;120), then &pound;10 a month only if you want it</li>
       <li class="ps" hidden>Robot Care, &pound;10 a month, only if you want it</li>
       <li>A private members' space for questions and ideas</li>
-      <li>Opens January 2027, before the new tax year on 6 April. UK only at launch</li>
-      <li>No payment now. Lesson 1 is free to watch before you buy</li>
+      <li>Opens January 2027. UK only at launch</li>
+      <li>No payment now. Lesson 1 is free before you buy</li>
       <li>The QuickStart gets most people to their first paper trade in about 30 minutes. The promise: within 60 minutes, with our help, or your money back</li>
     </ul>
-    <p class="lead" data-member hidden>You're already signed in as a member. <a href="members/#home" style="color:var(--green);font-weight:700">Open the members area</a>.</p>
+    <p class="lead" data-member hidden>You're already signed in as a member. <a href="members/#home" style="color:var(--green);font-weight:700">Open the members area</a>. Not you? <a href="#join" id="show-join" style="color:var(--green)">Show the sign-up form</a>.</p>
     <form id="f" novalidate data-guest>
       <div class="row">
         <input type="email" id="email" name="email" placeholder="you@email.com" autocomplete="email" required aria-label="Email address">
@@ -675,7 +675,7 @@
 <script>
 // 22 Oct 2026: signed-in members see "Members area" instead of "Log in" in the header (the side menu stays the site's; Amit, 23 Oct).
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
-var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");l.textContent="Members area";}document.querySelectorAll("[data-guest],.side-cta .pf,.side-cta .ps,.side-cta [data-places],.side-cta .side-nl").forEach(function(x){x.style.display="none";});var b=document.querySelector(".side-cta a.btn");if(b&&l){b.textContent="Members area";b.href=l.href;}document.querySelectorAll("[data-member]").forEach(function(x){x.hidden=false;});document.querySelectorAll("footer a[href='members/']").forEach(function(x){if(x.textContent==="Member log in"){x.textContent="Members area";x.href="members/#home";}});}catch(e){}})();
+var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");l.textContent="Members area";}document.querySelectorAll("[data-guest],.side-cta .pf,.side-cta .ps,.side-cta [data-places],.side-cta .side-nl").forEach(function(x){x.style.display="none";});var b=document.querySelector(".side-cta a.btn");if(b&&l){b.textContent="Members area";b.href=l.href;}document.querySelectorAll("[data-member]").forEach(function(x){x.hidden=false;});var sj=document.getElementById("show-join");if(sj)sj.addEventListener("click",function(){document.querySelectorAll("#f[data-guest],p[data-guest]").forEach(function(x){x.style.display="";});});document.querySelectorAll("footer a[href='members/']").forEach(function(x){if(x.textContent==="Member log in"){x.textContent="Members area";x.href="members/#home";}});}catch(e){}})();
 </script>
 </body>
 </html>

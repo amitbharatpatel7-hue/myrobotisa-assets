@@ -430,7 +430,7 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
     </section>
     <section class="card">
       <h2>Setup check</h2>
-      <p class="lede">Runs in your own GitHub. It checks every key and emails you the result. Your first paper trade comes next, when you tap Approve in Robot Dash.</p>
+      <p class="lede">Runs in your own GitHub. It checks every key and emails you the result. Your first paper trade comes next, when you tap Approve on your first plan.</p>
       <button class="btn go" id="qrun" type="button">Run the setup check</button>
       <ul class="checks" id="qchecks"></ul>
     </section>
@@ -710,7 +710,7 @@ function renderQS(){
   $("qcount").textContent=`${qdone.size} of ${QS.length} steps done · about ${QS.reduce((s,q,i)=>s+(qdone.has(i)?0:parseInt(q[1])),0)} minutes left`;
 }
 $("qrun").addEventListener("click",()=>{
-  const L=[["✓","GitHub copy found, private","up"],["✓","Broker key works · practice account · read and trade allowed","up"],["✓","Email key works · a test email went to you@example.com","up"],["–","Error alerts: optional, skipped","tag"],["–","Robot Care or your own Claude: optional, skipped","tag"],["✓","Real orders are off (practice money)","up"],["✓","First paper trade placed: Global shares fund, £50, filled","up"],["✓","First daily report sent. You're set up.","up"]];
+  const L=[["✓","GitHub copy found, private","up"],["✓","Broker key works · practice account · read and trade allowed","up"],["✓","Email key works · a test email went to you@example.com","up"],["–","Error alerts: optional, skipped","tag"],["–","Robot Care or your own Claude: optional, skipped","tag"],["✓","Real orders are off (practice money)","up"],["✓","Result emailed to you. Next: tap Approve on your first plan.","up"]];
   const ul=$("qchecks"); ul.innerHTML=""; $("qrun").disabled=true;
   L.forEach((r,i)=>setTimeout(()=>{ ul.insertAdjacentHTML("beforeend",`<li><span class="ic ${r[2]}">${r[0]}</span><span>${r[1]}</span></li>`); if(i===L.length-1){ $("qrun").disabled=false; $("qrun").textContent="Run it again"; } },350*(i+1)));
 });
