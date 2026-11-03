@@ -23,7 +23,7 @@ const URL_ = `http://127.0.0.1:${PORT}/members/`;
 const FIX = { id: 7, outcome: "pr", pr_number: 4, pr_title: "Fix the weekly plan", diagnosis: "A date was read the wrong way.", files: ["signals_report.py"], urgent: true, fix_state: "open", at: "2026-10-29T09:00:00Z" };
 
 let passed = 0;
-async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, height: 900 }, store = {}, guides = null, voice = null }, f) {
+async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, height: 900 }, store = {}, guides = null, voice = null, owner = false }, f) {
   const browser = await chromium.launch(), page = await browser.newPage({ viewport: vp });
   const errs = [];
   page.on("pageerror", (e) => errs.push(String(e)));
@@ -31,10 +31,11 @@ async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, he
     const p = new URL(route.request().url()).pathname;
     const json = (o) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(o) });
     if (p.endsWith("/rpc/my_robot_care_fixes")) return json(fixes);
-    if (p.endsWith("/rest/v1/members")) return json([{ email: "a@example.com", plan: "founding", status: "active", joined_at: "2026-10-01", updates_until: "2027-10-01", founding_no: 7, preview_videos: true, robot_care: robotCare }]);
+    if (p.endsWith("/rest/v1/members")) return json([{ email: "a@example.com", plan: owner ? "owner" : "founding", status: "active", joined_at: "2026-10-01", updates_until: "2027-10-01", founding_no: 7, preview_videos: true, robot_care: robotCare }]);
     if (p.endsWith("/functions/v1/robot-care-accept")) return json({ ok: true, changed: 0 });
     if (p.endsWith("/rest/v1/lesson_guides")) return json(guides || [{ id: "day-1", data: { title: "Lesson 1", mins: 5, steps: [] } }]);
     if (p.endsWith("/functions/v1/lesson-media")) return json({ error: "stub" });
+    if (p.endsWith("/rpc/owner_early_list")) return json([]);
     return json([]);
   });
   await page.addInitScript(([s, st]) => { localStorage.setItem("mri-members-session", JSON.stringify(s)); for (const k in st) localStorage.setItem(k, st[k]); },
@@ -69,6 +70,20 @@ try {
     await page.click('[data-gd="next"]'); await page.click('[data-gd="finish"]');
     assert.ok((await page.textContent("#gd-step")).includes("All 5 steps done"));
     if (SHOTS) await page.screenshot({ path: path.join(SHOTS, "lesson-390.png") });
+  });
+  await run("owner: Early adopters is a third tab; lessons never say preview", { owner: true }, async (page) => {
+    await page.goto(URL_ + "#help"); await page.waitForSelector("#pane-memb:not([hidden])"); await page.waitForTimeout(300);
+    assert.equal(await page.$$eval('#pane-memb .ea-tab', (t) => t.filter((x) => !x.hidden).length), 1, "owner sees the tab");
+    assert.equal(await page.$("#pane-memb #ea-email"), null, "the form is not above Membership any more");
+    await page.click('#pane-memb .ea-tab'); await page.waitForSelector("#ea-card:not(.off) #ea-email");
+    assert.equal(await page.getAttribute("#ea-card .ea-tab", "aria-selected"), "true");
+    await page.goto(URL_ + "#lessons"); await page.waitForSelector("#lessons li");
+    const pills = await page.$$eval("#lessons .pill", (p) => p.map((x) => x.textContent.trim()));
+    assert.ok(pills.includes("Open") && !pills.some((t) => /preview/i.test(t)), pills.join(","));
+  });
+  await run("member: no Early adopters tab", {}, async (page) => {
+    await page.goto(URL_ + "#help"); await page.waitForSelector("#pane-memb:not([hidden])"); await page.waitForTimeout(300);
+    assert.equal(await page.$$eval('.ea-tab', (t) => t.filter((x) => !x.hidden).length), 0);
   });
   await run("menu order and groups (desktop)", {}, async (page) => {
     await page.goto(URL_ + "#home"); await page.waitForSelector("#v-home:not([hidden])");

@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="99">
+<meta name="mri-version" content="100">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -821,16 +821,7 @@
         <p class="small" style="margin:12px 0 0">Prefer email? <a href="mailto:hello@myrobotisa.com?subject=Members%20area" style="color:var(--green);font-weight:700">hello@myrobotisa.com</a> · replies within two working days.</p>
         </div>
         <div id="pane-memb" hidden>
-        <section id="ea-card" hidden aria-labelledby="ea-h" style="margin:0 0 22px;padding:16px;border:1px solid var(--rule);border-radius:16px">
-          <h3 id="ea-h" style="margin:0 0 4px">Early adopters</h3>
-          <p class="small" style="margin:0 0 10px">Only you see this. Adding someone opens everything for them: all lessons, a free licence and a year of Robot Care, outside the founding 100.</p>
-          <label class="f" for="ea-email">Their email</label><input class="t" id="ea-email" type="email" autocomplete="off" spellcheck="false">
-          <label class="f" for="ea-name">First name (optional)</label><input class="t" id="ea-name" autocomplete="off" maxlength="40">
-          <div class="row"><button class="btn" type="button" id="ea-add">Add</button></div>
-          <p class="small" id="ea-msg" role="status" aria-live="polite"></p>
-          <ul id="ea-list" style="list-style:none;margin:12px 0 0;padding:0"></ul>
-        </section>
-        <div class="ib-seg hp-seg" role="tablist" aria-label="Help and membership"><a role="tab" href="#help" data-go-tab="help" aria-selected="true">Membership</a><a role="tab" href="#passkeys" data-go-tab="passkeys" aria-selected="false">Faster sign-in</a></div>
+        <div class="ib-seg hp-seg" role="tablist" aria-label="Help and membership"><a role="tab" href="#help" data-go-tab="help" aria-selected="true">Membership</a><a role="tab" href="#passkeys" data-go-tab="passkeys" aria-selected="false">Faster sign-in</a><a role="tab" href="#early" data-go-tab="early" aria-selected="false" class="ea-tab" hidden>Early adopters</a></div>
         <div class="kv" id="mem-kv"></div>
         <div class="row"><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=My%20membership">Email about my membership</a></div>
         <p class="small" style="margin:12px 0 0">You keep every lesson and video released while your updates are included, and the version of the code you had. Renewing is optional and never automatic.</p>
@@ -1104,7 +1095,7 @@
       <section class="card wide" aria-labelledby="h-pk" id="pk-card" data-page="passkeys">
         <h2 id="h-pk">Help and <span class="g">membership</span></h2>
         <!-- 29 Oct 2026 (Amit): Faster sign-in is a pill on Help and membership, not its own menu line. -->
-        <div class="ib-seg hp-seg" role="tablist" aria-label="Help and membership"><a role="tab" href="#help" data-go-tab="help" aria-selected="false">Membership</a><a role="tab" href="#passkeys" data-go-tab="passkeys" aria-selected="true">Faster sign-in</a></div>
+        <div class="ib-seg hp-seg" role="tablist" aria-label="Help and membership"><a role="tab" href="#help" data-go-tab="help" aria-selected="false">Membership</a><a role="tab" href="#passkeys" data-go-tab="passkeys" aria-selected="true">Faster sign-in</a><a role="tab" href="#early" data-go-tab="early" aria-selected="false" class="ea-tab" hidden>Early adopters</a></div>
         <p class="lede">Add a passkey and next time you sign in with Face ID, Touch ID or Windows Hello: no email, no code. The email code always works too.</p>
         <div class="kv" id="pk-list"><div><span>Passkeys on your account</span><b id="pk-count">—</b></div></div>
         <p class="small" id="pk-here" hidden style="margin:12px 0 0;color:var(--green);font-weight:700">This device is already set up. You only need to add a passkey here again if you removed it.</p>
@@ -1112,6 +1103,19 @@
         <p class="small" id="pk-msg" style="margin:12px 0 0" role="status" aria-live="polite"></p>
         <p class="small" id="pk-tip" style="margin:12px 0 0"></p>
         <p class="small" id="pk-unsupported" hidden style="margin:12px 0 0">This browser can't save passkeys. Use Safari, Chrome or Edge, or keep signing in with the emailed code.</p>
+      </section>
+      <section class="card wide" aria-labelledby="ea-h" id="ea-card" data-page="early">
+        <h2>Help and <span class="g">membership</span></h2>
+        <!-- 3 Nov 2026 (Amit): Early adopters is a third tab here, owner only, not a card above Membership. -->
+        <div class="ib-seg hp-seg" role="tablist" aria-label="Help and membership"><a role="tab" href="#help" data-go-tab="help" aria-selected="false">Membership</a><a role="tab" href="#passkeys" data-go-tab="passkeys" aria-selected="false">Faster sign-in</a><a role="tab" href="#early" data-go-tab="early" aria-selected="true" class="ea-tab" hidden>Early adopters</a></div>
+        
+          <h3 id="ea-h" style="margin:0 0 4px">Early adopters</h3>
+          <p class="small" style="margin:0 0 10px">Only you see this. Adding someone opens everything for them: all lessons, a free licence and a year of Robot Care, outside the founding 100.</p>
+          <label class="f" for="ea-email">Their email</label><input class="t" id="ea-email" type="email" autocomplete="off" spellcheck="false">
+          <label class="f" for="ea-name">First name (optional)</label><input class="t" id="ea-name" autocomplete="off" maxlength="40">
+          <div class="row"><button class="btn" type="button" id="ea-add">Add</button></div>
+          <p class="small" id="ea-msg" role="status" aria-live="polite"></p>
+          <ul id="ea-list" style="list-style:none;margin:12px 0 0;padding:0"></ul>
       </section>
     </div>
 
@@ -1270,7 +1274,7 @@
     renderList($("qs"), QS, "qs", function (i) { var g = window.GUIDES && GUIDES["qs-" + (i + 1)]; return ' <span class="pill">' + QS[i][1] + '</span>' + (g ? ' <span class="small">about ' + g.mins + ' min</span>' : "") + '<br><a class="gd-link" href="#guide/qs-' + (i + 1) + '">Step by step &rarr;</a>'; });
     renderList($("lessons"), LESSONS, "day", function (i) {
       var g = window.GUIDES && GUIDES["day-" + (i + 1)], mins = g ? ' <span class="small">about ' + g.mins + ' min</span>' : "";
-      var pill = i === 0 ? ' <span class="pill g">Free to watch</span>' : (me.plan === "early" ? ' <span class="pill g">Open</span>' : me.preview_videos ? ' <span class="pill g">Open (preview)</span>' : ' <span class="pill a">Opens January 2027</span>');
+      var pill = i === 0 ? ' <span class="pill g">Free to watch</span>' : ((me.plan === "early" || me.preview_videos) ? ' <span class="pill g">Open</span>' : ' <span class="pill a">Opens January 2027</span>');
       return pill + mins + '<br><a class="gd-link" href="#guide/day-' + (i + 1) + '">Step by step &rarr;</a>';
     });
     counts();
@@ -1309,8 +1313,8 @@
       "<dt>Dashboard</dt><dd>" + (m.dashboard_url ? '<a class="pill g pill-link" href="' + esc(dashHref(m.dashboard_url)) + '">Open my dashboard</a>' : '<a href="#dashboard" style="font-size:14px;font-weight:700">Add your link</a>') + "</dd>";
     $("name-edit").addEventListener("click", editName);
     $("code-kv").innerHTML =
-      "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : m.plan === "early" ? "Your own copy, from Set up my robot" : (m.repo_url ? "Preview account" : "Arrives in January 2027")) + "</b></div>" +
-      "<div><span>Version</span><b>" + (m.repo_invited_at || m.plan === "early" ? "Latest" : "Preview") + "</b></div>";
+      "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : (m.plan === "early" || m.plan === "owner") ? "Your own copy, from Set up my robot" : (m.repo_url ? "Preview account" : "Arrives in January 2027")) + "</b></div>" +
+      "<div><span>Version</span><b>" + (m.repo_invited_at || m.plan === "early" || m.plan === "owner" ? "Latest" : "Preview") + "</b></div>";
     var br = $("b-repo"); if (m.repo_url) { br.href = m.repo_url; br.removeAttribute("aria-disabled"); br.target = "_blank"; br.rel = "noopener"; br.classList.remove("ghost"); } else { br.removeAttribute("href"); br.setAttribute("aria-disabled", "true"); }
     $("mem-kv").innerHTML =
       "<div><span>Updates included until</span><b>" + esc(fmtDate(m.updates_until)) + "</b></div>" +
@@ -2544,7 +2548,7 @@
       .catch(function () { m.textContent = "The invite email isn't switched on yet."; });
   }
   function eaInit() {
-    if (!me || me.plan !== "owner") return; $("ea-card").hidden = false; eaLoad();
+    if (!me || me.plan !== "owner") return; document.querySelectorAll(".ea-tab").forEach(function (t) { t.hidden = false; }); eaLoad();
     if ($("ea-add").dataset.on) return; $("ea-add").dataset.on = "1";
     $("ea-add").addEventListener("click", function () {
       var m = $("ea-msg"), e = $("ea-email").value.trim(); if (!e) { m.textContent = "Type their email first."; return; }
@@ -2901,7 +2905,7 @@
   });
 
   // ---- one section per page: Home (welcome and messages), Start here, Lessons, Code, Dashboard, Clips, Help
-  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "fixes", "dashboard", "mydash", "clips", "passkeys", "help", "guide", "questions", "ideas", "post"];   // #space maps to ideas, #membership to help
+  var PAGES = ["home", "setup", "live", "start", "lessons", "code", "fixes", "dashboard", "mydash", "clips", "passkeys", "early", "help", "guide", "questions", "ideas", "post"];   // #space maps to ideas, #membership to help
   // Questions (23 Oct 2026): the public Questions page, shown inside the members area so the members menu stays put. Fetched once.
   var faqLoaded = false;
   function loadFaq() {
@@ -3208,7 +3212,7 @@
     if (hl === "space" || /^ideas\//.test(hl)) hl = "ideas";
     if (page === "guide") hl = /^day-/.test(gid || "") ? "lessons" : "start";
     if (hl === "membership") hl = "help";
-    if (hl === "passkeys") hl = "help";   // 29 Oct 2026: Faster sign-in is a pill on Help and membership
+    if (hl === "passkeys" || hl === "early") hl = "help";   // 29 Oct 2026: Faster sign-in is a pill on Help and membership; Early adopters too (3 Nov 2026)
     if (["ideas", "help", "lessons", "start"].indexOf(hl) < 0) hl = page;
     document.querySelectorAll("[data-go]").forEach(function (a) { var on = a.dataset.go === hl; a.classList.toggle("on", on); on ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"); });
     sgOpenFor();
