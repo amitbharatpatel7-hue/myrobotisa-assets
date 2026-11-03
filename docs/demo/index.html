@@ -343,8 +343,8 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
     <li><a href="../status.html">Nothing to hide</a></li>
     <li><a href="../isa-rules.html">ISA rules</a></li>
     <li><a href="../questions.html">Questions</a></li>
-    <li><a href="../join.html">Free test drive</a></li>
-    <li><a href="../newsletter.html">Newsletter</a></li>
+    <li data-guest><a href="../join.html">Free test drive</a></li>
+    <li data-guest><a href="../newsletter.html">Newsletter</a></li>
   </ol>
   <div id="installbox" data-install role="button" tabindex="0" aria-label="Try the demo as an app on your phone, Mac or PC">
     <b>Try the demo as an app</b>
@@ -696,7 +696,7 @@ const QS=[
   ["Connect GitHub","5 min",["Press <b>Connect GitHub</b> in Set up my robot. GitHub asks once if My Robot I.S.A. can use your account","Your private copy of the robot is made for you: named, locked to you, nothing to download"],"qs-01-copy-the-code"],
   ["Your Trading 212 key, practice account first","8 min",["In the Trading 212 app, switch to Practice and generate an API key","Paste it into Set up my robot. Real orders stay off until you choose"],"qs-02-broker-key"],
   ["Your email key","5 min",["Create a free Resend account and an API key","Paste it into Set up my robot. Reports come to your own inbox"],"qs-03-email-key"],
-  ["Pick how bold, press Build","5 min",["Cautious, balanced or adventurous: one choice, changeable later","Press <b>Build my robot</b>. The setup check tells you exactly what's missing"],"qs-04-setup-check"],
+  ["Pick how bold, press Build","5 min",["Balanced or adventurous: one choice, changeable later","Press <b>Build my robot</b>. The setup check tells you exactly what's missing"],"qs-04-setup-check"],
   ["Robot Dash and your first paper trade","10 min",["Make a free Cloudflare account and two more keys, and Set up my robot builds your own app","Ask for your first plan, then tap <b>Approve</b> in the email: that's your first paper trade"],"qs-06-your-app"],
   ["Optional extras","3 min",["Robot Care: when a run fails, the fix is waiting for your tap. <a href=\"../robot-care.html\">A year free for founding members</a>","Or your own Claude for fixes, and error alerts with a free Sentry account"],"qs-05-optional-extras"]
 ];
@@ -981,7 +981,7 @@ if ("serviceWorker" in navigator && location.protocol==="https:") { navigator.se
 </script>
 <script>/* 23 Oct 2026 (Amit): same as the site pages: a signed-in member sees "Members area" instead of "Log in" */
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
-var l=document.querySelector(".sitehdr a.login");if(l){l.textContent="Members area";l.href="../members/#home";}}catch(e){}})();</script>
+document.querySelectorAll("[data-guest]").forEach(function(x){x.style.display="none";});var l=document.querySelector(".sitehdr a.login");if(l){l.textContent="Members area";l.href="../members/#home";}}catch(e){}})();</script>
 <script>/* 23 Oct 2026: tap a step to read its email right below; the frame grows to the email's full height */
 (function(){var tl=document.getElementById("tl"),f=document.getElementById("tl-f"),tag=document.getElementById("tl-vtag"),view=document.getElementById("tl-view");if(!tl||!f)return;
 var fw=document.getElementById("tl-fw");
