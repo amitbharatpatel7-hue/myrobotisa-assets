@@ -406,7 +406,8 @@
       <li>No payment now. Lesson 1 is free to watch before you buy</li>
       <li>The QuickStart gets most people to their first paper trade in about 30 minutes. The promise: within 60 minutes, with our help, or your money back</li>
     </ul>
-    <form id="f" novalidate>
+    <p class="lead" data-member hidden>You're already signed in as a member. <a href="members/#home" style="color:var(--green);font-weight:700">Open the members area</a>.</p>
+    <form id="f" novalidate data-guest>
       <div class="row">
         <input type="email" id="email" name="email" placeholder="you@email.com" autocomplete="email" required aria-label="Email address">
         <button type="submit" id="go">Get the free test drive</button>
@@ -420,7 +421,7 @@
       <div class="hp" aria-hidden="true"><input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></div>
       <div class="msg" id="msg" role="status" aria-live="polite"></div>
     </form>
-    <p class="small" style="margin-top:12px">Not ready to join? <a href="newsletter.html#news" style="color:var(--green);font-weight:700">Just get the free newsletter</a>.</p>
+    <p class="small" style="margin-top:12px" data-guest>Not ready to join? <a href="newsletter.html#news" style="color:var(--green);font-weight:700">Just get the free newsletter</a>.</p>
   </div>
 
 
@@ -674,7 +675,7 @@
 <script>
 // 22 Oct 2026: signed-in members see "Members area" instead of "Log in" in the header (the side menu stays the site's; Amit, 23 Oct).
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
-var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");l.textContent="Members area";}document.querySelectorAll("[data-guest],.side-cta .pf,.side-cta .ps,.side-cta [data-places],.side-cta .side-nl").forEach(function(x){x.style.display="none";});var b=document.querySelector(".side-cta a.btn");if(b&&l){b.textContent="Members area";b.href=l.href;}}catch(e){}})();
+var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");l.textContent="Members area";}document.querySelectorAll("[data-guest],.side-cta .pf,.side-cta .ps,.side-cta [data-places],.side-cta .side-nl").forEach(function(x){x.style.display="none";});var b=document.querySelector(".side-cta a.btn");if(b&&l){b.textContent="Members area";b.href=l.href;}document.querySelectorAll("[data-member]").forEach(function(x){x.hidden=false;});document.querySelectorAll("footer a[href='members/']").forEach(function(x){if(x.textContent==="Member log in"){x.textContent="Members area";x.href="members/#home";}});}catch(e){}})();
 </script>
 </body>
 </html>

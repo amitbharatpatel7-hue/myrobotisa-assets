@@ -343,6 +343,7 @@ button.tl-b:focus-visible{outline:3px solid var(--fg);outline-offset:3px;border-
     <li><a href="../status.html">Nothing to hide</a></li>
     <li><a href="../isa-rules.html">ISA rules</a></li>
     <li><a href="../questions.html">Questions</a></li>
+    <li data-member hidden><a href="../members/#home">Members area</a></li>
     <li data-guest><a href="../join.html">Free test drive</a></li>
     <li data-guest><a href="../newsletter.html">Newsletter</a></li>
   </ol>
@@ -981,7 +982,7 @@ if ("serviceWorker" in navigator && location.protocol==="https:") { navigator.se
 </script>
 <script>/* 23 Oct 2026 (Amit): same as the site pages: a signed-in member sees "Members area" instead of "Log in" */
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
-document.querySelectorAll("[data-guest]").forEach(function(x){x.style.display="none";});var l=document.querySelector(".sitehdr a.login");if(l){l.textContent="Members area";l.href="../members/#home";}}catch(e){}})();</script>
+document.querySelectorAll("[data-guest]").forEach(function(x){x.style.display="none";});document.querySelectorAll("[data-member]").forEach(function(x){x.hidden=false;});var l=document.querySelector(".sitehdr a.login");if(l){l.textContent="Members area";l.href="../members/#home";}}catch(e){}})();</script>
 <script>/* 23 Oct 2026: tap a step to read its email right below; the frame grows to the email's full height */
 (function(){var tl=document.getElementById("tl"),f=document.getElementById("tl-f"),tag=document.getElementById("tl-vtag"),view=document.getElementById("tl-view");if(!tl||!f)return;
 var fw=document.getElementById("tl-fw");

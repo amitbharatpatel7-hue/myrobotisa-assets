@@ -674,7 +674,7 @@
         </div>
         <div class="row"><button class="btn" id="b-install" type="button" data-install>Install my dashboard</button></div>
         <p class="small" id="installed" hidden style="margin:12px 0 0;color:var(--green);font-weight:700">You're using the installed app.</p>
-        <p class="small" style="margin:12px 0 0">No dashboard yet? Set it up in <a href="#setup">Set up my robot</a> first. The app opens with Face ID or your fingerprint once you've set it up there; the emailed code is the backup.</p>
+        <p class="small" style="margin:12px 0 0">No dashboard yet? Set it up in <a class="pv-only" hidden href="#setup">Set up my robot</a><a class="npv-only" href="#start">Start here, step 5</a> first. The app opens with Face ID or your fingerprint once you've set it up there; the emailed code is the backup.</p>
       </section>
 
       <section class="card wide" aria-labelledby="h-les" data-page="lessons">
@@ -1104,7 +1104,7 @@
         <p class="small" id="pk-tip" style="margin:12px 0 0"></p>
         <p class="small" id="pk-unsupported" hidden style="margin:12px 0 0">This browser can't save passkeys. Use Safari, Chrome or Edge, or keep signing in with the emailed code.</p>
       </section>
-      <section class="card wide" aria-labelledby="ea-h" id="ea-card" data-page="early">
+      <section class="card wide" aria-labelledby="ea-h" id="ea-card" data-page="early" hidden>
         <h2>Help and <span class="g">membership</span></h2>
         <!-- 3 Nov 2026 (Amit): Early adopters is a third tab here, owner only, not a card above Membership. -->
         <div class="ib-seg hp-seg" role="tablist" aria-label="Help and membership"><a role="tab" href="#help" data-go-tab="help" aria-selected="false">Membership</a><a role="tab" href="#passkeys" data-go-tab="passkeys" aria-selected="false">Faster sign-in</a><a role="tab" href="#early" data-go-tab="early" aria-selected="true" class="ea-tab" hidden>Early adopters</a></div>
@@ -1154,7 +1154,7 @@
     ["Your email key", "5 min", "A free Resend account and an API key. No domain needed: reports come to your own inbox."],
     ["Pick how bold, press Build", "5 min", "Balanced or adventurous, then Build my robot. The setup check lists anything missing in plain words and emails you the result."],
     ["Robot Dash and your first paper trade", "10 min", "A free Cloudflare account and two more keys give you your own app. Ask for your first plan, then tap Approve: that's your first paper trade."],
-    ["Optional extras", "3 min", "Robot Care (free for your first year as a founding member), or your own Claude for fixes, and error alerts with a free Sentry account."]
+    ["Optional extras", "3 min", "Robot Care (a year free for founding members), or your own Claude for fixes, and error alerts with a free Sentry account."]
   ];
   var LESSONS = [
     ["Rules, not tips", "What a robot ISA is and isn't; writing rules down so a machine can follow them"],
@@ -1274,7 +1274,7 @@
     renderList($("qs"), QS, "qs", function (i) { var g = window.GUIDES && GUIDES["qs-" + (i + 1)]; return ' <span class="pill">' + QS[i][1] + '</span>' + (g ? ' <span class="small">about ' + g.mins + ' min</span>' : "") + '<br><a class="gd-link" href="#guide/qs-' + (i + 1) + '">Step by step &rarr;</a>'; });
     renderList($("lessons"), LESSONS, "day", function (i) {
       var g = window.GUIDES && GUIDES["day-" + (i + 1)], mins = g ? ' <span class="small">about ' + g.mins + ' min</span>' : "";
-      var pill = i === 0 ? ' <span class="pill g">Free to watch</span>' : ((me.plan === "early" || me.preview_videos) ? ' <span class="pill g">Open</span>' : ' <span class="pill a">Opens January 2027</span>');
+      var pill = i === 0 ? ((me.plan === "early" || me.preview_videos) ? ' <span class="pill g">Open</span>' : ' <span class="pill g">Free to read</span>') : ((me.plan === "early" || me.preview_videos) ? ' <span class="pill g">Open</span>' : ' <span class="pill a">Opens January 2027</span>');
       return pill + mins + '<br><a class="gd-link" href="#guide/day-' + (i + 1) + '">Step by step &rarr;</a>';
     });
     counts();
@@ -1294,7 +1294,7 @@
     me = m; me.user_id = uid;
     $("whoemail").textContent = session.email || m.email;
     var first = (PLAN[m.plan] || "Member");
-    (function (u) { var b = $("oldapp-go"); if (!b) return; if (!u) { b.textContent = "Set up my dashboard"; b.onclick = function () { location.hash = "setup"; }; return; }
+    (function (u) { var b = $("oldapp-go"); if (!b) return; if (!u) { b.textContent = "Set up my dashboard"; b.onclick = function () { location.hash = (me && me.preview_videos) ? "setup" : "start"; }; return; }
       b.onclick = function () { if (safeHttps(u)) window.open(u, "_blank", "noopener"); else location.hash = "dashboard"; }; })(m.dashboard_url);
     $("hi").innerHTML = m.first_name ? 'Welcome back, <span class="g">' + esc(m.first_name) + '</span>'
       : m.plan === "founding" ? 'Welcome, <span class="g">founding member</span>' : 'Welcome <span class="g">back</span>';
@@ -1314,8 +1314,8 @@
     $("name-edit").addEventListener("click", editName);
     $("code-kv").innerHTML =
       "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : (m.plan === "early" || m.plan === "owner") ? "Your own copy, from Set up my robot" : (m.repo_url ? "Preview account" : "Arrives in January 2027")) + "</b></div>" +
-      "<div><span>Version</span><b>" + (m.repo_invited_at || m.plan === "early" || m.plan === "owner" ? "Latest" : "Preview") + "</b></div>";
-    var br = $("b-repo"); if (m.repo_url) { br.href = m.repo_url; br.removeAttribute("aria-disabled"); br.target = "_blank"; br.rel = "noopener"; br.classList.remove("ghost"); } else { br.removeAttribute("href"); br.setAttribute("aria-disabled", "true"); }
+      "<div><span>Version</span><b>" + (m.repo_invited_at || m.plan === "early" || m.plan === "owner" ? "Latest" : "The latest, when your invite arrives") + "</b></div>";
+    var br = $("b-repo"); if (m.repo_url) { br.href = m.repo_url; br.removeAttribute("aria-disabled"); br.target = "_blank"; br.rel = "noopener"; br.classList.remove("ghost"); } else { br.removeAttribute("href"); br.setAttribute("aria-disabled", "true"); br.textContent = "Your repo opens with your invite"; }
     $("mem-kv").innerHTML =
       "<div><span>Updates included until</span><b>" + esc(fmtDate(m.updates_until)) + "</b></div>" +
       "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
@@ -2129,7 +2129,9 @@
     });
     suFn("GET").then(function (r) {
       SU.cfg = r.j || {};
-      if (!SU.cfg.configured) { $("su-gh").disabled = true; $("su1-msg").textContent = "Coming soon: the GitHub connection switches on before launch. You can look through the steps now."; }
+      // 3 Nov 2026: "Coming soon" only when the service says so; a service that can't be reached says that instead
+      if (!r.ok) { $("su1-msg").textContent = "GitHub can't be reached just now. Try again in a minute."; }
+      else if (!SU.cfg.configured) { $("su-gh").disabled = true; $("su1-msg").textContent = "Coming soon: the GitHub connection switches on before launch. You can look through the steps now."; }
     }).catch(function () {});
     $("su-gh").addEventListener("click", function () { ghConnect("setup"); });
     $("su-go").addEventListener("click", suBuild);
@@ -2138,7 +2140,7 @@
     suUnlock();
   }
   function ghConnect(back) {
-      if (!SU.cfg || !SU.cfg.client_id) return;
+      if (!SU.cfg || !SU.cfg.client_id) { toast("GitHub can't be reached just now. Try again in a minute."); return; }
       var state = Array.prototype.map.call(crypto.getRandomValues(new Uint8Array(16)), function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
       try { sessionStorage.setItem("mri-gh-state", state); sessionStorage.setItem("mri-gh-back", back); } catch (e) {}
       location.href = "https://github.com/login/oauth/authorize?client_id=" + encodeURIComponent(SU.cfg.client_id) + "&scope=" + encodeURIComponent("repo workflow") +
@@ -2548,7 +2550,9 @@
       .catch(function () { m.textContent = "The invite email isn't switched on yet."; });
   }
   function eaInit() {
-    if (!me || me.plan !== "owner") return; document.querySelectorAll(".ea-tab").forEach(function (t) { t.hidden = false; }); eaLoad();
+    // 3 Nov 2026 (visitor simulation): the card is the owner's alone; anyone else who lands on #early goes to Help.
+    if (!me || me.plan !== "owner") { if (location.hash === "#early") location.hash = "help"; return; }
+    $("ea-card").hidden = false; document.querySelectorAll(".ea-tab").forEach(function (t) { t.hidden = false; }); eaLoad();
     if ($("ea-add").dataset.on) return; $("ea-add").dataset.on = "1";
     $("ea-add").addEventListener("click", function () {
       var m = $("ea-msg"), e = $("ea-email").value.trim(); if (!e) { m.textContent = "Type their email first."; return; }
@@ -2691,9 +2695,9 @@
   function guideVideo(id) {
     var box = $("gd-video"), slug = VIDEOS[id];
     if (!box) return;
-    if (!me.preview_videos || !slug) { box.hidden = true; box.innerHTML = ""; return; }
+    if (!me.preview_videos || !slug || lxOn(window.GUIDES && GUIDES[id])) { box.hidden = true; box.innerHTML = ""; return; }   // an interactive lesson plays inside its steps
     box.hidden = false;
-    var note = '<p class="small">Watch first, then do the steps below. <span style="color:var(--eye)">Owner preview: only your account sees the videos for now.</span></p>';
+    var note = '<p class="small">Watch first, then do the steps below.' + (me.plan === "owner" ? ' <span style="color:var(--eye)">Owner preview: only owner and early-adopter accounts see the videos for now.</span>' : '') + '</p>';
     function paint(url) {
       if (gcur.id !== id) return;   // they moved on while the link was on its way
       box.innerHTML = '<div class="gd-video"><video controls preload="metadata" playsinline src="' + esc(url) + '"></video>' + note + '</div>';
@@ -2707,7 +2711,7 @@
       if (!x.ok || !/^https:\/\//.test(x.j.url || "")) throw new Error(x.j.error || "no link");
       VIDLINK[id] = { url: x.j.url, until: Date.parse(x.j.expires_at) || Date.now() + 3600000 }; paint(x.j.url);
     }).catch(function (e) {
-      if (gcur.id === id) box.innerHTML = '<div class="gd-video"><p class="small">The video didn\u2019t load. ' + esc(String((e && e.message) || "")) + ' Try again in a minute; the steps below are all you need.</p></div>';
+      if (gcur.id === id) box.innerHTML = '<div class="gd-video"><p class="small">The video didn\u2019t load just now. Try again in a minute; the steps below are all you need.</p></div>';
     });
   }
   // "I want this" (23 Oct 2026): saved to your account, counted across members (want_counts() returns totals only), with a toast.
@@ -2781,7 +2785,7 @@
     lxLink(id).then(function (url) {
       if (LX.url === url) return go();
       LX.url = url; v.src = url; v.addEventListener("loadedmetadata", go, { once: true }); v.load();
-    }).catch(function () { btn.textContent = "Play"; toast("The video didn't load. The words are all here."); });
+    }).catch(function () { btn.textContent = "Play"; var sc = $("lx-screen"); if (sc) sc.hidden = true; var fo = document.querySelector("#lx-step details.fold, .lx-voice + details.fold"); if (fo) fo.open = true; toast("The video didn't load. The words are open below."); });
   }
   function lxPause() {
     var p = LX.pz, ask = LX.ask, line = p ? (ask ? "Your robot goes back to its usual weekly plan." : "Your robot is paused. Nothing new is proposed or sent, and what you hold stays as it is.")
@@ -3206,6 +3210,8 @@
     if (page === "ideas") { page = "help"; helpTab("space"); }   // the board lives in the Help card; 29 Oct 2026: it has its own menu line, Moonshotters
     if (!ibSheetKind && !$("ib-sheet").hidden) ibClose(true);
     if (page === "membership" || (page === "help" && hl === "help")) { page = "help"; hl = "help"; helpTab("memb"); }
+    if (page === "early" && me && me.plan && me.plan !== "owner") { page = "help"; hl = "help"; helpTab("memb"); }
+    if (/^(q-|faq-)/.test(page)) { var qa = page; page = "questions"; setTimeout(function jump(n) { n = n || 0; var t = document.querySelector("#faq-body #" + qa); if (t) { if (t.tagName === "DETAILS") t.open = true; t.scrollIntoView({ block: "start" }); } else if (n < 20) setTimeout(function () { jump(n + 1); }, 150); }, 150); }   // the FAQ's own jump links (3 Nov 2026)
     if (PAGES.indexOf(page) < 0) page = "home";
     if (page === "guide") { if (!window.GUIDES || !GUIDES[gid]) { page = "start"; } else { guideOpen(gid); } }
     document.querySelectorAll("#v-home [data-page]").forEach(function (el) { el.classList.toggle("off", el.dataset.page.split(" ").indexOf(page) < 0); });
