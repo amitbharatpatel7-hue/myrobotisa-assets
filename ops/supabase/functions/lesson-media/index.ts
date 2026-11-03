@@ -8,7 +8,8 @@
 // To stop all video at once, delete the R2_SECRET_ACCESS_KEY secret: no new links are issued.
 //
 // GET ?v=<guide id>  (qs-1 … qs-6, day-1 … day-14)  ->  { url, expires_at }  or  { error }
-// Who may watch: the same rule as the page. An active member whose row has preview_videos on, or the owner. When the
+// Who may watch: the same rule as the page. An active member whose row has preview_videos on, or the owner; and, since
+// 3 Nov 2026 (Amit), every active member for Lesson 1, which the site promises free before you buy (FREE below). When the
 // lessons open to every member (January 2027), change canWatch() here and the page's me.preview_videos checks together.
 // verify_jwt is on; the member is looked up by the token's subject with the service role, so an anon key gets 404.
 // Secrets: R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY (an R2 token limited to this bucket, read only is enough).
@@ -44,9 +45,10 @@ export function subFromJwt(auth: string): string | null {
   try { return JSON.parse(atob(auth.replace(/^Bearer /, "").split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub || null; } catch { return null; }
 }
 
-export function canWatch(m: { status?: string; plan?: string; preview_videos?: boolean } | null): boolean {
+export const FREE = new Set(["day-1"]);
+export function canWatch(m: { status?: string; plan?: string; preview_videos?: boolean } | null, id = ""): boolean {
   if (!m || !["active", "lapsed"].includes(m.status || "")) return false;
-  return m.plan === "owner" || m.preview_videos === true;
+  return m.plan === "owner" || m.preview_videos === true || FREE.has(id);
 }
 
 export async function presign(accountId: string, keyId: string, secret: string, key: string, seconds: number) {
@@ -62,7 +64,7 @@ Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(origin) });
   if (req.method !== "GET") return reply(origin, 405, { error: "GET only" });
   if (!origin || !ALLOWED.has(origin)) return reply(origin, 403, { error: "Watch the lessons at myrobotisa.com/members" });
-  const slug = VIDEOS[new URL(req.url).searchParams.get("v") || ""];
+  const vid = new URL(req.url).searchParams.get("v") || "", slug = VIDEOS[vid];
   if (!slug) return reply(origin, 404, { error: "No such lesson video." });
   const acct = env("R2_ACCOUNT_ID"), kid = env("R2_ACCESS_KEY_ID"), sec = env("R2_SECRET_ACCESS_KEY");
   if (!acct || !kid || !sec) return reply(origin, 503, { error: "Lesson videos aren't switched on yet." });
@@ -72,7 +74,7 @@ Deno.serve(async (req: Request) => {
   const r = await fetch(`${URL_}/rest/v1/members?select=status,plan,preview_videos&user_id=eq.${sub}&limit=1`,
     { headers: { apikey: SRK, Authorization: `Bearer ${SRK}` } });
   const m = r.ok ? (await r.json())[0] || null : null;
-  if (!canWatch(m)) return reply(origin, 403, { error: "The lesson videos open to members in January 2027." });
+  if (!canWatch(m, vid)) return reply(origin, 403, { error: "The lesson videos open to members in January 2027." });
 
   const db = (path: string, init: RequestInit = {}) => fetch(`${URL_}/rest/v1/${path}`, { ...init,
     headers: { apikey: SRK, Authorization: `Bearer ${SRK}`, "Content-Type": "application/json", ...(init.headers || {}) } });

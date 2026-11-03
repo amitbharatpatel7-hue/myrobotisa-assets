@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="103">
+<meta name="mri-version" content="104">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -1278,7 +1278,7 @@
     renderList($("qs"), QS, "qs", function (i) { var g = window.GUIDES && GUIDES["qs-" + (i + 1)]; return ' <span class="pill">' + QS[i][1] + '</span>' + (g ? ' <span class="small">about ' + g.mins + ' min</span>' : "") + '<br><a class="gd-link" href="#guide/qs-' + (i + 1) + '">Step by step &rarr;</a>'; });
     renderList($("lessons"), LESSONS, "day", function (i) {
       var g = window.GUIDES && GUIDES["day-" + (i + 1)], mins = g ? ' <span class="small">about ' + g.mins + ' min</span>' : "";
-      var pill = i === 0 ? ((me.plan === "early" || me.preview_videos) ? ' <span class="pill g">Open</span>' : ' <span class="pill g">Free to read</span>') : ((me.plan === "early" || me.preview_videos) ? ' <span class="pill g">Open</span>' : ' <span class="pill a">Opens January 2027</span>');
+      var pill = i === 0 ? ((me.plan === "early" || me.preview_videos) ? ' <span class="pill g">Open</span>' : ' <span class="pill g">Free to watch</span>') : ((me.plan === "early" || me.preview_videos) ? ' <span class="pill g">Open</span>' : ' <span class="pill a">Opens January 2027</span>');
       return pill + mins + '<br><a class="gd-link" href="#guide/day-' + (i + 1) + '">Step by step &rarr;</a>';
     });
     counts();
@@ -2697,10 +2697,11 @@
   var VIDLINK = {}, VIDEOS = { "qs-1": "qs-01-copy-the-code", "qs-2": "qs-02-broker-key", "qs-3": "qs-03-email-key", "qs-4": "qs-04-setup-check", "qs-5": "qs-06-your-app", "qs-6": "qs-05-optional-extras",
     "day-1": "day-01-rules-not-tips", "day-2": "day-02-get-it-running", "day-3": "day-03-data-you-can-trust", "day-4": "day-04-make-it-yours", "day-5": "day-05-backtest-honestly", "day-6": "day-06-paper-money-first", "day-7": "day-07-the-plumbing",
     "day-8": "day-08-done-means-it-happened", "day-9": "day-09-make-it-explain-itself", "day-10": "day-10-keys-and-secrets", "day-11": "day-11-it-runs-while-you-sleep", "day-12": "day-12-limits-and-an-off-switch", "day-13": "day-13-small-and-real", "day-14": "day-14-keep-an-honest-record" };
+  var FREE_VIDEO = { "day-1": true };   // 3 Nov 2026 (Amit): Lesson 1 is free to watch for every member; lesson-media's FREE matches
   function guideVideo(id) {
     var box = $("gd-video"), slug = VIDEOS[id];
     if (!box) return;
-    if (!me.preview_videos || !slug || lxOn(window.GUIDES && GUIDES[id])) { box.hidden = true; box.innerHTML = ""; return; }   // an interactive lesson plays inside its steps
+    if ((!me.preview_videos && !FREE_VIDEO[id]) || !slug || lxOn(window.GUIDES && GUIDES[id])) { box.hidden = true; box.innerHTML = ""; return; }   // an interactive lesson plays inside its steps
     box.hidden = false;
     var note = '<p class="small">Watch first, then do the steps below.' + (me.plan === "owner" ? ' <span style="color:var(--eye)">Owner preview: only owner and early-adopter accounts see the videos for now.</span>' : '') + '</p>';
     function paint(url) {
@@ -2813,7 +2814,7 @@
     return '<div class="lx-try">' + h + '</div>';
   }
   function lxStep(st) {
-    var canPlay = !!(me && me.preview_videos), words = '<p class="lx-words">' + esc(st.d) + '</p>';
+    var canPlay = !!(me && (me.preview_videos || FREE_VIDEO[gcur.id])), words = '<p class="lx-words">' + esc(st.d) + '</p>';
     return (canPlay ? '<div class="lx-voice"><div class="lx-screen" id="lx-screen"></div><div class="lx-bar"><button class="btn sm lx-play" type="button" data-lx="play">Play</button><span class="lx-len">About ' + Math.round(st.lx.to - st.lx.from) + ' seconds</span></div></div><details class="fold"><summary><span class="fold-l">Read the words</span></summary>' + words + '</details>'
       : '<div class="lx-voice">' + words + '</div>') + lxTry(st.lx.try);
   }
