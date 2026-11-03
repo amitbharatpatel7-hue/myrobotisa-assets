@@ -23,7 +23,7 @@ const URL_ = `http://127.0.0.1:${PORT}/members/`;
 const FIX = { id: 7, outcome: "pr", pr_number: 4, pr_title: "Fix the weekly plan", diagnosis: "A date was read the wrong way.", files: ["signals_report.py"], urgent: true, fix_state: "open", at: "2026-10-29T09:00:00Z" };
 
 let passed = 0;
-async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, height: 900 }, store = {} }, f) {
+async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, height: 900 }, store = {}, guides = null, voice = null }, f) {
   const browser = await chromium.launch(), page = await browser.newPage({ viewport: vp });
   const errs = [];
   page.on("pageerror", (e) => errs.push(String(e)));
@@ -33,7 +33,8 @@ async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, he
     if (p.endsWith("/rpc/my_robot_care_fixes")) return json(fixes);
     if (p.endsWith("/rest/v1/members")) return json([{ email: "a@example.com", plan: "founding", status: "active", joined_at: "2026-10-01", updates_until: "2027-10-01", founding_no: 7, preview_videos: true, robot_care: robotCare }]);
     if (p.endsWith("/functions/v1/robot-care-accept")) return json({ ok: true, changed: 0 });
-    if (p.endsWith("/rest/v1/lesson_guides")) return json([{ id: "day-1", data: { title: "Lesson 1", mins: 5, steps: [] } }]);
+    if (p.endsWith("/rest/v1/lesson_guides")) return json(guides || [{ id: "day-1", data: { title: "Lesson 1", mins: 5, steps: [] } }]);
+    if (p.endsWith("/functions/v1/lesson-media")) return json({ error: "stub" });
     return json([]);
   });
   await page.addInitScript(([s, st]) => { localStorage.setItem("mri-members-session", JSON.stringify(s)); for (const k in st) localStorage.setItem(k, st[k]); },
@@ -41,10 +42,34 @@ async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, he
   try { await f(page); assert.deepEqual(errs, [], "no page errors"); passed++; console.log("ok  ", name); }
   finally { await browser.close(); }
 }
+const LX = { id: "day-12", data: { title: "Limits and an off switch", kind: "Lesson 12", mins: 5, tips: [], steps: [
+  { t: "Safety comes first", d: "Words for one.", lx: { from: 0, to: 30, try: { type: "tiles", title: "Tap each limit", items: [["Holding cap", "No single holding above 15%."]] } } },
+  { t: "The safety stop", d: "Words for two.", lx: { from: 30, to: 54, try: { type: "line", title: "Move the market", intro: "Example.", high: 5000, line: 4250 } } },
+  { t: "Your off switch", d: "Words for three.", lx: { from: 54, to: 77, try: { type: "pause", note: "Do it once for real." } } },
+  { t: "When to pause", d: "Words for four.", lx: { from: 77, to: 99, try: { type: "ask", title: "Ask your robot", items: [["I'm on holiday.", "Enjoy it."]] } } },
+  { t: "We took the L", d: "Words for five.", lx: { from: 99, to: 135, try: { type: "points", title: "We took the L", items: ["A rule, not a promise"] } } } ] } };
 const side = "#mgroup-sub";
 const vis = (page, sel) => page.isVisible(sel);
 
 try {
+  await run("interactive lesson: touch everything, no marks, no sideways scroll", { guides: [LX], vp: { width: 390, height: 844 } }, async (page) => {
+    await page.goto(URL_ + "#guide/day-12"); await page.waitForSelector(".lx-words");
+    assert.equal((await page.textContent("#h-gd")).trim(), "Limits and an off switch");
+    await page.click('[data-lx="tile"]'); assert.equal(await page.getAttribute('[data-lx="tile"]', "aria-expanded"), "true");
+    await page.click('[data-gd="next"]'); await page.waitForSelector("#lx-fall");
+    await page.$eval("#lx-fall", (r) => { r.value = 18; r.dispatchEvent(new Event("input", { bubbles: true })); });
+    assert.equal(await page.textContent("#lx-pill"), "Safety stop on"); assert.equal(await page.textContent("#lx-val"), "\u00a34,100");
+    await page.$eval("#lx-fall", (r) => { r.value = 5; r.dispatchEvent(new Event("input", { bubbles: true })); });
+    assert.equal(await page.textContent("#lx-pill"), "Running", "the stop lifts by itself");
+    await page.click('[data-gd="next"]'); await page.click('[data-lx="pz-ask"]'); await page.click('[data-lx="pz-go"]');
+    assert.equal(await page.textContent("#lx-pz .lx-pill"), "Paused");
+    await page.click('[data-gd="next"]'); await page.click('[data-lx="ask"]');
+    assert.equal(await page.textContent("#lx-chat .bot"), "Enjoy it."); assert.equal(await page.$('[data-lx="ask"]'), null);
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+    await page.click('[data-gd="next"]'); await page.click('[data-gd="finish"]');
+    assert.ok((await page.textContent("#gd-step")).includes("All 5 steps done"));
+    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, "lesson-390.png") });
+  });
   await run("menu order and groups (desktop)", {}, async (page) => {
     await page.goto(URL_ + "#home"); await page.waitForSelector("#v-home:not([hidden])");
     const top = await page.$$eval(`${side} > li:not([hidden])`, (lis) => lis.map((li) => li.querySelector("a:not([hidden])").textContent.trim()));

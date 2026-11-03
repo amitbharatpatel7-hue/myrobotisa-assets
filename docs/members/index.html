@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="97">
+<meta name="mri-version" content="98">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -76,6 +76,26 @@
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:999px;border:2px solid var(--green);background:var(--green);color:var(--deep);font:inherit;font-weight:800;font-size:15px;text-decoration:none;cursor:pointer;transition:transform .12s,background .12s,color .12s}
   .btn:hover{transform:translateY(-1px)} .btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
   .btn.ghost{background:transparent;color:var(--ink)} .btn.ghost:hover{border-color:var(--green);color:var(--green)}
+  /* Interactive lessons (Amit, 3 Nov 2026): short steps, the voice, and something to touch. Lesson 12 is the benchmark. No marks, no scores. */
+  .lx-voice{display:flex;flex-direction:column;gap:10px;background:var(--deep3);border:1px solid var(--rule);border-radius:16px;padding:14px;margin:12px 0}
+  .lx-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .lx-len{font-size:13px;color:var(--muted)}
+  .lx-words{margin:0;line-height:1.6}
+  .lx-words.on span{opacity:.42;transition:opacity .12s} .lx-words.on span.said{opacity:1}
+  .lx-try{display:flex;flex-direction:column;gap:12px;background:var(--deep2);border-radius:16px;padding:16px;margin:12px 0}
+  .lx-try h4{margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:21px;letter-spacing:.03em;text-transform:uppercase}
+  .lx-try p{margin:0}
+  .lx-tiles{display:grid;gap:8px}
+  .lx-tile{font:inherit;text-align:left;color:var(--ink);background:var(--deep3);border:1px solid var(--rule);border-radius:12px;padding:12px 14px;min-height:48px;cursor:pointer}
+  .lx-tile b{display:block;font-weight:600} .lx-tile small{display:block;color:var(--muted);font-size:14px;margin-top:4px}
+  .lx-tile[aria-expanded="true"]{border-color:var(--green)}
+  .lx-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+  .lx-big{font-weight:700;font-size:28px;font-variant-numeric:tabular-nums}
+  .lx-pill{font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;background:#14402C;color:var(--green)} .lx-pill.stop{background:#5A3A0E;color:var(--amber)}
+  .lx-try input[type=range]{width:100%;height:44px;accent-color:var(--green);margin:0}
+  .lx-ends{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+  .lx-chat{display:flex;flex-direction:column;gap:8px} .lx-chat p{max-width:88%;padding:10px 14px;border-radius:16px}
+  .lx-chat .you{align-self:flex-end;background:var(--deep3);border:1px solid var(--rule)} .lx-chat .bot{align-self:flex-start;background:var(--green);color:var(--deep);font-weight:500}
   .btn.sm{min-height:36px;padding:0 14px;font-size:13px}
   .btn[disabled],.btn[aria-disabled=true]{opacity:.55;cursor:not-allowed;transform:none}
   .card{background:var(--deep2);border:1px solid var(--rule);border-radius:20px;padding:20px}
@@ -2712,9 +2732,102 @@
     c.classList.remove("pop"); void c.offsetWidth; if (on) c.classList.add("pop");
     toast(on ? "Noted. We'll message you here when \u201c" + c.querySelector("b").textContent + "\u201d ships." : "Vote removed.");
   });
+  // Interactive lessons (3 Nov 2026): a step with an lx block plays its slice of the lesson's one voice take and shows one
+  // thing to touch. The take is the lesson's file in R2, fetched through lesson-media like the videos. Steps, ticks and
+  // saved places are the ordinary guide ones, so a member without the voice still gets the words and the interaction.
+  var LX = { audio: null, url: "", started: false, raf: 0, pz: false, ask: false };
+  function lxOn(g) { return !!(g && g.steps && g.steps[0] && g.steps[0].lx); }
+  function lxLink(id) {
+    var c = VIDLINK[id]; if (c && c.until > Date.now() + 5 * 60000) return Promise.resolve(c.url);
+    return fresh().then(function (s) {
+      if (!s) throw new Error("signed out");
+      return fetch(SB + "/functions/v1/lesson-media?v=" + encodeURIComponent(id), { headers: { apikey: KEY, Authorization: "Bearer " + s.access_token } });
+    }).then(function (r) { return r.json(); }).then(function (j) {
+      if (!/^https:\/\//.test(j.url || "")) throw new Error(j.error || "no link");
+      VIDLINK[id] = { url: j.url, until: Date.parse(j.expires_at) || Date.now() + 3600000 }; return j.url;
+    });
+  }
+  function lxStop() {
+    cancelAnimationFrame(LX.raf); LX.raf = 0;
+    if (LX.audio) LX.audio.pause();
+    var w = document.querySelector(".lx-words"); if (w) w.classList.remove("on");
+  }
+  function lxFollow(st, btn) {
+    var a = LX.audio, w = document.querySelector(".lx-words"); if (!a || !w) return;
+    var spans = w.children, n = Math.floor((a.currentTime - st.lx.from) / (st.lx.to - st.lx.from) * spans.length);
+    for (var i = 0; i < spans.length; i++) spans[i].classList.toggle("said", i <= n);
+    if (a.currentTime >= st.lx.to) { lxStop(); btn.textContent = "Play again"; return; }
+    LX.raf = requestAnimationFrame(function () { lxFollow(st, btn); });
+  }
+  function lxPlay() {
+    var st = GUIDES[gcur.id].steps[gcur.n], btn = document.querySelector(".lx-play"), w = document.querySelector(".lx-words");
+    if (!btn || !st.lx) return;
+    if (LX.raf) { lxStop(); btn.textContent = "Play"; return; }
+    btn.textContent = "Loading\u2026"; LX.started = true;
+    var a = LX.audio || (LX.audio = new Audio());   // made inside the tap, so a phone lets the next steps play too
+    var id = gcur.id, n = gcur.n;
+    function go() {
+      if (gcur.id !== id || gcur.n !== n) return;
+      if (a.currentTime < st.lx.from || a.currentTime >= st.lx.to) { try { a.currentTime = st.lx.from; } catch (e) {} }
+      a.play().then(function () { w.classList.add("on"); btn.textContent = "Pause"; LX.raf = requestAnimationFrame(function () { lxFollow(st, btn); }); })
+        .catch(function () { btn.textContent = "Play"; });
+    }
+    lxLink(id).then(function (url) {
+      if (LX.url === url) return go();
+      LX.url = url; a.src = url; a.addEventListener("loadedmetadata", go, { once: true }); a.load();
+    }).catch(function () { btn.textContent = "Play"; toast("The voice didn't load. The words are all here."); });
+  }
+  function lxPause() {
+    var p = LX.pz, ask = LX.ask, line = p ? (ask ? "Your robot goes back to its usual weekly plan." : "Your robot is paused. Nothing new is proposed or sent, and what you hold stays as it is.")
+      : (ask ? "Pausing stops new plans and orders. It doesn't sell anything." : "Only for when something looks broken. A falling market isn't a reason to pause, and nor is a holiday.");
+    return '<div class="lx-row"><h4>Robot Dash</h4><span class="lx-pill' + (p ? " stop" : "") + '">' + (p ? "Paused" : "Running") + '</span></div><p>' + line + '</p><div class="row" style="margin-top:0">' +
+      (ask ? '<button class="btn sm" type="button" data-lx="pz-go">Yes, ' + (p ? "restart" : "pause") + ' with Face ID</button><button class="btn ghost sm" type="button" data-lx="pz-no">Not now</button>'
+           : '<button class="btn ghost sm" type="button" data-lx="pz-ask">' + (p ? "Restart my robot" : "Pause my robot") + '</button>') + '</div>';
+  }
+  function lxTry(t) {
+    if (!t) return "";
+    var h = "";
+    if (t.type === "tiles") h = '<h4>' + esc(t.title) + '</h4><div class="lx-tiles">' + t.items.map(function (x) {
+      return '<button class="lx-tile" type="button" aria-expanded="false" data-lx="tile"><b>' + esc(x[0]) + '</b><small hidden>' + esc(x[1]) + '</small></button>'; }).join("") + '</div>';
+    if (t.type === "line") h = '<h4>' + esc(t.title) + '</h4><p class="small">' + esc(t.intro) + '</p><div class="lx-row"><span class="lx-big" id="lx-val">\u00a3' + t.high.toLocaleString("en-GB") + '</span><span class="lx-pill" id="lx-pill">Running</span></div>' +
+      '<input id="lx-fall" type="range" min="0" max="25" step="1" value="0" data-high="' + t.high + '" data-line="' + t.line + '" aria-label="How far the account has fallen from its high"><div class="lx-ends"><span>At its high</span><span>Down 25%</span></div><p class="small" id="lx-say">Running as normal. Drag right to see the fall.</p>';
+    if (t.type === "pause") h = '<div id="lx-pz">' + lxPause() + '</div><p class="small">Pretend, so nothing here touches a real account.' + (t.note ? " " + esc(t.note) : "") + '</p>';
+    if (t.type === "ask") h = '<h4>' + esc(t.title) + '</h4><div class="lx-chat" id="lx-chat" aria-live="polite"></div><div class="lx-tiles">' + t.items.map(function (x) {
+      return '<button class="lx-tile" type="button" data-lx="ask" data-you="' + esc(x[0]) + '" data-bot="' + esc(x[1]) + '">' + esc(x[0]) + '</button>'; }).join("") + '</div>';
+    if (t.type === "points") h = '<h4>' + esc(t.title) + '</h4><div class="lx-tiles">' + t.items.map(function (x) { return '<div class="lx-tile"><b>' + esc(x) + '</b></div>'; }).join("") + '</div>';
+    return '<div class="lx-try">' + h + '</div>';
+  }
+  function lxStep(st) {
+    var canPlay = !!(me && me.preview_videos);
+    return '<div class="lx-voice">' + (canPlay ? '<div class="lx-bar"><button class="btn sm lx-play" type="button" data-lx="play">Play</button><span class="lx-len">About ' + Math.round(st.lx.to - st.lx.from) + ' seconds</span></div>' : "") +
+      '<p class="lx-words">' + esc(st.d).split(" ").map(function (w) { return "<span>" + w + " </span>"; }).join("") + '</p></div>' + lxTry(st.lx.try);
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-lx]"); if (!b) return;
+    var k = b.dataset.lx;
+    if (k === "play") return lxPlay();
+    if (k === "tile") { var sm = b.querySelector("small"); sm.hidden = !sm.hidden; b.setAttribute("aria-expanded", String(!sm.hidden)); return; }
+    if (k === "ask") {
+      var you = document.createElement("p"), bot = document.createElement("p"), c = $("lx-chat");
+      you.className = "you"; you.textContent = b.dataset.you; bot.className = "bot"; bot.textContent = b.dataset.bot; c.appendChild(you); c.appendChild(bot); b.remove(); return;
+    }
+    if (k === "pz-ask") LX.ask = true;
+    if (k === "pz-no") LX.ask = false;
+    if (k === "pz-go") { LX.pz = !LX.pz; LX.ask = false; }
+    $("lx-pz").innerHTML = lxPause();
+  });
+  document.addEventListener("input", function (e) {
+    if (e.target.id !== "lx-fall") return;
+    var r = e.target, pct = +r.value, high = +r.dataset.high, val = high * (1 - pct / 100), stop = val < +r.dataset.line;
+    $("lx-val").textContent = "\u00a3" + val.toLocaleString("en-GB", { maximumFractionDigits: 0 });
+    $("lx-pill").textContent = stop ? "Safety stop on" : "Running"; $("lx-pill").classList.toggle("stop", stop);
+    $("lx-say").textContent = stop ? "Below the line. No buying and no selling. Drag back and it carries on by itself." : pct ? "Still above the line. Your robot carries on by its rules." : "Running as normal. Drag right to see the fall.";
+  });
   function guideOpen(id) {
     var g = GUIDES[id]; if (!g) return;
-    guideVideo(id);
+    lxStop(); LX.url = ""; LX.audio = null; LX.started = false;
+    if (lxOn(g)) { $("gd-video").hidden = true; $("gd-video").innerHTML = ""; } else guideVideo(id);
+    $("gd-lede").textContent = lxOn(g) ? "Listen, try it, tap next. Your place is saved to your account." : "One step at a time. Tick each one as you go; your place is saved to your account.";
     var tb = $("gd-tips"); if (tb) { tb.hidden = !(g.tips && g.tips.length); $("gd-tiplist").innerHTML = (g.tips || []).map(function (t) { return "<li>" + esc(t) + "</li>"; }).join(""); }
     var first = 0; for (var i = 0; i < g.steps.length; i++) { if (!done[gkey(id, i)]) { first = i; break; } first = g.steps.length - 1; }
     var complete = g.steps.every(function (_, i) { return done[gkey(id, i)]; });
@@ -2743,7 +2856,7 @@
     }
     $("gd-step").innerHTML = '<div class="gd-step' + (isDone ? " gd-done" : "") + '">' +
       '<div class="sn">Step ' + (n + 1) + ' of ' + total + (isDone ? ' &middot; <span style="color:var(--green)">done</span>' : "") + '</div>' +
-      '<h3>' + esc(st.t) + '</h3><p>' + esc(st.d) + '</p>' +
+      '<h3>' + esc(st.t) + '</h3>' + (st.lx ? lxStep(st) : '<p>' + esc(st.d) + '</p>') +
       (st.copy ? st.copy.map(function (c) { return '<div class="gd-copy"><code>' + esc(c) + '</code><button type="button" data-copy="' + esc(c) + '">Copy</button></div>'; }).join("") : "") +
       (st.img ? '<img class="gd-shot" src="guide/' + esc(st.img) + '" alt="What the screen looks like at this step" loading="lazy" data-zoom>' : "") +
       (st.stuck ? '<details class="fold gd-stuck"><summary><span class="fold-l">Stuck? Doesn\'t look like that?</span></summary><p>' + esc(st.stuck) + '</p></details>' : "") +
@@ -2755,6 +2868,7 @@
       var d = !!done[gkey(id, i)];
       return '<li class="' + (i === n ? "on " : "") + (d ? "done" : "") + '" data-gd-go="' + i + '"><span class="k">' + (d ? "&#10003;" : (i + 1)) + '</span><span>' + esc(x.t) + '</span></li>';
     }).join("");
+    if (st.lx) { if (LX.raf) lxStop(); if (LX.started) lxPlay(); } else lxStop();
   }
   document.addEventListener("click", function (e) {
     var cp = e.target.closest("[data-copy]");
