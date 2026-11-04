@@ -66,7 +66,7 @@ Public surface (unchanged from v1, two optional additions):
 A block may set `accent: True` to draw it with a green left rule (use for the one thing that needs the reader).
 `button`, `small` and `health` blocks: see v2.6.8 below. `kind` for a pill is green / amber / red / muted. `buttons` is a list of (label, url, primary_bool) shown under the cards.
 `tone="up"` turns the headline green (a gain); `subtitle` and prose paragraphs may be lists of strings and (text, "gain")
-pairs so successes read in bold green. A `days` block ([(label, change), ...]) draws a week strip. `internal` (default True) puts a green INTERNAL badge beside the wordmark: pass internal=False for anything a member,
+pairs so successes read in bold green. A `days` block ([(label, change), ...]) draws a week strip; add "today": <index> to outline today's tile. `internal` (default True) puts a green INTERNAL badge beside the wordmark: pass internal=False for anything a member,
 customer or player receives (same rule as subject()). `brand` is (tile_letter, wordmark, pink_suffix[, logo_url]); with a logo_url the tile is that image (the website's mark), else a green
 tile with the letter. `mood` is an image URL shown beside the headline (the robot moods live at myrobotisa.com/email/robot-*.png;
 use `mood_for(change)`). A block may carry `more: {"summary": "Show the funds", "items": [...]}`: a show/hide list (<details>, which
@@ -274,16 +274,22 @@ def _segments(sub) -> str:
     return "".join(out)
 
 
-def _days(days) -> str:
-    """A week strip: one tile per day, green for an up day, plum for a down or flat day (never red), amount beneath."""
+def _days(days, today=None) -> str:
+    """A week strip: one tile per day, green for an up day, plum for a down or flat day (never red), amount beneath.
+    v2.7.1 (4 Nov 2026, Amit): `today` is the index of today's tile, drawn with a pink outline and white text so a lone green
+    up day isn't read as "you are here". Colour still only means up or down; an up day today stays green inside the outline."""
     cells = []
-    for label, chg in days:
+    for i, (label, chg) in enumerate(days):
         up = chg is not None and chg > 0
         bgc = GREEN_BG if up else MUTED_BG
         fg = GREEN if up else MUTED
         amt = "" if chg is None else (("+" if chg > 0 else "\u2212" if chg < 0 else "") + f"£{abs(chg):,.2f}")
+        now = i == today
+        if now and not up:
+            fg = INK
+        ring = f"border:2px solid {PINK};padding:6px 0;" if now else "padding:8px 2px;"   # same height with or without the outline
         cells.append(f'<td align="center" valign="top" style="padding:0 3px;vertical-align:top;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">'
-                     f'<tr><td align="center" {_bg(bgc)}border-radius:10px;padding:8px 2px;font-size:11px;font-weight:800;letter-spacing:.06em;'
+                     f'<tr><td align="center" {_bg(bgc)}border-radius:10px;{ring}font-size:11px;font-weight:800;letter-spacing:.06em;'
                      f'text-transform:uppercase;color:{fg};font-family:{FONT_STACK};">{esc(label)}</td></tr>'
                      f'<tr><td align="center" style="padding-top:6px;font-size:12px;font-weight:700;color:{fg};font-family:{FONT_STACK};">{esc(amt)}</td></tr>'
                      f'</table></td>')
@@ -469,7 +475,7 @@ def _block_body_inner(block: dict) -> str:
     if "milestone" in block:
         return _milestone(block["milestone"])
     if "days" in block:
-        return _days(block["days"]) + ('<div style="height:14px;line-height:14px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
+        return _days(block["days"], block.get("today")) + ('<div style="height:14px;line-height:14px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
     if "table" in block:
         return table(block["table"]["headers"], block["table"]["rows"])
     if "pills" in block:
