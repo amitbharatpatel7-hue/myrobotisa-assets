@@ -57,7 +57,7 @@ Public surface (unchanged from v1, two optional additions):
 `blocks` is a list of dicts, each one card: `heading`, optional `status` (label, kind), and one of `prose` (str or list),
 `table` ({"headers": [...], "rows": [[...]]}), `pills` (list of str or (label, kind)), or `kv` (list of (label, value)).
 A block may set `accent: True` to draw it with a green left rule (use for the one thing that needs the reader).
-`kind` for a pill is green / amber / red / muted. `buttons` is a list of (label, url, primary_bool) shown under the cards.
+`button`, `small` and `health` blocks: see v2.6.8 below. `kind` for a pill is green / amber / red / muted. `buttons` is a list of (label, url, primary_bool) shown under the cards.
 `tone="up"` turns the headline green (a gain); `subtitle` and prose paragraphs may be lists of strings and (text, "gain")
 pairs so successes read in bold green. A `days` block ([(label, change), ...]) draws a week strip. `internal` (default True) puts a green INTERNAL badge beside the wordmark: pass internal=False for anything a member,
 customer or player receives (same rule as subject()). `brand` is (tile_letter, wordmark, pink_suffix[, logo_url]); with a logo_url the tile is that image (the website's mark), else a green
@@ -412,12 +412,40 @@ def scenario(change: float | None, paused: bool = False, to_approve: int = 0, mi
     return {"key": key, "robot": MOODS[key], "tone": "up" if key in ("up", "milestone") else None, "lead": lead}
 
 
+# v2.6.8 (4 Nov 2026, Amit: "Review the fix should be in the same pane"; Health "clearer on what's happening and actions").
+#   button: (label, url, primary)   a pill button inside the card that asks for the tap
+#   small:  "text"                  a quiet line under it
+#   health: [(mark, title, now, robot, you), ...]   mark ok | warn | bad. One row per thing, always answering the same three
+#           questions. Owner mail only: member mail never shows red.
+BLOCK_BUTTONS = True
+_HEALTH = {"ok": ("&#10003;", GREEN), "warn": ("!", AMBER_FG), "bad": ("&#10005;", "#FF8FB0")}
+
+
+def _health(rows) -> str:
+    out = []
+    for mark, title, now, robot, you in rows:
+        g, c = _HEALTH.get(mark, _HEALTH["ok"])
+        strong = c if mark != "ok" else None
+        def line(k, v, col=None):
+            return (f'<tr><td valign="top" width="58" style="width:58px;font-size:13px;line-height:1.45;color:{MUTED};padding:3px 8px 0 0;font-family:{FONT_STACK};">{k}</td>'
+                    f'<td style="font-size:14px;line-height:1.45;color:{col or INK};padding-top:3px;font-weight:{800 if col else 400};font-family:{FONT_STACK};">{esc(v)}</td></tr>')
+        out.append(f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 14px;"><tr>'
+                   f'<td width="22" valign="top" style="width:22px;color:{c};font-weight:800;font-size:16px;font-family:{FONT_STACK};">{g}</td>'
+                   f'<td style="font-size:15px;font-weight:800;color:{INK};font-family:{FONT_STACK};">{esc(title)}</td></tr><tr><td></td><td>'
+                   f'<table role="presentation" cellpadding="0" cellspacing="0">{line("Now", now)}{line("Robot", robot)}{line("You", you, strong)}</table></td></tr></table>')
+    return "".join(out)
+
+
 def _block_body(block: dict) -> str:
     return (_block_body_inner(block) + (_more(block["more"]) if block.get("more") else "")
-            + (_link(block["link"]) if block.get("link") else ""))
+            + (_link(block["link"]) if block.get("link") else "")
+            + (f'<div style="margin-top:12px;">{button(*block["button"])}</div>' if block.get("button") else "")
+            + (f'<div style="margin-top:8px;font-size:13px;line-height:1.5;color:{MUTED};font-family:{FONT_STACK};">{esc(block["small"])}</div>' if block.get("small") else ""))
 
 
 def _block_body_inner(block: dict) -> str:
+    if "health" in block:
+        return _health(block["health"])
     if "spark" in block:
         return _spark(block["spark"]) + ('<div style="height:12px;line-height:12px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
     if "items" in block:
