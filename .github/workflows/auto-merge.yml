@@ -46,3 +46,4 @@ jobs:
           if gh api "repos/$REPO/issues/$PR/comments" --jq '.[].body' | grep -qF "$marker"; then exit 0; fi
           printf '%s\n**This one waits for you.** Checks passed, but it doesn'"'"'t merge itself because:\n\n%s\n\nPress **Merge pull request** when you'"'"'re happy.\n' "$marker" "$WHY" > body.md
           gh api "repos/$REPO/issues/$PR/comments" -F body=@body.md > /dev/null
+          gh api "repos/$REPO/issues/$PR/labels" -f "labels[]=needs-amit" > /dev/null || true   # his one daily list (hub D36)

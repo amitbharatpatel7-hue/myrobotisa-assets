@@ -47,6 +47,24 @@ versions = {"index.html meta": meta and meta.group(1), "version.json": vjson, "s
 if len(set(versions.values())) != 1 or None in versions.values():
     failures.append(f"members area versions disagree: {versions} (bump all three together)")
 
+# hub D36: the email module merges on green checks, and every scheduled email loads it from main, so prove it still renders.
+try:
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("lms_email", ROOT / "ops/lms_email.py")
+    mail = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mail)
+    block = {"heading": "Does it need me?", "status": ("Yes", "green"), "accent": True, "prose": ["Yes."],
+             "button": ("Review", "https://myrobotisa.com/", True), "small": "Small."}
+    health = {"heading": "Health", "status": ("Check", "amber"), "health": [("warn", "T", "Now", "Robot", "You")], "checks": []}
+    for internal in (True, False):
+        html = mail.render("Title", "Eyebrow", "Sub", [block, health], brand=mail.MRI_BRAND, internal=internal)
+        html = html["html"] if isinstance(html, dict) else html
+        for needed in ("color-scheme", "Review", "Small.", "Robot", "bgcolor"):
+            if needed not in html:
+                failures.append(f"lms_email.render lost {needed!r} (internal={internal})")
+except Exception as e:  # noqa: BLE001
+    failures.append(f"lms_email.py doesn't render: {e!r}")
+
 print(f"{checked} inline scripts parsed; members area version {versions['version.json']}")
 if failures:
     print("\n\n".join(failures))
