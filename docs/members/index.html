@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="105">
+<meta name="mri-version" content="106">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -521,7 +521,6 @@
         </li>
         <li class="rcf-only" hidden><a href="#fixes" data-go="fixes">Your fixes <span class="pill p rcf-n" id="rcf-nav" style="margin-left:4px;padding:2px 7px;font-size:10px" hidden></span></a></li>
         <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
-        <li><a href="#orders" data-go="orders">Your orders</a></li>
         <li><a href="#clips" data-go="clips">Your updates</a></li>
         <li><a href="#ideas" data-go="ideas">Moonshotters</a></li>
         <li><a href="#help" data-go="help">Help and membership</a></li>
@@ -544,7 +543,6 @@
         </li>
         <li class="rcf-only" hidden><a href="#fixes" data-go="fixes">Your fixes <span class="pill p rcf-n" style="margin-left:4px;padding:2px 7px;font-size:10px" hidden></span></a></li>
         <li><a href="#dashboard" data-go="dashboard">Your dashboard</a></li>
-        <li><a href="#orders" data-go="orders">Your orders</a></li>
         <li><a href="#clips" data-go="clips">Your updates</a></li>
         <li><a href="#ideas" data-go="ideas">Moonshotters</a></li>
         <li><a href="#help" data-go="help">Help and membership</a></li>
@@ -1845,23 +1843,9 @@
   var dash = { origin: null, readyAt: 0, timer: null };
   function dashHelp(on) { $("dash-help").hidden = !on; }
   function dashArm(ms) { dashHelp(false); clearTimeout(dash.timer); dash.timer = setTimeout(function () { if (Date.now() - dash.readyAt > ms + 1000) dashHelp(true); }, ms); }
-  // 3 Nov 2026 (Amit): "Your orders" opens Robot Dash at its Every order view (#orders there), never a copy here.
-  var DASH_AT = "";
-  function openOrders() {
-    var url = me && me.dashboard_url;
-    if (!url || !safeHttps(url)) { location.hash = "dashboard"; return; }
-    if (inApp()) { DASH_AT = "#orders"; if (location.hash === "#mydash") dashOpen(false); else location.hash = "mydash"; return; }
-    window.open(safeHttps(url).replace(/#.*$/, "") + "#orders", "_blank", "noopener");
-  }
-  document.addEventListener("click", function (e) {
-    var a = e.target.closest && e.target.closest('a[data-go="orders"]'); if (!a) return;
-    e.preventDefault(); e.stopPropagation(); openOrders();
-    if (typeof closeMenu === "function") try { closeMenu(); } catch (x) {}
-  }, true);
   function dashOpen(reload) {
     var url = me && me.dashboard_url, f = $("dash-frame");
     if (!url || !safeHttps(url)) { if (me.user_id) location.hash = "dashboard"; return; }
-    url = url.replace(/#.*$/, "") + DASH_AT; DASH_AT = "";
     try { dash.origin = new URL(url).origin; } catch (e) { location.hash = "dashboard"; return; }
     $("dash-signin").href = url;
     if (reload || f.dataset.src !== url) { f.dataset.src = url; dash.readyAt = 0; f.src = url; dashArm(8000); }
@@ -3260,7 +3244,6 @@
     if (page === "membership" || (page === "help" && hl === "help")) { page = "help"; hl = "help"; helpTab("memb"); }
     if (page === "early" && me && me.plan && me.plan !== "owner") { page = "help"; hl = "help"; helpTab("memb"); }
     if (/^(q-|faq-)/.test(page)) { var qa = page; page = "questions"; setTimeout(function jump(n) { n = n || 0; var t = document.querySelector("#faq-body #" + qa); if (t) { if (t.tagName === "DETAILS") t.open = true; t.scrollIntoView({ block: "start" }); } else if (n < 20) setTimeout(function () { jump(n + 1); }, 150); }, 150); }   // the FAQ's own jump links (3 Nov 2026)
-    if (page === "orders") page = "dashboard";   // typed or old #orders: the Your orders line itself opens Robot Dash (openOrders)
     if (PAGES.indexOf(page) < 0) page = "home";
     if (page === "guide") { if (!window.GUIDES || !GUIDES[gid]) { page = "start"; } else { guideOpen(gid); } }
     document.querySelectorAll("#v-home [data-page]").forEach(function (el) { el.classList.toggle("off", el.dataset.page.split(" ").indexOf(page) < 0); });
