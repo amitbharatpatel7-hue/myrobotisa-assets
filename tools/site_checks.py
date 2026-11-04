@@ -80,6 +80,8 @@ for brand, project in ((mail.SBH_BRAND, "sbh"), (mail.MRI_BRAND, "isa"), (mail.D
     for needed in (f"email/notice/{project}-red.png", "border:2px solid #FF4D7A"):
         if needed not in html:
             failures.append(f"internal render for {project} lost {needed}")
+    if html.count("border:2px solid") != 1 or "border-left:4px" in html:
+        failures.append(f"internal render for {project}: only the top card may have an outline")
 
 print(f"{checked} inline scripts parsed; members area version {versions['version.json']}")
 if failures:

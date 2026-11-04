@@ -14,7 +14,8 @@ including the internal ones to me, and flag (Internal) in the subject"):
 
 v2.7 (4 Nov 2026, Amit: "ensure these are the templates and no drift") — every internal email is one of six notices, so its
   colour says what it means before it's opened (hub DECISIONS D37). NOTICES below is the one table; the top card's outline, the
-  logo ring, the INTERNAL NOTICE label, the eyebrow and the robot all come from it. render() always picks one: pass notice=
+  INTERNAL NOTICE label, the eyebrow, status pills and the robot all come from it. Only the top card has an outline: no logo ring and no
+  coloured rule on other cards (Amit, 4 Nov 2026). render() always picks one: pass notice=
   to say which, otherwise notice_for() works it out, so an internal email can't go out without one. Member mail is unchanged.
   last-man-standing's internal_email.ts copies NOTICES and a test there fails if the two differ.
 
@@ -604,12 +605,10 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
         # v2.7: the plain label from Amit's option A, in the notice colour.
         badge_html = (f'<span style="color:{accent or GREEN};font-size:11px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;'
                       f'font-family:{FONT_STACK};white-space:nowrap;">{esc(badge or "Internal notice")}</span>')
-        left = (f'<img src="{esc(logo)}" width="40" height="40" alt="{esc(word)}" style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {accent or GREEN};">'
+        left = (f'<img src="{esc(logo)}" width="40" height="40" alt="{esc(word)}" style="display:block;width:40px;height:40px;border-radius:11px;{"" if accent else f"border:2px solid {GREEN};"}">'
                 if logo else
                 f'<table role="presentation" cellpadding="0" cellspacing="0"><tr><td width="40" height="40" align="center" {_bg(GREEN)}width:40px;height:40px;'
                 f'border-radius:11px;color:{ON_GREEN};font-weight:900;font-size:18px;font-family:{FONT_STACK};">{esc(tile or "R")}</td></tr></table>')
-        if accent and not logo:
-            left = left.replace(GREEN, accent)
         brand_row = (
             f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;margin:0 0 16px;"><tr>'
             f'<td style="vertical-align:middle;">{left}</td>'
@@ -816,7 +815,7 @@ def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand
     # The iPhone Gmail app also leaves a light strip down each side of the message: a black outline paints over it. The
     # strips above and below the message are Gmail's own and can't be reached (Test D on Amit's phone, 2 Nov 2026).
     html = html.replace("font-family:Impact,", "word-break:break-word;overflow-wrap:anywhere;font-family:Impact,")
-    html = html.replace(f"border-left:4px solid {GREEN};", f"border-left:4px solid {accent};")   # v2.7: the card rule matches too
+    html = html.replace(f"border-left:4px solid {GREEN};", "")   # v2.7: only the top card has an outline
     page_bg = _INTERNAL["PAGE"]
     html = html.replace(f'class="mri-page" width="100%" cellpadding="0" cellspacing="0" bgcolor="{page_bg}" style="',
                         f'class="mri-page" width="100%" cellpadding="0" cellspacing="0" bgcolor="{page_bg}" style="'
