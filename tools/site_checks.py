@@ -65,6 +65,22 @@ try:
 except Exception as e:  # noqa: BLE001
     failures.append(f"lms_email.py doesn't render: {e!r}")
 
+# Every internal notice needs its robot for every project, or internal mail shows a broken image (hub DECISIONS D37).
+theme = (ROOT / "ops/lms_email.py").read_text()
+notices = re.findall(r'"(\w+)": "#[0-9A-F]{6}"', theme[theme.index("NOTICES = {"):theme.index("_NOTICE_BY_TYPE")])
+if len(notices) != 6:
+    failures.append(f"expected six notices in lms_email.py, found {notices}")
+for project in ("isa", "sbh", "lms", "dtl"):
+    for notice in notices:
+        if not (DOCS / f"email/notice/{project}-{notice}.png").is_file():
+            failures.append(f"docs/email/notice/{project}-{notice}.png is missing")
+# An internal email must use the notice robot for its project, whatever the caller passes (hub DECISIONS D37).
+for brand, project in ((mail.SBH_BRAND, "sbh"), (mail.MRI_BRAND, "isa"), (mail.DTL_BRAND, "dtl"), (("L", "Last Man", "Standing", mail.LMS_LOGO), "lms")):
+    html = mail.render("Title", "Eyebrow", "Sub", [{"heading": "H", "status": ("x", "red"), "accent": True, "prose": ["P"]}], brand=brand, mood=mail.MOODS["calm"])
+    for needed in (f"email/notice/{project}-red.png", "border:2px solid #FF4D7A"):
+        if needed not in html:
+            failures.append(f"internal render for {project} lost {needed}")
+
 print(f"{checked} inline scripts parsed; members area version {versions['version.json']}")
 if failures:
     print("\n\n".join(failures))
