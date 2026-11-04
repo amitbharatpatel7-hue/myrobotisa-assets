@@ -816,6 +816,9 @@ def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand
     # strips above and below the message are Gmail's own and can't be reached (Test D on Amit's phone, 2 Nov 2026).
     html = html.replace("font-family:Impact,", "word-break:break-word;overflow-wrap:anywhere;font-family:Impact,")
     html = html.replace(f"border-left:4px solid {GREEN};", "")   # v2.7: only the top card has an outline
+    # v2.7: main buttons take the notice colour, as Last Man Standing's do (Amit, 4 Nov 2026: "consistent to all internal emails").
+    html = html.replace(f"background:{GREEN};background-color:{GREEN};color:{_INTERNAL['ON_GREEN']};border:2px solid {GREEN};",
+                        f"background:{accent};background-color:{accent};color:{_INTERNAL['ON_GREEN']};border:2px solid {accent};")
     page_bg = _INTERNAL["PAGE"]
     html = html.replace(f'class="mri-page" width="100%" cellpadding="0" cellspacing="0" bgcolor="{page_bg}" style="',
                         f'class="mri-page" width="100%" cellpadding="0" cellspacing="0" bgcolor="{page_bg}" style="'
