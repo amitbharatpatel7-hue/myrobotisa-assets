@@ -88,7 +88,7 @@ try {
   await run("menu order and groups (desktop)", {}, async (page) => {
     await page.goto(URL_ + "#home"); await page.waitForSelector("#v-home:not([hidden])");
     const top = await page.$$eval(`${side} > li:not([hidden])`, (lis) => lis.map((li) => li.querySelector("a:not([hidden])").textContent.trim()));
-    assert.deepEqual(top, ["Set up my robot", "Your dashboard", "Your orders", "Your updates", "Moonshotters", "Help and membership"]);
+    assert.deepEqual(top, ["Set up my robot", "Your dashboard", "Your updates", "Moonshotters", "Help and membership"]);
     assert.equal(await page.$$eval(`${side} a[data-go="setup"] .ndot`, (d) => d.length), 0, "no green dot (Amit, 29 Oct 2026)");
     assert.equal((await page.textContent(`${side} a[data-go="lessons"]`)).trim(), "Your lessons");
     assert.equal(await vis(page, `${side} a[data-go="code"]`), true);
@@ -179,7 +179,7 @@ try {
   await run("installed app menu has the same group", { robotCare: true }, async (page) => {
     await page.goto(URL_ + "?app=1#home"); await page.waitForSelector("#v-home:not([hidden])");
     const items = await page.$$eval("#appnav > li", (lis) => lis.filter((li) => !li.hidden).map((li) => (li.querySelector("a:not([hidden])") || {}).textContent.trim()));
-    assert.deepEqual(items, ["Home", "Set up my robot", "Your fixes", "Your dashboard", "Your orders", "Your updates", "Moonshotters", "Help and membership"]);
+    assert.deepEqual(items, ["Home", "Set up my robot", "Your fixes", "Your dashboard", "Your updates", "Moonshotters", "Help and membership"]);
     assert.equal(await page.$$eval('#appnav .grp-t', (b) => b.length), 1);
   });
   console.log(`all passed (${passed})`);
