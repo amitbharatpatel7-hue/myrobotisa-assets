@@ -77,6 +77,8 @@ for project in ("isa", "sbh", "lms", "dtl"):
 # An internal email must use the notice robot for its project, whatever the caller passes (hub DECISIONS D37).
 for brand, project in ((mail.SBH_BRAND, "sbh"), (mail.MRI_BRAND, "isa"), (mail.DTL_BRAND, "dtl"), (("L", "Last Man", "Standing", mail.LMS_LOGO), "lms")):
     html = mail.render("Title", "Eyebrow", "Sub", [{"heading": "H", "status": ("x", "red"), "accent": True, "prose": ["P"]}], brand=brand, mood=mail.MOODS["calm"])
+    if "background:#FF4D7A;background-color:#FF4D7A;color:#0A0A0D;border:2px solid #FF4D7A" not in mail.render("T", "E", "S", [{"heading": "H", "status": ("x", "red")}], brand=brand, buttons=[("Go", "https://myrobotisa.com/", True)]):
+        failures.append(f"internal render for {project}: the main button lost the notice colour")
     for needed in (f"email/notice/{project}-red.png", "border:2px solid #FF4D7A"):
         if needed not in html:
             failures.append(f"internal render for {project} lost {needed}")
