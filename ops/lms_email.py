@@ -449,6 +449,40 @@ def _health(rows) -> str:
     return "".join(out)
 
 
+# v2.7.2 (4 Nov 2026, Amit picked this over the top-five list): what's in the pot on one card. A split bar made of table cells
+# (no images), every holding in groups with pounds and share lined up on the right, then cash and the total.
+#   pot: {"split": [(label, pct, "green"|"pink"|"muted"), ...],
+#         "groups": [(label, total_text, [(name, value_text, share_text), ...]), ...],
+#         "lines": [(label, value_text), ...]}
+POT_BLOCK = True
+_POT_COLOURS = {"green": GREEN, "pink": PINK, "muted": MUTED}
+
+
+def _pot(p: dict) -> str:
+    parts = [(lab, pct, _POT_COLOURS.get(kind, MUTED)) for lab, pct, kind in p.get("split") or [] if pct > 0]
+    bar = "".join(f'<td width="{pct}%" height="12" {_bg(c)}width:{pct}%;height:12px;line-height:12px;font-size:1px;">&nbsp;</td>' for _, pct, c in parts)
+    key = "".join(f'<td style="padding-top:8px;font-size:12px;color:{MUTED};font-family:{FONT_STACK};white-space:nowrap;">'
+                  f'<span style="display:inline-block;width:8px;height:8px;border-radius:4px;background:{c};background-color:{c};margin-right:5px;"></span>'
+                  f'{esc(lab)} {pct}%</td>' for lab, pct, c in parts)
+    head = (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;border-radius:6px;overflow:hidden;"><tr>{bar}</tr></table>'
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:6px;"><tr>{key}</tr></table>') if parts else ""
+    def sum_row(label, value, colour=MUTED):
+        line = f"border-bottom:1px solid {HAIRLINE};" if colour == MUTED else ""
+        return (f'<tr><td style="padding:12px 0 6px;{line}font-size:13px;font-weight:800;color:{colour};font-family:{FONT_STACK};">{esc(label)}</td>'
+                f'<td colspan="2" align="right" style="padding:12px 0 6px;{line}font-size:13px;font-weight:800;color:{colour};font-family:{FONT_STACK};white-space:nowrap;">{esc(value)}</td></tr>')
+    rows = []
+    for label, total, items in p.get("groups") or []:
+        rows.append(sum_row(label, total))
+        for name, value, share in items:
+            rows.append(f'<tr><td style="padding:8px 8px 0 0;font-size:15px;line-height:1.35;color:{INK};font-family:{FONT_STACK};">{esc(name)}</td>'
+                        f'<td align="right" valign="top" style="padding-top:8px;font-size:15px;font-weight:700;color:{INK};font-family:{FONT_STACK};white-space:nowrap;">{esc(value)}</td>'
+                        f'<td align="right" valign="top" width="42" style="width:42px;padding-top:10px;font-size:12px;color:{MUTED};font-family:{FONT_STACK};white-space:nowrap;">{esc(share)}</td></tr>')
+    lines = p.get("lines") or []
+    for i, (label, value) in enumerate(lines):
+        rows.append(sum_row(label, value, INK if i == len(lines) - 1 else MUTED))
+    return f'{head}<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{"".join(rows)}</table>'
+
+
 def _block_body(block: dict) -> str:
     return (_block_body_inner(block) + (_more(block["more"]) if block.get("more") else "")
             + (_link(block["link"]) if block.get("link") else "")
@@ -474,6 +508,8 @@ def _block_body_inner(block: dict) -> str:
         return _ticks(block["ticks"]) + (_prose(block["prose"]) if block.get("prose") else "")
     if "milestone" in block:
         return _milestone(block["milestone"])
+    if "pot" in block:
+        return _pot(block["pot"])
     if "days" in block:
         return _days(block["days"], block.get("today")) + ('<div style="height:14px;line-height:14px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
     if "table" in block:
