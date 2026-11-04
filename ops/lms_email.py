@@ -720,7 +720,8 @@ DTL_LOGO = "https://myrobotisa.com/email/dtl-robot.png"   # v2.6.2 (Amit, 24 Oct
 DTL_BRAND = ("D", "Day Trade", "Lab", DTL_LOGO)
 _INTERNAL = {"PAGE": "#0A0A0D", "CARD": "#17171D", "CARD_DEEP": "#101014", "HAIRLINE": "#2A2A33", "MUTED": "#B9B6C2",
              "ON_GREEN": "#0A0A0D", "MUTED_BG": "#24242C", "GREEN_BG": "#12301F",
-             "PILL_COLORS": {"green": ("#0A0A0D", "#00E87A"), "amber": ("#2A1A00", "#FFC94D"), "red": ("#FFFFFF", "#FF4D7A"), "muted": ("#E6E3EC", "#3A3A44")}}
+             "PILL_COLORS": {"green": ("#0A0A0D", "#00E87A"), "amber": ("#2A1A00", "#FFA63D"), "red": ("#FFFFFF", "#FF4D7A"), "muted": ("#E6E3EC", "#3A3A44")},
+             "SOLID_TAGS": {**SOLID_TAGS, "amber": ("#FFA63D", "#2A1A00")}}   # v2.7: amber pills match the amber notice
 
 
 # v2.7 (Amit, 4 Nov 2026): the six internal notices. Robots live at myrobotisa.com/email/notice/<project>-<notice>.png, the
