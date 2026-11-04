@@ -259,6 +259,13 @@ body.qs-mode header.hero{display:none}
   aside#side{position:fixed;top:0;left:0;bottom:0;align-self:stretch;width:250px;max-height:none;overscroll-behavior:contain;padding:26px 16px 20px;background:var(--bg);border-right:1px solid var(--line);z-index:10}
 }
 @media (max-width:899px){ .herort{align-items:flex-start} .refreshwrap{justify-content:flex-start} .refreshwrap #livemsg{text-align:left} }
+/* 4 Nov 2026 (Amit): scrollbars in the site colours: a slim brand-green thumb on deep plum, page and sidebar alike */
+html,aside#side{scrollbar-width:thin;scrollbar-color:var(--brand-green) #1E0024}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:#1E0024}
+::-webkit-scrollbar-thumb{background:var(--brand-green);border-radius:999px;border:2px solid #1E0024}
+::-webkit-scrollbar-thumb:hover{background:#5CFFAF}
+::-webkit-scrollbar-corner{background:#1E0024}
 .sitehdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:-4px}
 .sitehdr .handle{color:var(--muted);font-weight:500;font-size:15px;text-decoration:none;display:inline-flex;align-items:center;min-height:34px}
 .sitehdr .login{display:inline-flex;align-items:center;min-height:34px;padding:0 14px;border:2px solid var(--brand-green);border-radius:999px;color:var(--fg);font-weight:800;font-size:13px;text-decoration:none}
