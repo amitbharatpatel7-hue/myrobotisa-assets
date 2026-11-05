@@ -2497,14 +2497,14 @@
   function rcfItem(x) {
     var st = x.fix_state, open = st === "open", later = st === "declined";
     var pills = (x.urgent && (open || later) ? '<span class="pill p">Urgent</span>' : "") +
-      (open ? '<span class="pill g">Waiting for you</span>' : st === "accepted" ? '<span class="pill g">In your robot</span>' : later ? '<span class="pill">Not now</span>' : '<span class="pill">Closed</span>');
+      (open ? '<span class="pill g">Waiting for you</span>' : st === "testing" ? '<span class="pill">Being tested</span>' : st === "undone" ? '<span class="pill">Undone</span>' : st === "accepted" || st === "applied" ? '<span class="pill g">In your robot</span>' : later ? '<span class="pill">Not now</span>' : '<span class="pill">Closed</span>');
     var h = '<li class="rcf-item' + (x.urgent && (open || later) ? " urgent" : "") + '" data-id="' + esc(x.id) + '">' +
       '<div class="rcf-top"><b>' + esc(x.pr_title || "A fix for your robot") + "</b>" + pills + "</div>" +
       (x.urgent && (open || later) ? '<p><b>Your robot can\u2019t do its main job until this is in.</b></p>' : "") +
       "<p>" + esc(x.diagnosis || "Robot Care found why a run failed and made a small fix.") + "</p>" +
       // 29 Oct 2026 (Amit): members never see GitHub or file names here; the fix is described in plain words only.
       '<p class="small">' +
-      (open || later ? "Robot Care checks it again just before it goes in. It can never touch your keys, your money settings or anything that places orders." : st === "accepted" ? "Accepted " + esc(fmtDate(String(x.decided_at || x.at).slice(0, 10))) + "." : "This fix was closed, so there's nothing to accept.") + "</p>";
+      (open || later ? "Robot Care checks it again just before it goes in. It can never touch your keys, your money settings or anything that places orders." : st === "testing" ? "It's being tested on your robot. If it passes it goes in by itself, as you chose, and you'll get a message." : st === "undone" ? "This one caused a problem, so it was taken back out. There's nothing for you to do." : st === "applied" ? "It passed your robot's tests and went in by itself, as you chose." : st === "accepted" ? "Accepted " + esc(fmtDate(String(x.decided_at || x.at).slice(0, 10))) + "." : "This fix was closed, so there's nothing to accept.") + "</p>";
     if (open || later) h += '<div class="row"><button class="btn" type="button" data-act="accept">Accept fix</button><button class="btn ghost" type="button" data-act="ask">Ask a question</button>' +
       (open ? '<button class="btn ghost" type="button" data-act="decline">Not now</button>' : "") + "</div>" +
       '<div class="rcf-box" data-box="confirm" hidden><p style="margin-top:0"><b>Put this fix into your robot?</b> It\u2019s a small change to your copy of the code. Your robot uses it from its next run.</p>' +
