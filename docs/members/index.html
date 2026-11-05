@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="109">
+<meta name="mri-version" content="110">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -1117,7 +1117,12 @@
               <label class="f" for="lv-rk">Read-only live key</label><input class="t" id="lv-rk" type="password" autocomplete="off" spellcheck="false">
               <label class="f" for="lv-rs">Read-only live secret</label><input class="t" id="lv-rs" type="password" autocomplete="off" spellcheck="false"></div></li>
           <li class="su-step locked" id="lv5"><div class="su-h"><b>Switch</b><span class="pill" id="lv5-st">Ready when you are</span></div>
-            <p>Your first live plan starts fresh from cash and builds your whole pot at once, from whatever passes the rules that week. It doesn't wait for a better moment, and a dip in the first month is normal. Your practice records stay in your copy.</p>
+            <p>Your first live plan starts fresh from cash, from whatever passes the rules that week. It doesn't wait for a better moment, and a dip in the first month is normal. Your practice records stay in your copy.</p>
+            <div id="lv-pace" hidden><label class="f">How do you want to start?</label>
+              <div class="su-chk">
+                <label><input type="radio" name="lv-pace" value="all"><span><b>All at once.</b> Your first plan builds your whole pot.</span></label>
+                <label><input type="radio" name="lv-pace" value="phased"><span><b>Over four weeks.</b> Each weekly plan brings in another quarter of your pot. The rest waits as cash in your ISA.</span></label></div>
+              <p class="small">In our backtest, starting over four weeks made big early falls smaller, not rarer, and it lagged when markets rose. Neither is right for everyone: it's your choice.</p></div>
             <label class="f" for="lv-ok">Type REAL MONEY to confirm</label><input class="t" id="lv-ok" autocomplete="off" spellcheck="false">
             <div class="row"><button class="btn" type="button" id="lv-go" disabled>Switch to real money</button></div>
             <ul class="su-log" id="lv-log" aria-live="polite"></ul>
@@ -2662,6 +2667,7 @@
     $("lv-gh").addEventListener("click", function () { ghConnect("live"); });
     $("lv-name").addEventListener("input", lvLookup);
     ["lv-c1", "lv-c2", "lv-c3"].forEach(function (id) { $(id).addEventListener("change", lvState); });
+    document.querySelectorAll('input[name="lv-pace"]').forEach(function (x) { x.addEventListener("change", lvState); });
     ["lv-tk", "lv-ts", "lv-rk", "lv-rs", "lv-ok", "lv-pk", "lv-ps"].forEach(function (id) { $(id).addEventListener("input", lvState); });
     $("lv-check").addEventListener("click", lvCheck); $("lv-go").addEventListener("click", lvGo); $("lv-bk").addEventListener("click", lvBack);
     if (SU.tok) ghConnected(); else if (SU.cfg && !SU.cfg.configured) $("lv-gh").disabled = true;
@@ -2677,12 +2683,15 @@
         if (!ours) { LV = null; msg.textContent = "Couldn't find a copy called " + name + " made by Set up my robot. Check the name above."; lvState(); return; }
         var sc = await gh("/repos/" + full + "/actions/secrets?per_page=100"), names = (sc.ok && sc.j && sc.j.secrets || []).map(function (x) { return x.name; });
         var ev = await gh("/repos/" + full + "/actions/variables/T212_ENV"), env = ev.ok && ev.j ? ev.j.value : "practice";
-        LV = { full: full, names: names, env: env };
+        // Hub D39: only offer the four-week start to a copy that has it; an older copy would ignore the setting and buy everything.
+        var wf = await gh("/repos/" + full + "/contents/.github/workflows/weekly-signals.yml"), pace = !!(wf.ok && wf.j && b64d(wf.j.content).indexOf("START_PACE") >= 0);
+        LV = { full: full, names: names, env: env, pace: pace && env !== "live" };
         msg.textContent = "Found your copy, " + name + ". " + (env === "live" ? "It's already on real money; you can still use this page to change its live key." : "It's on practice money.");
       } catch (e) { LV = null; msg.textContent = "Couldn't reach GitHub just now. Try again in a minute."; }
       lvState();
     }, 400);
   }
+  function lvPace() { var x = document.querySelector('input[name="lv-pace"]:checked'); return x ? x.value : ""; }
   function lvState() {
     if (!lvReady) return;
     var on = !!(SU.tok && LV), busy = !!SU.busy || !!(LV && LV.busy);
@@ -2692,8 +2701,8 @@
     var app = !!(LV && LV.names.indexOf("T212_READ_API_KEY") >= 0); $("lv-read").hidden = !app;
     var rk = $("lv-rk").value.trim(), rs = $("lv-rs").value.trim(), readOk = (!rk && !rs) || (rk.length > 10 && rs.length > 10);
     var key = $("lv-tk").value.trim().length > 10 && $("lv-ts").value.trim().length > 10 && readOk; lvStep(4, key ? "Ready" : "To do", key);
-    var sure = $("lv-ok").value.trim().toUpperCase() === "REAL MONEY";
-    $("lv-go").disabled = !(on && ticks && key && sure) || busy;
+    var sure = $("lv-ok").value.trim().toUpperCase() === "REAL MONEY", pc = lvPace(); $("lv-pace").hidden = !(LV && LV.pace);
+    $("lv-go").disabled = !(on && ticks && key && sure && (pc || !(LV && LV.pace))) || busy;
     $("lv-bk").disabled = !(on && $("lv-pk").value.trim().length > 10 && $("lv-ps").value.trim().length > 10) || busy;
   }
   async function lvCheck() {
@@ -2715,6 +2724,11 @@
       if ($("lv-rk").value.trim()) { vals.T212_READ_API_KEY = $("lv-rk").value.trim(); vals.T212_READ_API_SECRET = $("lv-rs").value.trim(); }
       if (!(await ghSeal(full, vals))) k.bad("Couldn't lock in your live key just now. Press Switch again in a minute.");
       vals = null; k.ok("Live key locked in");
+      if (LV.pace) {
+        var p = log("Saving how you want to start");
+        if (!(await ghVar(full, "START_PACE", lvPace()))) p.bad("Couldn't save how you want to start. Press Switch again in a minute.");
+        p.ok(lvPace() === "phased" ? "Starting over four weekly plans" : "Starting all at once");
+      }
       var e = log("Pointing your robot at your real account");
       if (!(await ghVar(full, "T212_ENV", "live"))) e.bad("Couldn't finish the switch just now. Press Switch again in a minute to finish it; nothing trades until you approve a plan.");
       LV.env = "live"; SU.liveCopy = full; e.ok("Your robot now uses your real account");
