@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="107">
+<meta name="mri-version" content="108">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -328,6 +328,10 @@
   .note.new:hover,.note.new:focus-visible{background:var(--deep2);outline:none}
   .note.new .dot{position:absolute;left:12px;top:17px;width:9px;height:9px;border-radius:50%;background:var(--green)}
   .note.read{opacity:.72} .note.action.new .dot{background:var(--pink-ink)}
+  /* 5 Nov 2026 (Amit: "short and sweet"): a long message shows its first lines; See more opens the rest. */
+  .note-more{display:block;appearance:none;background:none;border:0;padding:0;min-height:36px;font:inherit;font-weight:700;font-size:14px;color:var(--green);text-decoration:underline;cursor:pointer}
+  .note-more:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  .note .note-rest{margin-top:8px}
   .note b{display:block;font-size:15px} .note time{display:block;font-size:12px;color:var(--eye);margin:2px 0 6px} .note p{margin:0;font-size:14px;line-height:1.55;color:var(--muted);white-space:pre-line} .note a{display:inline-block;margin-top:8px;font-weight:700;font-size:14px}
   .dash-form{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px} .dash-form input{flex:1 1 220px;min-height:46px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
@@ -1426,7 +1430,15 @@
 
   // ---- messages from us: news, upcoming changes, things to do.
   // Unread ones have a green edge and count towards the number; click one to mark it read (on every device).
-  var NOTES = [], READ = {};
+  var NOTES = [], READ = {}, NOTE_OPEN = {};
+  // 5 Nov 2026: the first paragraph (or first sentences) of anything long; the rest sits behind See more. Short messages stay whole.
+  function noteParts(body) {
+    var b = String(body || "").trim(); if (b.length <= 240) return { short: b, more: "" };
+    var first = b.split(/\n\s*\n/)[0];
+    if (first.length > 200) { var m = first.match(/^[\s\S]{40,200}[.!?](?=\s)/); first = m ? m[0] : first; }
+    var more = b.slice(first.length).trim();
+    return more ? { short: first, more: more } : { short: b, more: "" };
+  }
   function loadNotes() {
     Promise.all([
       rest("member_notices?select=id,title,body,kind,link_url,link_text,starts_at&order=starts_at.desc&limit=20").then(function (r) { return r.ok ? r.json() : []; }),
@@ -1477,10 +1489,11 @@
     var shown = [], older = [], seenRead = false;
     NOTES.forEach(function (n) { if (!READ[n.id] || !seenRead) { shown.push(n); if (READ[n.id]) seenRead = true; } else older.push(n); });
     var one = function (n) {
-      var isNew = !READ[n.id];
+      var isNew = !READ[n.id], parts = noteParts(n.body), open = !!NOTE_OPEN[n.id];
       var when = new Date(n.starts_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
       return '<li class="note' + (isNew ? " new" : " read") + (n.kind === "action" ? " action" : "") + '" data-id="' + n.id + '"' + (isNew ? ' role="button" tabindex="0" title="Mark as read"' : "") + '>' +
-        (isNew ? '<span class="dot" aria-label="Unread"></span>' : "") + '<b>' + (n.kind === "action" ? "Action needed: " : "") + esc(n.title) + '</b><time>' + esc(when) + (isNew ? " · tap to mark as read" : " · read") + '</time><p>' + esc(n.body) + '</p>' +
+        (isNew ? '<span class="dot" aria-label="Unread"></span>' : "") + '<b>' + (n.kind === "action" ? "Action needed: " : "") + esc(n.title) + '</b><time>' + esc(when) + (isNew ? " · tap to mark as read" : " · read") + '</time><p>' + esc(parts.short) + '</p>' +
+        (parts.more ? '<p class="note-rest"' + (open ? "" : " hidden") + '>' + esc(parts.more) + '</p><button type="button" class="note-more" data-more="' + esc(n.id) + '" aria-expanded="' + open + '">' + (open ? "Hide" : "See more") + '</button>' : "") +
         (safeLink(n.link_url) ? '<a href="' + esc(n.link_url) + '">' + esc(n.link_text || "Find out more") + " →</a>" : "") + "</li>";
     };
     $("notes").innerHTML = shown.map(one).join("");
@@ -1507,10 +1520,13 @@
   $("notes-older").addEventListener("toggle", function () { var o = $("notes-older"), n = $("notes-old").children.length; o.querySelector(".fold-l").textContent = (o.open ? "Hide" : "Show") + " " + n + " earlier message" + (n === 1 ? "" : "s"); });
   $("msgs").addEventListener("click", function (e) {
     if (!e.target.closest(".note")) return;
+    var more = e.target.closest("[data-more]");
+    if (more) { var id = more.dataset.more, on = !NOTE_OPEN[id]; NOTE_OPEN[id] = on; more.previousElementSibling.hidden = !on; more.textContent = on ? "Hide" : "See more"; more.setAttribute("aria-expanded", on); return; }
     if (e.target.closest("a")) { var li0 = e.target.closest(".note"); if (li0) markRead([li0.dataset.id]); return; }
     var li = e.target.closest(".note.new"); if (li) markRead([li.dataset.id]);
   });
   $("msgs").addEventListener("keydown", function (e) {
+    if (e.target.closest && e.target.closest("[data-more]")) return;   // See more is its own button
     var li = e.target.closest && e.target.closest(".note.new"); if (li && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); markRead([li.dataset.id]); }
   });
   $("msg-all").addEventListener("click", function () { markRead(NOTES.map(function (n) { return n.id; })); });
