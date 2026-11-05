@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="106">
+<meta name="mri-version" content="107">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -221,6 +221,30 @@
   .gd-done{border-color:rgba(0,232,122,.55);background:rgba(0,232,122,.07)}
   .gd-zoom{position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px;cursor:zoom-out} .gd-zoom img{max-width:100%;max-height:100%;border-radius:10px}
   .item .gd-link{display:inline-block;margin-top:4px;font-size:13px;font-weight:700;color:var(--green)}
+  /* Lesson progress (5 Nov 2026, Amit chose option B of three mockups): people dip in and out, so the top of Your lessons
+     says how far they've got, roughly how long is left, and takes them straight back to the lesson they'd left. */
+  .lp{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:16px;background:var(--deep3);border:1px solid var(--rule);border-radius:14px;padding:18px}
+  .lp.all{border-color:var(--green)}
+  .lp-sum{display:flex;flex-direction:column;justify-content:center;min-width:0}
+  .lp-eye{margin:0;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .lp-big{margin:6px 0 0;font-family:Anton,Impact,sans-serif;font-size:clamp(32px,6vw,40px);letter-spacing:.02em;text-transform:uppercase;line-height:1.05}
+  .lp-big .g{color:var(--green)}
+  .lp .bar{height:10px;margin:12px 0 0}
+  .lp .small{margin:8px 0 0}
+  .lp-next{background:var(--deep);border:1px solid var(--rule);border-radius:12px;padding:14px;min-width:0}
+  .lp-next .lp-eye{color:var(--green)}
+  .lp-next b{display:block;margin-top:6px;font-size:17px;line-height:1.3}
+  .lp-next .small{margin:2px 0 0}
+  .lp-next .btn,.lp-next .pill{margin-top:12px}
+  .lp-next.won{display:flex;align-items:center;gap:14px}
+  .lp-next.won img{width:110px;height:110px;flex:none}
+  .lp-next.won p{margin:0;font-size:14px;line-height:1.5}
+  .item.now{border-color:var(--green)}
+  .item .les-steps{margin-top:8px;max-width:220px}
+  .item .les-steps .t{margin:0;color:var(--ink);font-weight:600}
+  .item .les-steps .bar{height:6px;margin:4px 0 0}
+  .item.done .les-steps{display:none}
+  @media(max-width:600px){.lp{padding:14px;gap:12px}.lp-next .btn{width:100%}}
   .pill-link{text-decoration:none;transition:background .15s,color .15s,box-shadow .15s} .pill-link:hover,.pill-link:focus-visible{background:var(--ink);border-color:var(--ink);color:var(--deep);outline:none} .notes{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
   /* Members' space (26 Oct 2026): the GitHub Discussions feed, in the site's own clothes */
   .sp-list{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:8px}
@@ -680,8 +704,15 @@
       <section class="card wide" aria-labelledby="h-les" data-page="lessons">
         <h2 id="h-les">The 14 <span class="p">lessons</span></h2>
         <p class="lede">About 6 hours in all, at your own pace: what every part of the code does and why, then making it yours with Claude. Each one is the long version of a fix you've seen on the channel.</p>
-        <div class="bar" aria-hidden="true"><i id="les-bar"></i></div>
-        <p class="small" id="les-count"></p>
+        <div class="lp" id="les-panel">
+          <div class="lp-sum">
+            <p class="lp-eye">Your progress</p>
+            <p class="lp-big" id="les-count"></p>
+            <div class="bar" aria-hidden="true"><i id="les-bar"></i></div>
+            <p class="small" id="les-left"></p>
+          </div>
+          <div class="lp-next" id="les-next"></div>
+        </div>
         <details class="fold" id="les-fold"><summary><span class="fold-l">Show all 14 lessons</span></summary>
           <ol class="lessons" id="lessons"></ol>
         </details>
@@ -724,6 +755,7 @@
         <h2 id="h-new">Your <span class="g">updates</span></h2>
         <p class="lede">Shipped first, then what's on the bench. Tap <b>I want this</b> on anything you'd like sooner: it's saved to your account and counts.</p>
         <ol class="tl" id="wn-list">
+          <li><span class="tl-dot"></span><div><span class="tl-date">5 Nov 2026</span><span class="pill g">New</span><b>Pick up where you left off</b><p>Your lessons now show how far you've got and roughly how long is left, with the next lesson one tap away. Started one and stopped halfway? Its card shows your steps, and Carry on takes you back to the right one.</p><a class="tl-go" href="#lessons" data-go="lessons">Your lessons &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">1 Nov 2026</span><span class="pill g">New</span><b>The moonshot pot is retired</b><p>We tested ten rules for it over six years of prices, including Trading 212's top winners and losers. Some made more money, but only with much bigger falls; none gave a better trade-off than keeping the money in the hunter. So the pot's money went back into the main robot and new robots start without it. We took the L, so you don't have to. The Moonshotters keep their name.</p><a class="tl-go" href="../questions.html#faq-moonshot">Why, in full &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">29 Oct 2026</span><span class="pill g">New</span><b>The 14 lessons are now Your lessons</b><p>Same 14 lessons, new name in the menu, next to Your code. Your progress through them still shows at the top of the page.</p><a class="tl-go" href="#lessons" data-go="lessons">Your lessons &rarr;</a></div></li>
           <li><span class="tl-dot"></span><div><span class="tl-date">29 Oct 2026</span><span class="pill g">New</span><b>What's new is now Your updates</b><p>Same page, new name, to match Your code, Your fixes and Your dashboard. It now sits just above the Moonshotters in the menu.</p></div></li>
@@ -1272,14 +1304,50 @@
     var q = QS.filter(function (_, i) { return done["qs:" + (i + 1)]; }).length, l = LESSONS.filter(function (_, i) { return done["day:" + (i + 1)]; }).length;
     $("qs-bar").style.width = (q / QS.length * 100) + "%"; $("les-bar").style.width = (l / LESSONS.length * 100) + "%";
     $("qs-count").textContent = q === QS.length ? "All done. Your robot is running on paper money." : q + " of " + QS.length + " steps done";
-    $("les-count").textContent = l + " of 14 lessons done";
+    lessonPanel(l);
+  }
+  // Lesson progress (5 Nov 2026): ticks are day:<n>, a lesson's steps are g:day-<n>:<k>, its length is in GUIDES. Started-but-unfinished
+  // comes first, so "Carry on" goes back to the lesson someone left; guideOpen() then lands on their first unticked step.
+  function lessonOpen(i) { return i === 0 || me.plan === "early" || !!me.preview_videos; }   // the same rule as the pills on the cards
+  function lessonSteps(i) {
+    var id = "day-" + (i + 1), g = window.GUIDES && GUIDES[id];
+    if (!g || !g.steps) return null;
+    return { ticked: g.steps.filter(function (_, n) { return done[gkey(id, n)]; }).length, total: g.steps.length };
+  }
+  function lessonStarted(i) { var s = lessonSteps(i); return !done["day:" + (i + 1)] && s && s.ticked > 0 && s.ticked < s.total ? s : null; }
+  function lessonNext() {
+    var i;
+    for (i = 0; i < LESSONS.length; i++) if (lessonStarted(i)) return i;
+    for (i = 0; i < LESSONS.length; i++) if (!done["day:" + (i + 1)]) return i;
+    return -1;
+  }
+  function lessonTime(m) { var h = Math.floor(m / 60), r = m % 60; return h ? h + (h > 1 ? " hours" : " hour") + (r ? " " + r + " min" : "") : r + " min"; }
+  function lessonPanel(l) {
+    var all = l === LESSONS.length, next = lessonNext(), left = 0, known = true;
+    LESSONS.forEach(function (_, i) { var g = window.GUIDES && GUIDES["day-" + (i + 1)]; if (!g || !g.mins) known = false; else if (!done["day:" + (i + 1)]) left += g.mins; });
+    $("les-panel").classList.toggle("all", all);
+    $("les-count").innerHTML = all ? '<span class="g">All 14</span> done' : '<span class="g">' + l + '</span> of 14 done';
+    $("les-left").textContent = all ? "That was the last one." : !known ? "" : l === 0 ? "About " + lessonTime(left) + " in all, at your own pace" : "About " + lessonTime(left) + " to go";
+    var box = $("les-next"); box.classList.toggle("won", all);
+    if (all) box.innerHTML = '<img src="../who-highfive.png" alt=""><p>You own a robot that runs by written rules. Everything else is patience.</p>';
+    else {
+      var n = next + 1, g = window.GUIDES && GUIDES["day-" + n], s = lessonStarted(next), mins = g && g.mins ? "about " + g.mins + " min" : "";
+      box.innerHTML = '<p class="lp-eye">' + (s ? "Pick up where you left off" : l === 0 ? "Start here" : "Up next") + '</p><b>Lesson ' + n + ': ' + esc(LESSONS[next][0]) + '</b>' +
+        '<p class="small">' + (s ? s.ticked + " of " + s.total + " steps done" + (mins ? " &middot; " : "") : "") + mins + '</p>' +
+        (s || lessonOpen(next) ? '<a class="btn" href="#guide/day-' + n + '">' + (s ? "Carry on" : "Start lesson " + n) + ' &rarr;</a>' : '<span class="pill a">Opens January 2027</span>');
+    }
+    document.querySelectorAll("#lessons .item").forEach(function (el, i) {
+      el.classList.toggle("now", i === next);
+      var a = el.querySelector(".gd-link"); if (a) a.innerHTML = (lessonStarted(i) ? "Carry on" : "Step by step") + " &rarr;";
+    });
   }
   function renderAll() {
     renderList($("qs"), QS, "qs", function (i) { var g = window.GUIDES && GUIDES["qs-" + (i + 1)]; return ' <span class="pill">' + QS[i][1] + '</span>' + (g ? ' <span class="small">about ' + g.mins + ' min</span>' : "") + '<br><a class="gd-link" href="#guide/qs-' + (i + 1) + '">Step by step &rarr;</a>'; });
     renderList($("lessons"), LESSONS, "day", function (i) {
       var g = window.GUIDES && GUIDES["day-" + (i + 1)], mins = g ? ' <span class="small">about ' + g.mins + ' min</span>' : "";
       var pill = i === 0 ? ((me.plan === "early" || me.preview_videos) ? ' <span class="pill g">Open</span>' : ' <span class="pill g">Free to watch</span>') : ((me.plan === "early" || me.preview_videos) ? ' <span class="pill g">Open</span>' : ' <span class="pill a">Opens January 2027</span>');
-      return pill + mins + '<br><a class="gd-link" href="#guide/day-' + (i + 1) + '">Step by step &rarr;</a>';
+      var s = lessonSteps(i), steps = s && s.ticked > 0 && s.ticked < s.total ? '<span class="les-steps"><span class="t">' + s.ticked + ' of ' + s.total + ' steps done</span><span class="bar" aria-hidden="true"><i style="width:' + (s.ticked / s.total * 100) + '%"></i></span></span>' : "";
+      return pill + mins + steps + '<br><a class="gd-link" href="#guide/day-' + (i + 1) + '">Step by step &rarr;</a>';
     });
     counts();
   }
@@ -3255,7 +3323,7 @@
     document.querySelectorAll("[data-go]").forEach(function (a) { var on = a.dataset.go === hl; a.classList.toggle("on", on); on ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"); });
     sgOpenFor();
     document.querySelector('.mgroup .grp-h > a').classList.toggle("on", true);
-    if (page === "lessons") $("les-fold").open = true;
+    if (page === "lessons") { $("les-fold").open = true; renderAll(); }   // 5 Nov 2026: steps ticked in a guide show as soon as they come back
     if (page === "questions") loadFaq();
     if (page === "care") loadCare();
     if (page === "home" || page === "questions" || page === "help" || page === "post") ibLoad();
