@@ -23,7 +23,7 @@ const URL_ = `http://127.0.0.1:${PORT}/members/`;
 const FIX = { id: 7, outcome: "pr", pr_number: 4, pr_title: "Fix the weekly plan", diagnosis: "A date was read the wrong way.", files: ["signals_report.py"], urgent: true, fix_state: "open", at: "2026-10-29T09:00:00Z" };
 
 let passed = 0;
-async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, height: 900 }, store = {}, guides = null, voice = null, owner = false, preview = true, progress = [] }, f) {
+async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, height: 900 }, store = {}, guides = null, voice = null, owner = false, preview = true, progress = [], notices = [] }, f) {
   const browser = await chromium.launch(), page = await browser.newPage({ viewport: vp });
   const errs = [];
   page.on("pageerror", (e) => errs.push(String(e)));
@@ -33,6 +33,7 @@ async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, he
     if (p.endsWith("/rpc/my_robot_care_fixes")) return json(fixes);
     if (p.endsWith("/rest/v1/members")) return json([{ email: "a@example.com", plan: owner ? "owner" : "founding", status: "active", joined_at: "2026-10-01", updates_until: "2027-10-01", founding_no: 7, preview_videos: preview, robot_care: robotCare }]);
     if (p.endsWith("/rest/v1/member_progress") && route.request().method() === "GET") return json(progress.map((item) => ({ item, done: true })));
+    if (p.endsWith("/rest/v1/member_notices")) return json(notices);
     if (p.endsWith("/functions/v1/robot-care-accept")) return json({ ok: true, changed: 0 });
     if (p.endsWith("/rest/v1/lesson_guides")) return json(guides || [{ id: "day-1", data: { title: "Lesson 1", mins: 5, steps: [] } }]);
     if (p.endsWith("/functions/v1/lesson-media")) return json({ error: "stub" });
@@ -58,7 +59,28 @@ const GUIDE14 = [[10, 3], [30, 4], [20, 3], [40, 4], [45, 4], [25, 3], [25, 3], 
 const days = (n) => Array.from({ length: n }, (_, i) => `day:${i + 1}`);
 const lessons = async (page) => { await page.goto(URL_ + "#lessons"); await page.waitForFunction(() => /Lesson \d|last one/.test(document.querySelector("#les-panel").textContent) && document.querySelector("#les-left").textContent); };
 
+const LONG = "Your robot could not sign in to Trading 212.\n\nNothing was bought or sold, and your money is safe. " + "Open Set up my robot and re-enter your key and secret. ".repeat(6).trim();
+const NOTE = (id, title, body) => ({ id, kind: "action", title, body, link_url: null, link_text: null, starts_at: "2026-11-05T11:45:00Z" });
+
 try {
+  await run("messages: a long one folds, See more doesn't mark it read, Hide closes it", { vp: { width: 390, height: 844 }, notices: [NOTE(21, "A failed run needs you", LONG), NOTE(20, "Short one", "All sorted.")] }, async (page) => {
+    await page.goto(URL_ + "#home"); await page.waitForSelector('.note[data-id="21"]');
+    const n = '.note[data-id="21"]';
+    assert.equal((await page.textContent(`${n} p`)).trim(), "Your robot could not sign in to Trading 212.");
+    assert.equal(await vis(page, `${n} .note-rest`), false);
+    assert.equal((await page.textContent(`${n} .note-more`)).trim(), "See more");
+    assert.equal(await page.$('.note[data-id="20"] .note-more'), null, "a short message has no button");
+    await page.click(`${n} .note-more`);
+    assert.equal(await vis(page, `${n} .note-rest`), true);
+    assert.equal((await page.textContent(`${n} .note-more`)).trim(), "Hide");
+    assert.equal(await page.$eval(n, (e) => e.classList.contains("new")), true, "reading more leaves it unread");
+    await page.click(`${n} time`);   // marking it read repaints the list: it stays open
+    assert.equal(await page.$eval(n, (e) => e.classList.contains("read")), true);
+    assert.equal(await vis(page, `${n} .note-rest`), true);
+    await page.click(`${n} .note-more`);
+    assert.equal(await vis(page, `${n} .note-rest`), false);
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "no sideways scroll");
+  });
   await run("lesson progress: picks up the lesson they left, on a phone", { guides: GUIDE14, vp: { width: 390, height: 844 }, progress: [...days(3), "g:day-4:1", "g:day-4:2"] }, async (page) => {
     await lessons(page);
     assert.equal((await page.textContent("#les-count")).trim(), "3 of 14 done");
