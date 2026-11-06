@@ -49,9 +49,9 @@ export async function handle(req, store, realNow = Date.now()) {
 
   if (req.method === "POST" && req.action === "done") {
     const day = Number(req.day);
-    if (!Number.isInteger(day) || day < 1 || day > DAYS) return out(400, { error: "That day doesn't exist." });
-    if (day > open) return out(403, { error: `Day ${day} opens on ${openDate(started, day)}.` });
-    if (day > 1 && !done.includes(day - 1) ) return out(409, { error: `Finish day ${day - 1} first.` });
+    if (!Number.isInteger(day) || day < 1 || day > DAYS) return out(400, { error: "That week doesn't exist." });
+    if (day > open) return out(403, { error: `Week ${day} opens on ${openDate(started, day)}.` });
+    if (day > 1 && !done.includes(day - 1) ) return out(409, { error: `Finish week ${day - 1} first.` });
     done = await store.done(token, day);
   }
   const days = await store.days(open);
