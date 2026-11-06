@@ -127,7 +127,7 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
     </section>
 
     <section class="card" id="ordersCard">
-      <h2>What I did this week</h2>
+      <h2>What I did at Friday's close</h2>
       <div id="orders"></div>
     </section>
 
@@ -150,6 +150,12 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
       <p class="muted">These are past weeks. Naming a share here is not a tip to buy or sell it.</p>
     </section>
 
+    <section class="card hidden" id="tomorrowCard">
+      <h2>That's today done</h2>
+      <p id="tomorrowLine"></p>
+      <p class="hidden" id="jumpLine"><a class="btn ghost" id="jump" href="#">Preview only: jump to the next day</a></p>
+    </section>
+
     <section class="card accent hidden" id="endCard">
       <h2>Your seven weeks</h2>
       <p id="endline"></p>
@@ -162,7 +168,7 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
 
     <footer>
       Pretend money on real past prices. Past weeks don't predict future ones. The robot's rules are those in the kit today,
-      run on past prices: no costs or taxes are taken off, and a real account would not have matched this to the penny.
+      run on past prices, with the trading costs my tests charge taken off but no taxes. A real account would not have matched this to the penny.
       My Robot I.S.A. is software and a course, not financial advice. Our founder runs the robot with his own money, in an ISA.
       Capital at risk. <a href="https://myrobotisa.com/questions.html">Questions</a>
     </footer>
@@ -224,8 +230,14 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
     show(finished ? d.path.length : 0);
     drawChart(finished ? d.path.length : 0);
     // orders
-    $("ordersCard").classList.toggle("hidden", !d.orders.length);
-    $("orders").innerHTML = d.orders.map((o) => `<div class="order"><b class="${o.side === "Sold" ? "sold" : ""}">${o.side} ${o.label}</b> at Friday's close. ${o.why}</div>`).join("");
+    // every day says what the robot did, even when that was checking and holding
+    const big = d.orders.filter((o) => o.side === "Sold" || o.side === "Bought");
+    const tweaks = d.orders.filter((o) => o.side === "Topped up" || o.side === "Trimmed");
+    let html = big.map((o) => `<div class="order"><b class="${o.side === "Sold" ? "sold" : ""}">${o.side} ${o.label}</b>, <span class="num">${gbp(o.amount)}</span>. ${o.why}</div>`).join("");
+    if (tweaks.length) html += `<div class="order"><b>Rebalanced ${tweaks.length === 1 ? tweaks[0].label : `the other ${tweaks.length} funds`}</b> back to equal shares, <span class="num">${gbp(tweaks.reduce((a, o) => a + o.amount, 0))}</span> moved in all. I do this once a month.</div>`;
+    if (!d.orders.some((o) => o.kind === "fund")) html += `<div class="order"><b>Funds: no change.</b> I only rebalance them once a month.</div>`;
+    if (d.checked && !d.orders.some((o) => o.kind === "share")) html += `<div class="order"><b>Shares: no trades.</b> ${d.checked}</div>`;
+    $("orders").innerHTML = html;
     // finish / reveal
     $("finishCard").classList.toggle("hidden", finished);
     $("finish").textContent = `Finish day ${view} and reveal the names`;
@@ -235,8 +247,15 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
     $("revealCard").classList.toggle("hidden", !rv);
     if (rv) {
       $("revealTitle").textContent = `Day ${view}: who they were`;
-      $("reveal").innerHTML = rv.shares.map((s) => `<li><span class="lab">${s.label}</span> was <b>${s.name}</b>, which ${s.what}. <span class="num ${cls(s.change_pct)}">${pct(s.change_pct)}</span> that week.${s.founder_holds ? '<span class="tag">Our founder holds this now</span>' : ""}</li>`).join("");
+      $("reveal").innerHTML = rv.shares.map((s) => `<li><span class="lab">${s.label}</span> was <b>${s.name}</b>, which ${s.what}. ${s.bought ? "I bought it at Friday's close." : `<span class="num ${cls(s.change_pct)}">${pct(s.change_pct)}</span> that week.`}${s.founder_holds ? '<span class="tag">Our founder holds this now</span>' : ""}</li>`).join("");
       $("revealFunds").textContent = rv.funds_held && rv.funds_held.length ? `Our founder holds these funds now: ${rv.funds_held.join(", ")}.` : "";
+    }
+    const waiting = finished && view === S.unlocked && S.unlocked < 7;
+    $("tomorrowCard").classList.toggle("hidden", !waiting);
+    if (waiting && S.next_opens_at) {
+      $("tomorrowLine").textContent = `Day ${view + 1} opens ${londonDay(S.next_opens_at, { weekday: "long", day: "numeric", month: "long" })}. Come back then: it's the next real week, and your pot carries on from ${gbp2(d.pot_end)}.`;
+      $("jumpLine").classList.toggle("hidden", !NOW);
+      if (NOW) { const u = new URL(location.href); u.searchParams.set("now", new Date(Date.parse(S.next_opens_at) + 9 * 3600000).toISOString().slice(0, 19) + "Z"); $("jump").href = u.toString(); }
     }
     const last = S.days[6];
     $("endCard").classList.toggle("hidden", !(view === 7 && finished && last));

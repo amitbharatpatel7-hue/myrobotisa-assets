@@ -105,6 +105,9 @@ async function visitor(browser, n) {
       // the pot tile at Monday morning must equal the day's start (the pot carries)
       const potStart = DAYS[next - 1].pot_start; const want = next === 1 ? 10000 : DAYS[next - 2].pot_end;
       if (Math.abs(potStart - want) > 0.011) fail(`day ${next} starts at ${potStart}, the day before ended at ${want}`);
+      // every day says what the robot did at Friday's close, even if that was checking and holding
+      const lines = await page.$$eval("#orders .order", (o) => o.length);
+      if (!lines || await page.$eval("#ordersCard", (c) => c.classList.contains("hidden"))) fail(`day ${next} showed nothing for what the robot did`);
       await page.click("#finish");
       await page.waitForSelector("#revealCard:not(.hidden)");
       const shown = await page.$$eval("#reveal li", (l) => l.length);
@@ -124,7 +127,8 @@ async function visitor(browser, n) {
   if (done.length === 7) {
     stats.finished_all++;
     const end = await page.textContent("#endline");
-    if (!end.includes("£10,357.18") || !end.includes("£10,121.97")) fail(`end card said "${end}"`);
+    const g = (v) => "£" + v.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    if (!end.includes(g(DAYS[6].pot_end)) || !end.includes(g(DAYS[6].fund_end))) fail(`end card said "${end}"`);
   } else if (kind !== "gives_up") fail(`finished ${done.length} of 7 days`);
   for (const e of errs) fail(`page error: ${e}`);
   await ctx.close();
