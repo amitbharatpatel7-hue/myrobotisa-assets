@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="108">
+<meta name="mri-version" content="111">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -479,6 +479,9 @@
   .su-seg button{flex:1 1 120px;min-height:46px;border-radius:14px;border:2px solid var(--rule);background:var(--deep);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
   .su-seg button[aria-pressed="true"]{border-color:var(--green);background:#14402C;color:var(--green)}
   .su-seg small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+  .su-bt table{width:100%;border-collapse:collapse;margin-top:8px;font-size:13.5px} .su-bt th,.su-bt td{padding:8px 6px;border-top:1px solid var(--rule);text-align:left;vertical-align:top}
+  .su-bt thead th{color:var(--green);border-top:0} .su-bt tbody th{font-weight:500;color:var(--muted)} .su-bt td{color:var(--ink);font-weight:700;white-space:nowrap}
+  .su-step .su-bt-w{font-size:13px}
   .su-lock{display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding:12px 14px;border-radius:14px;background:var(--deep);border:1px solid var(--rule);font-size:13.5px;color:var(--muted)} .su-lock b{color:var(--ink)}
   .su-log{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:8px}
   .su-log li{display:flex;gap:10px;align-items:center;font-size:15px} .su-log li i{width:22px;height:22px;border-radius:50%;flex:none;border:2px solid var(--rule)}
@@ -1022,6 +1025,17 @@
             <p>Both can be changed later.</p>
             <label class="f">How bold?</label>
             <div class="su-seg" data-k="risk"><button type="button" data-v="balanced" aria-pressed="true">Balanced<small>the default</small></button><button type="button" data-v="adventurous" aria-pressed="false">Adventurous<small>bigger bold slice</small></button></div>
+            <details class="su-bt"><summary>How each did in our backtest</summary>
+              <p class="su-bt-w"><b>Past results from a backtest, not a forecast.</b> Weekly prices from 2020 to October 2026, after costs, starting fresh every week. Real results can be worse, and you can get back less than you put in.</p>
+              <table><thead><tr><th scope="col"></th><th scope="col">Balanced</th><th scope="col">Adventurous</th></tr></thead><tbody>
+                <tr><th scope="row">Worst fall</th><td>about 23%</td><td>about 30%</td></tr>
+                <tr><th scope="row">Fell 10%+ in year one</th><td>2 in 3</td><td>4 in 5</td></tr>
+                <tr><th scope="row">Safety stop at a fall of</th><td>15%</td><td>20%</td></tr>
+                <tr><th scope="row">Longest stop</th><td>9 weeks</td><td>24 weeks</td></tr>
+                <tr><th scope="row">Growth a year*</th><td>21% to 25%</td><td>25% to 27%</td></tr>
+              </tbody></table>
+              <p class="su-bt-w">*Starting in 2020, 2021 or 2022. "Fell 10%+" counts starts that dropped that far below their high at some point. Adventurous grew a little more and fell further on the way. Neither is the right answer for everyone: pick the fall you could sit through. A cautious option is being re-tested and isn't offered for now.</p>
+            </details>
             <label class="f">How often should it email you?</label>
             <div class="su-seg" data-k="freq"><button type="button" data-v="daily" aria-pressed="true">Every day<small>the default</small></button><button type="button" data-v="weekly" aria-pressed="false">Once a week<small>Fridays, plus anything that needs you</small></button></div>
             <label class="f" for="su-name">Name for your copy</label><input class="t" id="su-name" value="my-robot-isa" autocomplete="off" spellcheck="false">
@@ -1124,7 +1138,12 @@
               <label class="f" for="lv-rk">Read-only live key</label><input class="t" id="lv-rk" type="password" autocomplete="off" spellcheck="false">
               <label class="f" for="lv-rs">Read-only live secret</label><input class="t" id="lv-rs" type="password" autocomplete="off" spellcheck="false"></div></li>
           <li class="su-step locked" id="lv5"><div class="su-h"><b>Switch</b><span class="pill" id="lv5-st">Ready when you are</span></div>
-            <p>Your first live run starts fresh from cash, and your practice records stay in your copy.</p>
+            <p>Your first live plan starts fresh from cash, from whatever passes the rules that week. It doesn't wait for a better moment, and a dip in the first month is normal. Your practice records stay in your copy.</p>
+            <div id="lv-pace" hidden><label class="f">How do you want to start?</label>
+              <div class="su-chk">
+                <label><input type="radio" name="lv-pace" value="all"><span><b>All at once.</b> Your first plan builds your whole pot.</span></label>
+                <label><input type="radio" name="lv-pace" value="phased"><span><b>Over four weeks.</b> Each weekly plan brings in another quarter of your pot. The rest waits as cash in your ISA.</span></label></div>
+              <p class="small">In our backtest, starting over four weeks made big early falls smaller, not rarer, and it lagged when markets rose. Neither is right for everyone: it's your choice.</p></div>
             <label class="f" for="lv-ok">Type REAL MONEY to confirm</label><input class="t" id="lv-ok" autocomplete="off" spellcheck="false">
             <div class="row"><button class="btn" type="button" id="lv-go" disabled>Switch to real money</button></div>
             <ul class="su-log" id="lv-log" aria-live="polite"></ul>
@@ -2684,6 +2703,7 @@
     $("lv-gh").addEventListener("click", function () { ghConnect("live"); });
     $("lv-name").addEventListener("input", lvLookup);
     ["lv-c1", "lv-c2", "lv-c3"].forEach(function (id) { $(id).addEventListener("change", lvState); });
+    document.querySelectorAll('input[name="lv-pace"]').forEach(function (x) { x.addEventListener("change", lvState); });
     ["lv-tk", "lv-ts", "lv-rk", "lv-rs", "lv-ok", "lv-pk", "lv-ps"].forEach(function (id) { $(id).addEventListener("input", lvState); });
     $("lv-check").addEventListener("click", lvCheck); $("lv-go").addEventListener("click", lvGo); $("lv-bk").addEventListener("click", lvBack);
     if (SU.tok) ghConnected(); else if (SU.cfg && !SU.cfg.configured) $("lv-gh").disabled = true;
@@ -2699,12 +2719,15 @@
         if (!ours) { LV = null; msg.textContent = "Couldn't find a copy called " + name + " made by Set up my robot. Check the name above."; lvState(); return; }
         var sc = await gh("/repos/" + full + "/actions/secrets?per_page=100"), names = (sc.ok && sc.j && sc.j.secrets || []).map(function (x) { return x.name; });
         var ev = await gh("/repos/" + full + "/actions/variables/T212_ENV"), env = ev.ok && ev.j ? ev.j.value : "practice";
-        LV = { full: full, names: names, env: env };
+        // Hub D39: only offer the four-week start to a copy that has it; an older copy would ignore the setting and buy everything.
+        var wf = await gh("/repos/" + full + "/contents/.github/workflows/weekly-signals.yml"), pace = !!(wf.ok && wf.j && b64d(wf.j.content).indexOf("START_PACE") >= 0);
+        LV = { full: full, names: names, env: env, pace: pace && env !== "live" };
         msg.textContent = "Found your copy, " + name + ". " + (env === "live" ? "It's already on real money; you can still use this page to change its live key." : "It's on practice money.");
       } catch (e) { LV = null; msg.textContent = "Couldn't reach GitHub just now. Try again in a minute."; }
       lvState();
     }, 400);
   }
+  function lvPace() { var x = document.querySelector('input[name="lv-pace"]:checked'); return x ? x.value : ""; }
   function lvState() {
     if (!lvReady) return;
     var on = !!(SU.tok && LV), busy = !!SU.busy || !!(LV && LV.busy);
@@ -2714,8 +2737,8 @@
     var app = !!(LV && LV.names.indexOf("T212_READ_API_KEY") >= 0); $("lv-read").hidden = !app;
     var rk = $("lv-rk").value.trim(), rs = $("lv-rs").value.trim(), readOk = (!rk && !rs) || (rk.length > 10 && rs.length > 10);
     var key = $("lv-tk").value.trim().length > 10 && $("lv-ts").value.trim().length > 10 && readOk; lvStep(4, key ? "Ready" : "To do", key);
-    var sure = $("lv-ok").value.trim().toUpperCase() === "REAL MONEY";
-    $("lv-go").disabled = !(on && ticks && key && sure) || busy;
+    var sure = $("lv-ok").value.trim().toUpperCase() === "REAL MONEY", pc = lvPace(); $("lv-pace").hidden = !(LV && LV.pace);
+    $("lv-go").disabled = !(on && ticks && key && sure && (pc || !(LV && LV.pace))) || busy;
     $("lv-bk").disabled = !(on && $("lv-pk").value.trim().length > 10 && $("lv-ps").value.trim().length > 10) || busy;
   }
   async function lvCheck() {
@@ -2737,6 +2760,11 @@
       if ($("lv-rk").value.trim()) { vals.T212_READ_API_KEY = $("lv-rk").value.trim(); vals.T212_READ_API_SECRET = $("lv-rs").value.trim(); }
       if (!(await ghSeal(full, vals))) k.bad("Couldn't lock in your live key just now. Press Switch again in a minute.");
       vals = null; k.ok("Live key locked in");
+      if (LV.pace) {
+        var p = log("Saving how you want to start");
+        if (!(await ghVar(full, "START_PACE", lvPace()))) p.bad("Couldn't save how you want to start. Press Switch again in a minute.");
+        p.ok(lvPace() === "phased" ? "Starting over four weekly plans" : "Starting all at once");
+      }
       var e = log("Pointing your robot at your real account");
       if (!(await ghVar(full, "T212_ENV", "live"))) e.bad("Couldn't finish the switch just now. Press Switch again in a minute to finish it; nothing trades until you approve a plan.");
       LV.env = "live"; SU.liveCopy = full; e.ok("Your robot now uses your real account");
