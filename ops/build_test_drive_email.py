@@ -12,11 +12,11 @@ import lms_email as L  # noqa: E402
 
 LINK, UNSUB = "{{LINK}}", "{{UNSUB}}"
 OUT_JS = HERE / "supabase" / "functions" / "test-drive-email" / "email.js"
-HOW = ("Tap the button and day 1 opens: a real past market week, Monday to Friday, on £10,000 of pretend money. "
-       "Watch what I do, then finish the day to see who the hidden shares were. A new day opens each day for a week. "
-       "Miss one and it waits for you.")
+HOW = ("Tap the button and week 1 opens: a real past market week, Monday to Friday, on £10,000 of pretend money. "
+       "Watch what I do, then finish the week to see who the hidden shares were. A new week opens each day for seven "
+       "days. Miss one and it waits for you.")
 TICKS = ["Seven real weeks in a row from 2024, good and bad, on the rules members get",
-         "Stock names hidden while you watch, revealed at the end of each day",
+         "Stock names hidden while you watch, revealed when you finish each week",
          "Your pot next to the same £10,000 in an S&P 500 fund",
          "Nothing to install, nothing to buy, and the link is yours alone"]
 PICKED = ("The seven weeks were picked because the result is close to my typical seven weeks from 2020 to 2025. "
@@ -35,8 +35,8 @@ def build():
     ]
     html = L.render("Your test drive", "My Robot I.S.A.", "Seven real weeks, one a day, starting today.", blocks,
                     footnote=FOOT, brand=L.MRI_BRAND, internal=False, label="Free test drive", mood=L.MOODS["salesopen"],
-                    hero={"accent": "is open", "button": ("Start day 1", LINK, True)})
-    text = ("YOUR TEST DRIVE IS OPEN\nSeven real weeks, one a day, starting today.\n\n" + HOW + "\nStart day 1: " + LINK + "\n\n"
+                    hero={"accent": "is open", "button": ("Start week 1", LINK, True)})
+    text = ("YOUR TEST DRIVE IS OPEN\nSeven real weeks, one a day, starting today.\n\n" + HOW + "\nStart week 1: " + LINK + "\n\n"
             "WHAT YOU'LL SEE\n" + "\n".join("- " + t for t in TICKS) + "\n\nHOW THE WEEKS WERE PICKED\n" + PICKED +
             "\n\nThen you decide. And if I'm not for you, a fund is a fine, simple choice.\nAmit, founder\n\n--\n"
             "You're getting this because you joined the free test drive list at myrobotisa.com. Pretend money on real past "
