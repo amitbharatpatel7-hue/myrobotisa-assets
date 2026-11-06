@@ -483,6 +483,36 @@ def _pot(p: dict) -> str:
     return f'{head}<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{"".join(rows)}</table>'
 
 
+# v2.7.3 (6 Nov 2026, Amit picked option A): the safety stop card, laid out like the pot card. A bar of table cells runs from
+# the stop to the high point and empties as the pot falls, then the figures line up the same way as the pot's.
+#   safety: {"fill": 20, "tone": "green"|"amber"|"muted", "ends": (left_label, right_label),
+#            "rows": [(label, value_text), ...], "total": (label, value_text, share_text_or_None), "note": str}
+SAFETY_BLOCK = True
+_SAFETY_TONES = {"green": GREEN, "amber": AMBER_FG, "muted": MUTED}
+
+
+def _safety(s: dict) -> str:
+    fill = max(0, min(100, int(s.get("fill") or 0)))
+    colour = _SAFETY_TONES.get(s.get("tone"), MUTED)
+    cell = lambda pct, c: f'<td width="{pct}%" height="12" {_bg(c)}width:{pct}%;height:12px;line-height:12px;font-size:1px;">&nbsp;</td>'  # noqa: E731
+    cells = (cell(fill, colour) if fill else "") + (cell(100 - fill, CARD_DEEP) if fill < 100 else "")
+    left, right = s.get("ends") or ("", "")
+    end = lambda text, side: (f'<td align="{side}" style="padding-top:8px;font-size:12px;color:{MUTED};font-family:{FONT_STACK};'  # noqa: E731
+                              f'white-space:nowrap;">{esc(text)}</td>')
+    head = (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;border-radius:6px;overflow:hidden;"><tr>{cells}</tr></table>'
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:4px;"><tr>{end(left, "left")}{end(right, "right")}</tr></table>')
+    rows = "".join(f'<tr><td style="padding:8px 8px 0 0;font-size:15px;line-height:1.35;color:{INK};font-family:{FONT_STACK};">{esc(label)}</td>'
+                   f'<td align="right" valign="top" style="padding-top:8px;font-size:15px;font-weight:700;color:{INK};font-family:{FONT_STACK};white-space:nowrap;">{esc(value)}</td></tr>'
+                   for label, value in s.get("rows") or [])
+    rule = f'<tr><td colspan="2" height="12" style="height:12px;line-height:12px;font-size:1px;border-bottom:1px solid {HAIRLINE};">&nbsp;</td></tr>'
+    label, value, share = s["total"]
+    tail = (f' <span style="font-size:12px;font-weight:400;color:{MUTED};">{esc(share)}</span>' if share else "")
+    total = (f'<tr><td style="padding:12px 8px 0 0;font-size:15px;font-weight:800;color:{INK};font-family:{FONT_STACK};">{esc(label)}</td>'
+             f'<td align="right" valign="top" style="padding-top:12px;font-size:15px;font-weight:800;color:{INK};font-family:{FONT_STACK};white-space:nowrap;">{esc(value)}{tail}</td></tr>')
+    note = f'<div style="margin-top:14px;font-size:13px;line-height:1.55;color:{MUTED};font-family:{FONT_STACK};">{esc(s.get("note") or "")}</div>'
+    return f'{head}<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{rows}{rule}{total}</table>{note}'
+
+
 def _block_body(block: dict) -> str:
     return (_block_body_inner(block) + (_more(block["more"]) if block.get("more") else "")
             + (_link(block["link"]) if block.get("link") else "")
@@ -510,6 +540,8 @@ def _block_body_inner(block: dict) -> str:
         return _milestone(block["milestone"])
     if "pot" in block:
         return _pot(block["pot"])
+    if "safety" in block:
+        return _safety(block["safety"])
     if "days" in block:
         return _days(block["days"], block.get("today")) + ('<div style="height:14px;line-height:14px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
     if "table" in block:
