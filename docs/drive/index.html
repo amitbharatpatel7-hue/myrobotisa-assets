@@ -63,7 +63,7 @@ p{margin:6px 0}
 .week div.now{outline:2px solid var(--pink)}
 .week div .num{font-size:13px;display:block}
 @media (max-width:430px){.week{gap:4px}.week div{padding:6px 1px;font-size:11px}.week div .num{font-size:10.5px;letter-spacing:-.02em}}
-.btn{appearance:none;border:0;border-radius:999px;padding:12px 20px;font:inherit;font-weight:700;cursor:pointer;min-height:44px}
+.btn{display:inline-block;text-decoration:none;line-height:1.2;appearance:none;border:0;border-radius:999px;padding:12px 20px;font:inherit;font-weight:700;cursor:pointer;min-height:44px}
 .btn.primary{background:var(--green);color:#1C0A21}
 .btn.ghost{background:transparent;color:var(--fg);border:1.5px solid #fff}
 .btn:disabled{opacity:.5;cursor:default}
@@ -97,7 +97,7 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
 
   <div id="app" class="hidden">
     <header class="hero">
-      <div class="eyebrow" id="eyebrow">Free test drive · Day 1 of 7</div>
+      <div class="eyebrow" id="eyebrow">Free test drive · Week 1 of 7</div>
       <h1 id="title">1 April to 5 April 2024</h1>
       <div class="sub">Pretend money: <b>£10,000</b> on the robot's real rules (the Balanced mix), on real past prices. Share names stay hidden until you finish the day.</div>
     </header>
@@ -112,14 +112,14 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
       <div class="tile t3"><div class="k">This week</div><div class="v" id="wk">£0</div><div class="d" id="wkd">Press play</div></div>
     </div>
 
-    <section class="card" aria-label="Your seven days">
-      <h2>Your seven days</h2>
+    <section class="card" aria-label="Your seven weeks">
+      <h2>Your seven weeks</h2>
       <div class="strip" id="strip"></div>
       <p class="muted" id="nextline"></p>
     </section>
 
     <section class="card chart">
-      <h2>The pot, day by day</h2>
+      <h2>The pot, week by week</h2>
       <svg id="chart" viewBox="0 0 640 220" role="img" aria-label="Your pot against an S&amp;P 500 fund"></svg>
       <div class="legend"><span><i style="background:var(--green)"></i>Your pot</span><span><i style="background:var(--bench)"></i>S&amp;P 500 fund, same £10,000</span></div>
       <div class="week" id="week"></div>
@@ -127,7 +127,7 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
     </section>
 
     <section class="card" id="ordersCard">
-      <h2>What I did at Friday's close</h2>
+      <h2 id="ordersTitle">What I did on Friday</h2>
       <div id="orders"></div>
     </section>
 
@@ -137,9 +137,9 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
     </section>
 
     <section class="card accent" id="finishCard">
-      <h2>Finished watching?</h2>
+      <h2>Finished watching this week?</h2>
       <p>Finish the day to see who Stock A, B, C and the rest really were.</p>
-      <div class="row"><button class="btn primary" id="finish">Finish day 1 and reveal the names</button></div>
+      <div class="row"><button class="btn primary" id="finish">Finish week 1 and reveal the names</button></div>
       <p class="muted" id="finisherr" role="alert"></p>
     </section>
 
@@ -151,9 +151,9 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
     </section>
 
     <section class="card hidden" id="tomorrowCard">
-      <h2>That's today done</h2>
+      <h2>That's this week done</h2>
       <p id="tomorrowLine"></p>
-      <p class="hidden" id="jumpLine"><a class="btn ghost" id="jump" href="#">Preview only: jump to the next day</a></p>
+      <p class="hidden" id="jumpLine"><a class="btn ghost" id="jump" href="#">Preview only: jump to the next week</a></p>
     </section>
 
     <section class="card accent hidden" id="endCard">
@@ -207,7 +207,7 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
     const d = S.days[view - 1]; if (!d) return;
     const finished = S.done.includes(view);
     $("app").classList.remove("hidden"); $("msg").classList.add("hidden");
-    $("eyebrow").textContent = `Free test drive · Day ${view} of 7`;
+    $("eyebrow").textContent = `Free test drive · Week ${view} of 7`;
     $("title").textContent = d.title;
     $("how").classList.toggle("hidden", !(view === 1 || view === 7));
     // strip
@@ -218,18 +218,19 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
       b.disabled = !open; b.setAttribute("aria-current", String(n === view));
       if (S.done.includes(n)) b.classList.add("done");
       const dd = S.days[n - 1];
-      b.innerHTML = `<small>Day</small><b>${n}</b><small>${open ? (S.done.includes(n) ? "done" : "open") : "soon"}</small>`;
-      b.setAttribute("aria-label", open ? `Day ${n}${S.done.includes(n) ? ", finished" : ""}` : `Day ${n}, not open yet`);
+      b.innerHTML = `<small>Week</small><b>${n}</b><small>${open ? (S.done.includes(n) ? "done" : "open") : "soon"}</small>`;
+      b.setAttribute("aria-label", open ? `Week ${n}${S.done.includes(n) ? ", finished" : ""}` : `Week ${n}, opens later`);
       if (open) b.onclick = () => { stop(); view = n; render(); };
       strip.appendChild(b);
     }
     $("nextline").textContent = S.unlocked < 7 && S.next_opens_at
-      ? `Day ${S.unlocked + 1} opens ${londonDay(S.next_opens_at, { weekday: "long", day: "numeric", month: "long" })}. One day at a time, like the real thing.`
-      : "All seven days are open.";
+      ? `Week ${S.unlocked + 1} opens ${londonDay(S.next_opens_at, { weekday: "long", day: "numeric", month: "long" })}. One real week a day, for seven days.`
+      : "All seven weeks are open.";
     // tiles start at the end of the day if finished, else at Monday's start
     show(finished ? d.path.length : 0);
     drawChart(finished ? d.path.length : 0);
     // orders
+    $("ordersTitle").textContent = `What I did on Friday ${new Date(d.week_to + "T12:00:00Z").toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" })}`;
     // every day says what the robot did, even when that was checking and holding
     const big = d.orders.filter((o) => o.side === "Sold" || o.side === "Bought");
     const tweaks = d.orders.filter((o) => o.side === "Topped up" || o.side === "Trimmed");
@@ -240,20 +241,20 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
     $("orders").innerHTML = html;
     // finish / reveal
     $("finishCard").classList.toggle("hidden", finished);
-    $("finish").textContent = `Finish day ${view} and reveal the names`;
+    $("finish").textContent = `Finish week ${view} and reveal the names`;
     $("finish").disabled = view > 1 && !S.done.includes(view - 1);
-    $("finisherr").textContent = $("finish").disabled ? `Finish day ${view - 1} first.` : "";
+    $("finisherr").textContent = $("finish").disabled ? `Finish week ${view - 1} first.` : "";
     const rv = S.reveals.find((r) => r.day === view);
     $("revealCard").classList.toggle("hidden", !rv);
     if (rv) {
-      $("revealTitle").textContent = `Day ${view}: who they were`;
+      $("revealTitle").textContent = `Week ${view}: who they were`;
       $("reveal").innerHTML = rv.shares.map((s) => `<li><span class="lab">${s.label}</span> was <b>${s.name}</b>, which ${s.what}. ${s.bought ? "I bought it at Friday's close." : `<span class="num ${cls(s.change_pct)}">${pct(s.change_pct)}</span> that week.`}${s.founder_holds ? '<span class="tag">Our founder holds this now</span>' : ""}</li>`).join("");
       $("revealFunds").textContent = rv.funds_held && rv.funds_held.length ? `Our founder holds these funds now: ${rv.funds_held.join(", ")}.` : "";
     }
     const waiting = finished && view === S.unlocked && S.unlocked < 7;
     $("tomorrowCard").classList.toggle("hidden", !waiting);
     if (waiting && S.next_opens_at) {
-      $("tomorrowLine").textContent = `Day ${view + 1} opens ${londonDay(S.next_opens_at, { weekday: "long", day: "numeric", month: "long" })}. Come back then: it's the next real week, and your pot carries on from ${gbp2(d.pot_end)}.`;
+      $("tomorrowLine").textContent = `Week ${view + 1} opens ${londonDay(S.next_opens_at, { weekday: "long", day: "numeric", month: "long" })}. Come back then: it's the next real week, and your pot carries on from ${gbp2(d.pot_end)}.`;
       $("jumpLine").classList.toggle("hidden", !NOW);
       if (NOW) { const u = new URL(location.href); u.searchParams.set("now", new Date(Date.parse(S.next_opens_at) + 9 * 3600000).toISOString().slice(0, 19) + "Z"); $("jump").href = u.toString(); }
     }
@@ -269,9 +270,9 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
     const d = S.days[view - 1];
     const p = k ? d.path[k - 1] : { pot: d.pot_start, fund: d.fund_start };
     $("pot").textContent = gbp(p.pot); $("pot").className = "v";
-    $("potd").textContent = `${p.pot >= 10000 ? "+" : "−"}${Math.abs(100 * (p.pot / 10000 - 1)).toFixed(1)}% since day 1`;
+    $("potd").textContent = `${p.pot >= 10000 ? "+" : "−"}${Math.abs(100 * (p.pot / 10000 - 1)).toFixed(1)}% since the start`;
     $("fund").textContent = gbp(p.fund);
-    $("fundd").textContent = `${p.fund >= 10000 ? "+" : "−"}${Math.abs(100 * (p.fund / 10000 - 1)).toFixed(1)}% since day 1`;
+    $("fundd").textContent = `${p.fund >= 10000 ? "+" : "−"}${Math.abs(100 * (p.fund / 10000 - 1)).toFixed(1)}% since the start`;
     const wk = p.pot - d.pot_start;
     $("wk").textContent = signed(wk); $("wk").className = "v " + cls(wk);
     $("wkd").textContent = k ? (k === d.path.length ? "Friday close" : `${DOW[k - 1]} close`) : "Monday morning";
@@ -301,7 +302,7 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
     let g = "";
     const marks = [10000]; for (const v of [lo + pad, hi - pad]) if (Math.abs(y(v) - y(10000)) > 16) marks.push(v);
     for (const v of marks) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="#5A2A66" stroke-width="1"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="#D9C6DE" font-family="IBM Plex Mono, monospace">${gbp(v)}</text>`;
-    for (let n = 1; n <= 7; n++) g += `<text x="${x(5 * n - 2.5)}" y="${H - 6}" text-anchor="middle" font-size="${W < 500 ? 10 : 12}" fill="${n === view ? "#FF5CCB" : "#D9C6DE"}">${W < 500 ? n : "Day " + n}</text>`;
+    for (let n = 1; n <= 7; n++) g += `<text x="${x(5 * n - 2.5)}" y="${H - 6}" text-anchor="middle" font-size="${W < 500 ? 10 : 12}" fill="${n === view ? "#FF5CCB" : "#D9C6DE"}">${W < 500 ? "W" + n : "Week " + n}</text>`;
     $("chart").innerHTML = g + `<path d="${line("fund")}" fill="none" stroke="#7FB3FF" stroke-width="2"/><path d="${line("pot")}" fill="none" stroke="#00E87A" stroke-width="2.5"/>`;
   }
 
@@ -326,7 +327,7 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
     if (!/^[0-9a-f-]{36}$/i.test(T)) return say(`<h2>Open your test drive from your email</h2><p>This page needs the link from your test drive email. Not on the list yet? <a href="https://myrobotisa.com/join.html">Join the free test drive</a>.</p>`);
     try {
       S = await call();
-      if (S.state === "soon") return say(`<h2>Your test drive opens on Monday 7 December</h2><p>Keep this link: it's yours. From Monday 7 December it opens day 1, then one new day each day for a week.</p>`);
+      if (S.state === "soon") return say(`<h2>Your test drive opens on Monday 7 December</h2><p>Keep this link: it's yours. From Monday 7 December it opens week 1, then one new week each day for seven days.</p>`);
       view = Math.min(S.unlocked, (S.done.length ? Math.max(...S.done) : 0) + 1);
       render();
     } catch (e) { say(`<h2>That didn't work</h2><p>${e.message}</p>`); }
