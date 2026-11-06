@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#34003B">
+<title>Your test drive · My Robot I.S.A.</title>
+<meta name="description" content="Your free 7-day test drive: seven real past weeks, one a day, on £10,000 of pretend money.">
+<link rel="icon" href="../demo/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Poppins:wght@400;500;600;700;800&display=swap">
+<!-- The free test drive (hub D41, docs/TEST-DRIVE.md). Nothing secret is in this file: each day and its reveal come
+     from the test-drive function, and only once that day has opened (or been finished). -->
+<style>
+:root{
+  --bg:#34003B; --card:#4B1155; --inset:#3E0A47; --fg:#FFFFFF; --muted:#D9C6DE; --line:#6A3578; --grid:#5A2A66;
+  --chrome:#260029; --green:#00E87A; --pink:#FF5CCB; --gain:#00E87A; --loss:#FF8FB0; --warn:#FFD27A; --warn-bg:#4F3410;
+  --bench:#7FB3FF; color-scheme:dark;
+  --body:Poppins, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;
+  padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.wrap{max-width:880px;margin:0 auto;padding:20px 16px 96px;display:flex;flex-direction:column;gap:16px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+a{color:var(--green)}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fg);font-weight:800;letter-spacing:.02em}
+.brand img{width:34px;height:34px;border-radius:10px;background:var(--green)}
+.brand span b{color:var(--pink)}
+header.hero{background:var(--chrome);border-radius:18px;padding:20px 22px;display:grid;gap:6px}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--pink)}
+h1{margin:0;font-size:clamp(22px,4.6vw,30px);font-weight:800;letter-spacing:-.01em;text-wrap:balance}
+.sub{color:var(--muted);font-size:14px}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:560px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.tiles .t3{grid-column:1/-1}}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-width:0}
+.tile .k{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tile .v{font-family:var(--mono);font-size:clamp(20px,4vw,26px);font-weight:600;margin-top:2px}
+.tile .d{font-size:13px;color:var(--muted)}
+.up{color:var(--gain)} .down{color:var(--loss)}
+section.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;min-width:0}
+section.card.accent{border-left:4px solid var(--green)}
+h2{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px}
+p{margin:6px 0}
+.muted{color:var(--muted)}
+.strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.strip button{appearance:none;border:1px solid var(--line);background:var(--inset);color:var(--fg);border-radius:12px;padding:8px 2px;
+  font:inherit;font-size:12px;cursor:pointer;min-height:56px;display:grid;place-items:center;gap:0}
+.strip button b{font-size:15px}
+.strip button[aria-current="true"]{outline:2px solid var(--pink);outline-offset:1px}
+.strip button.done{background:#0F4A2E;border-color:#14402C}
+.strip button:disabled{opacity:.45;cursor:default}
+.strip small{font-size:10.5px;color:var(--muted)}
+.chart svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+.week{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-top:10px}
+.week div{background:var(--inset);border-radius:10px;padding:6px 4px;text-align:center;font-size:12px}
+.week div.now{outline:2px solid var(--pink)}
+.week div .num{font-size:13px;display:block}
+@media (max-width:430px){.week{gap:4px}.week div{padding:6px 1px;font-size:11px}.week div .num{font-size:10.5px;letter-spacing:-.02em}}
+.btn{appearance:none;border:0;border-radius:999px;padding:12px 20px;font:inherit;font-weight:700;cursor:pointer;min-height:44px}
+.btn.primary{background:var(--green);color:#1C0A21}
+.btn.ghost{background:transparent;color:var(--fg);border:1.5px solid #fff}
+.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:6px 4px;border-bottom:1px solid var(--line)}
+td{padding:7px 4px;border-bottom:1px solid var(--grid)}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (max-width:430px){table{font-size:13px}.mon{display:none}.order,.reveal li{font-size:14px}}
+td:first-child{overflow-wrap:anywhere}
+tr.grp td{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;padding-top:12px;border-bottom:0}
+.order{background:var(--inset);border-radius:12px;padding:10px 12px;margin-top:8px}
+.order b{color:var(--green)} .order b.sold{color:var(--loss)}
+.reveal li{margin:8px 0;list-style:none}
+.reveal ul{padding:0;margin:0}
+.reveal .lab{display:inline-block;min-width:68px;font-weight:700;color:var(--pink)}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 8px;border-radius:999px;background:#5A2366;color:var(--muted);margin-left:6px}
+.note{background:var(--warn-bg);color:var(--warn);border-radius:14px;padding:12px 14px;font-size:14px}
+.note b{color:#fff}
+footer{color:var(--muted);font-size:12.5px;line-height:1.55}
+.center{text-align:center}
+.hidden{display:none !important}
+@media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="brand" href="https://myrobotisa.com/"><img src="../avatar.png" alt="" width="34" height="34"><span>MY ROBOT <b>I.S.A.</b></span></a>
+
+  <div id="msg" class="hidden"></div>
+
+  <div id="app" class="hidden">
+    <header class="hero">
+      <div class="eyebrow" id="eyebrow">Free test drive · Day 1 of 7</div>
+      <h1 id="title">1 April to 5 April 2024</h1>
+      <div class="sub">Pretend money: <b>£10,000</b> on the robot's real rules (the Balanced mix), on real past prices. Share names stay hidden until you finish the day.</div>
+    </header>
+
+    <div class="note" id="how"><b>How these weeks were picked.</b> Seven real weeks in a row, from April to May 2024, picked because
+      the result is close to my typical seven weeks from 2020 to 2025. In that record, about 6 weeks in 10 were up. Past weeks
+      don't predict future ones.</div>
+
+    <div class="tiles">
+      <div class="tile"><div class="k">Your pot</div><div class="v" id="pot">£10,000</div><div class="d" id="potd">Start</div></div>
+      <div class="tile"><div class="k">S&amp;P 500 fund</div><div class="v" id="fund">£10,000</div><div class="d" id="fundd">The same £10,000</div></div>
+      <div class="tile t3"><div class="k">This week</div><div class="v" id="wk">£0</div><div class="d" id="wkd">Press play</div></div>
+    </div>
+
+    <section class="card" aria-label="Your seven days">
+      <h2>Your seven days</h2>
+      <div class="strip" id="strip"></div>
+      <p class="muted" id="nextline"></p>
+    </section>
+
+    <section class="card chart">
+      <h2>The pot, day by day</h2>
+      <svg id="chart" viewBox="0 0 640 220" role="img" aria-label="Your pot against an S&amp;P 500 fund"></svg>
+      <div class="legend"><span><i style="background:var(--green)"></i>Your pot</span><span><i style="background:var(--bench)"></i>S&amp;P 500 fund, same £10,000</span></div>
+      <div class="week" id="week"></div>
+      <div class="row" style="margin-top:12px"><button class="btn primary" id="play">Play the week</button><span class="muted" id="playnote">Monday to Friday, on that week's real closing prices.</span></div>
+    </section>
+
+    <section class="card" id="ordersCard">
+      <h2>What I did this week</h2>
+      <div id="orders"></div>
+    </section>
+
+    <section class="card">
+      <h2>What I hold</h2>
+      <table><thead><tr><th>Holding</th><th class="n mon">Monday</th><th class="n">Friday</th><th class="n">Week</th></tr></thead><tbody id="hold"></tbody></table>
+    </section>
+
+    <section class="card accent" id="finishCard">
+      <h2>Finished watching?</h2>
+      <p>Finish the day to see who Stock A, B, C and the rest really were.</p>
+      <div class="row"><button class="btn primary" id="finish">Finish day 1 and reveal the names</button></div>
+      <p class="muted" id="finisherr" role="alert"></p>
+    </section>
+
+    <section class="card reveal accent hidden" id="revealCard" aria-live="polite">
+      <h2 id="revealTitle">Who they were</h2>
+      <ul id="reveal"></ul>
+      <p class="muted" id="revealFunds"></p>
+      <p class="muted">These are past weeks. Naming a share here is not a tip to buy or sell it.</p>
+    </section>
+
+    <section class="card accent hidden" id="endCard">
+      <h2>Your seven weeks</h2>
+      <p id="endline"></p>
+      <p class="muted">These seven weeks were picked because they are close to my typical seven weeks from 2020 to 2025, and in
+        that record about 6 weeks in 10 were up. Some runs of seven weeks were much better than this and some much worse.</p>
+      <p><b>What happens next? Nothing, unless you want it to.</b> You haven't bought anything. Sales open in January: the first
+        100 founding members pay £99 once, then it's £199. And if I'm not for you, a fund is a fine, simple choice.</p>
+      <div class="row"><a class="btn ghost" href="https://myrobotisa.com/what-you-get.html">What you get</a></div>
+    </section>
+
+    <footer>
+      Pretend money on real past prices. Past weeks don't predict future ones. The robot's rules are those in the kit today,
+      run on past prices: no costs or taxes are taken off, and a real account would not have matched this to the penny.
+      My Robot I.S.A. is software and a course, not financial advice. Our founder runs the robot with his own money, in an ISA.
+      Capital at risk. <a href="https://myrobotisa.com/questions.html">Questions</a>
+    </footer>
+  </div>
+</div>
+<script>
+(() => {
+  const FN = "https://vxnestmhtjotidhzzqbo.supabase.co/functions/v1/test-drive";
+  const q = new URLSearchParams(location.search);
+  const T = (q.get("t") || "").trim();
+  const NOW = q.get("now");           // honoured by the function for preview and sim links only
+  const $ = (id) => document.getElementById(id);
+  const gbp = (v) => "£" + Number(v).toLocaleString("en-GB", { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  const gbp2 = (v) => "£" + Number(v).toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const signed = (v) => (v >= 0 ? "+" : "−") + gbp(Math.abs(v));
+  const pct = (v) => (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(1) + "%";
+  const cls = (v) => (v >= 0 ? "up" : "down");
+  const DOW = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+  let S = null, view = 1, timer = null;
+
+  function say(html) { $("app").classList.add("hidden"); const m = $("msg"); m.className = "card"; m.innerHTML = html; m.classList.remove("hidden"); }
+
+  async function call(body) {
+    const opt = body ? { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ t: T, now: NOW || undefined, ...body }) } : {};
+    const url = body ? FN : `${FN}?t=${encodeURIComponent(T)}${NOW ? "&now=" + encodeURIComponent(NOW) : ""}`;
+    let r;
+    try { r = await fetch(url, opt); } catch { throw new Error("We couldn't reach the test drive. Check your connection and try again."); }
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) { const e = new Error(j.error || "Something went wrong on our side. Try again in a minute."); e.status = r.status; throw e; }
+    return j;
+  }
+
+  const londonDay = (iso, opts) => new Date(iso).toLocaleDateString("en-GB", { timeZone: "Europe/London", ...opts });
+
+  function render() {
+    const d = S.days[view - 1]; if (!d) return;
+    const finished = S.done.includes(view);
+    $("app").classList.remove("hidden"); $("msg").classList.add("hidden");
+    $("eyebrow").textContent = `Free test drive · Day ${view} of 7`;
+    $("title").textContent = d.title;
+    $("how").classList.toggle("hidden", !(view === 1 || view === 7));
+    // strip
+    const strip = $("strip"); strip.innerHTML = "";
+    for (let n = 1; n <= 7; n++) {
+      const b = document.createElement("button");
+      const open = n <= S.unlocked;
+      b.disabled = !open; b.setAttribute("aria-current", String(n === view));
+      if (S.done.includes(n)) b.classList.add("done");
+      const dd = S.days[n - 1];
+      b.innerHTML = `<small>Day</small><b>${n}</b><small>${open ? (S.done.includes(n) ? "done" : "open") : "soon"}</small>`;
+      b.setAttribute("aria-label", open ? `Day ${n}${S.done.includes(n) ? ", finished" : ""}` : `Day ${n}, not open yet`);
+      if (open) b.onclick = () => { stop(); view = n; render(); };
+      strip.appendChild(b);
+    }
+    $("nextline").textContent = S.unlocked < 7 && S.next_opens_at
+      ? `Day ${S.unlocked + 1} opens ${londonDay(S.next_opens_at, { weekday: "long", day: "numeric", month: "long" })}. One day at a time, like the real thing.`
+      : "All seven days are open.";
+    // tiles start at the end of the day if finished, else at Monday's start
+    show(finished ? d.path.length : 0);
+    drawChart(finished ? d.path.length : 0);
+    // orders
+    $("ordersCard").classList.toggle("hidden", !d.orders.length);
+    $("orders").innerHTML = d.orders.map((o) => `<div class="order"><b class="${o.side === "Sold" ? "sold" : ""}">${o.side} ${o.label}</b> at Friday's close. ${o.why}</div>`).join("");
+    // finish / reveal
+    $("finishCard").classList.toggle("hidden", finished);
+    $("finish").textContent = `Finish day ${view} and reveal the names`;
+    $("finish").disabled = view > 1 && !S.done.includes(view - 1);
+    $("finisherr").textContent = $("finish").disabled ? `Finish day ${view - 1} first.` : "";
+    const rv = S.reveals.find((r) => r.day === view);
+    $("revealCard").classList.toggle("hidden", !rv);
+    if (rv) {
+      $("revealTitle").textContent = `Day ${view}: who they were`;
+      $("reveal").innerHTML = rv.shares.map((s) => `<li><span class="lab">${s.label}</span> was <b>${s.name}</b>, which ${s.what}. <span class="num ${cls(s.change_pct)}">${pct(s.change_pct)}</span> that week.${s.founder_holds ? '<span class="tag">Our founder holds this now</span>' : ""}</li>`).join("");
+      $("revealFunds").textContent = rv.funds_held && rv.funds_held.length ? `Our founder holds these funds now: ${rv.funds_held.join(", ")}.` : "";
+    }
+    const last = S.days[6];
+    $("endCard").classList.toggle("hidden", !(view === 7 && finished && last));
+    if (last) $("endline").innerHTML = `Seven real weeks: your pot went from <b>£10,000</b> to <b class="${cls(last.pot_end - 10000)}">${gbp2(last.pot_end)}</b>, and the same £10,000 in an S&amp;P 500 fund went to <b>${gbp2(last.fund_end)}</b>. That's ${pct(100 * (last.pot_end / 10000 - 1))} against ${pct(100 * (last.fund_end / 10000 - 1))}, after a fall of about ${Math.abs(100 * (minPot() / 10000 - 1)).toFixed(1)}% on the way.`;
+  }
+
+  function minPot() { let m = 10000; for (const d of S.days) for (const p of d.path) m = Math.min(m, p.pot); return m; }
+
+  // k = how many of the week's trading days have played (0 = Monday morning, path.length = Friday close)
+  function show(k) {
+    const d = S.days[view - 1];
+    const p = k ? d.path[k - 1] : { pot: d.pot_start, fund: d.fund_start };
+    $("pot").textContent = gbp(p.pot); $("pot").className = "v";
+    $("potd").textContent = `${p.pot >= 10000 ? "+" : "−"}${Math.abs(100 * (p.pot / 10000 - 1)).toFixed(1)}% since day 1`;
+    $("fund").textContent = gbp(p.fund);
+    $("fundd").textContent = `${p.fund >= 10000 ? "+" : "−"}${Math.abs(100 * (p.fund / 10000 - 1)).toFixed(1)}% since day 1`;
+    const wk = p.pot - d.pot_start;
+    $("wk").textContent = signed(wk); $("wk").className = "v " + cls(wk);
+    $("wkd").textContent = k ? (k === d.path.length ? "Friday close" : `${DOW[k - 1]} close`) : "Monday morning";
+    // holdings: Friday's numbers stay hidden until the week has played, so the table can't give the ending away
+    const fri = k >= d.path.length;
+    const funds = d.holdings.filter((h) => h.kind === "fund"), shares = d.holdings.filter((h) => h.kind === "share");
+    const row = (h) => `<tr><td>${h.label}</td><td class="n mon">${gbp2(h.start)}</td><td class="n">${fri ? gbp2(h.end) : "·"}</td><td class="n ${fri ? cls(h.change_pct) : ""}">${fri ? pct(h.change_pct) : "·"}</td></tr>`;
+    $("hold").innerHTML = `<tr class="grp"><td colspan="4">Steady funds · 75%</td></tr>${funds.map(row).join("")}<tr class="grp"><td colspan="4">Bolder picks · 25%, names hidden</td></tr>${shares.map(row).join("")}`;
+    $("week").innerHTML = d.path.map((pt, i) => `<div class="${i === k - 1 ? "now" : ""}">${DOW[i]}<span class="num ${i < k ? cls(pt.pot - (i ? d.path[i - 1].pot : d.pot_start)) : ""}">${i < k ? gbp(pt.pot) : "·"}</span></div>`).join("");
+  }
+
+  function drawChart(k) {
+    const pts = [{ pot: 10000, fund: 10000 }];
+    for (let n = 1; n <= S.days.length; n++) {
+      const d = S.days[n - 1];
+      const upto = n < view ? d.path.length : n === view ? k : 0;
+      for (let i = 0; i < upto; i++) pts.push(d.path[i]);
+      if (n >= view) break;
+    }
+    const box = $("chart").parentElement.clientWidth || 640;
+    const W = Math.max(280, Math.round(box)), H = W < 500 ? 190 : 220, L = 58, R = 6, Tp = 10, B = 24, total = 35;
+    $("chart").setAttribute("viewBox", `0 0 ${W} ${H}`);
+    const vals = pts.flatMap((p) => [p.pot, p.fund]).concat([10000]);
+    let lo = Math.min(...vals), hi = Math.max(...vals); const pad = Math.max(60, (hi - lo) * 0.15); lo -= pad; hi += pad;
+    const x = (i) => L + (W - L - R) * i / total, y = (v) => Tp + (H - Tp - B) * (1 - (v - lo) / (hi - lo));
+    const line = (key) => pts.map((p, i) => `${i ? "L" : "M"}${x(i).toFixed(1)},${y(p[key]).toFixed(1)}`).join("");
+    let g = "";
+    const marks = [10000]; for (const v of [lo + pad, hi - pad]) if (Math.abs(y(v) - y(10000)) > 16) marks.push(v);
+    for (const v of marks) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="#5A2A66" stroke-width="1"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="#D9C6DE" font-family="IBM Plex Mono, monospace">${gbp(v)}</text>`;
+    for (let n = 1; n <= 7; n++) g += `<text x="${x(5 * n - 2.5)}" y="${H - 6}" text-anchor="middle" font-size="${W < 500 ? 10 : 12}" fill="${n === view ? "#FF5CCB" : "#D9C6DE"}">${W < 500 ? n : "Day " + n}</text>`;
+    $("chart").innerHTML = g + `<path d="${line("fund")}" fill="none" stroke="#7FB3FF" stroke-width="2"/><path d="${line("pot")}" fill="none" stroke="#00E87A" stroke-width="2.5"/>`;
+  }
+
+  function stop() { if (timer) clearInterval(timer); timer = null; $("play").textContent = "Play the week"; }
+  $("play").onclick = () => {
+    if (timer) return stop();
+    const d = S.days[view - 1]; let k = 0;
+    $("play").textContent = "Pause";
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const step = () => { k++; show(k); drawChart(k); if (k >= d.path.length) { stop(); $("play").textContent = "Play it again"; } };
+    if (reduce) { k = d.path.length - 1; step(); return; }
+    show(0); drawChart(0); timer = setInterval(step, 900);
+  };
+
+  $("finish").onclick = async () => {
+    $("finish").disabled = true; $("finisherr").textContent = "";
+    try { stop(); S = await call({ action: "done", day: view }); render(); $("revealCard").scrollIntoView({ behavior: "smooth", block: "start" }); }
+    catch (e) { $("finisherr").textContent = e.message; $("finish").disabled = false; }
+  };
+
+  async function start() {
+    if (!/^[0-9a-f-]{36}$/i.test(T)) return say(`<h2>Open your test drive from your email</h2><p>This page needs the link from your test drive email. Not on the list yet? <a href="https://myrobotisa.com/join.html">Join the free test drive</a>.</p>`);
+    try {
+      S = await call();
+      if (S.state === "soon") return say(`<h2>Your test drive opens on Monday 7 December</h2><p>Keep this link: it's yours. From Monday 7 December it opens day 1, then one new day each day for a week.</p>`);
+      view = Math.min(S.unlocked, (S.done.length ? Math.max(...S.done) : 0) + 1);
+      render();
+    } catch (e) { say(`<h2>That didn't work</h2><p>${e.message}</p>`); }
+  }
+  addEventListener("resize", () => { if (S && S.days) drawChart(timer ? 0 : (S.done.includes(view) ? S.days[view - 1].path.length : 0)); });
+  start();
+})();
+</script>
+</body>
+</html>
