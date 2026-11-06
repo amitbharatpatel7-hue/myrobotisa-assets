@@ -23,7 +23,7 @@ const URL_ = `http://127.0.0.1:${PORT}/members/`;
 const FIX = { id: 7, outcome: "pr", pr_number: 4, pr_title: "Fix the weekly plan", diagnosis: "A date was read the wrong way.", files: ["signals_report.py"], urgent: true, fix_state: "open", at: "2026-10-29T09:00:00Z" };
 
 let passed = 0;
-async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, height: 900 }, store = {}, guides = null, voice = null, owner = false }, f) {
+async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, height: 900 }, store = {}, guides = null, voice = null, owner = false, preview = true, progress = [], notices = [] }, f) {
   const browser = await chromium.launch(), page = await browser.newPage({ viewport: vp });
   const errs = [];
   page.on("pageerror", (e) => errs.push(String(e)));
@@ -31,7 +31,9 @@ async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, he
     const p = new URL(route.request().url()).pathname;
     const json = (o) => route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(o) });
     if (p.endsWith("/rpc/my_robot_care_fixes")) return json(fixes);
-    if (p.endsWith("/rest/v1/members")) return json([{ email: "a@example.com", plan: owner ? "owner" : "founding", status: "active", joined_at: "2026-10-01", updates_until: "2027-10-01", founding_no: 7, preview_videos: true, robot_care: robotCare }]);
+    if (p.endsWith("/rest/v1/members")) return json([{ email: "a@example.com", plan: owner ? "owner" : "founding", status: "active", joined_at: "2026-10-01", updates_until: "2027-10-01", founding_no: 7, preview_videos: preview, robot_care: robotCare }]);
+    if (p.endsWith("/rest/v1/member_progress") && route.request().method() === "GET") return json(progress.map((item) => ({ item, done: true })));
+    if (p.endsWith("/rest/v1/member_notices")) return json(notices);
     if (p.endsWith("/functions/v1/robot-care-accept")) return json({ ok: true, changed: 0 });
     if (p.endsWith("/rest/v1/lesson_guides")) return json(guides || [{ id: "day-1", data: { title: "Lesson 1", mins: 5, steps: [] } }]);
     if (p.endsWith("/functions/v1/lesson-media")) return json({ error: "stub" });
@@ -51,8 +53,87 @@ const LX = { id: "day-12", data: { title: "Limits and an off switch", kind: "Les
   { t: "We took the L", d: "Words for five.", lx: { from: 99, to: 135, try: { type: "points", title: "We took the L", items: ["A rule, not a promise"] } } } ] } };
 const side = "#mgroup-sub";
 const vis = (page, sel) => page.isVisible(sel);
+// Lesson progress (5 Nov 2026): real lengths and step counts, so the time left is the sum a member would get
+const GUIDE14 = [[10, 3], [30, 4], [20, 3], [40, 4], [45, 4], [25, 3], [25, 3], [25, 3], [20, 3], [25, 3], [20, 3], [5, 5], [20, 3], [30, 3]]
+  .map(([mins, n], i) => ({ id: `day-${i + 1}`, data: { title: `Lesson ${i + 1}`, kind: `Lesson ${i + 1}`, mins, tips: [], steps: Array.from({ length: n }, (_, k) => ({ t: `Step ${k + 1}`, d: "Words." })) } }));
+const days = (n) => Array.from({ length: n }, (_, i) => `day:${i + 1}`);
+const lessons = async (page) => { await page.goto(URL_ + "#lessons"); await page.waitForFunction(() => /Lesson \d|last one/.test(document.querySelector("#les-panel").textContent) && document.querySelector("#les-left").textContent); };
+
+const LONG = "Your robot could not sign in to Trading 212.\n\nNothing was bought or sold, and your money is safe. " + "Open Set up my robot and re-enter your key and secret. ".repeat(6).trim();
+const NOTE = (id, title, body) => ({ id, kind: "action", title, body, link_url: null, link_text: null, starts_at: "2026-11-05T11:45:00Z" });
 
 try {
+  await run("messages: a long one folds, See more doesn't mark it read, Hide closes it", { vp: { width: 390, height: 844 }, notices: [NOTE(21, "A failed run needs you", LONG), NOTE(20, "Short one", "All sorted.")] }, async (page) => {
+    await page.goto(URL_ + "#home"); await page.waitForSelector('.note[data-id="21"]');
+    const n = '.note[data-id="21"]';
+    assert.equal((await page.textContent(`${n} p`)).trim(), "Your robot could not sign in to Trading 212.");
+    assert.equal(await vis(page, `${n} .note-rest`), false);
+    assert.equal((await page.textContent(`${n} .note-more`)).trim(), "See more");
+    assert.equal(await page.$('.note[data-id="20"] .note-more'), null, "a short message has no button");
+    await page.click(`${n} .note-more`);
+    assert.equal(await vis(page, `${n} .note-rest`), true);
+    assert.equal((await page.textContent(`${n} .note-more`)).trim(), "Hide");
+    assert.equal(await page.$eval(n, (e) => e.classList.contains("new")), true, "reading more leaves it unread");
+    await page.click(`${n} time`);   // marking it read repaints the list: it stays open
+    assert.equal(await page.$eval(n, (e) => e.classList.contains("read")), true);
+    assert.equal(await vis(page, `${n} .note-rest`), true);
+    await page.click(`${n} .note-more`);
+    assert.equal(await vis(page, `${n} .note-rest`), false);
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "no sideways scroll");
+  });
+  await run("lesson progress: picks up the lesson they left, on a phone", { guides: GUIDE14, vp: { width: 390, height: 844 }, progress: [...days(3), "g:day-4:1", "g:day-4:2"] }, async (page) => {
+    await lessons(page);
+    assert.equal((await page.textContent("#les-count")).trim(), "3 of 14 done");
+    assert.equal((await page.textContent("#les-left")).trim(), "About 4 hours 40 min to go");
+    const next = await page.textContent("#les-next");
+    assert.ok(/Pick up where you left off/.test(next) && /Lesson 4: Make it yours/.test(next) && /2 of 4 steps done · about 40 min/.test(next), next);
+    assert.equal(await page.getAttribute("#les-next .btn", "href"), "#guide/day-4");
+    assert.equal((await page.textContent("#les-next .btn")).trim(), "Carry on →");
+    const card = "#lessons .item:nth-child(4)";
+    assert.equal(await page.$eval(card, (e) => e.classList.contains("now")), true);
+    assert.equal((await page.textContent(`${card} .les-steps .t`)).trim(), "2 of 4 steps done");
+    assert.equal((await page.textContent(`${card} .gd-link`)).trim(), "Carry on →");
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "no sideways scroll");
+    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, "lessons-390.png") });
+    await page.click(`${card} .tick`);   // ticked by hand: the panel moves on with no reload
+    assert.equal((await page.textContent("#les-count")).trim(), "4 of 14 done");
+    assert.ok(/Up next/.test(await page.textContent("#les-next")) && /Lesson 5: Backtest honestly/.test(await page.textContent("#les-next")));
+    assert.equal(await vis(page, `${card} .les-steps`), false);
+    assert.equal((await page.textContent(`${card} .gd-link`)).trim(), "Step by step →");
+    assert.equal(await page.$eval("#lessons .item:nth-child(5)", (e) => e.classList.contains("now")), true);
+  });
+  await run("lesson progress: a step ticked in a guide shows on the way back", { guides: GUIDE14, progress: days(3) }, async (page) => {
+    await lessons(page);
+    assert.ok(/Start lesson 4/.test(await page.textContent("#les-next .btn")));
+    await page.click("#les-next .btn"); await page.waitForSelector('[data-gd="next"]');
+    await page.click('[data-gd="next"]');
+    await page.evaluate(() => { location.hash = "#lessons"; }); await page.waitForSelector("#les-next .btn >> text=Carry on");
+    assert.equal((await page.textContent("#lessons .item:nth-child(4) .les-steps .t")).trim(), "1 of 4 steps done");
+    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, "lessons-1280.png") });
+  });
+  await run("lesson progress: first visit", { guides: GUIDE14 }, async (page) => {
+    await lessons(page);
+    assert.equal((await page.textContent("#les-count")).trim(), "0 of 14 done");
+    assert.equal((await page.textContent("#les-left")).trim(), "About 5 hours 40 min in all, at your own pace");
+    assert.ok(/Start here/.test(await page.textContent("#les-next")));
+    assert.equal((await page.textContent("#les-next .btn")).trim(), "Start lesson 1 →");
+  });
+  await run("lesson progress: a lesson that hasn't opened yet has no button", { guides: GUIDE14, preview: false, progress: days(1) }, async (page) => {
+    await lessons(page);
+    assert.ok(/Lesson 2: Get it running/.test(await page.textContent("#les-next")));
+    assert.equal((await page.textContent("#les-next .pill")).trim(), "Opens January 2027");
+    assert.equal(await page.$("#les-next .btn"), null);
+    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, "lessons-locked-1280.png") });
+  });
+  await run("lesson progress: all 14 done", { guides: GUIDE14, progress: days(14) }, async (page) => {
+    await lessons(page);
+    assert.equal((await page.textContent("#les-count")).trim(), "All 14 done");
+    assert.equal((await page.textContent("#les-left")).trim(), "That was the last one.");
+    assert.ok(await page.$eval("#les-next img", (i) => i.complete && i.naturalWidth > 0), "the high five loads");
+    assert.equal(await page.$("#les-next .btn"), null);
+    assert.equal(await page.$$eval("#lessons .item.now", (e) => e.length), 0);
+    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, "lessons-all-1280.png") });
+  });
   await run("interactive lesson: touch everything, no marks, no sideways scroll", { guides: [LX], vp: { width: 390, height: 844 } }, async (page) => {
     await page.goto(URL_ + "#guide/day-12"); await page.waitForSelector("#lx-screen");
     assert.equal((await page.textContent("#h-gd")).trim(), "Limits and an off switch");

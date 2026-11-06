@@ -403,7 +403,7 @@
         <p>It applies above your personal savings allowance. Inside any ISA, interest stays tax-free.</p>
       </div>
     </div>
-    <p class="lead" style="margin-top:16px">So the ISA is worth more from April, not less. If cash is all you've ever used, nothing forces you to change. If you'd like to try investing part of your allowance, My Robot I.S.A. opens in January: practise on paper money for a few weeks and make up your own mind before the new tax year starts.</p>
+    <p class="lead" style="margin-top:16px">So the ISA is worth more from April, not less. If cash is all you've ever used, nothing forces you to change. If you'd like to try investing part of your allowance, My Robot I.S.A. opens in January: practise on paper money for a few weeks and make up your own mind.</p>
     <p class="small">The government also plans a new incentive for people putting money into a stocks and shares ISA for the first time, designed with the industry; there are no details yet. Investing can lose money; cash in a cash ISA can't fall in value. Announced in the Budget on 28 October 2026 (<a href="https://www.gov.uk/government/news/budget-2026-breathing-space-for-today-hope-for-the-future">GOV.UK</a>); details can change before they take effect.</p>
   </section>
 
@@ -416,7 +416,7 @@
       <tr><td style="padding:8px 0;border-bottom:1px solid var(--rule)">Outside, basic-rate taxpayer<br><span class="small">18% on the £7,000 above the £3,000 allowance, if it fits in your basic-rate band</span></td><td style="padding:8px 0;border-bottom:1px solid var(--rule);text-align:right">£1,260 tax · keep £8,740</td></tr>
       <tr><td style="padding:8px 0">Outside, higher-rate taxpayer<br><span class="small">24% on the £7,000 above the allowance</span></td><td style="padding:8px 0;text-align:right">£1,680 tax · keep £8,320</td></tr>
     </table>
-    <p class="small" style="margin-top:12px">Dividends outside an ISA: £500 a year tax-free, then 10.75% (basic rate) or 35.75% (higher rate). Already have an ISA with another provider? You can pay into more than one stocks and shares ISA in a tax year, within the £20,000 total. To move an existing ISA, ask the new provider for an ISA transfer. Never withdraw and pay back in, or you can use up your allowance and lose the tax-free status on that money. Day 13 walks through it. Tax rules can change and depend on your circumstances. 2026/27 figures from <a href="https://www.gov.uk/capital-gains-tax/rates">GOV.UK</a>.</p>
+    <p class="small" style="margin-top:12px">Dividends outside an ISA: £500 a year tax-free, then 10.75% (basic rate) or 35.75% (higher rate). Already have an ISA with another provider? You can pay into more than one stocks and shares ISA in a tax year, within the £20,000 total. To move an existing ISA, ask the new provider for an ISA transfer. Never withdraw and pay back in, or you can use up your allowance and lose the tax-free status on that money. Lesson 13 walks through it. Tax rules can change and depend on your circumstances. 2026/27 figures from <a href="https://www.gov.uk/capital-gains-tax/rates">GOV.UK</a>.</p>
   </div>
 
   <div class="card" id="calc">
@@ -661,7 +661,7 @@
   fetch("status.json",{cache:"no-store"}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(d){
     var f=function(id,v){ document.getElementById(id).textContent=v; };
     f("r-weeks", d.weeks_run); f("r-missed", d.missed_weeks); f("r-orders", d.orders_sent);
-    var st=document.getElementById("r-state"); st.textContent = d.trading==="halted" ? "Halted" : "Running"; if(d.trading==="halted") st.classList.add("off");
+    var st=document.getElementById("r-state"); st.textContent = d.trading==="halted" ? "Paused" : "Running"; if(d.trading==="halted") st.classList.add("off");
     var ld=function(iso){ try{ return new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Europe/London",timeZoneName:"short"}).format(new Date(iso)); }catch(e){ return iso; } };
     meta.textContent = "Last weekly run: " + ld(d.last_run_at) + ". Record since " + new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/London"}).format(new Date(d.first_run_at)) + ". Updated " + ld(d.generated_at) + ".";
     g.hidden=false;
@@ -719,7 +719,7 @@
 <script>
 // 22 Oct 2026: signed-in members see "Members area" instead of "Log in" in the header (the side menu stays the site's; Amit, 23 Oct).
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
-var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
+var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");l.textContent="Members area";}document.querySelectorAll("[data-guest]").forEach(function(x){x.style.display="none";});document.querySelectorAll("[data-member]").forEach(function(x){x.hidden=false;});document.querySelectorAll("footer a[href='members/']").forEach(function(x){if(x.textContent==="Member log in"){x.textContent="Members area";x.href="members/#home";}});}catch(e){}})();
 </script>
 </body>
 </html>

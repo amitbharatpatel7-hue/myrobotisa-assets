@@ -398,12 +398,12 @@
       <div class="rec-tile"><b id="r-state">–</b><span>trading</span></div>
     </div>
     <p class="small" id="recmeta" role="status" aria-live="polite">Loading the record…</p>
-    <p><b>Why this matters to you.</b> The robot you'd buy is a copy of this one, and its whole job is to turn up every Sunday, do the maths and put its proposals in your inbox whether or not anyone is watching. This record shows it doing exactly that, week after week, in public. A missed week would show up here before a buyer noticed; a halt would show here the same night. And your own copy keeps the same record for you, on your own dashboard, so you always know your plan actually ran.</p>
+    <p><b>Why this matters to you.</b> The robot you'd buy is a copy of this one, and its whole job is to turn up every Sunday, do the maths and put its proposals in your inbox whether or not anyone is watching. This record shows it doing exactly that, week after week, in public. A missed week would show up here before a buyer noticed; a pause would show here the same night. And your own copy keeps the same record for you, on your own dashboard, so you always know your plan actually ran.</p>
     <div class="card tr" id="transparency">
       <h2 class="h3">What we publish, and why</h2>
       <p>Most ways of investing without the work are a black box: a fund, a robo-adviser, a bot on someone else's servers. You hand money over and trust the label. We'd rather put you in charge, and the only honest way to ask for that trust is to show our working. So we publish three things that, as far as we know, no other company selling an investing robot publishes.</p>
       <ol>
-        <li><b>This status record,</b> rebuilt every night from the robot's own logs: did it run, did it miss, is it halted.</li>
+        <li><b>This status record,</b> rebuilt every night from the robot's own logs: did it run, did it miss, is it paused.</li>
         <li><b><a href="#trades" style="color:var(--green)">The trade log</a>,</b> from 18 October 2026: every order the robot places on the founder's own account, in a public repository, four weeks after the event. The rule that fired, the date and time, the size and the broker's confirmation. At decision time we publish only a fingerprint of the plan, so you can prove later that nothing was changed after the fact, and nobody can treat it as a tip.</li>
         <li><b>Every result, good and bad,</b> on the channel and in the newsletter, with what the robot learned from it.</li>
       </ol>
@@ -623,7 +623,7 @@
   fetch("status.json",{cache:"no-store"}).then(function(r){ if(!r.ok) throw 0; return r.json(); }).then(function(d){
     var f=function(id,v){ document.getElementById(id).textContent=v; };
     f("r-weeks", d.weeks_run); f("r-missed", d.missed_weeks); f("r-orders", d.orders_sent);
-    var st=document.getElementById("r-state"); st.textContent = d.trading==="halted" ? "Halted" : "Running"; if(d.trading==="halted") st.classList.add("off");
+    var st=document.getElementById("r-state"); st.textContent = d.trading==="halted" ? "Paused" : "Running"; if(d.trading==="halted") st.classList.add("off");
     var ld=function(iso){ try{ return new Intl.DateTimeFormat("en-GB",{weekday:"short",day:"numeric",month:"short",hour:"2-digit",minute:"2-digit",timeZone:"Europe/London",timeZoneName:"short"}).format(new Date(iso)); }catch(e){ return iso; } };
     meta.textContent = "Last weekly run: " + ld(d.last_run_at) + ". Record since " + new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"Europe/London"}).format(new Date(d.first_run_at)) + ". Updated " + ld(d.generated_at) + ".";
     g.hidden=false;
@@ -681,7 +681,7 @@
 <script>
 // 22 Oct 2026: signed-in members see "Members area" instead of "Log in" in the header (the side menu stays the site's; Amit, 23 Oct).
 (function(){try{var s=JSON.parse(localStorage.getItem("mri-members-session")||"null");if(!s||!s.access_token)return;
-var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");}}catch(e){}})();
+var l=document.querySelector("a.login");if(l){l.href=l.getAttribute("href").replace(/members\/.*/,"members/#home");l.textContent="Members area";}document.querySelectorAll("[data-guest]").forEach(function(x){x.style.display="none";});document.querySelectorAll("[data-member]").forEach(function(x){x.hidden=false;});document.querySelectorAll("footer a[href='members/']").forEach(function(x){if(x.textContent==="Member log in"){x.textContent="Members area";x.href="members/#home";}});}catch(e){}})();
 </script>
 </body>
 </html>

@@ -12,6 +12,13 @@ including the internal ones to me, and flag (Internal) in the subject"):
     `bgcolor` attribute as well as the inline background longhand, so Apple Mail and Outlook leave the colours alone;
   * `subject()` prefixes "(Internal) " unless `internal=False` — only emails to members or customers pass False.
 
+v2.7 (4 Nov 2026, Amit: "ensure these are the templates and no drift") — every internal email is one of six notices, so its
+  colour says what it means before it's opened (hub DECISIONS D37). NOTICES below is the one table; the top card's outline, the
+  INTERNAL NOTICE label, the eyebrow, status pills and the robot all come from it. Only the top card has an outline: no logo ring and no
+  coloured rule on other cards (Amit, 4 Nov 2026). render() always picks one: pass notice=
+  to say which, otherwise notice_for() works it out, so an internal email can't go out without one. Member mail is unchanged.
+  last-man-standing's internal_email.ts copies NOTICES and a test there fails if the two differ.
+
 v2.5 (23 Oct 2026, approved by Amit) — additive: the same cards as v2.4, plus (v2.5.1) the green tag sits at the right edge and
 (v2.5.3, 24 Oct) tag columns are pinned right at 1% width and ticks get an 8px gap, because the iPhone Gmail app enlarges
 text and re-shares spare width, which pulled tags in from the edge and butted ticks against their text:
@@ -57,9 +64,9 @@ Public surface (unchanged from v1, two optional additions):
 `blocks` is a list of dicts, each one card: `heading`, optional `status` (label, kind), and one of `prose` (str or list),
 `table` ({"headers": [...], "rows": [[...]]}), `pills` (list of str or (label, kind)), or `kv` (list of (label, value)).
 A block may set `accent: True` to draw it with a green left rule (use for the one thing that needs the reader).
-`kind` for a pill is green / amber / red / muted. `buttons` is a list of (label, url, primary_bool) shown under the cards.
+`button`, `small` and `health` blocks: see v2.6.8 below. `kind` for a pill is green / amber / red / muted. `buttons` is a list of (label, url, primary_bool) shown under the cards.
 `tone="up"` turns the headline green (a gain); `subtitle` and prose paragraphs may be lists of strings and (text, "gain")
-pairs so successes read in bold green. A `days` block ([(label, change), ...]) draws a week strip. `internal` (default True) puts a green INTERNAL badge beside the wordmark: pass internal=False for anything a member,
+pairs so successes read in bold green. A `days` block ([(label, change), ...]) draws a week strip; add "today": <index> to outline today's tile. `internal` (default True) puts a green INTERNAL badge beside the wordmark: pass internal=False for anything a member,
 customer or player receives (same rule as subject()). `brand` is (tile_letter, wordmark, pink_suffix[, logo_url]); with a logo_url the tile is that image (the website's mark), else a green
 tile with the letter. `mood` is an image URL shown beside the headline (the robot moods live at myrobotisa.com/email/robot-*.png;
 use `mood_for(change)`). A block may carry `more: {"summary": "Show the funds", "items": [...]}`: a show/hide list (<details>, which
@@ -267,16 +274,22 @@ def _segments(sub) -> str:
     return "".join(out)
 
 
-def _days(days) -> str:
-    """A week strip: one tile per day, green for an up day, plum for a down or flat day (never red), amount beneath."""
+def _days(days, today=None) -> str:
+    """A week strip: one tile per day, green for an up day, plum for a down or flat day (never red), amount beneath.
+    v2.7.1 (4 Nov 2026, Amit): `today` is the index of today's tile, drawn with a pink outline and white text so a lone green
+    up day isn't read as "you are here". Colour still only means up or down; an up day today stays green inside the outline."""
     cells = []
-    for label, chg in days:
+    for i, (label, chg) in enumerate(days):
         up = chg is not None and chg > 0
         bgc = GREEN_BG if up else MUTED_BG
         fg = GREEN if up else MUTED
         amt = "" if chg is None else (("+" if chg > 0 else "\u2212" if chg < 0 else "") + f"£{abs(chg):,.2f}")
+        now = i == today
+        if now and not up:
+            fg = INK
+        ring = f"border:2px solid {PINK};padding:6px 0;" if now else "padding:8px 2px;"   # same height with or without the outline
         cells.append(f'<td align="center" valign="top" style="padding:0 3px;vertical-align:top;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">'
-                     f'<tr><td align="center" {_bg(bgc)}border-radius:10px;padding:8px 2px;font-size:11px;font-weight:800;letter-spacing:.06em;'
+                     f'<tr><td align="center" {_bg(bgc)}border-radius:10px;{ring}font-size:11px;font-weight:800;letter-spacing:.06em;'
                      f'text-transform:uppercase;color:{fg};font-family:{FONT_STACK};">{esc(label)}</td></tr>'
                      f'<tr><td align="center" style="padding-top:6px;font-size:12px;font-weight:700;color:{fg};font-family:{FONT_STACK};">{esc(amt)}</td></tr>'
                      f'</table></td>')
@@ -412,12 +425,74 @@ def scenario(change: float | None, paused: bool = False, to_approve: int = 0, mi
     return {"key": key, "robot": MOODS[key], "tone": "up" if key in ("up", "milestone") else None, "lead": lead}
 
 
+# v2.6.8 (4 Nov 2026, Amit: "Review the fix should be in the same pane"; Health "clearer on what's happening and actions").
+#   button: (label, url, primary)   a pill button inside the card that asks for the tap
+#   small:  "text"                  a quiet line under it
+#   health: [(mark, title, now, robot, you), ...]   mark ok | warn | bad. One row per thing, always answering the same three
+#           questions. Owner mail only: member mail never shows red.
+BLOCK_BUTTONS = True
+_HEALTH = {"ok": ("&#10003;", GREEN), "warn": ("!", AMBER_FG), "bad": ("&#10005;", "#FF8FB0")}
+
+
+def _health(rows) -> str:
+    out = []
+    for mark, title, now, robot, you in rows:
+        g, c = _HEALTH.get(mark, _HEALTH["ok"])
+        strong = c if mark != "ok" else None
+        def line(k, v, col=None):
+            return (f'<tr><td valign="top" width="58" style="width:58px;font-size:13px;line-height:1.45;color:{MUTED};padding:3px 8px 0 0;font-family:{FONT_STACK};">{k}</td>'
+                    f'<td style="font-size:14px;line-height:1.45;color:{col or INK};padding-top:3px;font-weight:{800 if col else 400};font-family:{FONT_STACK};">{esc(v)}</td></tr>')
+        out.append(f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 14px;"><tr>'
+                   f'<td width="22" valign="top" style="width:22px;color:{c};font-weight:800;font-size:16px;font-family:{FONT_STACK};">{g}</td>'
+                   f'<td style="font-size:15px;font-weight:800;color:{INK};font-family:{FONT_STACK};">{esc(title)}</td></tr><tr><td></td><td>'
+                   f'<table role="presentation" cellpadding="0" cellspacing="0">{line("Now", now)}{line("Robot", robot)}{line("You", you, strong)}</table></td></tr></table>')
+    return "".join(out)
+
+
+# v2.7.2 (4 Nov 2026, Amit picked this over the top-five list): what's in the pot on one card. A split bar made of table cells
+# (no images), every holding in groups with pounds and share lined up on the right, then cash and the total.
+#   pot: {"split": [(label, pct, "green"|"pink"|"muted"), ...],
+#         "groups": [(label, total_text, [(name, value_text, share_text), ...]), ...],
+#         "lines": [(label, value_text), ...]}
+POT_BLOCK = True
+_POT_COLOURS = {"green": GREEN, "pink": PINK, "muted": MUTED}
+
+
+def _pot(p: dict) -> str:
+    parts = [(lab, pct, _POT_COLOURS.get(kind, MUTED)) for lab, pct, kind in p.get("split") or [] if pct > 0]
+    bar = "".join(f'<td width="{pct}%" height="12" {_bg(c)}width:{pct}%;height:12px;line-height:12px;font-size:1px;">&nbsp;</td>' for _, pct, c in parts)
+    key = "".join(f'<td style="padding-top:8px;font-size:12px;color:{MUTED};font-family:{FONT_STACK};white-space:nowrap;">'
+                  f'<span style="display:inline-block;width:8px;height:8px;border-radius:4px;background:{c};background-color:{c};margin-right:5px;"></span>'
+                  f'{esc(lab)} {pct}%</td>' for lab, pct, c in parts)
+    head = (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;border-radius:6px;overflow:hidden;"><tr>{bar}</tr></table>'
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:6px;"><tr>{key}</tr></table>') if parts else ""
+    def sum_row(label, value, colour=MUTED):
+        line = f"border-bottom:1px solid {HAIRLINE};" if colour == MUTED else ""
+        return (f'<tr><td style="padding:12px 0 6px;{line}font-size:13px;font-weight:800;color:{colour};font-family:{FONT_STACK};">{esc(label)}</td>'
+                f'<td colspan="2" align="right" style="padding:12px 0 6px;{line}font-size:13px;font-weight:800;color:{colour};font-family:{FONT_STACK};white-space:nowrap;">{esc(value)}</td></tr>')
+    rows = []
+    for label, total, items in p.get("groups") or []:
+        rows.append(sum_row(label, total))
+        for name, value, share in items:
+            rows.append(f'<tr><td style="padding:8px 8px 0 0;font-size:15px;line-height:1.35;color:{INK};font-family:{FONT_STACK};">{esc(name)}</td>'
+                        f'<td align="right" valign="top" style="padding-top:8px;font-size:15px;font-weight:700;color:{INK};font-family:{FONT_STACK};white-space:nowrap;">{esc(value)}</td>'
+                        f'<td align="right" valign="top" width="42" style="width:42px;padding-top:10px;font-size:12px;color:{MUTED};font-family:{FONT_STACK};white-space:nowrap;">{esc(share)}</td></tr>')
+    lines = p.get("lines") or []
+    for i, (label, value) in enumerate(lines):
+        rows.append(sum_row(label, value, INK if i == len(lines) - 1 else MUTED))
+    return f'{head}<table role="presentation" width="100%" cellpadding="0" cellspacing="0">{"".join(rows)}</table>'
+
+
 def _block_body(block: dict) -> str:
     return (_block_body_inner(block) + (_more(block["more"]) if block.get("more") else "")
-            + (_link(block["link"]) if block.get("link") else ""))
+            + (_link(block["link"]) if block.get("link") else "")
+            + (f'<div style="margin-top:12px;">{button(*block["button"])}</div>' if block.get("button") else "")
+            + (f'<div style="margin-top:8px;font-size:13px;line-height:1.5;color:{MUTED};font-family:{FONT_STACK};">{esc(block["small"])}</div>' if block.get("small") else ""))
 
 
 def _block_body_inner(block: dict) -> str:
+    if "health" in block:
+        return _health(block["health"])
     if "spark" in block:
         return _spark(block["spark"]) + ('<div style="height:12px;line-height:12px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
     if "items" in block:
@@ -433,8 +508,10 @@ def _block_body_inner(block: dict) -> str:
         return _ticks(block["ticks"]) + (_prose(block["prose"]) if block.get("prose") else "")
     if "milestone" in block:
         return _milestone(block["milestone"])
+    if "pot" in block:
+        return _pot(block["pot"])
     if "days" in block:
-        return _days(block["days"]) + ('<div style="height:14px;line-height:14px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
+        return _days(block["days"], block.get("today")) + ('<div style="height:14px;line-height:14px;">&nbsp;</div>' + _prose(block["prose"]) if block.get("prose") else "")
     if "table" in block:
         return table(block["table"]["headers"], block["table"]["rows"])
     if "pills" in block:
@@ -539,11 +616,12 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
            badge: str | None = None,
            label: str | None = None,
            hero: dict | None = None,
-           chip: str | None = None) -> str:
+           chip: str | None = None,
+           accent: str | None = None) -> str:
     # v2.5: badge overrides the green pill's text (default "Internal"), e.g. "Stock Boom Hunter" on the engine's own emails.
     b = tuple(brand) if brand else ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, "")
     tile, word, suffix = b[0], b[1], b[2]
-    if mood and len(b) > 3 and str(b[3]).endswith("sbh-robot.png") and mood.startswith(_E) and "/sbh/" not in mood:
+    if mood and len(b) > 3 and str(b[3]).endswith("sbh-robot.png") and mood.startswith(_E) and "/sbh/" not in mood and "/notice/" not in mood:
         mood = _to_tagged(mood).replace(_E, _E + "sbh/")
     logo = b[3] if len(b) > 3 else None
     suffix_html = ('' if word.endswith('.') else ' ') + '<span style="color:%s">%s</span>' % (PINK, esc(suffix)) if suffix else ""
@@ -566,10 +644,10 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
     elif len(b) > 4 and b[4] == "internal":
         # v2.6.1 (Amit, 24 Oct 2026): internal notices carry the project's logo top left and the INTERNAL NOTICE tag top
         # right; no wordmark (the logo, the sender and the eyebrow already say which project it is).
-        badge_html = (f'<span style="display:inline-block;padding:5px 10px;border-radius:999px;background:{GREEN};background-color:{GREEN};'
-                      f'color:{ON_GREEN};font-size:11px;font-weight:900;letter-spacing:.07em;text-transform:uppercase;font-family:{FONT_STACK};'
-                      f'white-space:nowrap;">{esc(badge or "Internal notice")}</span>')
-        left = (f'<img src="{esc(logo)}" width="40" height="40" alt="{esc(word)}" style="display:block;width:40px;height:40px;border-radius:11px;border:2px solid {GREEN};">'
+        # v2.7: the plain label from Amit's option A, in the notice colour.
+        badge_html = (f'<span style="color:{accent or GREEN};font-size:11px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;'
+                      f'font-family:{FONT_STACK};white-space:nowrap;">{esc(badge or "Internal notice")}</span>')
+        left = (f'<img src="{esc(logo)}" width="40" height="40" alt="{esc(word)}" style="display:block;width:40px;height:40px;border-radius:11px;{"" if accent else f"border:2px solid {GREEN};"}">'
                 if logo else
                 f'<table role="presentation" cellpadding="0" cellspacing="0"><tr><td width="40" height="40" align="center" {_bg(GREEN)}width:40px;height:40px;'
                 f'border-radius:11px;color:{ON_GREEN};font-weight:900;font-size:18px;font-family:{FONT_STACK};">{esc(tile or "R")}</td></tr></table>')
@@ -612,10 +690,12 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
                   f'{hb}</td></tr></table>')
     else:
       header = panel(
-        f'<tr><td style="padding:24px 26px;">{eyebrow(eyebrow_text)}'
+        f'<tr><td style="padding:24px 26px;">{eyebrow(eyebrow_text, accent) if accent else eyebrow(eyebrow_text)}'
         f'<div style="font-family:{HEAD_STACK};font-size:32px;font-weight:400;letter-spacing:.01em;text-transform:uppercase;'
         f'line-height:1.08;color:{INK};margin:0 0 8px;">{esc(title)}</div>'
         f'<div style="font-size:14px;color:{MUTED};font-family:{FONT_STACK};">{_segments(subtitle)}</div></td>{mood_td}</tr>')
+      if accent:   # v2.7: Amit's option A, the outline on the top card
+          header = header.replace("margin:0 0 14px;", f"margin:0 0 14px;border:2px solid {accent};", 1)
     cards = "".join(_block_html(b) for b in blocks)
     btns = (f'<div style="margin:4px 0 6px;">' + "".join(button(*b) for b in buttons) + "</div>") if buttons else ""
     foot = []
@@ -681,7 +761,36 @@ DTL_LOGO = "https://myrobotisa.com/email/dtl-robot.png"   # v2.6.2 (Amit, 24 Oct
 DTL_BRAND = ("D", "Day Trade", "Lab", DTL_LOGO)
 _INTERNAL = {"PAGE": "#0A0A0D", "CARD": "#17171D", "CARD_DEEP": "#101014", "HAIRLINE": "#2A2A33", "MUTED": "#B9B6C2",
              "ON_GREEN": "#0A0A0D", "MUTED_BG": "#24242C", "GREEN_BG": "#12301F",
-             "PILL_COLORS": {"green": ("#0A0A0D", "#00E87A"), "amber": ("#2A1A00", "#FFC94D"), "red": ("#FFFFFF", "#FF4D7A"), "muted": ("#E6E3EC", "#3A3A44")}}
+             "PILL_COLORS": {"green": ("#0A0A0D", "#00E87A"), "amber": ("#2A1A00", "#FFA63D"), "red": ("#FFFFFF", "#FF4D7A"), "muted": ("#E6E3EC", "#3A3A44")},
+             "SOLID_TAGS": {**SOLID_TAGS, "amber": ("#FFA63D", "#2A1A00")}}   # v2.7: amber pills match the amber notice
+
+
+# v2.7 (Amit, 4 Nov 2026): the six internal notices. Robots live at myrobotisa.com/email/notice/<project>-<notice>.png, the
+# same art for every project with only the tag different. Change a colour here and in last-man-standing internal_email.ts.
+NOTICES = {"gold": "#FFC94D",     # a win
+           "red": "#FF4D7A",      # needs you now
+           "amber": "#FFA63D",    # needs you soon
+           "green": "#00E87A",    # all fine, no action
+           "blue": "#4DB8FF",     # for information
+           "violet": "#B388FF"}   # someone wrote in
+_NOTICE_BY_TYPE = (("gold", ("prize",)), ("violet", ("feedback", "community", "support")), ("blue", ("pr digest", "merges")))
+
+
+def notice_for(eyebrow_text="", badge=None, blocks=()):
+    """The notice for an email that didn't name one: its type first, then the worst status pill on its cards."""
+    words = f"{badge or ''} {eyebrow_text or ''}".lower()
+    for name, types in _NOTICE_BY_TYPE:
+        if any(t in words for t in types):
+            return name
+    kinds = {b["status"][1] for b in blocks or () if isinstance(b, dict) and isinstance(b.get("status"), (tuple, list)) and len(b["status"]) > 1}
+    for kind in ("red", "amber", "green"):
+        if kind in kinds:
+            return kind
+    return "blue"
+
+
+def notice_robot(notice, project=None):
+    return f"{_E}notice/{ {'sbh': 'sbh', 'lms': 'lms', 'dtl': 'dtl'}.get(project, 'isa') }-{notice}.png"
 
 
 def _project_of(brand, eyebrow_text):
@@ -701,7 +810,7 @@ def _project_of(brand, eyebrow_text):
 
 
 def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand=None, buttons=None, mood=None,
-           internal=True, tone=None, badge=None, scheme=None, label=None, hero=None, chip=None):
+           internal=True, tone=None, badge=None, scheme=None, label=None, hero=None, chip=None, notice=None):
     # v2.6.3 (Amit, 24 Oct 2026: "the robot graphic is part of the brand and should be written into the theme"):
     # every email carries a robot. A caller that names no mood gets the up robot on an up day, otherwise the calm one;
     # the project tag (I.S.A., S.B.H., L.M.S., D.T.L.) is swapped in below as before. mood=False opts out explicitly.
@@ -715,12 +824,16 @@ def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand
         return _render_core(title, eyebrow_text, subtitle, blocks, cta=cta, footnote=footnote, brand=brand, buttons=buttons,
                             mood=mood, internal=internal, tone=tone, badge=badge, label=label, hero=hero, chip=chip)
     proj = _project_of(brand, eyebrow_text)
+    # v2.7: the notice decides the colours and the robot, whatever the caller asked for, so internal mail can't drift.
+    notice = notice or notice_for(eyebrow_text, badge, blocks)
+    accent = NOTICES[notice]
     base = {"sbh": SBH_BRAND, "mri": MRI_BRAND, "lms": LMS_BRAND, "dtl": DTL_BRAND}.get(proj) or tuple(brand or ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, ""))
     logo = base[3] if len(base) > 3 else None
     if proj == "sbh" and mood and mood.startswith(_E) and "/sbh/" not in mood:
         mood = _to_tagged(mood).replace(_E, _E + "sbh/")
     if proj in ("lms", "dtl") and mood and mood.startswith(_E) and f"/{proj}/" not in mood:
         mood = _to_tagged(mood).replace(_E + "sbh/", _E).replace(_E, _E + proj + "/")   # the same robots with an L.M.S. / D.T.L. tag
+    mood = notice_robot(notice, proj)
     if badge and badge.lower() not in ("internal", "internal notice") and not eyebrow_text.lower().startswith(badge.lower()):
         eyebrow_text = f"{badge} · {eyebrow_text}"
     if not logo and proj is None and brand and brand[1] and str(brand[1]).lower() not in eyebrow_text.lower():
@@ -730,7 +843,7 @@ def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand
     try:
         g.update(_INTERNAL)
         html = _render_core(title, eyebrow_text, subtitle, blocks, cta=cta, footnote=footnote, brand=ibrand, buttons=buttons,
-                            mood=mood, internal=True, tone=tone, badge="Internal notice")
+                            mood=mood, internal=True, tone=tone, badge="Internal notice", accent=accent)
     finally:
         g.update(saved)
     # v2.6.1: stop iOS Mail turning times, amounts and domains into blue underlined links.
@@ -744,6 +857,10 @@ def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand
     # The iPhone Gmail app also leaves a light strip down each side of the message: a black outline paints over it. The
     # strips above and below the message are Gmail's own and can't be reached (Test D on Amit's phone, 2 Nov 2026).
     html = html.replace("font-family:Impact,", "word-break:break-word;overflow-wrap:anywhere;font-family:Impact,")
+    html = html.replace(f"border-left:4px solid {GREEN};", "")   # v2.7: only the top card has an outline
+    # v2.7: main buttons take the notice colour, as Last Man Standing's do (Amit, 4 Nov 2026: "consistent to all internal emails").
+    html = html.replace(f"background:{GREEN};background-color:{GREEN};color:{_INTERNAL['ON_GREEN']};border:2px solid {GREEN};",
+                        f"background:{accent};background-color:{accent};color:{_INTERNAL['ON_GREEN']};border:2px solid {accent};")
     page_bg = _INTERNAL["PAGE"]
     html = html.replace(f'class="mri-page" width="100%" cellpadding="0" cellspacing="0" bgcolor="{page_bg}" style="',
                         f'class="mri-page" width="100%" cellpadding="0" cellspacing="0" bgcolor="{page_bg}" style="'

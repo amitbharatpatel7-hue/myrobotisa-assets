@@ -31,9 +31,7 @@ GUARDED = [
     (".github/*", "workflows, including this merge rule"),
     ("tools/auto_merge_check.py", "this merge rule"),
     ("tools/test_auto_merge_check.py", "this merge rule's tests"),
-    ("ops/lms_email.py", "lms_email.py: every scheduled email in every project loads it from here"),
     ("ops/supabase/migrations/*", "the live database schema"),
-    ("docs/email/*.py", "the email template"),
     ("docs/terms.html", "legal: terms"),
     ("docs/privacy.html", "legal: privacy"),
     ("docs/isa-rules.html", "what the site says about ISA rules (financial promotion)"),
@@ -46,11 +44,13 @@ GUARDED = [
 # changed lines matching these wait for Amit, wherever they are
 SENSITIVE = [
     (re.compile(r"/auth/v1/"), "sign-in calls"),
-    (re.compile(r"access_token|refresh_token|service_role|api[_-]?key", re.I), "sign-in tokens or keys"),
+    # 4 Nov 2026 (hub D36): a page using the member's own session token to call our functions is ordinary. What matters is a
+    # secret, or anything sent to a host that isn't ours (the rule after next).
+    (re.compile(r"service_role|api[_-]?key\s*[:=]|sk-ant-|sk_live_", re.I), "a secret key"),
     (re.compile(r"verifyOtp|signInWith|signOut|navigator\.credentials|PublicKeyCredential|webauthn", re.I), "sign-in"),
     (re.compile(r"stripe|payment_intent|price_id", re.I), "payments"),
-    (re.compile(r"<script[^>]*\bsrc\s*=", re.I), "a script loaded from a file or another site"),
-    (re.compile(r"<script\b(?![^>]*application/ld\+json)", re.I), "a new script on a page"),
+    (re.compile(r"""<script[^>]*\bsrc\s*=\s*["']?(https?:)?//""", re.I), "a script loaded from another site"),
+    (re.compile(r"""fetch\(\s*[`"']https?://(?![\w.-]*(myrobotisa\.com|supabase\.co)\b)""", re.I), "data sent to another site"),
     (re.compile(r"application/ld\+json", re.I), "a search summary with markup in it"),
 ]
 
@@ -91,7 +91,7 @@ def reasons_to_wait(pr, files, checked_sha):
         why.append("it's a draft")
     if (pr.get("head") or {}).get("sha") != checked_sha:
         why.append("new commits arrived after the checks ran")
-    if re.search(r"^\s*DECISION NEEDED:", pr.get("body") or "", re.M):
+    if re.search(r"^\s*DECISION NEEDED:\s*(money|legal|release|live data)\b", pr.get("body") or "", re.M | re.I):   # hub D36
         why.append("it says DECISION NEEDED")
     total = 0
     touched, guarded = {}, {}

@@ -30,7 +30,25 @@
    "sealed_at": "2026-11-02T21:31:06Z",
    "ots": true,
    "status": "sealed"
+  },
+  "2026-11-03-live": {
+   "sha256": "c7c3f7fc8aa415091b503c64313c1a4014854103cc0975b68a63b41394841f03",
+   "sealed_at": "2026-11-03T21:31:12Z",
+   "ots": true,
+   "status": "sealed"
+  },
+  "2026-11-04-live": {
+   "sha256": "eebb8f68ea183587298bbb13338c88e68325937f9ec0821697ed0c228b50c382",
+   "sealed_at": "2026-11-04T21:31:09Z",
+   "ots": true,
+   "status": "sealed"
+  },
+  "2026-11-05-live": {
+   "sha256": "91877343a16e790fc48fdb37afbef54d44b9ca8eb8922478a489c28c88e04517",
+   "sealed_at": "2026-11-05T21:31:14Z",
+   "ots": true,
+   "status": "sealed"
   }
  },
- "updated_at": "2026-11-02T21:31:06Z"
+ "updated_at": "2026-11-05T21:31:14Z"
 }

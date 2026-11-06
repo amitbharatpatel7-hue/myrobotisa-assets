@@ -47,6 +47,44 @@ versions = {"index.html meta": meta and meta.group(1), "version.json": vjson, "s
 if len(set(versions.values())) != 1 or None in versions.values():
     failures.append(f"members area versions disagree: {versions} (bump all three together)")
 
+# hub D36: the email module merges on green checks, and every scheduled email loads it from main, so prove it still renders.
+try:
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("lms_email", ROOT / "ops/lms_email.py")
+    mail = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mail)
+    block = {"heading": "Does it need me?", "status": ("Yes", "green"), "accent": True, "prose": ["Yes."],
+             "button": ("Review", "https://myrobotisa.com/", True), "small": "Small."}
+    health = {"heading": "Health", "status": ("Check", "amber"), "health": [("warn", "T", "Now", "Robot", "You")], "checks": []}
+    for internal in (True, False):
+        html = mail.render("Title", "Eyebrow", "Sub", [block, health], brand=mail.MRI_BRAND, internal=internal)
+        html = html["html"] if isinstance(html, dict) else html
+        for needed in ("color-scheme", "Review", "Small.", "Robot", "bgcolor"):
+            if needed not in html:
+                failures.append(f"lms_email.render lost {needed!r} (internal={internal})")
+except Exception as e:  # noqa: BLE001
+    failures.append(f"lms_email.py doesn't render: {e!r}")
+
+# Every internal notice needs its robot for every project, or internal mail shows a broken image (hub DECISIONS D37).
+theme = (ROOT / "ops/lms_email.py").read_text()
+notices = re.findall(r'"(\w+)": "#[0-9A-F]{6}"', theme[theme.index("NOTICES = {"):theme.index("_NOTICE_BY_TYPE")])
+if len(notices) != 6:
+    failures.append(f"expected six notices in lms_email.py, found {notices}")
+for project in ("isa", "sbh", "lms", "dtl"):
+    for notice in notices:
+        if not (DOCS / f"email/notice/{project}-{notice}.png").is_file():
+            failures.append(f"docs/email/notice/{project}-{notice}.png is missing")
+# An internal email must use the notice robot for its project, whatever the caller passes (hub DECISIONS D37).
+for brand, project in ((mail.SBH_BRAND, "sbh"), (mail.MRI_BRAND, "isa"), (mail.DTL_BRAND, "dtl"), (("L", "Last Man", "Standing", mail.LMS_LOGO), "lms")):
+    html = mail.render("Title", "Eyebrow", "Sub", [{"heading": "H", "status": ("x", "red"), "accent": True, "prose": ["P"]}], brand=brand, mood=mail.MOODS["calm"])
+    if "background:#FF4D7A;background-color:#FF4D7A;color:#0A0A0D;border:2px solid #FF4D7A" not in mail.render("T", "E", "S", [{"heading": "H", "status": ("x", "red")}], brand=brand, buttons=[("Go", "https://myrobotisa.com/", True)]):
+        failures.append(f"internal render for {project}: the main button lost the notice colour")
+    for needed in (f"email/notice/{project}-red.png", "border:2px solid #FF4D7A"):
+        if needed not in html:
+            failures.append(f"internal render for {project} lost {needed}")
+    if html.count("border:2px solid") != 1 or "border-left:4px" in html:
+        failures.append(f"internal render for {project}: only the top card may have an outline")
+
 print(f"{checked} inline scripts parsed; members area version {versions['version.json']}")
 if failures:
     print("\n\n".join(failures))
