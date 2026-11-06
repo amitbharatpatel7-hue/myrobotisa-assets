@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="111">
+<meta name="mri-version" content="112">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -307,6 +307,7 @@
   .rcf-list{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:12px}
   .rcf-item{border:1px solid var(--rule);border-radius:16px;padding:14px 16px;background:var(--deep)} .rcf-item.urgent{border-color:var(--pink-ink)}
   .rcf-top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px} .rcf-top b{font-size:16px;flex:1 1 220px} .rcf-top .pill{padding:3px 8px;font-size:10px}
+  .rcf-when{color:var(--muted);font-size:12px;white-space:nowrap}
   .rcf-item p{margin:8px 0 0;line-height:1.55} .rcf-item .small{margin-top:6px}
   .rcf-item .row{margin-top:12px} .rcf-item .row .btn{min-height:42px;padding:0 16px;font-size:14px}
   .rcf-box{margin-top:12px;border-top:1px solid var(--rule);padding-top:12px} .rcf-box textarea{width:100%;border-radius:14px;border:1px solid var(--rule);background:var(--deep);color:var(--ink);font:inherit;font-size:16px;padding:12px 14px;resize:vertical}
@@ -2512,13 +2513,15 @@
       if (sync && waiting) return rcfCall("robot-care-accept", { action: "sync" }).then(function (x) { if (x.ok && x.j && x.j.changed) return rcfLoad(false); }).catch(function () {});
     }).catch(function () { rcfPaint(); });
   }
+  function rcfDay(iso) { var d = String(iso).slice(0, 10), y = new Date().getFullYear(); return d.slice(0, 4) === String(y) ? fmtDate(d).replace(" " + y, "") : fmtDate(d); }
   function rcfFiles(f) { return (f || []).map(function (p) { return String(p).split("/").pop(); }).join(", "); }
   function rcfItem(x) {
     var st = x.fix_state, open = st === "open", later = st === "declined";
     var pills = (x.urgent && (open || later) ? '<span class="pill p">Urgent</span>' : "") +
       (open ? '<span class="pill g">Waiting for you</span>' : st === "testing" ? '<span class="pill">Being tested</span>' : st === "undone" ? '<span class="pill">Undone</span>' : st === "accepted" || st === "applied" ? '<span class="pill g">In your robot</span>' : later ? '<span class="pill">Not now</span>' : '<span class="pill">Closed</span>');
     var h = '<li class="rcf-item' + (x.urgent && (open || later) ? " urgent" : "") + '" data-id="' + esc(x.id) + '">' +
-      '<div class="rcf-top"><b>' + esc(x.pr_title || "A fix for your robot") + "</b>" + pills + "</div>" +
+      // 6 Nov 2026 (Amit): every fix shows the day Robot Care made it, so the list reads as a history
+      '<div class="rcf-top"><b>' + esc(x.pr_title || "A fix for your robot") + "</b>" + pills + (x.at ? '<span class="rcf-when">' + esc(rcfDay(x.at)) + "</span>" : "") + "</div>" +
       (x.urgent && (open || later) ? '<p><b>Your robot can\u2019t do its main job until this is in.</b></p>' : "") +
       "<p>" + esc(x.diagnosis || "Robot Care found why a run failed and made a small fix.") + "</p>" +
       // 29 Oct 2026 (Amit): members never see GitHub or file names here; the fix is described in plain words only.
