@@ -485,10 +485,11 @@ def _pot(p: dict) -> str:
 
 # v2.7.3 (6 Nov 2026, Amit picked option A): the safety stop card, laid out like the pot card. A bar of table cells runs from
 # the stop to the high point and empties as the pot falls, then the figures line up the same way as the pot's.
-#   safety: {"fill": 20, "tone": "green"|"amber"|"muted", "ends": (left_label, right_label),
+#   safety: {"fill": 20, "tone": "green"|"pink"|"amber"|"muted", "ends": (left_label, right_label),
 #            "rows": [(label, value_text), ...], "total": (label, value_text, share_text_or_None), "note": str}
 SAFETY_BLOCK = True
-_SAFETY_TONES = {"green": GREEN, "amber": AMBER_FG, "muted": MUTED}
+# v2.7.4 (6 Nov 2026, Amit): the bar uses the pot card's colours, so "some room" is pink, not a washed-out lilac.
+_SAFETY_TONES = {"green": GREEN, "pink": PINK, "amber": AMBER_FG, "muted": MUTED}
 
 
 def _safety(s: dict) -> str:
