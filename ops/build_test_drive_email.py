@@ -3,6 +3,8 @@
     python3 ops/build_test_drive_email.py   # writes supabase/functions/test-drive-email/email.js and ops/out/test-drive-open.html
 
 {{LINK}} and {{UNSUB}} are filled per person when it sends. Nothing sends without Amit's "send" for this email.
+The layout (robot banner, one-line Does it need me?, a W1-W7 strip, numbered steps, a second button) is Amit's standard
+for member emails (6 Nov 2026).
 """
 import json, sys
 from pathlib import Path
@@ -26,22 +28,33 @@ FOOT = ("You're getting this because you joined the free test drive list at myro
         "Not you, or changed your mind? " + UNSUB)
 
 
+STEPS = [("Watch the week", "Press Play and the week runs Monday to Friday on its real closing prices. Your pot and an "
+                            "S&P 500 fund move side by side."),
+         ("See what I did", "Every Friday I say what I traded and why, or what I checked and why I held."),
+         ("Meet the shares", "Finish the week and the hidden shares get their real names.")]
+WEEK = [(f"W{n}", None) for n in range(1, 8)]
+
+
 def build():
     blocks = [
-        {"heading": "Does it need me?", "status": ("About 5 minutes a day", "green"), "accent": True, "prose": [HOW]},
-        {"heading": "What you'll see", "ticks": TICKS},
+        {"heading": "Does it need me?", "status": ("About 5 minutes a day", "green"), "accent": True,
+         "prose": ["Just a tap. Nothing to install, nothing to buy, and the link is yours alone."]},
+        {"heading": "One week a day", "days": WEEK, "today": 0,
+         "prose": ["Seven real weeks in a row from 2024. Week 1 opens when you tap, then one more each day. Miss one and it waits for you."]},
+        {"heading": "How it works", "steps": STEPS, "button": ("Start week 1", LINK, True)},
         {"heading": "How the weeks were picked", "prose": [PICKED]},
-        {"quote": {"text": "Then you decide. And if I'm not for you, a fund is a fine, simple choice.", "by": "Amit, founder", "img": L.MRI_LOGO}},
+        {"quote": {"text": "I built this to run my own ISA. Watch it for a week, good days and bad, and see if it's for you.", "by": "Amit, founder", "img": L.MRI_LOGO}},
     ]
     html = L.render("Your test drive", "My Robot I.S.A.", "Seven real weeks, one a day, starting today.", blocks,
                     footnote=FOOT, brand=L.MRI_BRAND, internal=False, label="Free test drive", mood=L.MOODS["salesopen"],
                     hero={"accent": "is open", "button": ("Start week 1", LINK, True)})
-    text = ("YOUR TEST DRIVE IS OPEN\nSeven real weeks, one a day, starting today.\n\n" + HOW + "\nStart week 1: " + LINK + "\n\n"
-            "WHAT YOU'LL SEE\n" + "\n".join("- " + t for t in TICKS) + "\n\nHOW THE WEEKS WERE PICKED\n" + PICKED +
-            "\n\nThen you decide. And if I'm not for you, a fund is a fine, simple choice.\nAmit, founder\n\n--\n"
+    text = ("YOUR TEST DRIVE IS OPEN\nSeven real weeks, one a day, starting today. About 5 minutes a day.\n\nStart week 1: " + LINK + "\n\n"
+            "HOW IT WORKS\n" + "\n".join(f"{i}. {a}: {b}" for i, (a, b) in enumerate(STEPS, 1)) +
+            "\n\nWeek 1 opens when you tap, then one more each day. Miss one and it waits for you.\n\nHOW THE WEEKS WERE PICKED\n" + PICKED +
+            "\n\nI built this to run my own ISA. Watch it for a week, good days and bad, and see if it's for you.\nAmit, founder\n\n--\n"
             "You're getting this because you joined the free test drive list at myrobotisa.com. Pretend money on real past "
             "prices. Software and a course, not financial advice. Capital at risk.\nUnsubscribe: " + UNSUB)
-    assert html.count(UNSUB) == 1 and text.count(UNSUB) == 1 and html.count(LINK) >= 1
+    assert html.count(UNSUB) == 1 and text.count(UNSUB) == 1 and html.count(LINK) >= 2
     subject = L.subject("My Robot I.S.A.", "Account", "Your free test drive is open", internal=False)
     t = {"subject": subject, "html": html, "text": text}
     OUT_JS.parent.mkdir(parents=True, exist_ok=True)

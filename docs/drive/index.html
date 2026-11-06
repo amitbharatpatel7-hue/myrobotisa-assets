@@ -11,41 +11,51 @@
 <link rel="icon" href="../demo/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Poppins:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Mono:wght@400;500;600&family=Poppins:wght@400;500;600;700;800&display=swap">
 <!-- The free test drive (hub D41, docs/TEST-DRIVE.md). Nothing secret is in this file: each day and its reveal come
      from the test-drive function, and only once that day has opened (or been finished). -->
 <style>
 :root{
-  --bg:#34003B; --card:#4B1155; --inset:#3E0A47; --fg:#FFFFFF; --muted:#D9C6DE; --line:#6A3578; --grid:#5A2A66;
+  --bg:#34003B; --card:#4B1155; --inset:#3E0A47; --fg:#FFFFFF; --muted:#C9B3D0; --line:#6A3578; --grid:#5A2A66;
   --chrome:#260029; --green:#00E87A; --pink:#FF5CCB; --gain:#00E87A; --loss:#FF8FB0; --warn:#FFD27A; --warn-bg:#4F3410;
   --bench:#7FB3FF; color-scheme:dark;
   --body:Poppins, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5;
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;
   padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
-.wrap{max-width:880px;margin:0 auto;padding:20px 16px 96px;display:flex;flex-direction:column;gap:16px}
+.wrap{max-width:760px;margin:0 auto;padding:0 20px 96px;display:flex;flex-direction:column;gap:22px}
+.top{display:flex;align-items:center;justify-content:space-between;padding:20px 0 0}
+.top .handle{font-size:13px;color:var(--muted);text-decoration:none}
+.pill{display:inline-block;padding:8px 14px;border-radius:999px;background:var(--green);color:#34003B;font-weight:800;font-size:12px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.pghead{display:grid;grid-template-columns:72px 1fr;gap:16px;align-items:center;margin-top:18px}
+.pgmark{width:72px;height:72px;border-radius:18px;border:3px solid var(--green);background:var(--bg)}
+.display{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:.01em;line-height:1.02}
+.display .p{color:var(--pink)}
 .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
 a{color:var(--green)}
 .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fg);font-weight:800;letter-spacing:.02em}
 .brand img{width:34px;height:34px;border-radius:10px;background:var(--green)}
 .brand span b{color:var(--pink)}
-header.hero{background:var(--chrome);border-radius:18px;padding:20px 22px;display:grid;gap:6px}
+header.hero{display:grid;gap:8px}
 .eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--pink)}
-h1{margin:0;font-size:clamp(22px,4.6vw,30px);font-weight:800;letter-spacing:-.01em;text-wrap:balance}
-.sub{color:var(--muted);font-size:14px}
-.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+h1{margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(40px,10vw,64px);line-height:1.02;letter-spacing:.01em;text-transform:uppercase}
+h1 .p{color:var(--pink)}
+.sub{color:var(--muted);font-size:16px;line-height:1.55;margin-top:4px}
+.when{font-size:18px;font-weight:600;color:var(--fg)}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 @media (max-width:560px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.tiles .t3{grid-column:1/-1}}
-.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-width:0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;min-width:0}
 .tile .k{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
 .tile .v{font-family:var(--mono);font-size:clamp(20px,4vw,26px);font-weight:600;margin-top:2px}
-.tile .d{font-size:13px;color:var(--muted)}
+.tile .d{font-size:13px;color:var(--muted);line-height:1.4}
 .up{color:var(--gain)} .down{color:var(--loss)}
-section.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px;min-width:0}
+section.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:24px;min-width:0}
+@media (max-width:430px){section.card{padding:20px}}
 section.card.accent{border-left:4px solid var(--green)}
-h2{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin:0 0 8px}
-p{margin:6px 0}
+h2{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:22px;letter-spacing:.02em;text-transform:uppercase;margin:0 0 12px;line-height:1.15}
+p{margin:8px 0}
 .muted{color:var(--muted)}
 .strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
 .strip button{appearance:none;border:1px solid var(--line);background:var(--inset);color:var(--fg);border-radius:12px;padding:8px 2px;
@@ -70,18 +80,18 @@ p{margin:6px 0}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 table{width:100%;border-collapse:collapse;font-size:14px}
 th{text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:6px 4px;border-bottom:1px solid var(--line)}
-td{padding:7px 4px;border-bottom:1px solid var(--grid)}
+td{padding:10px 4px;border-bottom:1px solid var(--grid)}
 td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
 @media (max-width:430px){table{font-size:13px}.mon{display:none}.order,.reveal li{font-size:14px}}
 td:first-child{overflow-wrap:anywhere}
 tr.grp td{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;padding-top:12px;border-bottom:0}
-.order{background:var(--inset);border-radius:12px;padding:10px 12px;margin-top:8px}
+.order{background:var(--inset);border-radius:14px;padding:14px 16px;margin-top:10px;line-height:1.55}
 .order b{color:var(--green)} .order b.sold{color:var(--loss)}
-.reveal li{margin:8px 0;list-style:none}
+.reveal li{margin:12px 0;list-style:none;line-height:1.55}
 .reveal ul{padding:0;margin:0}
 .reveal .lab{display:inline-block;min-width:68px;font-weight:700;color:var(--pink)}
 .tag{display:inline-block;font-size:11px;font-weight:700;padding:1px 8px;border-radius:999px;background:#5A2366;color:var(--muted);margin-left:6px}
-.note{background:var(--warn-bg);color:var(--warn);border-radius:14px;padding:12px 14px;font-size:14px}
+.note{background:var(--warn-bg);color:var(--warn);border-radius:18px;padding:16px 18px;font-size:15px;line-height:1.55}
 .note b{color:#fff}
 footer{color:var(--muted);font-size:12.5px;line-height:1.55}
 .center{text-align:center}
@@ -91,15 +101,15 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
 </head>
 <body>
 <div class="wrap">
-  <a class="brand" href="https://myrobotisa.com/"><img src="../avatar.png" alt="" width="34" height="34"><span>MY ROBOT <b>I.S.A.</b></span></a>
+  <div class="top"><a class="handle" href="https://myrobotisa.com/">myrobotisa.com</a><span class="pill">Free test drive</span></div>
 
   <div id="msg" class="hidden"></div>
 
   <div id="app" class="hidden">
     <header class="hero">
-      <div class="eyebrow" id="eyebrow">Free test drive · Week 1 of 7</div>
-      <h1 id="title">1 April to 5 April 2024</h1>
-      <div class="sub">Pretend money: <b>£10,000</b> on the robot's real rules (the Balanced mix), on real past prices. Share names stay hidden until you finish the day.</div>
+      <div class="pghead"><img class="pgmark" src="../marks/join.png?v=1" alt="" width="72" height="72"><h1 id="eyebrow">Week 1 <span class="p">of 7</span></h1></div>
+      <div class="when" id="title">1 April to 5 April 2024</div>
+      <div class="sub">Pretend money: <b>£10,000</b> on the robot's real rules (the Balanced mix), on real past prices. Share names stay hidden until you finish the week.</div>
     </header>
 
     <div class="note" id="how"><b>How these weeks were picked.</b> Seven real weeks in a row, from April to May 2024, picked because
@@ -138,7 +148,7 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
 
     <section class="card accent" id="finishCard">
       <h2>Finished watching this week?</h2>
-      <p>Finish the day to see who Stock A, B, C and the rest really were.</p>
+      <p>Finish the week to see who Stock A, B, C and the rest really were.</p>
       <div class="row"><button class="btn primary" id="finish">Finish week 1 and reveal the names</button></div>
       <p class="muted" id="finisherr" role="alert"></p>
     </section>
@@ -207,7 +217,7 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
     const d = S.days[view - 1]; if (!d) return;
     const finished = S.done.includes(view);
     $("app").classList.remove("hidden"); $("msg").classList.add("hidden");
-    $("eyebrow").textContent = `Free test drive · Week ${view} of 7`;
+    $("eyebrow").innerHTML = `Week ${view} <span class="p">of 7</span>`;
     $("title").textContent = d.title;
     $("how").classList.toggle("hidden", !(view === 1 || view === 7));
     // strip
@@ -270,9 +280,9 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
     const d = S.days[view - 1];
     const p = k ? d.path[k - 1] : { pot: d.pot_start, fund: d.fund_start };
     $("pot").textContent = gbp(p.pot); $("pot").className = "v";
-    $("potd").textContent = `${p.pot >= 10000 ? "+" : "−"}${Math.abs(100 * (p.pot / 10000 - 1)).toFixed(1)}% since the start`;
+    $("potd").textContent = `${p.pot >= 10000 ? "+" : "−"}${Math.abs(100 * (p.pot / 10000 - 1)).toFixed(1)}% so far`;
     $("fund").textContent = gbp(p.fund);
-    $("fundd").textContent = `${p.fund >= 10000 ? "+" : "−"}${Math.abs(100 * (p.fund / 10000 - 1)).toFixed(1)}% since the start`;
+    $("fundd").textContent = `${p.fund >= 10000 ? "+" : "−"}${Math.abs(100 * (p.fund / 10000 - 1)).toFixed(1)}% so far`;
     const wk = p.pot - d.pot_start;
     $("wk").textContent = signed(wk); $("wk").className = "v " + cls(wk);
     $("wkd").textContent = k ? (k === d.path.length ? "Friday close" : `${DOW[k - 1]} close`) : "Monday morning";
@@ -303,7 +313,8 @@ footer{color:var(--muted);font-size:12.5px;line-height:1.55}
     const marks = [10000]; for (const v of [lo + pad, hi - pad]) if (Math.abs(y(v) - y(10000)) > 16) marks.push(v);
     for (const v of marks) g += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" stroke="#5A2A66" stroke-width="1"/><text x="${L - 6}" y="${y(v) + 4}" text-anchor="end" font-size="11" fill="#D9C6DE" font-family="IBM Plex Mono, monospace">${gbp(v)}</text>`;
     for (let n = 1; n <= 7; n++) g += `<text x="${x(5 * n - 2.5)}" y="${H - 6}" text-anchor="middle" font-size="${W < 500 ? 10 : 12}" fill="${n === view ? "#FF5CCB" : "#D9C6DE"}">${W < 500 ? "W" + n : "Week " + n}</text>`;
-    $("chart").innerHTML = g + `<path d="${line("fund")}" fill="none" stroke="#7FB3FF" stroke-width="2"/><path d="${line("pot")}" fill="none" stroke="#00E87A" stroke-width="2.5"/>`;
+    const hint = pts.length < 2 ? `<text x="${(L + W - R) / 2}" y="${Tp + (H - Tp - B) / 2 + 22}" text-anchor="middle" font-size="14" fill="#C9B3D0">Press Play the week to watch it</text>` : "";
+    $("chart").innerHTML = g + hint + `<path d="${line("fund")}" fill="none" stroke="#7FB3FF" stroke-width="2"/><path d="${line("pot")}" fill="none" stroke="#00E87A" stroke-width="2.5"/>`;
   }
 
   function stop() { if (timer) clearInterval(timer); timer = null; $("play").textContent = "Play the week"; }
