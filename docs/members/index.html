@@ -670,11 +670,18 @@
 
     <section class="card" aria-labelledby="h-rcf" id="rcf" data-page="home fixes" hidden>
       <h2 id="h-rcf">Your <span class="g">fixes</span></h2>
-      <p class="lede">When one of your robot's runs fails, Robot Care works out why and suggests a fix. Accept it here and it goes into your robot's code: your robot uses it from its next run. Nothing changes until you accept, and a fix can never place an order or touch your money settings.</p>
+      <p class="lede">When one of your robot's runs fails, Robot Care works out why and suggests a fix. Accept it here and it goes into your robot's code: your robot uses it from its next run. Nothing changes until you accept, unless you've switched on automatic fixes below, and a fix can never place an order or touch your money settings.</p>
       <ul class="rcf-list" id="rcf-list"></ul>
       <p class="small" id="rcf-empty" hidden>No fixes waiting for you. If a run fails and Robot Care can fix it, the fix shows up here and in your Messages.</p>
       <details class="fold" id="rcf-old" hidden><summary><span class="fold-l">Earlier</span></summary><ul class="rcf-list" id="rcf-old-list" style="margin-top:12px"></ul></details>
       <p class="small" id="rcf-msg" role="status" aria-live="polite" style="margin:10px 0 0"></p>
+      <div class="rcf-box" id="rcf-auto" hidden>
+        <p style="margin-top:0"><b>Let Robot Care fix things for you</b></p>
+        <p class="small">When a report or email breaks, Robot Care can test the fix on your robot and put it in by itself, then message you to say what it did. If a fix causes a problem, it's undone by itself. Leave this off and each fix waits for your tap.</p>
+        <p class="small">It only changes the code behind your reports and emails. It never touches your keys, your holdings, your settings or anything that decides or places orders: those fixes always wait for your tap. You can switch this off at any time.</p>
+        <div class="row"><button class="btn" type="button" id="rcf-auto-btn">Switch on</button></div>
+        <p class="small" id="rcf-auto-st" role="status" aria-live="polite" style="margin:10px 0 0"></p>
+      </div>
     </section>
 
     <section class="card" aria-labelledby="h-sph" id="sp-home" data-page="home">
@@ -1431,7 +1438,7 @@
     if (!session) { show("signin"); return; }
     show("wait");
     var sub = null; try { sub = JSON.parse(atob(session.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub; } catch (e) {}
-    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url,first_name,founding_no,preview_videos,repo_url,robot_care,github_login" + (sub ? "&user_id=eq." + encodeURIComponent(sub) : "")).then(function (r) {
+    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url,first_name,founding_no,preview_videos,repo_url,robot_care,robot_care_auto,github_login" + (sub ? "&user_id=eq." + encodeURIComponent(sub) : "")).then(function (r) {
       if (r.status === 401) { clear(); session = null; show("signin"); say("Your sign-in ran out. Ask for a new code.", false); return; }
       return r.json().then(function (rows) {
         var uid = null; try { uid = JSON.parse(atob(session.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub; } catch (e) {}
@@ -2509,14 +2516,14 @@
   function rcfItem(x) {
     var st = x.fix_state, open = st === "open", later = st === "declined";
     var pills = (x.urgent && (open || later) ? '<span class="pill p">Urgent</span>' : "") +
-      (open ? '<span class="pill g">Waiting for you</span>' : st === "accepted" ? '<span class="pill g">In your robot</span>' : later ? '<span class="pill">Not now</span>' : '<span class="pill">Closed</span>');
+      (open ? '<span class="pill g">Waiting for you</span>' : st === "testing" ? '<span class="pill">Being tested</span>' : st === "undone" ? '<span class="pill">Undone</span>' : st === "accepted" || st === "applied" ? '<span class="pill g">In your robot</span>' : later ? '<span class="pill">Not now</span>' : '<span class="pill">Closed</span>');
     var h = '<li class="rcf-item' + (x.urgent && (open || later) ? " urgent" : "") + '" data-id="' + esc(x.id) + '">' +
       '<div class="rcf-top"><b>' + esc(x.pr_title || "A fix for your robot") + "</b>" + pills + "</div>" +
       (x.urgent && (open || later) ? '<p><b>Your robot can\u2019t do its main job until this is in.</b></p>' : "") +
       "<p>" + esc(x.diagnosis || "Robot Care found why a run failed and made a small fix.") + "</p>" +
       // 29 Oct 2026 (Amit): members never see GitHub or file names here; the fix is described in plain words only.
       '<p class="small">' +
-      (open || later ? "Robot Care checks it again just before it goes in. It can never touch your keys, your money settings or anything that places orders." : st === "accepted" ? "Accepted " + esc(fmtDate(String(x.decided_at || x.at).slice(0, 10))) + "." : "This fix was closed, so there's nothing to accept.") + "</p>";
+      (open || later ? "Robot Care checks it again just before it goes in. It can never touch your keys, your money settings or anything that places orders." : st === "testing" ? "It's being tested on your robot. If it passes it goes in by itself, as you chose, and you'll get a message." : st === "undone" ? "This one caused a problem, so it was taken back out. There's nothing for you to do." : st === "applied" ? "It passed your robot's tests and went in by itself, as you chose." : st === "accepted" ? "Accepted " + esc(fmtDate(String(x.decided_at || x.at).slice(0, 10))) + "." : "This fix was closed, so there's nothing to accept.") + "</p>";
     if (open || later) h += '<div class="row"><button class="btn" type="button" data-act="accept">Accept fix</button><button class="btn ghost" type="button" data-act="ask">Ask a question</button>' +
       (open ? '<button class="btn ghost" type="button" data-act="decline">Not now</button>' : "") + "</div>" +
       '<div class="rcf-box" data-box="confirm" hidden><p style="margin-top:0"><b>Put this fix into your robot?</b> It\u2019s a small change to your copy of the code. Your robot uses it from its next run.</p>' +
@@ -2532,12 +2539,27 @@
     sec.hidden = !(onPage || now.length);
     $("rcf-list").innerHTML = now.map(rcfItem).join("");
     $("rcf-empty").hidden = !(onPage && !now.length);
+    rcfAutoPaint(onPage);
     $("rcf-old").hidden = !(onPage && old.length); $("rcf-old-list").innerHTML = onPage ? old.map(rcfItem).join("") : "";
     document.querySelectorAll(".rcf-n").forEach(function (n) { n.hidden = !now.length; n.textContent = now.length ? String(now.length) : ""; });
     // 29 Oct 2026: on the page it is "Your fixes"; on Home the card says who it's from
     $("h-rcf").innerHTML = onPage ? 'Your <span class="g">fixes</span>' : 'Robot Care has ' + (now.length > 1 ? now.length + ' fixes' : 'a fix') + ' <span class="g">for you</span>';
     rcfNav();
   }
+  // Automatic fixes (D39): off unless the member says yes here. robot-care-accept stores the yes with the wording they agreed to.
+  function rcfAutoPaint(onPage) {
+    var b = $("rcf-auto"); if (!b) return;
+    b.hidden = !(onPage && me && me.robot_care);
+    $("rcf-auto-btn").textContent = me && me.robot_care_auto ? "Switch off" : "Switch on";
+  }
+  if ($("rcf-auto-btn")) $("rcf-auto-btn").addEventListener("click", async function () {
+    var on = !(me && me.robot_care_auto), st = $("rcf-auto-st"), r;
+    this.disabled = true; st.textContent = "Saving\u2026";
+    try { r = await rcfCall("robot-care-accept", { action: "auto", on: on }); } catch (e) { r = null; }
+    this.disabled = false;
+    if (r && r.ok && r.j && r.j.ok) { me.robot_care_auto = r.j.auto; st.textContent = r.j.message; rcfAutoPaint(true); }
+    else st.textContent = "That didn't save. Try again in a minute.";
+  });
   // "Your fixes" is in the menu once Robot Care is switched on, or once there has ever been a fix (29 Oct 2026)
   function rcfNav() { var on = !!(me && me.robot_care) || RCF.rows.length > 0; document.querySelectorAll(".rcf-only").forEach(function (el) { el.hidden = !on; }); }
   function rcfSet(li, t, ok) { var p = li.querySelector(".rcf-st"); p.textContent = t || ""; p.className = "small rcf-st " + (t ? (ok ? "ok" : "err") : ""); }
