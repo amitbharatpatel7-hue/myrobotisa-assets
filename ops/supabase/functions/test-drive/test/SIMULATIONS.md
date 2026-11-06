@@ -19,9 +19,13 @@ design; 306 played a week through; 83 went back to an earlier day; 121 tried a d
 
 Checked on every visit: no page error; no share's name in the page or in any reply before its day is finished;
 the number of open days matches the London calendar (never early); a day can't be finished before it opens or out of
-order; the pot carries from one day to the next; the end card shows the real result (£10,357.18 against £10,121.97);
+order; the pot carries from one day to the next; the end card shows the real result (read from the days: £10,292.11 against £10,121.96);
 nothing wider than the screen. Every tenth visitor also opens the link on 6 December and must see "opens on Monday
 7 December" without starting their clock.
+
+**Second run (seed 11, after Amit's test, 6 Nov): 100 visitors, all passed**, on the replay that trades as the engine
+does. 573 visits; 86 finished all seven; 14 gave up by design; 312 played a week; 115 early tries refused. It also checks
+that every day shows what the robot did at Friday's close.
 
 What the runs and checks found and fixed before this PR:
 - The link carries `?t=` but the function read only `token`, so every real link said it was incomplete (found on the
@@ -34,3 +38,6 @@ What the runs and checks found and fixed before this PR:
 Run it: build the days in the hub (`RISK_PROFILE=balanced python ops/test_drive/drive.py <dir>`), then
 `DRIVE_DIR=<dir> node ops/supabase/functions/test-drive/test/journeys.mjs 100 7`. The days are not in this public repo
 because their reveals name the shares.
+- Amit's own test (6 Nov): the same holdings all week, one trade, and no way on from a finished day. The replay now
+  trades as the engine does (monthly fund change on days 1 and 6, the stop on day 3, the sale on day 4), every day says
+  what the robot did, and a finished day says when the next opens.
