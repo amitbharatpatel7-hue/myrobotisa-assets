@@ -26,7 +26,15 @@
    "reveal_after": "2026-11-29T08:19:22Z",
    "published_at": "2026-11-01T08:19:22Z",
    "status": "committed"
+  },
+  "2026-11-08": {
+   "sha256": "3a85babf62227b9da83dc9b90fdfeedf2697d3a1aba83ede2a3aebdecbe2c175",
+   "orders": 6,
+   "decided_at": "2026-11-08T08:19:12Z",
+   "reveal_after": "2026-12-06T08:19:12Z",
+   "published_at": "2026-11-08T08:19:12Z",
+   "status": "committed"
   }
  },
- "updated_at": "2026-11-01T08:19:28Z"
+ "updated_at": "2026-11-08T08:19:17Z"
 }
