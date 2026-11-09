@@ -1,9 +1,9 @@
 {
- "generated_at": "2026-11-07T01:01:19Z",
- "weeks_run": 8,
+ "generated_at": "2026-11-09T21:32:09Z",
+ "weeks_run": 9,
  "missed_weeks": 0,
  "first_run_at": "2026-09-10T14:43:56Z",
- "last_run_at": "2026-11-01T15:11:37Z",
- "orders_sent": 28,
+ "last_run_at": "2026-11-08T15:13:58Z",
+ "orders_sent": 34,
  "trading": "running"
 }
