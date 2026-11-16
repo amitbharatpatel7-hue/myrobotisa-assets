@@ -1,0 +1,24 @@
+{
+ "decided_at": "2026-10-18T12:38:49Z",
+ "env": "live",
+ "halted": false,
+ "nonce": "ad130b9c890910ef1d917bc30b88c981",
+ "orders": [
+  {
+   "est_value": 544.22,
+   "quantity": 13.112,
+   "reason": "rebalance: retry",
+   "side": "BUY",
+   "sleeve": "core",
+   "symbol": "XLV"
+  }
+ ],
+ "risk_profile": "adventurous",
+ "version": 1,
+ "week": "2026-10-18",
+ "fills": [],
+ "sha256": "ec765302e10df1b0554d3399152f7808c1095f3b6014ac51951388905352a1c2",
+ "commitment_matches": true,
+ "commitment_published_at": "2026-10-18T14:11:27Z",
+ "revealed_at": "2026-11-16T21:32:03Z"
+}
