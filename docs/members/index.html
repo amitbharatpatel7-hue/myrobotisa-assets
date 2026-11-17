@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="112">
+<meta name="mri-version" content="113">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -288,6 +288,11 @@
   .ib-body a.ib-t{display:block;color:var(--ink);text-decoration:none;font-weight:700;font-size:16px;line-height:1.35} .ib-body a.ib-t:hover{color:var(--green)}
   .ib-meta{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;margin-top:8px;font-size:12.5px;color:var(--muted)} .ib-meta .pill{padding:3px 8px;font-size:10px}
   .pill.st-planned{border-color:var(--pink-ink);color:var(--pink-ink)} .pill.st-building{border-color:var(--amber);color:var(--amber)} .pill.st-live{background:var(--green);border-color:var(--green);color:var(--deep)}
+  /* 17 Nov 2026 (Amit, iPhone: no way back from the Moonshotters or a Message's page without the menu): every members page
+     but Home starts with a link back to it. A post keeps its own "All ideas" link instead. */
+  .pg-back{display:inline-flex;align-items:center;min-height:44px;margin:4px 0 2px;color:var(--muted);text-decoration:none;font-weight:600}
+  .pg-back:hover{color:var(--green)}
+  html[data-pg="home"] .pg-back, html[data-pg="post"] .pg-back{display:none}
   .ib-back{display:inline-flex;align-items:center;min-height:44px;color:var(--muted);text-decoration:none;font-weight:600} .ib-back:hover{color:var(--green)}
   .ib-h1{font-family:Anton,Impact,"Arial Narrow Bold",sans-serif;font-weight:400;text-transform:uppercase;font-size:clamp(28px,5vw,40px);line-height:1.08;margin:10px 0 6px;letter-spacing:.01em}
   .ib-desc{white-space:pre-wrap;line-height:1.6;margin:12px 0 0}
@@ -641,6 +646,7 @@
       <div class="row"><button class="btn" type="button" id="oldapp-go">Open my dashboard</button></div></div>
     <div class="preview" id="preview"><span><b>Early preview.</b> The lessons, QuickStart videos and the code open when sales start in January 2027. Ticks you make here are saved to your account, so you can try it on your phone and your Mac and see them follow you.</span></div>
 
+    <a class="pg-back" href="#home" id="pg-back">&larr; Members area</a>
     <div class="ac-alert" id="ac-home-del" data-page="home" role="alert" hidden><b>Your account will be deleted on <span id="ac-home-on"></span>.</b> Changed your mind? <a href="#help" style="font-weight:800">Keep my account</a></div>
     <section class="hello" data-page="home">
       <div>
@@ -3368,7 +3374,8 @@
   }
   // 26 Oct 2026 (Amit): the logo always goes to the site's home page. In the installed app there is no site around it,
   // so there it goes to the members' home instead.
-  if (document.documentElement.classList.contains("app")) { ["brand", "side-brand"].forEach(function (id) { var br = $(id); br.href = "#home"; br.dataset.go = "home"; br.title = "Home"; }); }
+  // 17 Nov 2026: inside Robot Dash too, where "../" would open the website inside the dashboard's view.
+  if (document.documentElement.classList.contains("app") || document.documentElement.classList.contains("in-dash")) { ["brand", "side-brand"].forEach(function (id) { var br = $(id); br.href = "#home"; br.dataset.go = "home"; br.title = "Home"; }); }
   function go(page) {
     var gid = null, hl = page;   // hl: which menu line lights up (29 Oct 2026)
     if (page.indexOf("guide/") === 0) { gid = page.slice(6); page = "guide"; }

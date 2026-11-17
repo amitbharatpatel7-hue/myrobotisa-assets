@@ -257,6 +257,25 @@ try {
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "no sideways scroll with the menu open");
     if (SHOTS) await page.screenshot({ path: path.join(SHOTS, "sidebar-390.png") });
   });
+  // 17 Nov 2026 (Amit, iPhone): every page but Home has a link back to it, so a phone never needs the menu to get home.
+  await run("phone: a link back to the members area on every page but Home", { robotCare: true, fixes: [FIX], vp: { width: 390, height: 844 } }, async (page) => {
+    await page.goto(URL_ + "#home"); await page.waitForSelector("#v-home:not([hidden])"); await page.waitForTimeout(200);
+    assert.equal(await vis(page, "#pg-back"), false, "not on Home");
+    for (const h of ["ideas", "fixes", "help", "clips", "lessons", "questions"]) {
+      await page.goto(URL_ + "#" + h); await page.waitForTimeout(250);
+      assert.equal(await vis(page, "#pg-back"), true, `back link on #${h}`);
+      const box = await page.locator("#pg-back").boundingBox();
+      assert.ok(box.height >= 44 && box.y < 300, `#${h}: back link is a full tap target near the top`);
+    }
+    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, "back-390.png") });
+    await page.click("#pg-back"); await page.waitForURL(/#home$/); await page.waitForTimeout(200);
+    assert.equal(await vis(page, "#msgs, .hello"), true, "lands on Home");
+  });
+  await run("inside Robot Dash the logo goes to the members' Home, not the website", {}, async (page) => {
+    await page.setContent(`<iframe src="${URL_}#ideas" style="width:390px;height:800px"></iframe>`);
+    const f = await (await page.waitForSelector("iframe")).contentFrame(); await f.waitForSelector("#v-home:not([hidden])");
+    assert.equal(await f.getAttribute("#brand", "href"), "#home");
+  });
   await run("installed app menu has the same group", { robotCare: true }, async (page) => {
     await page.goto(URL_ + "?app=1#home"); await page.waitForSelector("#v-home:not([hidden])");
     const items = await page.$$eval("#appnav > li", (lis) => lis.filter((li) => !li.hidden).map((li) => (li.querySelector("a:not([hidden])") || {}).textContent.trim()));
