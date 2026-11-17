@@ -1522,7 +1522,10 @@
     var unread = NOTES.filter(function (n) { return !READ[n.id]; }).length;
     // 17 Nov 2026 (Amit): only unread messages show, so Messages never pushes the Moonshotters down the page. Read ones sit
     // behind "Show earlier messages"; with nothing unread the card is one quiet line. (NOTES is newest first.)
-    var shown = NOTES.filter(function (n) { return !READ[n.id]; }), older = NOTES.filter(function (n) { return READ[n.id]; });
+    // Earlier keeps a month: older read messages drop off so the list can't grow for ever (Amit, 17 Nov 2026). Unread always show.
+    var monthAgo = Date.now() - 30 * 864e5;
+    var shown = NOTES.filter(function (n) { return !READ[n.id]; }),
+        older = NOTES.filter(function (n) { return READ[n.id] && Date.parse(n.starts_at) >= monthAgo; });
     var one = function (n) {
       var isNew = !READ[n.id], parts = noteParts(n.body), open = !!NOTE_OPEN[n.id];
       var when = new Date(n.starts_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });

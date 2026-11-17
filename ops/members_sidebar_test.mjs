@@ -63,7 +63,7 @@ const days = (n) => Array.from({ length: n }, (_, i) => `day:${i + 1}`);
 const lessons = async (page) => { await page.goto(URL_ + "#lessons"); await page.waitForFunction(() => /Lesson \d|last one/.test(document.querySelector("#les-panel").textContent) && document.querySelector("#les-left").textContent); };
 
 const LONG = "Your robot could not sign in to Trading 212.\n\nNothing was bought or sold, and your money is safe. " + "Open Set up my robot and re-enter your key and secret. ".repeat(6).trim();
-const NOTE = (id, title, body) => ({ id, kind: "action", title, body, link_url: null, link_text: null, starts_at: "2026-11-05T11:45:00Z" });
+const NOTE = (id, title, body) => ({ id, kind: "action", title, body, link_url: null, link_text: null, starts_at: new Date(Date.now() - 864e5).toISOString() });   // a day ago: Earlier keeps a month
 
 try {
   await run("messages: a long one folds, See more doesn't mark it read, Hide closes it", { vp: { width: 390, height: 844 }, notices: [NOTE(21, "A failed run needs you", LONG), NOTE(20, "Short one", "All sorted.")] }, async (page) => {
@@ -87,13 +87,15 @@ try {
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "no sideways scroll");
   });
   // 17 Nov 2026 (Amit): only unread messages show, so the Moonshotters stay near the top on a phone
-  await run("messages: only unread show; nothing unread is one short line", { vp: { width: 390, height: 844 }, notices: [NOTE(31, "New one", "Fresh."), NOTE(30, "Old one", "Seen.")], reads: [30] }, async (page) => {
+  await run("messages: only unread show; nothing unread is one short line", { vp: { width: 390, height: 844 }, notices: [NOTE(31, "New one", "Fresh."), { ...NOTE(30, "Old one", "Seen."), starts_at: new Date(Date.now() - 5 * 864e5).toISOString() },
+    { ...NOTE(29, "Last month", "Long gone."), starts_at: new Date(Date.now() - 40 * 864e5).toISOString() }], reads: [30, 29] }, async (page) => {
     await page.goto(URL_ + "#home"); await page.waitForSelector('#notes .note[data-id="31"]');
     assert.equal(await vis(page, '#notes .note[data-id="30"]'), false, "the read one isn't in the main list");
     await page.click('#notes .note[data-id="31"] time');
     await page.waitForSelector("#msgs.quiet");
     assert.equal(await vis(page, "#notes-none"), true); assert.equal(await vis(page, "#notes"), false);
-    assert.match(await page.textContent("#notes-older .fold-l"), /Show 2 earlier messages/);
+    assert.match(await page.textContent("#notes-older .fold-l"), /Show 2 earlier messages/, "a read message older than a month drops off");
+    assert.equal(await page.$('.note[data-id="29"]'), null);
     const h = (await page.locator("#msgs").boundingBox()).height;
     assert.ok(h < 170, `the quiet card is short on a phone (${h}px)`);
     if (SHOTS) await page.screenshot({ path: path.join(SHOTS, "messages-quiet-390.png") });
