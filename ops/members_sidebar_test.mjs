@@ -23,7 +23,7 @@ const URL_ = `http://127.0.0.1:${PORT}/members/`;
 const FIX = { id: 7, outcome: "pr", pr_number: 4, pr_title: "Fix the weekly plan", diagnosis: "A date was read the wrong way.", files: ["signals_report.py"], urgent: true, fix_state: "open", at: "2026-10-29T09:00:00Z" };
 
 let passed = 0;
-async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, height: 900 }, store = {}, guides = null, voice = null, owner = false, preview = true, progress = [], notices = [] }, f) {
+async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, height: 900 }, store = {}, guides = null, voice = null, owner = false, preview = true, progress = [], notices = [], reads = [] }, f) {
   // bypassCSP: the test's own waitForFunction predicates are evaluated as strings, which the page's CSP (no unsafe-eval) refuses
   // under CI's Playwright 1.49 (17 Nov 2026). The test page only; the live page keeps its policy.
   const browser = await chromium.launch(), page = await browser.newPage({ viewport: vp, bypassCSP: true });
@@ -36,6 +36,7 @@ async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, he
     if (p.endsWith("/rest/v1/members")) return json([{ email: "a@example.com", plan: owner ? "owner" : "founding", status: "active", joined_at: "2026-10-01", updates_until: "2027-10-01", founding_no: 7, preview_videos: preview, robot_care: robotCare }]);
     if (p.endsWith("/rest/v1/member_progress") && route.request().method() === "GET") return json(progress.map((item) => ({ item, done: true })));
     if (p.endsWith("/rest/v1/member_notices")) return json(notices);
+    if (p.endsWith("/rest/v1/member_notice_reads") && route.request().method() === "GET") return json(reads.map((notice_id) => ({ notice_id })));
     if (p.endsWith("/functions/v1/robot-care-accept")) return json({ ok: true, changed: 0 });
     if (p.endsWith("/rest/v1/lesson_guides")) return json(guides || [{ id: "day-1", data: { title: "Lesson 1", mins: 5, steps: [] } }]);
     if (p.endsWith("/functions/v1/lesson-media")) return json({ error: "stub" });
@@ -62,7 +63,7 @@ const days = (n) => Array.from({ length: n }, (_, i) => `day:${i + 1}`);
 const lessons = async (page) => { await page.goto(URL_ + "#lessons"); await page.waitForFunction(() => /Lesson \d|last one/.test(document.querySelector("#les-panel").textContent) && document.querySelector("#les-left").textContent); };
 
 const LONG = "Your robot could not sign in to Trading 212.\n\nNothing was bought or sold, and your money is safe. " + "Open Set up my robot and re-enter your key and secret. ".repeat(6).trim();
-const NOTE = (id, title, body) => ({ id, kind: "action", title, body, link_url: null, link_text: null, starts_at: "2026-11-05T11:45:00Z" });
+const NOTE = (id, title, body) => ({ id, kind: "action", title, body, link_url: null, link_text: null, starts_at: new Date(Date.now() - 864e5).toISOString() });   // a day ago: Earlier keeps a month
 
 try {
   await run("messages: a long one folds, See more doesn't mark it read, Hide closes it", { vp: { width: 390, height: 844 }, notices: [NOTE(21, "A failed run needs you", LONG), NOTE(20, "Short one", "All sorted.")] }, async (page) => {
@@ -76,12 +77,28 @@ try {
     assert.equal(await vis(page, `${n} .note-rest`), true);
     assert.equal((await page.textContent(`${n} .note-more`)).trim(), "Hide");
     assert.equal(await page.$eval(n, (e) => e.classList.contains("new")), true, "reading more leaves it unread");
-    await page.click(`${n} time`);   // marking it read repaints the list: it stays open
-    assert.equal(await page.$eval(n, (e) => e.classList.contains("read")), true);
-    assert.equal(await vis(page, `${n} .note-rest`), true);
-    await page.click(`${n} .note-more`);
-    assert.equal(await vis(page, `${n} .note-rest`), false);
+    await page.click(`${n} time`);   // 17 Nov 2026: marking it read moves it under Earlier, still open
+    assert.equal(await vis(page, `#notes ${n}`), false, "read messages leave the main list");
+    await page.click("#notes-older summary");
+    assert.equal(await page.$eval(`#notes-old ${n}`, (e) => e.classList.contains("read")), true);
+    assert.equal(await vis(page, `#notes-old ${n} .note-rest`), true);
+    await page.click(`#notes-old ${n} .note-more`);
+    assert.equal(await vis(page, `#notes-old ${n} .note-rest`), false);
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), "no sideways scroll");
+  });
+  // 17 Nov 2026 (Amit): only unread messages show, so the Moonshotters stay near the top on a phone
+  await run("messages: only unread show; nothing unread is one short line", { vp: { width: 390, height: 844 }, notices: [NOTE(31, "New one", "Fresh."), { ...NOTE(30, "Old one", "Seen."), starts_at: new Date(Date.now() - 5 * 864e5).toISOString() },
+    { ...NOTE(29, "Last month", "Long gone."), starts_at: new Date(Date.now() - 40 * 864e5).toISOString() }], reads: [30, 29] }, async (page) => {
+    await page.goto(URL_ + "#home"); await page.waitForSelector('#notes .note[data-id="31"]');
+    assert.equal(await vis(page, '#notes .note[data-id="30"]'), false, "the read one isn't in the main list");
+    await page.click('#notes .note[data-id="31"] time');
+    await page.waitForSelector("#msgs.quiet");
+    assert.equal(await vis(page, "#notes-none"), true); assert.equal(await vis(page, "#notes"), false);
+    assert.match(await page.textContent("#notes-older .fold-l"), /Show 2 earlier messages/, "a read message older than a month drops off");
+    assert.equal(await page.$('.note[data-id="29"]'), null);
+    const h = (await page.locator("#msgs").boundingBox()).height;
+    assert.ok(h < 170, `the quiet card is short on a phone (${h}px)`);
+    if (SHOTS) await page.screenshot({ path: path.join(SHOTS, "messages-quiet-390.png") });
   });
   await run("lesson progress: picks up the lesson they left, on a phone", { guides: GUIDE14, vp: { width: 390, height: 844 }, progress: [...days(3), "g:day-4:1", "g:day-4:2"] }, async (page) => {
     await lessons(page);
