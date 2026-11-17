@@ -24,7 +24,9 @@ const FIX = { id: 7, outcome: "pr", pr_number: 4, pr_title: "Fix the weekly plan
 
 let passed = 0;
 async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, height: 900 }, store = {}, guides = null, voice = null, owner = false, preview = true, progress = [], notices = [] }, f) {
-  const browser = await chromium.launch(), page = await browser.newPage({ viewport: vp });
+  // bypassCSP: the test's own waitForFunction predicates are evaluated as strings, which the page's CSP (no unsafe-eval) refuses
+  // under CI's Playwright 1.49 (17 Nov 2026). The test page only; the live page keeps its policy.
+  const browser = await chromium.launch(), page = await browser.newPage({ viewport: vp, bypassCSP: true });
   const errs = [];
   page.on("pageerror", (e) => errs.push(String(e)));
   await page.route("https://vxnestmhtjotidhzzqbo.supabase.co/**", async (route) => {
