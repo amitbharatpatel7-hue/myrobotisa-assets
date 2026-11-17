@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="113">
+<meta name="mri-version" content="114">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -196,6 +196,8 @@
   .or{display:flex;align-items:center;gap:10px;margin:18px 0 0;color:var(--muted);font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
   .or::before,.or::after{content:"";flex:1;height:1px;background:var(--rule)}
   .msgs{margin:0 0 16px}
+  /* 17 Nov 2026: nothing unread: one short card, so the Moonshotters stay near the top */
+  .msgs.quiet{padding-top:14px;padding-bottom:14px} .msgs.quiet .msg-head{margin-bottom:0} .msgs.quiet .fold{margin-top:8px}
   /* 21 Oct 2026: nudge to add a passkey, on Home until the member has one (or taps Not now: back in 30 days) */
   .pknudge{margin:0 0 16px;display:flex;gap:16px;align-items:flex-start;border:2px solid var(--green)}
   .pknudge[hidden]{display:none}
@@ -672,6 +674,7 @@
     <section class="card msgs" aria-labelledby="h-msg" id="msgs" data-page="home" hidden>
       <div class="msg-head"><h2 id="h-msg">Messages <span class="count" id="msg-count" aria-label="unread"></span><span class="pill p" id="msg-new" hidden></span></h2><button class="linkbtn" type="button" id="msg-all" hidden>Mark all as read</button></div>
       <ul class="notes" id="notes"></ul>
+      <p class="small" id="notes-none" hidden style="margin:4px 0 0">Nothing new.</p>
       <details class="fold" id="notes-older" hidden><summary><span class="fold-l">Show earlier messages</span></summary><ul class="notes" id="notes-old" style="margin-top:12px"></ul></details>
     </section>
 
@@ -1517,10 +1520,9 @@
   function paintNotes() {
     if (!NOTES.length) { $("msgs").hidden = true; return; }
     var unread = NOTES.filter(function (n) { return !READ[n.id]; }).length;
-    // 22 Oct 2026 (Amit): read messages don't pile up. Everything unread plus the newest read one show; older read ones
-    // sit behind "Show earlier messages". (NOTES is newest first.)
-    var shown = [], older = [], seenRead = false;
-    NOTES.forEach(function (n) { if (!READ[n.id] || !seenRead) { shown.push(n); if (READ[n.id]) seenRead = true; } else older.push(n); });
+    // 17 Nov 2026 (Amit): only unread messages show, so Messages never pushes the Moonshotters down the page. Read ones sit
+    // behind "Show earlier messages"; with nothing unread the card is one quiet line. (NOTES is newest first.)
+    var shown = NOTES.filter(function (n) { return !READ[n.id]; }), older = NOTES.filter(function (n) { return READ[n.id]; });
     var one = function (n) {
       var isNew = !READ[n.id], parts = noteParts(n.body), open = !!NOTE_OPEN[n.id];
       var when = new Date(n.starts_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
@@ -1530,6 +1532,7 @@
         (safeLink(n.link_url) ? '<a href="' + esc(n.link_url) + '">' + esc(n.link_text || "Find out more") + " →</a>" : "") + "</li>";
     };
     $("notes").innerHTML = shown.map(one).join("");
+    $("notes").hidden = !shown.length; $("notes-none").hidden = !!shown.length; $("msgs").classList.toggle("quiet", !shown.length);
     var old = $("notes-older");
     if (older.length) {
       old.hidden = false; old.querySelector(".fold-l").textContent = (old.open ? "Hide" : "Show") + " " + older.length + " earlier message" + (older.length === 1 ? "" : "s");
