@@ -12,6 +12,9 @@ including the internal ones to me, and flag (Internal) in the subject"):
     `bgcolor` attribute as well as the inline background longhand, so Apple Mail and Outlook leave the colours alone;
   * `subject()` prefixes "(Internal) " unless `internal=False` — only emails to members or customers pass False.
 
+v2.8 (18 Nov 2026, Amit chose "A" for the daily P&L: "most people just want to see how much money the robot has lost or made") —
+  member mail only, additive and opt-in: render(figure={...}) puts the day's money in the header card as the biggest thing in the
+  email, with the day's one-liner under it and two stats beneath a hairline. FIGURE_HEADER = True marks it. See _figure_header().
 v2.7 (4 Nov 2026, Amit: "ensure these are the templates and no drift") — every internal email is one of six notices, so its
   colour says what it means before it's opened (hub DECISIONS D37). NOTICES below is the one table; the top card's outline, the
   INTERNAL NOTICE label, the eyebrow, status pills and the robot all come from it. Only the top card has an outline: no logo ring and no
@@ -638,6 +641,33 @@ def _block_html(block: dict) -> str:
 
 
 # ---------------------------------------------------------------- public API
+# v2.8 (18 Nov 2026, Amit chose option A): the day's money is the headline of the member P&L email.
+FIGURE_HEADER = True
+FIGURE_TONES = {"up": GREEN, "down": "#FF7AC0", "flat": INK}   # a down day is a soft pink, never red
+
+
+def _figure_header(eyebrow_text: str, fig: dict, mood: str | None) -> str:
+    """fig = {"value": "\u2212£19.77", "tone": "up"|"down"|"flat", "label": "The robot today",
+    "line": "A quieter day · rules held" (or segments, as for subtitle), "stats": [(label, value), ...] (two fit a phone)}."""
+    colour = FIGURE_TONES.get(fig.get("tone") or "flat", INK)
+    robot = (f'<td width="56" align="right" style="width:56px;vertical-align:top;"><img src="{esc(mood)}" width="56" height="56" alt="" '
+             f'style="display:block;width:56px;height:56px;"></td>') if mood else ""
+    top = (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="vertical-align:top;">{eyebrow(eyebrow_text)}'
+           f'<div style="font-size:14px;color:{MUTED};font-family:{FONT_STACK};">{esc(fig.get("label") or "The robot today")}</div></td>{robot}</tr></table>')
+    big = (f'<div style="font-family:{HEAD_STACK};font-size:64px;font-weight:400;line-height:1;letter-spacing:.01em;color:{colour};'
+           f'margin:6px 0 10px;white-space:nowrap;">{esc(fig["value"])}</div>')
+    line = f'<div style="font-size:17px;color:{INK};font-family:{FONT_STACK};">{_segments(fig.get("line") or "")}</div>' if fig.get("line") else ""
+    stats = fig.get("stats") or []
+    cells = "".join(
+        f'<td width="{100 // len(stats)}%" style="vertical-align:top;padding-right:10px;">'
+        f'<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:{MUTED};font-family:{FONT_STACK};">{esc(k)}</div>'
+        f'<div style="font-family:{HEAD_STACK};font-size:26px;font-weight:400;color:{INK};margin-top:4px;white-space:nowrap;">{esc(v)}</div></td>'
+        for k, v in stats)
+    grid = (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:18px 0 0;border-top:1px solid {HAIRLINE};">'
+            f'<tr><td colspan="{len(stats)}" style="height:14px;line-height:14px;font-size:1px;">&nbsp;</td></tr><tr>{cells}</tr></table>') if cells else ""
+    return panel(f'<tr><td style="padding:22px 24px 24px;">{top}{big}{line}{grid}</td></tr>')
+
+
 def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict],
            cta: tuple[str, str] | None = None, footnote: str | None = None,
            brand: tuple | None = None,
@@ -649,7 +679,8 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
            label: str | None = None,
            hero: dict | None = None,
            chip: str | None = None,
-           accent: str | None = None) -> str:
+           accent: str | None = None,
+           figure: dict | None = None) -> str:
     # v2.5: badge overrides the green pill's text (default "Internal"), e.g. "Stock Boom Hunter" on the engine's own emails.
     b = tuple(brand) if brand else ((eyebrow_text.strip()[:1] or "R").upper(), eyebrow_text, "")
     tile, word, suffix = b[0], b[1], b[2]
@@ -704,7 +735,9 @@ def _render_core(title: str, eyebrow_text: str, subtitle: str, blocks: list[dict
         f'</tr></table>')
     mood_td = (f'<td width="96" align="right" style="width:96px;padding:14px 18px 14px 0;vertical-align:middle;">'
                f'<img src="{esc(mood)}" width="96" height="96" alt="" style="display:block;width:96px;height:96px;"></td>') if mood else ""
-    if hero:
+    if figure and not hero:
+        header = _figure_header(eyebrow_text, figure, mood)
+    elif hero:
         # v2.6.6 (1 Nov 2026, Amit chose "layout 2b" for the welcome): a centred, website-style header. The robot sits
         # above the eyebrow, the title can end in a pink accent on its own line (the site's two-tone headline), and
         # an optional button sits inside the card. hero = {"accent": "the list", "button": (label, url)}.
@@ -842,7 +875,7 @@ def _project_of(brand, eyebrow_text):
 
 
 def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand=None, buttons=None, mood=None,
-           internal=True, tone=None, badge=None, scheme=None, label=None, hero=None, chip=None, notice=None):
+           internal=True, tone=None, badge=None, scheme=None, label=None, hero=None, chip=None, notice=None, figure=None):
     # v2.6.3 (Amit, 24 Oct 2026: "the robot graphic is part of the brand and should be written into the theme"):
     # every email carries a robot. A caller that names no mood gets the up robot on an up day, otherwise the calm one;
     # the project tag (I.S.A., S.B.H., L.M.S., D.T.L.) is swapped in below as before. mood=False opts out explicitly.
@@ -854,7 +887,8 @@ def render(title, eyebrow_text, subtitle, blocks, cta=None, footnote=None, brand
         scheme = "internal" if internal else "night"
     if scheme != "internal":
         return _render_core(title, eyebrow_text, subtitle, blocks, cta=cta, footnote=footnote, brand=brand, buttons=buttons,
-                            mood=mood, internal=internal, tone=tone, badge=badge, label=label, hero=hero, chip=chip)
+                            mood=mood, internal=internal, tone=tone, badge=badge, label=label, hero=hero, chip=chip,
+                            figure=figure)
     proj = _project_of(brand, eyebrow_text)
     # v2.7: the notice decides the colours and the robot, whatever the caller asked for, so internal mail can't drift.
     notice = notice or notice_for(eyebrow_text, badge, blocks)
