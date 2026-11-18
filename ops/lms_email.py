@@ -14,7 +14,7 @@ including the internal ones to me, and flag (Internal) in the subject"):
 
 v2.8 (18 Nov 2026, Amit chose "A" for the daily P&L: "most people just want to see how much money the robot has lost or made") —
   member mail only, additive and opt-in: render(figure={...}) puts the day's money in the header card as the biggest thing in the
-  email, with the day's one-liner under it and two stats beneath a hairline. FIGURE_HEADER = True marks it. See _figure_header().
+  email, with the day's one-liner under it and two stats in inset boxes (v2.8.1). FIGURE_HEADER = True marks it. See _figure_header().
 v2.7 (4 Nov 2026, Amit: "ensure these are the templates and no drift") — every internal email is one of six notices, so its
   colour says what it means before it's opened (hub DECISIONS D37). NOTICES below is the one table; the top card's outline, the
   INTERNAL NOTICE label, the eyebrow, status pills and the robot all come from it. Only the top card has an outline: no logo ring and no
@@ -658,13 +658,18 @@ def _figure_header(eyebrow_text: str, fig: dict, mood: str | None) -> str:
            f'margin:6px 0 10px;white-space:nowrap;">{esc(fig["value"])}</div>')
     line = f'<div style="font-size:17px;color:{INK};font-family:{FONT_STACK};">{_segments(fig.get("line") or "")}</div>' if fig.get("line") else ""
     stats = fig.get("stats") or []
+    # v2.8.1 (Amit, 18 Nov 2026, option 2): the stats are two inset boxes in the body font, one-line labels, so a long label
+    # can't wrap and push its figure out of line, and the day's change stays the only big number.
+    n = len(stats)
     cells = "".join(
-        f'<td width="{100 // len(stats)}%" style="vertical-align:top;padding-right:10px;">'
-        f'<div style="font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:{MUTED};font-family:{FONT_STACK};">{esc(k)}</div>'
-        f'<div style="font-family:{HEAD_STACK};font-size:26px;font-weight:400;color:{INK};margin-top:4px;white-space:nowrap;">{esc(v)}</div></td>'
-        for k, v in stats)
-    grid = (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:18px 0 0;border-top:1px solid {HAIRLINE};">'
-            f'<tr><td colspan="{len(stats)}" style="height:14px;line-height:14px;font-size:1px;">&nbsp;</td></tr><tr>{cells}</tr></table>') if cells else ""
+        f'<td width="{100 // n}%" style="width:{100 // n}%;padding:{"0 5px 0 0" if i == 0 else "0 0 0 5px" if i == n - 1 else "0 5px"};vertical-align:top;">'
+        f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(CARD_DEEP)}border-radius:{PANEL_RADIUS}px;"><tr><td style="padding:12px 14px;">'
+        f'<div style="font-size:12px;color:{MUTED};font-family:{FONT_STACK};white-space:nowrap;">{esc(k)}</div>'
+        f'<div style="font-size:20px;font-weight:800;color:{INK};font-family:{FONT_STACK};margin-top:2px;white-space:nowrap;">{esc(v)}</div>'
+        f'</td></tr></table></td>'
+        for i, (k, v) in enumerate(stats))
+    grid = (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:18px 0 0;"><tr>{cells}</tr></table>'
+            if cells else "")
     return panel(f'<tr><td style="padding:22px 24px 24px;">{top}{big}{line}{grid}</td></tr>')
 
 
