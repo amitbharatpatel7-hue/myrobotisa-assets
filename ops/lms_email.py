@@ -278,23 +278,28 @@ def _segments(sub) -> str:
 
 
 def _days(days, today=None) -> str:
-    """A week strip: one tile per day, green for an up day, plum for a down or flat day (never red), amount beneath.
+    """A week strip: one tile per day, green for an up day, plum for a down or flat day (never red).
     v2.7.1 (4 Nov 2026, Amit): `today` is the index of today's tile, drawn with a pink outline and white text so a lone green
-    up day isn't read as "you are here". Colour still only means up or down; an up day today stays green inside the outline."""
+    up day isn't read as "you are here". Colour still only means up or down; an up day today stays green inside the outline.
+    v2.8.3 (19 Nov 2026, his option 2): the amount sits inside the tile in whole pounds, on one line, because "−£25.09" under a
+    phone-width column broke after the minus sign. The exact total is the card's status pill. A tile with no amount (W1 to W7)
+    is the label alone, as before."""
     cells = []
     for i, (label, chg) in enumerate(days):
         up = chg is not None and chg > 0
         bgc = GREEN_BG if up else MUTED_BG
         fg = GREEN if up else MUTED
-        amt = "" if chg is None else (("+" if chg > 0 else "\u2212" if chg < 0 else "") + f"£{abs(chg):,.2f}")
+        pounds = None if chg is None else int(abs(chg) + 0.5)
+        amt = "" if chg is None else (("+" if chg > 0 and pounds else "\u2212" if chg < 0 and pounds else "") + f"£{pounds:,}")
         now = i == today
         if now and not up:
             fg = INK
-        ring = f"border:2px solid {PINK};padding:6px 0;" if now else "padding:8px 2px;"   # same height with or without the outline
+        pad = "padding:7px 0;" if amt else "padding:6px 0;"
+        ring = f"border:2px solid {PINK};{pad}" if now else f"border:2px solid {bgc};{pad}"   # same size with or without the outline
+        inner = (f'<div style="font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;">{esc(label)}</div>'
+                 + (f'<div style="margin-top:3px;font-size:12px;font-weight:800;white-space:nowrap;">{esc(amt)}</div>' if amt else ""))
         cells.append(f'<td align="center" valign="top" style="padding:0 3px;vertical-align:top;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">'
-                     f'<tr><td align="center" {_bg(bgc)}border-radius:10px;{ring}font-size:11px;font-weight:800;letter-spacing:.06em;'
-                     f'text-transform:uppercase;color:{fg};font-family:{FONT_STACK};">{esc(label)}</td></tr>'
-                     f'<tr><td align="center" style="padding-top:6px;font-size:12px;font-weight:700;color:{fg};font-family:{FONT_STACK};">{esc(amt)}</td></tr>'
+                     f'<tr><td align="center" {_bg(bgc)}border-radius:12px;{ring}color:{fg};font-family:{FONT_STACK};">{inner}</td></tr>'
                      f'</table></td>')
     return f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;"><tr>{"".join(cells)}</tr></table>'
 
