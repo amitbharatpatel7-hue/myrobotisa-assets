@@ -659,11 +659,12 @@ def _figure_header(eyebrow_text: str, fig: dict, mood: str | None) -> str:
     line = f'<div style="font-size:17px;color:{INK};font-family:{FONT_STACK};">{_segments(fig.get("line") or "")}</div>' if fig.get("line") else ""
     stats = fig.get("stats") or []
     # v2.8.1 (Amit, 18 Nov 2026, option 2): the stats are two inset boxes in the body font, one-line labels, so a long label
-    # can't wrap and push its figure out of line, and the day's change stays the only big number.
+    # can't wrap and push its figure out of line, and the day's change stays the only big number. v2.8.2 (19 Nov 2026,
+    # his option 4, after pink read as too much): each box has a 2px green outline.
     n = len(stats)
     cells = "".join(
         f'<td width="{100 // n}%" style="width:{100 // n}%;padding:{"0 5px 0 0" if i == 0 else "0 0 0 5px" if i == n - 1 else "0 5px"};vertical-align:top;">'
-        f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(CARD_DEEP)}border-radius:{PANEL_RADIUS}px;"><tr><td style="padding:12px 14px;">'
+        f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(CARD_DEEP)}border-radius:{PANEL_RADIUS}px;border:2px solid {GREEN};"><tr><td style="padding:12px 14px;">'
         f'<div style="font-size:12px;color:{MUTED};font-family:{FONT_STACK};white-space:nowrap;">{esc(k)}</div>'
         f'<div style="font-size:20px;font-weight:800;color:{INK};font-family:{FONT_STACK};margin-top:2px;white-space:nowrap;">{esc(v)}</div>'
         f'</td></tr></table></td>'
