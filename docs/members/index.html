@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="114">
+<meta name="mri-version" content="115">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -883,7 +883,13 @@
         <div id="pane-memb" hidden>
         <div class="ib-seg hp-seg" role="tablist" aria-label="Help and membership"><a role="tab" href="#help" data-go-tab="help" aria-selected="true">Membership</a><a role="tab" href="#passkeys" data-go-tab="passkeys" aria-selected="false">Faster sign-in</a><a role="tab" href="#early" data-go-tab="early" aria-selected="false" class="ea-tab" hidden>Early adopters</a></div>
         <div class="kv" id="mem-kv"></div>
-        <div class="row"><button class="btn ghost" type="button" disabled title="Arrives with checkout in January">Manage membership</button><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=My%20membership">Email about my membership</a></div>
+        <div class="row"><button class="btn ghost" type="button" id="b-manage">Manage membership</button><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=My%20membership">Email about my membership</a></div>
+        <p class="small" id="pay-msg" role="status" style="margin:10px 0 0" hidden></p>
+        <!-- 20 Nov 2026 (hub D27): Stripe in test mode. Owner only: the three checkouts, with Stripe's test card. -->
+        <div id="pay-test" hidden style="margin:14px 0 0;padding:14px;border:1px dashed var(--rule);border-radius:14px">
+          <p class="small" style="margin:0 0 10px"><b>Payments test (only you see this).</b> Stripe is in test mode: card 4242 4242 4242 4242, any future date, any CVC. No real money moves.</p>
+          <div class="row"><button class="btn ghost" type="button" data-pay="kit">Buy the kit</button><button class="btn ghost" type="button" data-pay="renewal">Renew updates (£99)</button><button class="btn ghost" type="button" data-pay="robot_care">Robot Care (£10 a month)</button></div>
+        </div>
         <p class="small" style="margin:12px 0 0">You keep every lesson and video released while your updates are included, and the version of the code you had. Renewing is optional and never automatic.</p>
         <!-- 29 Oct 2026 (D28): members manage their own account. Sign-in email, GitHub account, where the robot reaches
              them, download my data, delete my account (7 days to change their mind). -->
@@ -1404,6 +1410,7 @@
   var me = {};
   function home(m, uid) {
     me = m; me.user_id = uid;
+    $("pay-test").hidden = m.plan !== "owner";
     if (m.plan === "owner" || m.plan === "early") $("preview").hidden = true;   // 3 Nov 2026 (Amit): everything is open to these accounts, so no 'Early preview' banner
     $("whoemail").textContent = session.email || m.email;
     var first = (PLAN[m.plan] || "Member");
@@ -2510,6 +2517,21 @@
   // ---- Robot Care fixes (28 Oct 2026, hub DECISIONS D25 stage 1). The list comes from my_robot_care_fixes() (only
   // this member's own fixes); Accept fix calls robot-care-accept, which re-checks the fix with GitHub and merges it with
   // Robot Care's own GitHub App, so the member never needs GitHub. Ask a question calls robot-care-ask.
+  // ---- Payments (20 Nov 2026, hub D27): Stripe's hosted pages. Manage membership opens Stripe's customer portal
+  // (card, receipts, cancel Robot Care); the owner's test card buttons open Checkout. Both go through the stripe function.
+  function payMsg(t) { var m = $("pay-msg"); m.textContent = t || ""; m.hidden = !t; }
+  function payGo(route, body, btn) {
+    if (btn.disabled) return; btn.disabled = true; payMsg("");
+    rcfCall("stripe/" + route, body).then(function (r) {
+      if (r.ok && r.j && /^https:\/\/[a-z.]+\.stripe\.com\//.test(r.j.url || "")) { location.href = r.j.url; return; }
+      btn.disabled = false;
+      payMsg(r.j && r.j.code === "no-customer" ? "There's nothing to manage yet: no payments have been made on this account." : (r.j && r.j.error) || "That didn't work. Try again in a minute.");
+    }).catch(function () { btn.disabled = false; payMsg("That didn't work. Check your connection and try again."); });
+  }
+  $("b-manage").addEventListener("click", function () { payGo("portal", {}, this); });
+  document.querySelectorAll("[data-pay]").forEach(function (b) {
+    b.addEventListener("click", function () { payGo("checkout", { item: b.getAttribute("data-pay"), waiver: true }, b); });
+  });
   var RCF = { rows: [], page: "", busy: {} };
   function rcfCall(fn, body) {
     return fresh().then(function (s) {
