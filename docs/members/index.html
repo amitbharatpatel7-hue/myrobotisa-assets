@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="119">
+<meta name="mri-version" content="120">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -63,7 +63,7 @@
   .brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none}
   .brand img{width:40px;height:40px;border-radius:11px;border:2px solid var(--green)}
   .brand b{white-space:nowrap;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:22px;letter-spacing:.02em;text-transform:uppercase;line-height:1}
-  .brand b i{font-style:normal;color:var(--green)}
+  .brand b i{font-style:normal;color:var(--pink)}
   .brand small{display:block;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:3px}
   .who{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted);min-width:0}
   .who span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:38vw}
@@ -482,6 +482,9 @@
   /* 21 Oct 2026: the member's dashboard shown inside the app, full window. Its own menu is the only one while it's open. */
   .dashframe{display:none}
   html.dashview body{overflow:hidden}
+  /* 20 Nov 2026 (Amit): on a phone and in the app the menu is a solid bar along the bottom, so it never sits on top of text */
+  @media (max-width:1099px){ #menubtn{left:0;right:0;bottom:0;width:100%;height:calc(54px + env(safe-area-inset-bottom));padding:0 0 env(safe-area-inset-bottom);gap:8px;border:0;border-top:1px solid var(--rule);border-radius:0;box-shadow:0 -6px 18px rgba(0,0,0,.25);font:inherit;font-weight:700;font-size:14px} body{padding-bottom:calc(62px + env(safe-area-inset-bottom))} #mtoast{bottom:calc(70px + env(safe-area-inset-bottom))} }
+  html.app #menubtn{left:0;right:0;bottom:0;width:100%;height:calc(54px + env(safe-area-inset-bottom));padding:0 0 env(safe-area-inset-bottom);gap:8px;border:0;border-top:1px solid var(--rule);border-radius:0;box-shadow:0 -6px 18px rgba(0,0,0,.25);font:inherit;font-weight:700;font-size:14px} html.app body{padding-bottom:calc(62px + env(safe-area-inset-bottom))} html.app #mtoast{bottom:calc(70px + env(safe-area-inset-bottom))}
   html.dashview #menubtn,html.dashview #scrim,html.dashview .side{display:none!important}
   html.dashview .dashframe{display:block!important;position:fixed;inset:0;z-index:40;background:var(--deep);margin:0;padding:0;border:0;border-radius:0;max-width:none}
   .dashframe iframe{display:block;width:100%;height:100%;border:0;background:var(--deep)}
@@ -623,7 +626,7 @@
   </form>
 </div></div>
 <button id="scrim" tabindex="-1" aria-hidden="true"></button>
-<button id="menubtn" aria-label="Sections menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+<button id="menubtn" aria-label="Sections menu" aria-expanded="false" aria-controls="side"><svg class="i-bars" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg><svg class="i-x" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg><span class="i-bars">Menu</span><span class="i-x">Close</span></button>
 <div class="wrap" id="top">
   <div class="top">
     <a class="brand" href="../" id="brand" title="myrobotisa.com"><img src="icon-192.png" alt=""><span><b>My Robot <i>I.S.A.</i></b><small>Members</small></span></a>
