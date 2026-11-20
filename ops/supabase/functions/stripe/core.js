@@ -41,7 +41,9 @@ export async function checkout(d, { item, waiver, user, embedded }) {
       customer_creation: "always", ...(user?.email && d.live ? { customer_email: user.email } : {}),
       metadata: meta, payment_intent_data: { metadata: meta },
       custom_text: { submit: { message: "You agreed that opening the code ends your 14-day right to cancel. The QuickStart promise still applies: see our terms." } },
-      ...(embedded ? { ui_mode: "embedded_page", return_url: `${SITE}/buy.html?done={CHECKOUT_SESSION_ID}` }
+      // On our page Stripe's form sits in a white card, so its own summary panel is white too (not the brand purple).
+      ...(embedded ? { ui_mode: "embedded_page", return_url: `${SITE}/buy.html?done={CHECKOUT_SESSION_ID}`,
+        branding_settings: { background_color: "#ffffff", display_name: "My Robot I.S.A." } }
         : { success_url: `${MEMBERS}?welcome=1&session_id={CHECKOUT_SESSION_ID}`, cancel_url: `${SITE}/buy.html?checkout=cancelled` }),
     });
     if (embedded) return d.pk && s.client_secret ? ok({ client_secret: s.client_secret, publishable_key: d.pk, plan })

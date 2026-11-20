@@ -38,7 +38,7 @@ await t("kit, embedded: Stripe's form on our page gets a client secret and the p
   const r = await core.checkout(w.d, { item: "kit", waiver: true, user: null, embedded: true });
   assert.equal(r.body.client_secret, "cs_1_secret"); assert.equal(r.body.publishable_key, "pk_test_x"); assert.equal(r.body.url, undefined);
   const p = w.calls[0].params;
-  assert.equal(p.ui_mode, "embedded_page"); assert.match(p.return_url, /buy\.html\?done=\{CHECKOUT_SESSION_ID\}$/); assert.equal(p.success_url, undefined);
+  assert.equal(p.ui_mode, "embedded_page"); assert.equal(p.branding_settings.background_color, "#ffffff"); assert.match(p.return_url, /buy\.html\?done=\{CHECKOUT_SESSION_ID\}$/); assert.equal(p.success_url, undefined);
   w.d.pk = "";
   assert.equal((await core.checkout(w.d, { item: "kit", waiver: true, embedded: true })).body.code, "no-key");
 });
