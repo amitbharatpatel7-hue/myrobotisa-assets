@@ -23,7 +23,7 @@ const URL_ = `http://127.0.0.1:${PORT}/members/`;
 const FIX = { id: 7, outcome: "pr", pr_number: 4, pr_title: "Fix the weekly plan", diagnosis: "A date was read the wrong way.", files: ["signals_report.py"], urgent: true, fix_state: "open", at: "2026-10-29T09:00:00Z" };
 
 let passed = 0;
-async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, height: 900 }, store = {}, guides = null, voice = null, owner = false, preview = true, progress = [], notices = [], reads = [] }, f) {
+async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, height: 900 }, store = {}, guides = null, voice = null, owner = false, preview = true, progress = [], notices = [], reads = [], posts = [] }, f) {
   // bypassCSP: the test's own waitForFunction predicates are evaluated as strings, which the page's CSP (no unsafe-eval) refuses
   // under CI's Playwright 1.49 (17 Nov 2026). The test page only; the live page keeps its policy.
   const browser = await chromium.launch(), page = await browser.newPage({ viewport: vp, bypassCSP: true });
@@ -36,6 +36,7 @@ async function run(name, { robotCare = false, fixes = [], vp = { width: 1280, he
     if (p.endsWith("/rest/v1/members")) return json([{ email: "a@example.com", plan: owner ? "owner" : "founding", status: "active", joined_at: "2026-10-01", updates_until: "2027-10-01", founding_no: 7, preview_videos: preview, robot_care: robotCare }]);
     if (p.endsWith("/rest/v1/member_progress") && route.request().method() === "GET") return json(progress.map((item) => ({ item, done: true })));
     if (p.endsWith("/rest/v1/member_notices")) return json(notices);
+    if (p.endsWith("/rest/v1/community_posts")) return json(posts);
     if (p.endsWith("/rest/v1/member_notice_reads") && route.request().method() === "GET") return json(reads.map((notice_id) => ({ notice_id })));
     if (p.endsWith("/functions/v1/robot-care-accept")) return json({ ok: true, changed: 0 });
     if (p.endsWith("/rest/v1/lesson_guides")) return json(guides || [{ id: "day-1", data: { title: "Lesson 1", mins: 5, steps: [] } }]);
@@ -295,6 +296,50 @@ try {
     const f = await (await page.waitForSelector("iframe")).contentFrame(); await f.waitForSelector("#v-home:not([hidden])");
     assert.equal(await f.getAttribute("#brand", "href"), "#home");
   });
+  // Moonshotters board (20 Nov 2026, Amit): opens on All, ideas and questions together, newest first. The board as it
+  // stood that day (hidden posts never reach other members: RLS): the newest idea 25 days old, four newer questions hidden behind the Questions tab.
+  const post = (id, kind, title, at, extra = {}) => ({ id, kind, title, body: "", category: "robot", status: "review", author_name: "Amit",
+    user_id: "u", vote_count: 0, comment_count: 0, answer_id: null, hidden: false, created_at: at, status_at: at, ...extra });
+  const BOARD = [
+    post(4, "idea", "Show the safety-stop line on the Overview", "2026-10-20T09:00:00Z", { vote_count: 6, status: "planned" }),
+    post(5, "idea", "A weekly email option", "2026-10-21T09:00:00Z", { vote_count: 3 }),
+    post(6, "idea", "Dark and light themes", "2026-10-22T09:00:00Z", { vote_count: 3 }),
+    post(7, "idea", "More brokers", "2026-10-23T09:00:00Z", { vote_count: 1, status: "building" }),
+    post(8, "idea", "Lesson 15: testing your own rule", "2026-10-26T09:00:00Z", { vote_count: 2 }),
+    post(9, "question", "Can I change my approval time?", "2026-11-01T09:00:00Z"),
+    post(10, "question", "Does the robot trade on bank holidays?", "2026-11-08T09:00:00Z"),
+    post(11, "question", "What happens if I miss a week?", "2026-11-12T09:00:00Z"),
+    post(12, "question", "Why does the safety stop freeze everything instead of selling?", "2026-11-17T09:00:00Z"),
+  ];
+  const titles = (page) => page.$$eval("#ib-list .ib-t", (as) => as.map((a) => a.textContent));
+  for (const vp of [{ width: 1280, height: 900 }, { width: 360, height: 780 }]) {
+    await run(`Moonshotters open on All, newest first (${vp.width}px)`, { posts: BOARD, vp }, async (page) => {
+      await page.goto(URL_ + "#ideas"); await page.waitForSelector("#ib-list .ib-t");
+      assert.equal(await page.getAttribute("#ib-t-all", "aria-selected"), "true");
+      assert.deepEqual(await page.$$eval(".ib-seg[aria-label='Ideas or questions'] button", (b) => b.map((x) => x.textContent.trim())), ["All · 9", "Ideas · 5", "Questions · 4"]);
+      assert.deepEqual(await titles(page), [BOARD[8].title, BOARD[7].title, BOARD[6].title]);
+      assert.deepEqual(await page.$$eval("#ib-list .ib-kind", (s) => s.map((x) => x.textContent)), ["Question", "Question", "Question"]);
+      await page.click("#ib-more");
+      assert.deepEqual((await titles(page)).slice(3, 5), [BOARD[5].title, BOARD[4].title], "then 9, then Lesson 15");
+      const seg = await page.$eval(".ib-seg[aria-label='Ideas or questions']", (e) => ({ sw: e.scrollWidth, cw: e.clientWidth, r: e.getBoundingClientRect().right }));
+      assert.ok(seg.sw <= seg.cw + 1 && seg.r <= vp.width, `tabs fit without scrolling: ${JSON.stringify(seg)}`);
+      if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `moonshotters-all-${vp.width}.png`), fullPage: false });
+      // Ideas keeps vote order, ties newest first, and no kind label
+      await page.click("#ib-t-idea");
+      assert.deepEqual((await titles(page)).slice(0, 3), [BOARD[0].title, BOARD[2].title, BOARD[1].title]);
+      assert.equal(await page.$$eval("#ib-list .ib-kind", (s) => s.length), 0);
+      // a status chip on All shows ideas at that stage only
+      await page.click("#ib-t-all"); await page.click('#ib-chips button[data-f="planned"]');
+      assert.deepEqual(await titles(page), [BOARD[0].title]);
+      // search works across All
+      await page.click('#ib-chips button[data-f=""]');
+      await page.fill("#ib-q", "miss a week"); assert.deepEqual(await titles(page), [BOARD[7].title]);
+      // the menu link lands on All again
+      await page.click("#ib-t-question"); await page.goto(URL_ + "#home"); await page.goto(URL_ + "#ideas"); await page.waitForTimeout(200);
+      await page.evaluate(() => document.querySelector('a[href="#ideas"]').click()); await page.waitForTimeout(100);
+      assert.equal(await page.getAttribute("#ib-t-all", "aria-selected"), "true");
+    });
+  }
   await run("installed app menu has the same group", { robotCare: true }, async (page) => {
     await page.goto(URL_ + "?app=1#home"); await page.waitForSelector("#v-home:not([hidden])");
     const items = await page.$$eval("#appnav > li", (lis) => lis.filter((li) => !li.hidden).map((li) => (li.querySelector("a:not([hidden])") || {}).textContent.trim()));
