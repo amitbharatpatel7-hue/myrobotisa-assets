@@ -649,7 +649,8 @@
 </script>
 <script>
 // Founding price, automatically: ask how many of the 100 founding places have sold (counts only, no personal data).
-// At 100 sold every price line switches to £199 by itself; once sales open, "X of 100 founding places left" shows.
+// At 100 sold every price line switches to £199 by itself; once sales open and 75 or fewer are left, "X of 100
+// founding places left" shows (20 Nov 2026, Amit: a count of 100 of 100 left reads as if nobody has bought).
 (function(){
   if (!/myrobotisa\.com$/.test(location.hostname) && !/[?&](pricetest|livetest)=/.test(location.search)) return;
   var test = (location.search.match(/[?&]pricetest=(\d+)/) || [])[1];
@@ -668,7 +669,7 @@
     document.querySelectorAll(".pf").forEach(function(e){ e.hidden = gone; });
     document.querySelectorAll(".ps").forEach(function(e){ e.hidden = !gone; });
     document.querySelectorAll("[data-places]").forEach(function(e){
-      if (st.sales_open && !gone) { e.textContent = st.left === 1 ? "Last founding place left at £99" : "Only " + st.left + " of " + st.total + " founding places left"; e.hidden = false; }
+      if (st.sales_open && !gone && st.left <= 75) { e.textContent = st.left === 1 ? "Last founding place left at £99" : "Only " + st.left + " of " + st.total + " founding places left"; e.hidden = false; }
       else e.hidden = true;
     });
   }

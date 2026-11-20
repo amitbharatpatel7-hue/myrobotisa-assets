@@ -129,7 +129,8 @@
       $("amount-note").innerHTML = founding ? "once. <s>£199</s> after the first 100 members." : "once. No subscription.";
       $("care-li").hidden = !founding;
       var tag = $("tag"); tag.hidden = !founding;
-      if (founding) tag.textContent = "Founding member · " + f.left + " of " + f.total + " places left";
+      // 20 Nov 2026 (Amit): the first buyers shouldn't read "100 of 100 left"; the count shows once 75 or fewer remain.
+      if (founding) tag.textContent = f.left <= 75 ? "Founding member · only " + f.left + " of " + f.total + " places left" : "You made it · founding member price";
       $("go").dataset.amount = founding ? "£99" : "£199";
       if (!f.sales_open && !token) { $("closed").hidden = false; $("step1").hidden = true; $("go").hidden = true; }
     }).catch(function () {});
