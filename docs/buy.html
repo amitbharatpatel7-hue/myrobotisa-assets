@@ -42,6 +42,7 @@
   .card{width:100%;max-width:520px;background:#fff;color:var(--text);border-radius:20px;padding:28px;box-shadow:0 10px 30px rgba(52,0,59,.12);display:grid;gap:18px}
   .card h2{margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:28px;letter-spacing:.4px;color:var(--deep);text-transform:uppercase}
   .card h2 span{color:var(--pink-bg)}
+  #form{margin:0 -12px}
   .agree{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.45;padding:14px;border-radius:12px;background:#FDEAF7;border:1px solid var(--pink-bg);cursor:pointer}
   .agree input{width:22px;height:22px;flex:none;margin:0;accent-color:var(--pink-bg)}
   .agree a{color:var(--pink-bg);font-weight:600}
@@ -111,7 +112,11 @@
   var q = new URLSearchParams(location.search);
 
   // Back from Stripe after paying: the webhook has made the membership; this page only says what to do next.
-  if (q.get("done")) { $("card-buy").hidden = true; $("card-done").hidden = false; return; }
+  if (q.get("done")) {
+    $("card-buy").hidden = true; $("card-done").hidden = false;
+    document.querySelector(".price").hidden = true; $("h").innerHTML = "Welcome. <span>Let's set up your robot.</span>";
+    return;
+  }
 
   // A signed-in member's token, if this browser has one (the members area keeps it). In test mode only the owner or a
   // test member gets past the stripe function; a buyer in January needs no sign-in.
@@ -129,7 +134,8 @@
       $("amount-note").innerHTML = founding ? "once. <s>£199</s> after the first 100 members." : "once. No subscription.";
       $("care-li").hidden = !founding;
       var tag = $("tag"); tag.hidden = !founding;
-      if (founding) tag.textContent = "Founding member · " + f.left + " of " + f.total + " places left";
+      // 20 Nov 2026 (Amit): the first buyers shouldn't read "100 of 100 left"; the count shows once 75 or fewer remain.
+      if (founding) tag.textContent = f.left <= 75 ? "Founding member · only " + f.left + " of " + f.total + " places left" : "You made it · founding member price";
       $("go").dataset.amount = founding ? "£99" : "£199";
       if (!f.sales_open && !token) { $("closed").hidden = false; $("step1").hidden = true; $("go").hidden = true; }
     }).catch(function () {});
