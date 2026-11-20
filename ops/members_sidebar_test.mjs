@@ -323,6 +323,12 @@ try {
       assert.deepEqual((await titles(page)).slice(3, 5), [BOARD[5].title, BOARD[4].title], "then 9, then Lesson 15");
       const seg = await page.$eval(".ib-seg[aria-label='Ideas or questions']", (e) => ({ sw: e.scrollWidth, cw: e.clientWidth, r: e.getBoundingClientRect().right }));
       assert.ok(seg.sw <= seg.cw + 1 && seg.r <= vp.width, `tabs fit without scrolling: ${JSON.stringify(seg)}`);
+      // 20 Nov 2026 (Amit): the two buttons sit side by side, not one under the other, and stay inside the card
+      const [bn, ba] = [await page.locator("#ib-new").boundingBox(), await page.locator("#ib-ask").boundingBox()];
+      assert.ok(Math.abs(bn.y - ba.y) < 2 && ba.x > bn.x + bn.width - 1, `buttons side by side: ${JSON.stringify([bn, ba])}`);
+      const lb = await page.locator("#ib-list").boundingBox();
+      assert.ok(ba.x + ba.width <= lb.x + lb.width + 1 && bn.height >= 44, `buttons no wider than the list, full tap target: ${JSON.stringify([ba, lb])}`);
+      assert.equal(await page.$eval("#ib-new", (e) => e.scrollWidth <= e.clientWidth + 1), true, "label not clipped");
       if (SHOTS) await page.screenshot({ path: path.join(SHOTS, `moonshotters-all-${vp.width}.png`), fullPage: false });
       // Ideas keeps vote order, ties newest first, and no kind label
       await page.click("#ib-t-idea");
