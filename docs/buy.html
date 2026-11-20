@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get the kit · My Robot I.S.A.</title>
+<meta name="description" content="The My Robot I.S.A. kit: your own copy of the robot's code, all 14 lessons and 12 months of updates.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#34003B">
+<link rel="icon" href="avatar.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- 20 Nov 2026 (hub D27): the checkout page. Our page, our words; Stripe's payment form sits inside the white card
+     (embedded Checkout), so card details go only to Stripe. Sales open in January: until then the stripe function
+     only lets the owner or a test member through, and this page says so to everyone else. -->
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+  :root{--deep:#34003B;--deep2:#4B1155;--rule:#6A3578;--green:#00E87A;--pink-bg:#C8008F;--pink-ink:#FF5CCB;--ink:#FFFFFF;--soft:#D9C6DE;--muted:#BFA6C6;--paper:#F4EEF6;--text:#1C0A21;--text2:#5A3E62}
+  *{box-sizing:border-box} [hidden]{display:none!important}
+  html,body{margin:0}
+  body{font-family:Poppins,system-ui,sans-serif;background:var(--deep);color:var(--ink);-webkit-font-smoothing:antialiased}
+  a{color:var(--green)}
+  .skip{position:absolute;left:-999px} .skip:focus{left:12px;top:12px;background:var(--green);color:var(--deep);padding:8px 12px;border-radius:8px;z-index:9}
+  .wrap{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+  .pitch{padding:48px 56px;display:flex;flex-direction:column;gap:22px}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);align-self:flex-start}
+  .brand img{width:44px;height:44px;border-radius:10px}
+  .brand span{font-family:Anton,Impact,sans-serif;font-size:28px;letter-spacing:.5px} .brand i{font-style:normal;color:var(--pink-ink)}
+  .tag{align-self:flex-start;padding:6px 14px;border-radius:999px;background:var(--pink-bg);font-size:13px;font-weight:700;letter-spacing:.6px;text-transform:uppercase}
+  h1{margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:clamp(40px,5vw,60px);line-height:1.05;letter-spacing:.5px;text-transform:uppercase}
+  h1 span{color:var(--green)}
+  .price{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+  .price b{font-family:Anton,Impact,sans-serif;font-weight:400;font-size:76px;line-height:1;color:var(--green)}
+  .price span{font-size:17px;color:var(--soft)}
+  .gets{list-style:none;margin:0;padding:0;display:grid;gap:12px;font-size:17px;line-height:1.45}
+  .gets li{display:flex;gap:12px;align-items:flex-start}
+  .gets svg{flex:none;margin-top:3px}
+  .only{display:inline-block;margin-left:6px;padding:2px 10px;border-radius:999px;background:var(--pink-bg);font-size:12px;font-weight:700;white-space:nowrap}
+  .fine{margin:auto 0 0;font-size:12px;line-height:1.5;color:var(--muted)}
+  .pay{background:var(--paper);display:flex;align-items:flex-start;justify-content:center;padding:40px}
+  .card{width:100%;max-width:520px;background:#fff;color:var(--text);border-radius:20px;padding:28px;box-shadow:0 10px 30px rgba(52,0,59,.12);display:grid;gap:18px}
+  .card h2{margin:0;font-family:Anton,Impact,sans-serif;font-weight:400;font-size:28px;letter-spacing:.4px;color:var(--deep);text-transform:uppercase}
+  .card h2 span{color:var(--pink-bg)}
+  .agree{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.45;padding:14px;border-radius:12px;background:#FDEAF7;border:1px solid var(--pink-bg);cursor:pointer}
+  .agree input{width:22px;height:22px;flex:none;margin:0;accent-color:var(--pink-bg)}
+  .agree a{color:var(--pink-bg);font-weight:600}
+  .go{min-height:56px;border:0;border-radius:999px;background:var(--green);color:var(--text);font:inherit;font-size:18px;font-weight:800;cursor:pointer;padding:0 24px}
+  .go:disabled{background:#D8CFDB;color:#5A3E62;cursor:not-allowed}
+  .go:focus-visible,.agree input:focus-visible{outline:3px solid var(--pink-bg);outline-offset:2px}
+  .msg{margin:0;font-size:14px;line-height:1.5;color:var(--text2)} .msg.err{color:#A3006F;font-weight:600}
+  .small{margin:0;font-size:12px;line-height:1.5;color:var(--text2);text-align:center}
+  .small a{color:var(--text2)}
+  #form{min-height:120px}
+  .done h2 span{color:#0A7A45}
+  .done p{margin:0;font-size:16px;line-height:1.55}
+  .done .go{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+  @media(max-width:860px){
+    .wrap{grid-template-columns:1fr}
+    .pitch{padding:24px 20px 26px;gap:16px}
+    .price b{font-size:56px} .gets{font-size:15px;gap:8px} .fine{margin-top:6px}
+    .pay{padding:20px 16px 40px} .card{padding:20px}
+  }
+  @media(prefers-reduced-motion:no-preference){.go{transition:transform .08s} .go:not(:disabled):active{transform:scale(.98)}}
+</style>
+</head>
+<body>
+<a class="skip" href="#pay">Skip to payment</a>
+<div class="wrap">
+  <section class="pitch" aria-labelledby="h">
+    <a class="brand" href="./"><img src="avatar.png" alt=""><span>MY ROBOT <i>I.S.A.</i></span></a>
+    <span class="tag" id="tag" hidden></span>
+    <h1 id="h">It does the work. <span>You keep control.</span></h1>
+    <div class="price"><b id="amount">£99</b><span id="amount-note">once. No subscription.</span></div>
+    <ul class="gets">
+      <li><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E87A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span>Your own copy of the robot's code, under a personal licence</span></li>
+      <li><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E87A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span>All 14 lessons and the QuickStart setup tool</span></li>
+      <li><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E87A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span>12 months of updates. After that, £99 a year only if you want them</span></li>
+      <li id="care-li" hidden><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00E87A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg><span>A year of Robot Care, free <span class="only">Founding only</span></span></li>
+    </ul>
+    <p class="fine">Software and lessons, not financial advice. Investing puts your capital at risk and you may get back less than you put in. You approve every trade. My Robot I.S.A. is a trading name of Night Shift Labs Ltd, registered in England and Wales, company number 17591971. <a href="terms.html">Terms</a> · <a href="terms.html#refund">Refunds and cancelling</a> · <a href="privacy.html">Privacy</a></p>
+  </section>
+
+  <main class="pay" id="pay">
+    <div class="card" id="card-buy">
+      <h2>Pay <span>securely</span></h2>
+      <p class="msg" id="closed" hidden>Sales open in January 2027. Until then, <a href="join.html" style="color:#A3006F;font-weight:700">join the free test drive</a> and you'll hear the moment they do.</p>
+      <div id="step1">
+        <label class="agree"><input type="checkbox" id="waiver"><span>I understand my 14-day right to cancel ends when I open the code. The QuickStart promise still applies: see the <a href="terms.html#cancel" target="_blank" rel="noopener">terms of sale</a>.</span></label>
+      </div>
+      <button class="go" type="button" id="go" disabled>Continue to payment</button>
+      <p class="msg" id="msg" role="status" hidden></p>
+      <div id="form" hidden></div>
+      <p class="small">Payments by Stripe. We never see your card. Night Shift Labs Ltd, company number 17591971.</p>
+    </div>
+    <div class="card done" id="card-done" hidden>
+      <h2>You're <span>in</span></h2>
+      <p>Thank you. Your payment went through and your membership is being set up; it takes a few seconds.</p>
+      <p>Sign in to the members area with <b>the email address you just paid with</b>. We send a one-time code to it, so there's no password.</p>
+      <a class="go" href="members/">Open the members area</a>
+      <p class="small">Stripe has emailed your receipt. Anything wrong? <a href="mailto:hello@myrobotisa.com">hello@myrobotisa.com</a></p>
+    </div>
+  </main>
+</div>
+
+<script>
+(function () {
+  var SB = "https://vxnestmhtjotidhzzqbo.supabase.co";
+  var KEY = "sb_publishable_hjvkAbVw82CKg2rdDZgVcw_XUDbmerV"; // publishable: the same key every page uses
+  var $ = function (id) { return document.getElementById(id); };
+  var q = new URLSearchParams(location.search);
+
+  // Back from Stripe after paying: the webhook has made the membership; this page only says what to do next.
+  if (q.get("done")) { $("card-buy").hidden = true; $("card-done").hidden = false; return; }
+
+  // A signed-in member's token, if this browser has one (the members area keeps it). In test mode only the owner or a
+  // test member gets past the stripe function; a buyer in January needs no sign-in.
+  var token = null;
+  try { var s = JSON.parse(localStorage.getItem("mri-members-session") || "null"); if (s && s.access_token && (!s.expires_at || s.expires_at * 1000 > Date.now() + 30000)) token = s.access_token; } catch (e) {}
+
+  function say(t, err) { var m = $("msg"); m.textContent = t || ""; m.hidden = !t; m.className = "msg" + (err ? " err" : ""); }
+
+  // Price and places left, from the same public count the rest of the site shows.
+  fetch(SB + "/rest/v1/rpc/founding_status", { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: "{}" })
+    .then(function (r) { return r.ok ? r.json() : null; }).then(function (f) {
+      if (!f) return;
+      var founding = f.left > 0;
+      $("amount").textContent = founding ? "£99" : "£199";
+      $("amount-note").innerHTML = founding ? "once. <s>£199</s> after the first 100 members." : "once. No subscription.";
+      $("care-li").hidden = !founding;
+      var tag = $("tag"); tag.hidden = !founding;
+      if (founding) tag.textContent = "Founding member · " + f.left + " of " + f.total + " places left";
+      $("go").dataset.amount = founding ? "£99" : "£199";
+      if (!f.sales_open && !token) { $("closed").hidden = false; $("step1").hidden = true; $("go").hidden = true; }
+    }).catch(function () {});
+
+  $("waiver").addEventListener("change", function () { $("go").disabled = !this.checked; });
+
+  $("go").addEventListener("click", function () {
+    var go = this; if (go.disabled) return;
+    go.disabled = true; go.textContent = "Opening the payment form…"; say("");
+    var h = { apikey: KEY, "Content-Type": "application/json" }; if (token) h.Authorization = "Bearer " + token;
+    fetch(SB + "/functions/v1/stripe/checkout", { method: "POST", headers: h, body: JSON.stringify({ item: "kit", waiver: true, embedded: true }) })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (r) {
+        if (!r.ok || !r.j.client_secret || !/^pk_(test|live)_/.test(r.j.publishable_key || "")) throw new Error((r.j && r.j.error) || "");
+        var stripe = window.Stripe(r.j.publishable_key);
+        var opts = { fetchClientSecret: function () { return Promise.resolve(r.j.client_secret); } };
+        var make = stripe.createEmbeddedCheckoutPage || stripe.initEmbeddedCheckout;   // the newer name first
+        return make.call(stripe, opts).then(function (co) {
+          $("step1").hidden = true; go.hidden = true; $("waiver").disabled = true;
+          $("form").hidden = false; co.mount("#form");
+        });
+      })
+      .catch(function (e) {
+        go.disabled = !$("waiver").checked; go.textContent = "Continue to payment";
+        say(e && e.message ? e.message : "The payment form didn't open. Check your connection and try again.", true);
+      });
+  });
+})();
+</script>
+</body>
+</html>
