@@ -20,6 +20,9 @@ const londonToday = (now) => new Date(now).toLocaleDateString("en-CA", { timeZon
 // ── Checkout ───────────────────────────────────────────────────────────────────────────────────────────────────
 // d: { member(user) -> row|null, founding() -> {left, sales_open}, price(lookup) -> id, stripe(path, form) -> json,
 //      live: boolean, now: ms }
+// Card only: Apple Pay and Google Pay ride on "card". No Klarna, Revolut Pay, Amazon Pay or Link (Amit, 20 Nov 2026).
+const CARD_ONLY = { payment_method_types: ["card"] };
+
 export async function checkout(d, { item, waiver, user, embedded }) {
   // Test mode is for the owner and test members only: a test card must never make a stranger a member.
   const me = user ? await d.member(user) : null;
@@ -36,7 +39,7 @@ export async function checkout(d, { item, waiver, user, embedded }) {
     const waiverAt = new Date(d.now).toISOString();
     const meta = { item: "kit", plan, waiver_at: waiverAt };
     const s = await d.stripe("checkout/sessions", {
-      mode: "payment", locale: "en-GB",
+      mode: "payment", locale: "en-GB", ...CARD_ONLY,
       line_items: [{ price: await d.price(plan === "founding" ? "kit_founding" : "kit_standard"), quantity: 1 }],
       customer_creation: "always", ...(user?.email && d.live ? { customer_email: user.email } : {}),
       metadata: meta, payment_intent_data: { metadata: meta },
@@ -59,7 +62,7 @@ export async function checkout(d, { item, waiver, user, embedded }) {
   const meta = { item, member_id: m.id };
   if (item === "renewal") {
     const s = await d.stripe("checkout/sessions", {
-      mode: "payment", locale: "en-GB", ...customer,
+      mode: "payment", locale: "en-GB", ...CARD_ONLY, ...customer,
       line_items: [{ price: await d.price("updates_renewal"), quantity: 1 }],
       metadata: meta, payment_intent_data: { metadata: meta },
       success_url: `${MEMBERS}?renewed=1`, cancel_url: MEMBERS,
@@ -73,7 +76,7 @@ export async function checkout(d, { item, waiver, user, embedded }) {
     return no(409, "Robot Care is already on. Manage it from Manage membership.", "has-care");
   const { customer_creation, ...subCustomer } = customer;   // subscription mode always makes a customer
   const s = await d.stripe("checkout/sessions", {
-    mode: "subscription", locale: "en-GB", ...subCustomer,
+    mode: "subscription", locale: "en-GB", ...CARD_ONLY, ...subCustomer,
     line_items: [{ price: await d.price("robot_care_monthly"), quantity: 1 }],
     metadata: meta, subscription_data: { metadata: meta },
     success_url: `${MEMBERS}?robot_care=on`, cancel_url: MEMBERS,
