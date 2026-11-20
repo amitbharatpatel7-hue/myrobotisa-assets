@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="121">
+<meta name="mri-version" content="122">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -287,6 +287,9 @@
   .ib-seg{display:inline-flex;gap:4px;padding:4px;background:var(--deep3);border:1px solid var(--rule);border-radius:999px;margin-top:16px}
   .ib-seg button{min-height:42px;padding:0 18px;border:0;border-radius:999px;background:transparent;color:var(--muted);font:inherit;font-weight:700;font-size:14px;cursor:pointer}
   .ib-seg button[aria-selected="true"]{background:var(--green);color:var(--deep)}
+  /* 20 Nov 2026 (Amit): All is the first tab, so three pills must fit a phone without scrolling. */
+  @media (max-width:520px){.ib-seg button{padding:0 12px;font-size:13.5px}}
+  .ib-kind{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--green)}
   .ndot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-left:7px;vertical-align:middle;position:relative;top:-1px;flex:none}
   .vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .hp-seg{margin:6px 0 4px}.hp-seg a{display:inline-flex;align-items:center;min-height:42px;padding:0 18px;border-radius:999px;color:var(--muted);font-weight:700;font-size:14px;text-decoration:none}
@@ -892,8 +895,8 @@
              membership pane only. The two panes stay in one card so every #ideas link keeps working. -->
         <div id="pane-space">
         <div class="ib-head"><div><p class="lede" style="margin-top:0"><b>The Moonshotters</b> are the members running their own robot. You use it every day, so you shape what we build next. Vote for the ideas you want, suggest your own, or ask anything. When something moves, it shows up in your Messages.</p></div>
-        <button class="btn" type="button" id="ib-new">Suggest an idea</button></div>
-        <div class="ib-seg" role="tablist" aria-label="Ideas or questions"><button type="button" role="tab" id="ib-t-idea" data-k="idea" aria-selected="true">Ideas <span id="ib-n-idea"></span></button><button type="button" role="tab" id="ib-t-question" data-k="question" aria-selected="false">Questions <span id="ib-n-question"></span></button></div>
+        <div class="row" style="margin:0"><button class="btn" type="button" id="ib-new">Suggest an idea</button><button class="btn ghost" type="button" id="ib-ask">Ask a question</button></div></div>
+        <div class="ib-seg" role="tablist" aria-label="Ideas or questions"><button type="button" role="tab" id="ib-t-all" data-k="all" aria-selected="true">All <span id="ib-n-all"></span></button><button type="button" role="tab" id="ib-t-idea" data-k="idea" aria-selected="false">Ideas <span id="ib-n-idea"></span></button><button type="button" role="tab" id="ib-t-question" data-k="question" aria-selected="false">Questions <span id="ib-n-question"></span></button></div>
         <div class="ib-tools"><div class="ib-chips" id="ib-chips" role="group" aria-label="Show"></div><label class="sr" for="ib-q">Search ideas and questions</label><input class="ib-search" id="ib-q" type="search" placeholder="Search ideas and questions"></div>
         <ul class="ib-list" id="ib-list" aria-live="polite"></ul>
         <button type="button" class="ib-morebtn" id="ib-more" hidden>Show more <span class="wn-n" id="ib-more-n"></span></button>
@@ -3175,7 +3178,7 @@
   // Members only (RLS on community_*). Votes, posts and replies go straight to the tables; status, team updates, answers
   // and hiding go through the community_* functions. What happens to a post reaches people as Messages, never email.
   // Schema: ops/supabase/2026-10-27-community.sql in this repo.
-  var IB = { posts: null, mine: {}, answers: {}, kind: "idea", filter: "", q: "", more: false, loading: null, cur: null, sheetKind: "idea", cat: "robot" };
+  var IB = { posts: null, mine: {}, answers: {}, kind: "all", filter: "", q: "", more: false, loading: null, cur: null, sheetKind: "idea", cat: "robot" };
   var IB_ST = { review: "Under review", planned: "Planned", building: "Building", live: "Live", declined: "Not for now" };
   var IB_CAT = { robot: "Robot settings", lessons: "Lessons", dashboard: "Dashboard and app", emails: "Messages and emails", account: "Account", other: "Something else" };
   var IB_UP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15l6-6 6 6"/></svg>';
@@ -3213,13 +3216,13 @@
     if (p.kind === "question") return p.answer_id ? '<span class="pill g">Answered</span>' : '<span class="pill">Waiting for an answer</span>';
     return '<span class="pill st-' + esc(p.status) + '">' + esc(IB_ST[p.status] || "") + "</span>";
   }
-  function ibRow(p) {
+  function ibRow(p, showKind) {
     var li = document.createElement("li"), on = !!IB.mine[p.id];
     li.className = "ib-post" + (p.hidden ? " hid" : "");
     var left = p.kind === "idea"
       ? '<button type="button" class="ib-vote" data-vote="' + p.id + '" aria-pressed="' + on + '" aria-label="' + (on ? "Take back your vote for: " : "Vote for: ") + esc(p.title) + '">' + IB_UP + "<span>" + p.vote_count + "</span></button>"
       : '<span class="ib-q' + (p.answer_id ? " ok" : "") + '" aria-hidden="true">' + p.comment_count + "<small>" + (p.comment_count === 1 ? "reply" : "replies") + "</small></span>";
-    li.innerHTML = left + '<div class="ib-body"><a class="ib-t" href="#post/' + p.id + '">' + esc(p.title) + '</a><div class="ib-meta">' + ibPill(p) +
+    li.innerHTML = left + '<div class="ib-body"><a class="ib-t" href="#post/' + p.id + '">' + esc(p.title) + '</a><div class="ib-meta">' + (showKind ? '<span class="ib-kind">' + (p.kind === "idea" ? "Idea" : "Question") + "</span>" : "") + ibPill(p) +
       "<span>" + esc(IB_CAT[p.category] || "") + "</span>" +
       (p.kind === "idea" ? "<span>" + p.comment_count + (p.comment_count === 1 ? " comment" : " comments") + "</span>" : "") +
       "<span>" + esc(p.author_name) + " · " + esc(spAgo(p.created_at)) + "</span>" + (p.hidden ? '<span class="pill">Hidden</span>' : "") + "</div></div>";
@@ -3232,17 +3235,22 @@
   function ibPaintAll() { ibPaintBoard(); ibPaintHome(); fqPaint(); if (IB.cur) ibOpen(IB.cur); }
   function ibPaintBoard() {
     if (!IB.posts) return;
+    // 20 Nov 2026 (Amit): the board opens on All, ideas and questions together, newest first, so a new question
+    // never sits unseen behind an Ideas tab that looks weeks quiet. Ideas and Questions stay as they were.
     var k = IB.kind;
-    ["idea", "question"].forEach(function (x) {
+    ["all", "idea", "question"].forEach(function (x) {
       $("ib-t-" + x).setAttribute("aria-selected", String(x === k));
-      $("ib-n-" + x).textContent = "· " + IB.posts.filter(function (p) { return p.kind === x && !p.hidden; }).length;
+      $("ib-n-" + x).textContent = "· " + IB.posts.filter(function (p) { return (x === "all" || p.kind === x) && !p.hidden; }).length;
     });
-    $("ib-new").textContent = k === "idea" ? "Suggest an idea" : "Ask a question";
-    var chips = k === "idea" ? [["", "All"], ["review", "Under review"], ["planned", "Planned"], ["building", "Building"], ["live", "Live"]] : [["", "All"], ["open", "Waiting for an answer"], ["answered", "Answered"]];
+    $("ib-new").hidden = k === "question"; $("ib-ask").hidden = k === "idea";
+    $("ib-ask").className = k === "question" ? "btn" : "btn ghost";
+    // On All, a status chip shows the ideas at that stage (questions have no stage).
+    var chips = k !== "question" ? [["", "All"], ["review", "Under review"], ["planned", "Planned"], ["building", "Building"], ["live", "Live"]] : [["", "All"], ["open", "Waiting for an answer"], ["answered", "Answered"]];
     if (!chips.some(function (c) { return c[0] === IB.filter; })) IB.filter = "";
     $("ib-chips").innerHTML = chips.map(function (c) { return '<button type="button" data-f="' + c[0] + '" aria-pressed="' + (c[0] === IB.filter) + '">' + c[1] + "</button>"; }).join("");
     var list = IB.posts.filter(function (p) {
-      if (p.kind !== k) return false;
+      if (k !== "all" && p.kind !== k) return false;
+      if (k === "all" && IB.filter && p.kind !== "idea") return false;
       if (IB.filter === "open") { if (p.answer_id) return false; }
       else if (IB.filter === "answered") { if (!p.answer_id) return false; }
       else if (IB.filter && p.status !== IB.filter) return false;
@@ -3253,10 +3261,10 @@
       : function (a, b) { return Date.parse(b.created_at) - Date.parse(a.created_at); });
     // 28 Oct 2026 (Amit): three posts by default, then "Show more"; a search shows every match
     var cut = (!IB.more && !IB.q && list.length > 3) ? 3 : list.length;
-    var ul = $("ib-list"); ul.innerHTML = ""; list.slice(0, cut).forEach(function (p) { ul.appendChild(ibRow(p)); });
+    var ul = $("ib-list"); ul.innerHTML = ""; list.slice(0, cut).forEach(function (p) { ul.appendChild(ibRow(p, k === "all")); });
     var mb = $("ib-more"); mb.hidden = cut >= list.length; mb.firstChild.textContent = "Show more ";
     $("ib-more-n").textContent = list.length - cut;
-    $("ib-msg").textContent = list.length ? "" : (IB.q ? "Nothing matches that. Try other words, or post it." : (k === "idea" ? "No ideas here yet. Be the first." : "No questions here yet. Ask the first one."));
+    $("ib-msg").textContent = list.length ? "" : (IB.q ? "Nothing matches that. Try other words, or post it." : (k === "idea" ? "No ideas here yet. Be the first." : k === "question" ? "No questions here yet. Ask the first one." : "Nothing here yet. Suggest an idea or ask a question."));
   }
   function ibPaintHome() {
     var ul = $("sp-home-list"); ul.innerHTML = "";
@@ -3304,7 +3312,8 @@
     if (!IB.posts) { box.innerHTML = '<p class="small">Loading…</p>'; return; }   // ibLoad repaints through ibPaintAll
     var p = ibFind(id);
     if (!p) { box.innerHTML = '<p class="lede">That post isn\'t here any more.</p>'; return; }
-    IB.kind = p.kind; $("ib-p-back").textContent = "← All " + (p.kind === "idea" ? "ideas" : "questions");
+    if (IB.kind !== "all") IB.kind = p.kind;   // 20 Nov 2026: back from a post opened on All returns to All
+    $("ib-p-back").textContent = "← " + (IB.kind === "all" ? "Back to the Moonshotters" : "All " + (p.kind === "idea" ? "ideas" : "questions"));
     Promise.all([
       rest("community_comments?select=id,author_name,is_team,body,created_at,user_id,hidden&post_id=eq." + id + "&order=created_at.asc").then(ibJson),
       p.kind === "idea" ? rest("community_status_events?select=status,note,created_at&post_id=eq." + id + "&order=created_at.asc").then(ibJson) : Promise.resolve([])
@@ -3383,15 +3392,16 @@
   $("ib-chips").addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; IB.filter = b.dataset.f; IB.more = false; ibPaintBoard(); });
   $("ib-more").addEventListener("click", function () { IB.more = true; ibPaintBoard(); });
   // 28 Oct 2026 (Amit): Help and membership in the menu (or any link to the board, other than "All ideas" back from a post)
-  // always lands on the default view: Ideas & questions tab, Ideas, All, no search, the top three, top of the page.
-  function ibReset() { IB.kind = "idea"; IB.filter = ""; IB.q = ""; $("ib-q").value = ""; IB.more = false; helpTab("space"); ibPaintBoard(); }
+  // always lands on the default view: Ideas & questions tab, All (since 20 Nov 2026; was Ideas), no filter, no search, the top three, top of the page.
+  function ibReset() { IB.kind = "all"; IB.filter = ""; IB.q = ""; $("ib-q").value = ""; IB.more = false; helpTab("space"); ibPaintBoard(); }
   document.addEventListener("click", function (e) {
     var a = e.target.closest && e.target.closest('a[data-go="ideas"], a[href="#ideas"]');
     if (!a || a.id === "ib-p-back") return;
     ibReset(); if (location.hash === a.getAttribute("href")) window.scrollTo(0, 0);
   });
   $("ib-q").addEventListener("input", function () { IB.q = this.value.trim(); ibPaintBoard(); });
-  $("ib-new").addEventListener("click", function () { ibSheet(IB.kind); });
+  $("ib-new").addEventListener("click", function () { ibSheet("idea"); });
+  $("ib-ask").addEventListener("click", function () { ibSheet("question"); });
   // ---- the sheet: suggest an idea or ask a question, with a look for ones already there
   function ibSheet(kind) {
     var idea = kind === "idea"; IB.sheetKind = kind; IB.cat = idea ? "robot" : "other";
