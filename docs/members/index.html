@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="115">
+<meta name="mri-version" content="116">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -142,6 +142,21 @@
   .tick:hover{border-color:var(--green)} .tick:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
   .tick:checked{background:var(--green);border-color:var(--green)}
   .tick:checked::after{content:"";width:7px;height:13px;border:solid var(--deep);border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-1px)}
+  /* 20 Nov 2026 (Amit, option A): the Membership tab as three cards, with the site's pink for the things that are yours. */
+  .mb{display:grid;gap:12px;margin-top:14px}
+  .mb-card{background:var(--deep3);border:1px solid var(--rule);border-radius:20px;padding:18px;display:grid;gap:8px}
+  .mb-card.mine{border-color:#C8008F}
+  .mb-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+  .mb-lab{font-size:12px;font-weight:700;letter-spacing:1px;color:var(--muted);text-transform:uppercase}
+  .mb-pill{padding:4px 12px;border-radius:999px;font-size:12px;font-weight:700;background:#C8008F;color:#fff}
+  .mb-pill.on{background:none;border:1px solid var(--green);color:var(--green)} .mb-pill.off{background:none;border:1px solid var(--rule);color:var(--muted)}
+  .mb-big{font-family:Anton,Impact,sans-serif;font-size:26px;letter-spacing:.3px;line-height:1.15;text-transform:uppercase}
+  .mb-big .g{color:var(--green)} .mb-big .p{color:var(--pink-ink)}
+  .mb-card p{margin:0;font-size:14px;line-height:1.45;color:var(--muted)}
+  .mb-card .row{margin-top:6px} .mb-card .row .btn{flex:1 1 220px}
+  .mb-renew{border-radius:16px;padding:16px;background:#C8008F;color:#fff;display:grid;gap:10px}
+  .mb-renew p{margin:0;font-size:14px;line-height:1.45} .mb-renew b{font-size:15px}
+  .mb-renew .btn{background:#fff;border-color:#fff;color:var(--deep)}
   .kv{display:grid;gap:10px;margin-top:12px}
   .kv div{display:flex;justify-content:space-between;gap:12px;align-items:center;background:var(--deep3);border:1px solid var(--rule);border-radius:14px;padding:12px 14px;font-size:14px}
   .kv div b{font-weight:700}
@@ -866,7 +881,7 @@
       </section>
 
       <section class="card wide" aria-labelledby="h-help" data-page="help">
-        <h2 id="h-help">Help and <span class="g">membership</span></h2>
+        <h2 id="h-help">Help and <span style="color:var(--pink-ink)">membership</span></h2>
         <!-- 29 Oct 2026 (Amit): the Moonshotters have their own menu line (#ideas); Help and membership (#help) is the
              membership pane only. The two panes stay in one card so every #ideas link keeps working. -->
         <div id="pane-space">
@@ -882,15 +897,20 @@
         </div>
         <div id="pane-memb" hidden>
         <div class="ib-seg hp-seg" role="tablist" aria-label="Help and membership"><a role="tab" href="#help" data-go-tab="help" aria-selected="true">Membership</a><a role="tab" href="#passkeys" data-go-tab="passkeys" aria-selected="false">Faster sign-in</a><a role="tab" href="#early" data-go-tab="early" aria-selected="false" class="ea-tab" hidden>Early adopters</a></div>
-        <div class="kv" id="mem-kv"></div>
-        <div class="row"><button class="btn ghost" type="button" id="b-manage">Manage membership</button><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=My%20membership">Email about my membership</a></div>
-        <p class="small" id="pay-msg" role="status" style="margin:10px 0 0" hidden></p>
+        <div class="mb">
+          <div class="mb-renew" id="mb-renew" hidden><b id="mb-renew-h"></b><p>Another year of updates is £99, a one-off payment. It never renews automatically.</p><button class="btn" type="button" data-pay="renewal">Renew updates for £99</button></div>
+          <div class="mb-card mine"><div class="mb-top"><span class="mb-lab">Your plan</span><span class="mb-pill" id="mb-plan"></span></div><div class="mb-big" id="mb-upd"></div><p id="mb-upd-p"></p></div>
+          <div class="mb-card"><div class="mb-top"><span class="mb-lab">Robot Care</span><span class="mb-pill" id="mb-care-pill"></span></div><div class="mb-big" id="mb-care"></div><p id="mb-care-p"></p></div>
+          <div class="mb-card"><span class="mb-lab">Payments</span><p>Your card, your receipts, and cancelling Robot Care, on Stripe's secure page.</p>
+            <div class="row"><button class="btn" type="button" id="b-manage">Manage membership</button><a class="btn ghost" href="mailto:hello@myrobotisa.com?subject=My%20membership">Email about my membership</a></div>
+            <p id="pay-msg" role="status" hidden></p></div>
+        </div>
         <!-- 20 Nov 2026 (hub D27): Stripe in test mode. Owner only: the three checkouts, with Stripe's test card. -->
         <div id="pay-test" hidden style="margin:14px 0 0;padding:14px;border:1px dashed var(--rule);border-radius:14px">
           <p class="small" style="margin:0 0 10px"><b>Payments test (only you see this).</b> Stripe is in test mode: card 4242 4242 4242 4242, any future date, any CVC. No real money moves.</p>
-          <div class="row"><button class="btn ghost" type="button" data-pay="kit">Buy the kit</button><button class="btn ghost" type="button" data-pay="renewal">Renew updates (£99)</button><button class="btn ghost" type="button" data-pay="robot_care">Robot Care (£10 a month)</button></div>
+          <div class="row"><a class="btn ghost" href="../buy.html">Open the checkout page</a><button class="btn ghost" type="button" data-pay="renewal">Renew updates (£99)</button><button class="btn ghost" type="button" data-pay="robot_care">Robot Care (£10 a month)</button></div>
         </div>
-        <p class="small" style="margin:12px 0 0">You keep every lesson and video released while your updates are included, and the version of the code you had. Renewing is optional and never automatic.</p>
+        <p class="small" style="margin:12px 0 0">You keep every lesson and video released while your updates are included, and the version of the code you had.</p>
         <!-- 29 Oct 2026 (D28): members manage their own account. Sign-in email, GitHub account, where the robot reaches
              them, download my data, delete my account (7 days to change their mind). -->
         <div class="ac" id="ac">
@@ -1436,9 +1456,23 @@
       "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : (m.plan === "early" || m.plan === "owner") ? "Your own copy, from Set up my robot" : (m.repo_url ? "Preview account" : "Arrives in January 2027")) + "</b></div>" +
       "<div><span>Version</span><b>" + (m.repo_invited_at || m.plan === "early" || m.plan === "owner" ? "Latest" : "The latest, when your invite arrives") + "</b></div>";
     var br = $("b-repo"); if (m.repo_url) { br.href = m.repo_url; br.removeAttribute("aria-disabled"); br.target = "_blank"; br.rel = "noopener"; br.classList.remove("ghost"); } else { br.removeAttribute("href"); br.setAttribute("aria-disabled", "true"); br.textContent = (m.plan === "early" || m.plan === "owner") ? "Build it in Set up my robot" : "Your repo opens with your invite"; }
-    $("mem-kv").innerHTML =
-      "<div><span>Updates included until</span><b>" + esc(fmtDate(m.updates_until)) + "</b></div>" +
-      "<div><span>After that</span><b>£99 a year, if you want them</b></div>";
+    (function () {   // 20 Nov 2026 (option A): Your plan, Robot Care, Payments
+      var day = 864e5, today = new Date(new Date().toDateString()).getTime();
+      var end = m.updates_until ? new Date(m.updates_until + "T00:00:00").getTime() : null, left = end == null ? null : Math.round((end - today) / day);
+      $("mb-plan").textContent = m.plan === "founding" ? (m.founding_no ? "Founding member No. " + m.founding_no : "Founding member") : m.plan === "owner" ? "Owner" : m.plan === "early" ? "Early adopter" : m.plan === "test" ? "Test member" : "Member";
+      $("mb-upd").innerHTML = end == null ? "Updates <span class=\"g\">included</span>" : left < 0 ? "Updates ended <span class=\"p\">" + esc(fmtDate(m.updates_until)) + "</span>" : "Updates until <span class=\"g\">" + esc(fmtDate(m.updates_until)) + "</span>";
+      $("mb-upd-p").textContent = left != null && left < 0 ? "You keep every lesson, video and the version of the code you have." : "After that, £99 a year, only if you want them. Never automatic.";
+      var due = left != null && left <= 30 && (m.plan === "founding" || m.plan === "standard" || m.plan === "test");
+      $("mb-renew").hidden = !due;
+      if (due) $("mb-renew-h").textContent = left < 0 ? "Your updates have ended." : left === 0 ? "Your updates end today." : "Your updates end in " + left + (left === 1 ? " day." : " days.");
+      var cu = m.robot_care_until ? new Date(m.robot_care_until + "T00:00:00").getTime() : null, paid = /^(active|trialing|past_due)$/.test(m.robot_care_sub_status || "");
+      var pill = $("mb-care-pill"), big = $("mb-care"), cp = $("mb-care-p");
+      if (m.robot_care && paid && cu == null) { pill.textContent = "On"; pill.className = "mb-pill on"; big.innerHTML = "On, <span class=\"g\">£10 a month</span>"; cp.textContent = "Cancel any time from Manage membership. It stops at the end of the month you've paid for."; }
+      else if (m.robot_care && paid) { pill.textContent = "Ending"; pill.className = "mb-pill"; big.innerHTML = "On until <span class=\"p\">" + esc(fmtDate(m.robot_care_until)) + "</span>"; cp.textContent = "You've cancelled. Nothing more will be charged."; }
+      else if (m.robot_care && cu != null && cu >= today) { pill.textContent = "On"; pill.className = "mb-pill on"; big.innerHTML = "Free until <span class=\"p\">" + esc(fmtDate(m.robot_care_until)) + "</span>"; cp.textContent = "Then £10 a month, only if you choose to carry on. We email you first."; }
+      else if (m.robot_care) { pill.textContent = "On"; pill.className = "mb-pill on"; big.innerHTML = "Robot Care is <span class=\"g\">on</span>"; cp.textContent = "It watches your robot's runs and fixes what breaks."; }
+      else { pill.textContent = "Off"; pill.className = "mb-pill off"; big.textContent = "Not switched on"; cp.innerHTML = "£10 a month, only if you want it. <a href=\"../robot-care.html\">What Robot Care does</a>"; }
+    })();
     document.querySelectorAll(".pv-only").forEach(function (el) { el.hidden = !m.preview_videos; });
     document.querySelectorAll(".npv-only").forEach(function (el) { el.hidden = !!m.preview_videos; });   // Start here folds into Set up my robot
     rcfNav(); acInit(); eaInit();
@@ -1455,7 +1489,7 @@
     if (!session) { show("signin"); return; }
     show("wait");
     var sub = null; try { sub = JSON.parse(atob(session.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub; } catch (e) {}
-    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url,first_name,founding_no,preview_videos,repo_url,robot_care,robot_care_auto,github_login" + (sub ? "&user_id=eq." + encodeURIComponent(sub) : "")).then(function (r) {
+    rest("members?select=email,plan,status,joined_at,updates_until,repo_invited_at,dashboard_url,first_name,founding_no,preview_videos,repo_url,robot_care,robot_care_until,robot_care_sub_status,robot_care_auto,github_login" + (sub ? "&user_id=eq." + encodeURIComponent(sub) : "")).then(function (r) {
       if (r.status === 401) { clear(); session = null; show("signin"); say("Your sign-in ran out. Ask for a new code.", false); return; }
       return r.json().then(function (rows) {
         var uid = null; try { uid = JSON.parse(atob(session.access_token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))).sub; } catch (e) {}
@@ -3398,7 +3432,7 @@
   });
   function helpTab(v) {
     ["space", "memb"].forEach(function (k) { $("pane-" + k).hidden = k !== v; });
-    $("h-help").innerHTML = v === "space" ? 'The <span class="g">Moonshotters</span>' : 'Help and <span class="g">membership</span>';
+    $("h-help").innerHTML = v === "space" ? 'The <span class="g">Moonshotters</span>' : 'Help and <span style="color:var(--pink-ink)">membership</span>';
   }
   // 26 Oct 2026 (Amit): the logo always goes to the site's home page. In the installed app there is no site around it,
   // so there it goes to the members' home instead.

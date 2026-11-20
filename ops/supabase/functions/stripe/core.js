@@ -4,6 +4,7 @@
 //
 // Routes (index.ts):
 //   POST /stripe/checkout {item, waiver?}  -> {url}   item: kit (no sign-in), renewal or robot_care (signed in)
+//        with embedded: true (the kit, on /buy.html) -> {client_secret, publishable_key} for Stripe's form on our page
 //   POST /stripe/portal                    -> {url}   signed in: Stripe's page for card, receipts, cancel Robot Care
 //   POST /stripe/webhook                   Stripe's events, signature checked
 //
@@ -19,7 +20,7 @@ const londonToday = (now) => new Date(now).toLocaleDateString("en-CA", { timeZon
 // ── Checkout ───────────────────────────────────────────────────────────────────────────────────────────────────
 // d: { member(user) -> row|null, founding() -> {left, sales_open}, price(lookup) -> id, stripe(path, form) -> json,
 //      live: boolean, now: ms }
-export async function checkout(d, { item, waiver, user }) {
+export async function checkout(d, { item, waiver, user, embedded }) {
   // Test mode is for the owner and test members only: a test card must never make a stranger a member.
   const me = user ? await d.member(user) : null;
   if (!d.live && !(me && me.status === "active" && ["owner", "test"].includes(me.plan)))
@@ -40,9 +41,11 @@ export async function checkout(d, { item, waiver, user }) {
       customer_creation: "always", ...(user?.email && d.live ? { customer_email: user.email } : {}),
       metadata: meta, payment_intent_data: { metadata: meta },
       custom_text: { submit: { message: "You agreed that opening the code ends your 14-day right to cancel. The QuickStart promise still applies: see our terms." } },
-      success_url: `${MEMBERS}?welcome=1&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${SITE}/join.html?checkout=cancelled`,
+      ...(embedded ? { ui_mode: "embedded_page", return_url: `${SITE}/buy.html?done={CHECKOUT_SESSION_ID}` }
+        : { success_url: `${MEMBERS}?welcome=1&session_id={CHECKOUT_SESSION_ID}`, cancel_url: `${SITE}/buy.html?checkout=cancelled` }),
     });
+    if (embedded) return d.pk && s.client_secret ? ok({ client_secret: s.client_secret, publishable_key: d.pk, plan })
+      : no(503, "Payments aren't set up yet.", "no-key");
     return ok({ url: s.url, plan });
   }
   if (item !== "renewal" && item !== "robot_care") return no(400, "Choose something to buy.", "item");

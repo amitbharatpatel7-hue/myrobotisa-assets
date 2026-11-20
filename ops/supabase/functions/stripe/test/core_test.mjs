@@ -11,11 +11,11 @@ const NOW = Date.parse("2026-11-20T15:00:00Z");
 function world({ left = 37, open = true, live = true, m = null } = {}) {
   const calls = [];
   return { calls, d: {
-    live, now: NOW,
+    live, now: NOW, pk: "pk_test_x",
     founding: async () => ({ left, sales_open: open }),
     member: async () => m,
     price: async (k) => `price_${k}`,
-    stripe: async (path, params) => { calls.push({ path, params }); return { url: `https://checkout.stripe.com/${path}`, id: "cs_1" }; },
+    stripe: async (path, params) => { calls.push({ path, params }); return { url: `https://checkout.stripe.com/${path}`, id: "cs_1", client_secret: "cs_1_secret" }; },
   } };
 }
 const member = (o = {}) => ({ id: "m1", email: "a@x.com", plan: "founding", status: "active", stripe_customer_id: "cus_1",
@@ -31,6 +31,16 @@ await t("kit: founding price while places are left, standard after; waiver recor
   w = world({ left: 0 });
   r = await core.checkout(w.d, { item: "kit", waiver: true, user: null });
   assert.equal(r.body.plan, "standard"); assert.equal(w.calls[0].params.line_items[0].price, "price_kit_standard");
+});
+
+await t("kit, embedded: Stripe's form on our page gets a client secret and the publishable key, and a return_url", async () => {
+  const w = world({ left: 3 });
+  const r = await core.checkout(w.d, { item: "kit", waiver: true, user: null, embedded: true });
+  assert.equal(r.body.client_secret, "cs_1_secret"); assert.equal(r.body.publishable_key, "pk_test_x"); assert.equal(r.body.url, undefined);
+  const p = w.calls[0].params;
+  assert.equal(p.ui_mode, "embedded_page"); assert.match(p.return_url, /buy\.html\?done=\{CHECKOUT_SESSION_ID\}$/); assert.equal(p.success_url, undefined);
+  w.d.pk = "";
+  assert.equal((await core.checkout(w.d, { item: "kit", waiver: true, embedded: true })).body.code, "no-key");
 });
 
 await t("kit: no tick, no checkout; closed in live mode before sales open, open in test mode", async () => {

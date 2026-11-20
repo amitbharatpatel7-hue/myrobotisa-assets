@@ -2,13 +2,14 @@
 // Deploy with verify_jwt = false: Stripe's webhook carries no Supabase token, and a kit can be bought before sign-in.
 // Sign-ins on the other routes are checked here against Supabase Auth (/auth/v1/user), not just decoded.
 // Secrets: STRIPE_SECRET_KEY (a restricted key: Checkout Sessions, Customer portal, Prices and Subscriptions read),
-//          STRIPE_WEBHOOK_SECRET (whsec_… for this endpoint). The service role key is built in.
+//          STRIPE_WEBHOOK_SECRET (whsec_… for this endpoint), STRIPE_PUBLISHABLE_KEY (pk_…). The service role key is built in.
 import * as core from "./core.js";
 
 const URL_ = Deno.env.get("SUPABASE_URL")!;
 const SRK = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 const KEY = Deno.env.get("STRIPE_SECRET_KEY") || "";
 const WHSEC = Deno.env.get("STRIPE_WEBHOOK_SECRET") || "";
+const PK = Deno.env.get("STRIPE_PUBLISHABLE_KEY") || "";   // pk_…, public by design; sent to /buy.html for Stripe.js
 const LIVE = KEY.startsWith("sk_live_") || KEY.startsWith("rk_live_");
 const ALLOWED = new Set(["https://myrobotisa.com", "https://www.myrobotisa.com"]);
 const cors = (o: string | null) => ({ "Access-Control-Allow-Origin": o && ALLOWED.has(o) ? o : "https://myrobotisa.com",
@@ -83,9 +84,9 @@ Deno.serve(async (req: Request) => {
   let input: Record<string, unknown> = {};
   try { input = await req.json(); } catch { /* empty body is fine */ }
   const u = await user(req.headers.get("authorization") || "");
-  const d = { member, founding, price, stripe, live: LIVE, now: Date.now() };
+  const d = { member, founding, price, stripe, live: LIVE, now: Date.now(), pk: PK };
   try {
-    if (route === "checkout") return reply(origin, await core.checkout(d, { item: input.item, waiver: input.waiver, user: u }));
+    if (route === "checkout") return reply(origin, await core.checkout(d, { item: input.item, waiver: input.waiver, user: u, embedded: input.embedded === true }));
     if (route === "portal") return reply(origin, await core.portal(d, { user: u }));
   } catch (e) {
     console.error("stripe:", e);
