@@ -9,7 +9,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="The My Robot I.S.A. members area: lessons, your copy of the code, your app and your membership.">
 <meta name="theme-color" content="#34003B">
-<meta name="mri-version" content="117">
+<meta name="mri-version" content="118">
 <!-- 26 Oct 2026 (Amit): the members area is not an app any more. The only home-screen app is the member's dashboard. -->
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Robot I.S.A.">
@@ -154,6 +154,10 @@
   .mb-big .g{color:var(--green)} .mb-big .p{color:var(--pink-ink)}
   .mb-card p{margin:0;font-size:14px;line-height:1.45;color:var(--muted)}
   .mb-card .row{margin-top:6px} .mb-card .row .btn{flex:1 1 220px}
+  .mb-big.url{text-transform:none;font-family:inherit;font-weight:700;font-size:19px;letter-spacing:0;overflow-wrap:anywhere}
+  .fjump{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+  .fjump a{display:inline-block;padding:8px 14px;border-radius:999px;background:var(--deep3);border:1px solid var(--rule);color:var(--ink);text-decoration:none;font-size:14px;font-weight:700}
+  .fjump a:hover,.fjump a:focus-visible{border-color:var(--pink-ink);color:var(--pink-ink)}
   .mb-renew{border-radius:16px;padding:16px;background:#C8008F;color:#fff;display:grid;gap:10px}
   .mb-renew p{margin:0;font-size:14px;line-height:1.45} .mb-renew b{font-size:15px}
   .mb-renew .btn{background:#fff;border-color:#fff;color:var(--deep)}
@@ -697,13 +701,14 @@
       <h2 id="h-rcf">Your <span class="p">fixes</span></h2>
       <p class="lede">When one of your robot's runs fails, Robot Care works out why and suggests a fix. Accept it here and it goes into your robot's code: your robot uses it from its next run. Nothing changes until you accept, unless you've switched on automatic fixes below, and a fix can never place an order or touch your money settings.</p>
       <ul class="rcf-list" id="rcf-list"></ul>
-      <p class="small" id="rcf-empty" hidden>No fixes waiting for you. If a run fails and Robot Care can fix it, the fix shows up here and in your Messages.</p>
+      <div class="mb-card" id="rcf-empty" style="margin-top:14px" hidden><div class="mb-top"><span class="mb-lab">Waiting for you</span><span class="mb-pill on">All clear</span></div><div class="mb-big">Nothing to <span class="g">fix</span></div><p>If a run fails and Robot Care can fix it, the fix shows up here and in your Messages.</p></div>
       <details class="fold" id="rcf-old" hidden><summary><span class="fold-l">Earlier</span></summary><ul class="rcf-list" id="rcf-old-list" style="margin-top:12px"></ul></details>
       <p class="small" id="rcf-msg" role="status" aria-live="polite" style="margin:10px 0 0"></p>
-      <div class="rcf-box" id="rcf-auto" hidden>
-        <p style="margin-top:0"><b>Let Robot Care fix things for you</b></p>
-        <p class="small">When a report or email breaks, Robot Care can test the fix on your robot and put it in by itself, then message you to say what it did. If a fix causes a problem, it's undone by itself. Leave this off and each fix waits for your tap.</p>
-        <p class="small">It only changes the code behind your reports and emails. It never touches your keys, your holdings, your settings or anything that decides or places orders: those fixes always wait for your tap. You can switch this off at any time.</p>
+      <div class="mb-card" id="rcf-auto" style="margin-top:12px" hidden>
+        <div class="mb-top"><span class="mb-lab">Automatic fixes</span><span class="mb-pill off" id="rcf-auto-pill">Off</span></div>
+        <div class="mb-big" id="rcf-auto-big">Let Robot Care fix things for you</div>
+        <p>When a report or email breaks, Robot Care can test the fix on your robot and put it in by itself, then message you to say what it did. If a fix causes a problem, it's undone by itself. Leave this off and each fix waits for your tap.</p>
+        <p>It only changes the code behind your reports and emails. It never touches your keys, your holdings, your settings or anything that decides or places orders: those fixes always wait for your tap. You can switch this off at any time.</p>
         <div class="row"><button class="btn" type="button" id="rcf-auto-btn">Switch on</button></div>
         <p class="small" id="rcf-auto-st" role="status" aria-live="polite" style="margin:10px 0 0"></p>
       </div>
@@ -772,8 +777,8 @@
       <section class="card" aria-labelledby="h-code" data-page="code">
         <h2 id="h-code">Your copy of <span class="p">the code</span></h2>
         <p class="lede">Delivered as an invite to your own private GitHub repo, never a zip file. Updates arrive there for as long as your membership includes them.</p>
-        <div class="kv" id="code-kv"></div>
-        <div class="row"><a class="btn ghost" aria-disabled="true" id="b-repo">Open my repo</a></div>
+        <div class="mb"><div class="mb-card mine"><div class="mb-top"><span class="mb-lab">Your copy</span><span class="mb-pill" id="code-pill"></span></div><div class="mb-big" id="code-big"></div><p id="code-p"></p>
+          <div class="row"><a class="btn ghost" aria-disabled="true" id="b-repo">Open my repo</a></div></div></div>
       </section>
 
       <section class="card" aria-labelledby="h-dash" data-page="dashboard">
@@ -1452,9 +1457,12 @@
       "<dt>Signed in as</dt><dd style=\"overflow-wrap:break-word\">" + esc(session.email || m.email).replace("@", "<wbr>@") + "</dd>" +
       "<dt>Dashboard</dt><dd>" + (m.dashboard_url ? '<a class="pill g pill-link" href="' + esc(dashHref(m.dashboard_url)) + '">Open my dashboard</a>' : '<a href="#dashboard" style="font-size:14px;font-weight:700">Add your link</a>') + "</dd>";
     $("name-edit").addEventListener("click", editName);
-    $("code-kv").innerHTML =
-      "<div><span>Repo invite</span><b>" + (m.repo_invited_at ? "Sent " + esc(fmtDate(m.repo_invited_at)) : (m.plan === "early" || m.plan === "owner") ? "Your own copy, from Set up my robot" : (m.repo_url ? "Preview account" : "Arrives in January 2027")) + "</b></div>" +
-      "<div><span>Version</span><b>" + (m.repo_invited_at || m.plan === "early" || m.plan === "owner" ? "Latest" : "The latest, when your invite arrives") + "</b></div>";
+    (function () {   // 20 Nov 2026: the same card as Help and membership
+      var own = m.plan === "early" || m.plan === "owner", has = !!m.repo_invited_at || own;
+      $("code-pill").textContent = has ? "Latest version" : "On its way"; $("code-pill").className = "mb-pill " + (has ? "on" : "off");
+      $("code-big").innerHTML = m.repo_invited_at ? 'Invite sent <span class="g">' + esc(fmtDate(m.repo_invited_at)) + '</span>' : own ? 'Your own <span class="g">private copy</span>' : m.repo_url ? 'Preview <span class="g">account</span>' : 'Arrives in <span class="g">January 2027</span>';
+      $("code-p").textContent = m.repo_invited_at ? "The invite went to your GitHub account. Your copy is private to you." : own ? "Built in Set up my robot, in your own GitHub account. Private to you." : m.repo_url ? "You're looking at the preview copy." : "You get the latest version when your invite arrives.";
+    })();
     var br = $("b-repo"); if (m.repo_url) { br.href = m.repo_url; br.removeAttribute("aria-disabled"); br.target = "_blank"; br.rel = "noopener"; br.classList.remove("ghost"); } else { br.removeAttribute("href"); br.setAttribute("aria-disabled", "true"); br.textContent = (m.plan === "early" || m.plan === "owner") ? "Build it in Set up my robot" : "Your repo opens with your invite"; }
     (function () {   // 20 Nov 2026 (option A): Your plan, Robot Care, Payments
       var day = 864e5, today = new Date(new Date().toDateString()).getTime();
@@ -2029,13 +2037,13 @@
     var box = $("dash-box"), url = me.dashboard_url;
     window.MRI_DASH_URL = url || null;   // the install kit installs the dashboard, not this page (26 Oct 2026)
     if (url) {
-      box.innerHTML = '<div class="kv"><div><span>Your dashboard</span><b style="overflow-wrap:anywhere">' + esc(url.replace(/^https:\/\//, "")) + '</b></div><div><span>Who can see it</span><b>Only you</b></div></div>' +
-        '<div class="row"><a class="btn" href="' + esc(dashHref(url)) + '">Open my dashboard</a></div>' +
+      box.innerHTML = '<div class="mb"><div class="mb-card mine"><div class="mb-top"><span class="mb-lab">Your dashboard</span><span class="mb-pill">Only you can see it</span></div><div class="mb-big url">' + esc(url.replace(/^https:\/\//, "")) + '</div>' +
+        '<div class="row"><a class="btn" href="' + esc(dashHref(url)) + '">Open my dashboard</a></div></div></div>' +
         '<p class="small" style="margin:12px 0 0">It asks for its own sign-in, which only you can pass. ' + (inApp() ? "It opens right here in the app: Members area in its menu brings you back." : "Use Back to return here.") + '</p>' +
         '<p class="small" style="margin:6px 0 0;font-size:12px">Rebuilt your dashboard at a new address? <button class="linkbtn" type="button" id="dash-edit" style="font-size:12px">Update the link</button></p><div id="dash-form-wrap" hidden></div>';
       $("dash-edit").addEventListener("click", function () { var w = $("dash-form-wrap"); w.hidden = false; w.innerHTML = dashForm(url); wireDash(); });
     } else {
-      box.innerHTML = '<div class="kv"><div><span>Set up</span><b>QuickStart step 6</b></div><div><span>Who can see it</span><b>Only you</b></div></div>' +
+      box.innerHTML = '<div class="mb"><div class="mb-card"><div class="mb-top"><span class="mb-lab">Your dashboard</span><span class="mb-pill off">Not set up yet</span></div><div class="mb-big">QuickStart <span class="g">step 6</span></div><p>Only you will be able to see it.</p></div></div>' +
         '<p class="small" style="margin:12px 0 0">Set it up already? Save its address here and it opens from this page.</p>' + dashForm("") +
         '<div class="row"><a class="btn ghost" href="../demo/">See the demo</a></div>';
       wireDash();
@@ -2621,7 +2629,10 @@
   function rcfAutoPaint(onPage) {
     var b = $("rcf-auto"); if (!b) return;
     b.hidden = !(onPage && me && me.robot_care);
-    $("rcf-auto-btn").textContent = me && me.robot_care_auto ? "Switch off" : "Switch on";
+    var on = !!(me && me.robot_care_auto);
+    $("rcf-auto-btn").textContent = on ? "Switch off" : "Switch on";
+    $("rcf-auto-pill").textContent = on ? "On" : "Off"; $("rcf-auto-pill").className = "mb-pill " + (on ? "on" : "off");
+    $("rcf-auto-big").innerHTML = on ? 'Automatic fixes are <span class="g">on</span>' : 'Automatic fixes are <span class="p">off</span>';
   }
   if ($("rcf-auto-btn")) $("rcf-auto-btn").addEventListener("click", async function () {
     var on = !(me && me.robot_care_auto), st = $("rcf-auto-st"), r;
@@ -3154,7 +3165,7 @@
     fetch("../questions.html", { cache: "no-cache" }).then(function (r) { return r.ok ? r.text() : Promise.reject(r.status); }).then(function (html) {
       var doc = new DOMParser().parseFromString(html, "text/html"), sec = doc.getElementById("faq");
       if (!sec) throw 0;
-      sec.querySelectorAll("script, .pghead, h1, .pgmark").forEach(function (x) { x.remove(); });
+      sec.querySelectorAll("script, .pghead, h1, .pgmark, .askcard").forEach(function (x) { x.remove(); });
       sec.querySelectorAll("a[href]").forEach(function (a) { var h = a.getAttribute("href"); if (/^(https?:|mailto:|#)/.test(h)) return; a.setAttribute("href", "../" + h.replace(/^\.\//, "")); });
       $("faq-body").innerHTML = sec.innerHTML;
     }).catch(function () { faqLoaded = false; $("faq-body").innerHTML = '<p class="small">Couldn\'t load the questions just now. <a href="../questions.html">Open the public page</a>.</p>'; });
