@@ -8,7 +8,7 @@ const t = async (name, f) => { await f(); passed++; console.log("ok  ", name); }
 const hmacHex = async (k, m) => createHmac("sha256", k).update(m).digest("hex");
 const NOW = Date.parse("2026-11-20T15:00:00Z");
 
-function world({ left = 37, open = true, live = false, m = null } = {}) {
+function world({ left = 37, open = true, live = true, m = null } = {}) {
   const calls = [];
   return { calls, d: {
     live, now: NOW,
@@ -36,7 +36,11 @@ await t("kit: founding price while places are left, standard after; waiver recor
 await t("kit: no tick, no checkout; closed in live mode before sales open, open in test mode", async () => {
   assert.equal((await core.checkout(world().d, { item: "kit", waiver: false })).body.code, "waiver");
   assert.equal((await core.checkout(world({ open: false, live: true }).d, { item: "kit", waiver: true })).body.code, "closed");
-  assert.equal((await core.checkout(world({ open: false, live: false }).d, { item: "kit", waiver: true })).status, 200);
+  // test mode: strangers and ordinary members are refused; the owner or a test member may buy even before sales open
+  assert.equal((await core.checkout(world({ live: false }).d, { item: "kit", waiver: true })).body.code, "test-mode");
+  assert.equal((await core.checkout(world({ live: false, m: member() }).d, { item: "kit", waiver: true, user: { id: "u" } })).body.code, "test-mode");
+  assert.equal((await core.checkout(world({ open: false, live: false, m: member({ plan: "owner" }) }).d, { item: "kit", waiver: true, user: { id: "u" } })).status, 200);
+  assert.equal((await core.checkout(world({ live: false, m: member({ plan: "test" }) }).d, { item: "renewal", user: { id: "u" } })).status, 200);
 });
 
 await t("kit: a signed-in member who already has it is stopped", async () => {

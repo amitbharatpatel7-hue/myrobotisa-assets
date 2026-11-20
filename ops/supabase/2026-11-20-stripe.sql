@@ -61,6 +61,8 @@ declare e text := lower(trim(p_email)); cur public.members%rowtype; m public.mem
   yr date := (now() at time zone 'Europe/London')::date + interval '12 months';
 begin
   if p_plan not in ('founding', 'standard') then raise exception 'bad plan %', p_plan; end if;
+  -- A test-mode payment never takes a founding number or counts as a sale: it makes a plan 'test' row.
+  if not p_live then plan_ := 'test'; end if;
   if exists (select 1 from admin.purchases where checkout_session = p_session) then
     select * into m from public.members where email = e;
     return json_build_object('member_id', m.id, 'plan', m.plan, 'founding_no', m.founding_no, 'repeat', true);
@@ -81,13 +83,13 @@ begin
     end if;
     update public.members set plan = plan_, status = 'active', founding_no = case when plan_ = 'founding' then no_ end,
       updates_until = yr, stripe_customer_id = p_customer, first_name = coalesce(nullif(trim(p_first_name), ''), first_name),
-      robot_care = (plan_ = 'founding'), robot_care_since = case when plan_ = 'founding' then now() end,
-      robot_care_until = case when plan_ = 'founding' then yr end
+      robot_care = (p_plan = 'founding'), robot_care_since = case when p_plan = 'founding' then now() end,
+      robot_care_until = case when p_plan = 'founding' then yr end
       where id = cur.id returning * into m;
   else
     insert into public.members (email, first_name, plan, status, updates_until, stripe_customer_id,
       robot_care, robot_care_since, robot_care_until)
-    values (e, nullif(trim(p_first_name), ''), p_plan, 'active', yr, p_customer,
+    values (e, nullif(trim(p_first_name), ''), plan_, 'active', yr, p_customer,
       p_plan = 'founding', case when p_plan = 'founding' then now() end, case when p_plan = 'founding' then yr end)
     returning * into m;
   end if;
@@ -150,7 +152,7 @@ begin
   if not found then return json_build_object('known', false); end if;
   if p.item = 'kit' then
     update public.members set status = 'refunded', robot_care = false, preview_videos = false
-      where id = p.member_id and plan in ('founding', 'standard');
+      where id = p.member_id and plan in ('founding', 'standard', 'test');
   elsif p.item = 'renewal' then
     update public.members set note = concat_ws(' · ', note, 'renewal refunded ' || current_date || ': check updates_until')
       where id = p.member_id;

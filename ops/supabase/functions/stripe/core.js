@@ -20,22 +20,24 @@ const londonToday = (now) => new Date(now).toLocaleDateString("en-CA", { timeZon
 // d: { member(user) -> row|null, founding() -> {left, sales_open}, price(lookup) -> id, stripe(path, form) -> json,
 //      live: boolean, now: ms }
 export async function checkout(d, { item, waiver, user }) {
+  // Test mode is for the owner and test members only: a test card must never make a stranger a member.
+  const me = user ? await d.member(user) : null;
+  if (!d.live && !(me && me.status === "active" && ["owner", "test"].includes(me.plan)))
+    return no(403, "Payments are being tested. Sales open in January.", "test-mode");
+  const buyers = d.live ? ["founding", "standard"] : ["founding", "standard", "owner", "test"];
   if (item === "kit") {
     const f = await d.founding();
     if (!f.sales_open && d.live) return no(409, "Sales open in January. Join the free test drive for now.", "closed");
     if (waiver !== true) return no(400, "Tick the box to say you understand the 14-day right to cancel ends when you open the code.", "waiver");
-    if (user) {
-      const m = await d.member(user);
-      if (m && ["active", "lapsed"].includes(m.status) && m.plan !== "test")
-        return no(409, "You already have the kit. Manage membership is in Help and membership.", "has-kit");
-    }
+    if (d.live && me && ["active", "lapsed"].includes(me.status) && me.plan !== "test")
+      return no(409, "You already have the kit. Manage membership is in Help and membership.", "has-kit");
     const plan = f.left > 0 ? "founding" : "standard";
     const waiverAt = new Date(d.now).toISOString();
     const meta = { item: "kit", plan, waiver_at: waiverAt };
     const s = await d.stripe("checkout/sessions", {
       mode: "payment", locale: "en-GB",
       line_items: [{ price: await d.price(plan === "founding" ? "kit_founding" : "kit_standard"), quantity: 1 }],
-      customer_creation: "always", ...(user?.email ? { customer_email: user.email } : {}),
+      customer_creation: "always", ...(user?.email && d.live ? { customer_email: user.email } : {}),
       metadata: meta, payment_intent_data: { metadata: meta },
       custom_text: { submit: { message: "You agreed that opening the code ends your 14-day right to cancel. The QuickStart promise still applies: see our terms." } },
       success_url: `${MEMBERS}?welcome=1&session_id={CHECKOUT_SESSION_ID}`,
@@ -45,8 +47,8 @@ export async function checkout(d, { item, waiver, user }) {
   }
   if (item !== "renewal" && item !== "robot_care") return no(400, "Choose something to buy.", "item");
   if (!user) return no(401, "Sign in again.", "auth");
-  const m = await d.member(user);
-  if (!m || !["active", "lapsed"].includes(m.status) || !["founding", "standard"].includes(m.plan))
+  const m = me;
+  if (!m || !["active", "lapsed"].includes(m.status) || !buyers.includes(m.plan))
     return no(403, "This is for members with the kit.", "not-member");
   const customer = m.stripe_customer_id ? { customer: m.stripe_customer_id } : { customer_email: m.email, customer_creation: "always" };
   const meta = { item, member_id: m.id };
