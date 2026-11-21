@@ -12,6 +12,8 @@ including the internal ones to me, and flag (Internal) in the subject"):
     `bgcolor` attribute as well as the inline background longhand, so Apple Mail and Outlook leave the colours alone;
   * `subject()` prefixes "(Internal) " unless `internal=False` — only emails to members or customers pass False.
 
+v2.9 (21 Nov 2026, Amit) — internal mail only: the black scheme becomes "Petrol" (page #0B2530, cards #143746), because
+  My Robot Trader's public site now uses black. Background shades only; see _INTERNAL. Member mail is unchanged.
 v2.8 (18 Nov 2026, Amit chose "A" for the daily P&L: "most people just want to see how much money the robot has lost or made") —
   member mail only, additive and opt-in: render(figure={...}) puts the day's money in the header card as the biggest thing in the
   email, with the day's one-liner under it and two stats in inset boxes (v2.8.1). FIGURE_HEADER = True marks it. See _figure_header().
@@ -835,10 +837,14 @@ LMS_LOGO = "https://myrobotisa.com/email/lms.png"
 LMS_BRAND = ("L", "Last Man", "Standing", LMS_LOGO)
 DTL_LOGO = "https://myrobotisa.com/email/dtl-robot.png"   # v2.6.2 (Amit, 24 Oct 2026: option C, the lab flask)
 DTL_BRAND = ("D", "Day Trade", "Lab", DTL_LOGO)
-_INTERNAL = {"PAGE": "#0A0A0D", "CARD": "#17171D", "CARD_DEEP": "#101014", "HAIRLINE": "#2A2A33", "MUTED": "#B9B6C2",
-             "ON_GREEN": "#0A0A0D", "MUTED_BG": "#24242C", "GREEN_BG": "#12301F",
-             "PILL_COLORS": {"green": ("#0A0A0D", "#00E87A"), "amber": ("#2A1A00", "#FFA63D"), "red": ("#FFFFFF", "#FF4D7A"), "muted": ("#E6E3EC", "#3A3A44")},
-             "SOLID_TAGS": {**SOLID_TAGS, "amber": ("#FFA63D", "#2A1A00")}}   # v2.7: amber pills match the amber notice
+# v2.9 (21 Nov 2026, Amit: "Lets use Petrol for all internal emails for all repos") — internal mail moves off black, now that
+# My Robot Trader's public site is the black theme. Only the background shades change (page, cards, insets, hairlines, the
+# muted text and pill tints that sit on them, and text on solid green/notice colours, which takes the page colour as before).
+# Everything else — notices, pink eyebrow, tags, robots, layout — is unchanged. Was: page #0A0A0D, card #17171D.
+_INTERNAL = {"PAGE": "#0B2530", "CARD": "#143746", "CARD_DEEP": "#10303D", "HAIRLINE": "#24505F", "MUTED": "#B7CFD8",
+             "ON_GREEN": "#0B2530", "MUTED_BG": "#1A4251", "GREEN_BG": "#12301F",
+             "PILL_COLORS": {"green": ("#0B2530", "#00E87A"), "amber": ("#2A1A00", "#FFA63D"), "red": ("#FFFFFF", "#FF4D7A"), "muted": ("#E6E3EC", "#2E5C6C")},
+             "SOLID_TAGS": {**SOLID_TAGS, "amber": ("#FFA63D", "#2A1A00"), "green": ("#00E87A", "#0B2530"), "muted": ("#2E5C6C", "#E6E3EC")}}   # v2.7: amber pills match the amber notice
 
 
 # v2.7 (Amit, 4 Nov 2026): the six internal notices. Robots live at myrobotisa.com/email/notice/<project>-<notice>.png, the
