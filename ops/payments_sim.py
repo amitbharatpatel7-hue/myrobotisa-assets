@@ -18,7 +18,7 @@ GITHUB_REPOSITORY. Standard library only.   python3 ops/payments_sim.py
 """
 import json, os, sys, time, urllib.error, urllib.parse, urllib.request
 
-KEY = os.environ.get("STRIPE_TEST_SECRET_KEY", "").strip()
+KEY = os.environ.get("STRIPE_TEST_SECRET_KEY", "").strip().strip("'\"").strip()
 COUNT = max(1, min(150, int(os.environ.get("COUNT") or 60)))
 RUN = "".join(c for c in (os.environ.get("RUN") or str(int(time.time()))) if c.isalnum())[-10:]
 SITE = "https://myrobotisa.com"
