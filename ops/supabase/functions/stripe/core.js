@@ -21,7 +21,9 @@ const londonToday = (now) => new Date(now).toLocaleDateString("en-CA", { timeZon
 // d: { member(user) -> row|null, memberByEmail(email) -> {plan, status}|null, founding() -> {left, sales_open}, price(lookup) -> id, stripe(path, form) -> json,
 //      live: boolean, now: ms }
 // Card only: Apple Pay and Google Pay ride on "card". No Klarna, Revolut Pay, Amazon Pay or Link (Amit, 20 Nov 2026).
-const CARD_ONLY = { payment_method_types: ["card"] };
+// 21 Nov 2026: this API version refuses `payment_method_types` outright (every checkout failed with a 502 from the
+// evening of 20 Nov until this fix); `allowed_payment_method_types` is the filter that replaced it.
+const CARD_ONLY = { allowed_payment_method_types: ["card"] };
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export async function checkout(d, { item, waiver, user, embedded, email }) {

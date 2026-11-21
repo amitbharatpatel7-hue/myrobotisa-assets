@@ -148,7 +148,7 @@
 
   // 21 Nov 2026 (Amit): the email comes first, so the server can refuse before any payment if it already has the kit.
   var em = $("email");
-  try { var su = JSON.parse(localStorage.getItem("mri-members-session") || "null"); if (su && su.user && su.user.email) em.value = su.user.email; } catch (e) {}
+  try { var su = JSON.parse(localStorage.getItem("mri-members-session") || "null"); var se = su && (su.email || (su.user && su.user.email)); if (se) em.value = se; } catch (e) {}
   function emailOk() { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em.value.trim()); }
   function ready() { $("go").disabled = !($("waiver").checked && emailOk()); }
   $("waiver").addEventListener("change", ready); em.addEventListener("input", ready);
