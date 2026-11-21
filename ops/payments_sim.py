@@ -18,7 +18,7 @@ GITHUB_REPOSITORY. Standard library only.   python3 ops/payments_sim.py
 """
 import json, os, sys, time, urllib.error, urllib.parse, urllib.request
 
-KEY = os.environ.get("STRIPE_TEST_SECRET_KEY", "").strip()
+KEY = os.environ.get("STRIPE_TEST_SECRET_KEY", "").strip().strip("'\"").strip()
 COUNT = max(1, min(150, int(os.environ.get("COUNT") or 60)))
 RUN = "".join(c for c in (os.environ.get("RUN") or str(int(time.time()))) if c.isalnum())[-10:]
 SITE = "https://myrobotisa.com"
@@ -126,7 +126,16 @@ def report(text):
 
 def main():
     if not (KEY.startswith("sk_test_") or KEY.startswith("rk_test_")):
-        print("STRIPE_TEST_SECRET_KEY is missing or is not a test key. Nothing was sent.")
+        # Say what kind of key it is without showing it: only the part before the second underscore, and the length.
+        kind = "_".join(KEY.split("_")[:2]) + "_" if KEY.count("_") >= 2 else ("empty" if not KEY else "not a Stripe key")
+        hint = {"pk_test_": "that is the PUBLISHABLE key; the Secret key is the one below it, starting sk_test_",
+                "sk_live_": "that is a LIVE key; switch Stripe to the sandbox and copy its Secret key",
+                "rk_live_": "that is a LIVE restricted key; use a sandbox key",
+                "pk_live_": "that is a live publishable key; use the sandbox Secret key",
+                "whsec_": "that is the webhook signing secret, not an API key"}.get(kind, "")
+        if KEY.startswith("whsec_"):
+            kind, hint = "whsec_", "that is the webhook signing secret, not an API key"
+        print(f"STRIPE_TEST_SECRET_KEY must start sk_test_ or rk_test_. Found: {kind} ({len(KEY)} characters). {hint} Nothing was sent.")
         return 2
     prices = stripe("GET", "prices", {"active": "true", "lookup_keys": ["kit_founding"]}).get("data", [])
     if not prices:
