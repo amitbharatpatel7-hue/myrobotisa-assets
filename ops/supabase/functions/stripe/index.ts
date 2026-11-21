@@ -1,7 +1,8 @@
 // stripe edge function (20 Nov 2026, hub D27). The logic is core.js; this file wires the real calls.
 // Deploy with verify_jwt = false: Stripe's webhook carries no Supabase token, and a kit can be bought before sign-in.
 // Sign-ins on the other routes are checked here against Supabase Auth (/auth/v1/user), not just decoded.
-// Secrets: STRIPE_SECRET_KEY (a restricted key: Checkout Sessions, Customer portal, Prices and Subscriptions read),
+// Secrets: STRIPE_SECRET_KEY (a restricted key: Checkout Sessions, Customer portal, Prices and Subscriptions read,
+//          and Refunds write, used only to send back a second kit payment),
 //          STRIPE_WEBHOOK_SECRET (whsec_… for this endpoint), STRIPE_PUBLISHABLE_KEY (pk_…). The service role key is built in.
 import * as core from "./core.js";
 
@@ -52,6 +53,10 @@ async function member(u: { id: string }) {
   const rows = await (await db(`members?select=id,email,plan,status,stripe_customer_id,robot_care,robot_care_until,robot_care_sub_id,robot_care_sub_status&user_id=eq.${u.id}&limit=1`)).json();
   return Array.isArray(rows) ? rows[0] || null : null;
 }
+async function memberByEmail(email: string) {
+  const rows = await (await db(`members?select=plan,status&email=eq.${encodeURIComponent(email)}&limit=1`)).json();
+  return Array.isArray(rows) ? rows[0] || null : null;
+}
 const founding = async () => rpc("founding_status", {});
 async function hmacHex(secret: string, msg: string) {
   const k = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
@@ -84,9 +89,9 @@ Deno.serve(async (req: Request) => {
   let input: Record<string, unknown> = {};
   try { input = await req.json(); } catch { /* empty body is fine */ }
   const u = await user(req.headers.get("authorization") || "");
-  const d = { member, founding, price, stripe, live: LIVE, now: Date.now(), pk: PK };
+  const d = { member, memberByEmail, founding, price, stripe, live: LIVE, now: Date.now(), pk: PK };
   try {
-    if (route === "checkout") return reply(origin, await core.checkout(d, { item: input.item, waiver: input.waiver, user: u, embedded: input.embedded === true }));
+    if (route === "checkout") return reply(origin, await core.checkout(d, { item: input.item, waiver: input.waiver, user: u, embedded: input.embedded === true, email: input.email }));
     if (route === "portal") return reply(origin, await core.portal(d, { user: u }));
   } catch (e) {
     console.error("stripe:", e);

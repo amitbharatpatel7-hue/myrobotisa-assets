@@ -8,12 +8,13 @@ const t = async (name, f) => { await f(); passed++; console.log("ok  ", name); }
 const hmacHex = async (k, m) => createHmac("sha256", k).update(m).digest("hex");
 const NOW = Date.parse("2026-11-20T15:00:00Z");
 
-function world({ left = 37, open = true, live = true, m = null } = {}) {
+function world({ left = 37, open = true, live = true, m = null, held = null } = {}) {
   const calls = [];
   return { calls, d: {
     live, now: NOW, pk: "pk_test_x",
     founding: async () => ({ left, sales_open: open }),
     member: async () => m,
+    memberByEmail: async (e) => { calls.looked = e; return held; },
     price: async (k) => `price_${k}`,
     stripe: async (path, params) => { calls.push({ path, params }); return { url: `https://checkout.stripe.com/${path}`, id: "cs_1", client_secret: "cs_1_secret" }; },
   } };
@@ -23,24 +24,24 @@ const member = (o = {}) => ({ id: "m1", email: "a@x.com", plan: "founding", stat
 
 await t("kit: founding price while places are left, standard after; waiver recorded in metadata", async () => {
   let w = world({ left: 3 });
-  let r = await core.checkout(w.d, { item: "kit", waiver: true, user: null });
+  let r = await core.checkout(w.d, { item: "kit", waiver: true, user: null, email: "new@x.com" });
   assert.equal(r.status, 200); assert.equal(r.body.plan, "founding");
   assert.equal(w.calls[0].params.line_items[0].price, "price_kit_founding");
   assert.equal(w.calls[0].params.metadata.waiver_at, new Date(NOW).toISOString());
   assert.equal(w.calls[0].params.payment_intent_data.metadata.plan, "founding");
   w = world({ left: 0 });
-  r = await core.checkout(w.d, { item: "kit", waiver: true, user: null });
+  r = await core.checkout(w.d, { item: "kit", waiver: true, user: null, email: "new@x.com" });
   assert.equal(r.body.plan, "standard"); assert.equal(w.calls[0].params.line_items[0].price, "price_kit_standard");
 });
 
 await t("kit, embedded: Stripe's form on our page gets a client secret and the publishable key, and a return_url", async () => {
   const w = world({ left: 3 });
-  const r = await core.checkout(w.d, { item: "kit", waiver: true, user: null, embedded: true });
+  const r = await core.checkout(w.d, { item: "kit", waiver: true, user: null, embedded: true, email: "new@x.com" });
   assert.equal(r.body.client_secret, "cs_1_secret"); assert.equal(r.body.publishable_key, "pk_test_x"); assert.equal(r.body.url, undefined);
   const p = w.calls[0].params;
   assert.equal(p.ui_mode, "embedded_page"); assert.equal(p.branding_settings.background_color, "#ffffff"); assert.match(p.return_url, /buy\.html\?done=\{CHECKOUT_SESSION_ID\}$/); assert.equal(p.success_url, undefined);
   w.d.pk = "";
-  assert.equal((await core.checkout(w.d, { item: "kit", waiver: true, embedded: true })).body.code, "no-key");
+  assert.equal((await core.checkout(w.d, { item: "kit", waiver: true, embedded: true, email: "new@x.com" })).body.code, "no-key");
 });
 
 await t("kit: no tick, no checkout; closed in live mode before sales open, open in test mode", async () => {
@@ -56,6 +57,32 @@ await t("kit: no tick, no checkout; closed in live mode before sales open, open 
 await t("kit: a signed-in member who already has it is stopped", async () => {
   const r = await core.checkout(world({ m: member() }).d, { item: "kit", waiver: true, user: { id: "u", email: "a@x.com" } });
   assert.equal(r.body.code, "has-kit");
+});
+
+await t("kit: the email is checked before payment, so nobody pays twice; Stripe gets the same email", async () => {
+  // signed out, live: no email, no checkout
+  assert.equal((await core.checkout(world().d, { item: "kit", waiver: true, user: null })).body.code, "email");
+  assert.equal((await core.checkout(world().d, { item: "kit", waiver: true, user: null, email: "not an email" })).body.code, "email");
+  // an email that already holds a licence (paid, early adopter, owner, lapsed) is refused and Stripe is never called
+  for (const held of [{ plan: "founding", status: "active" }, { plan: "standard", status: "lapsed" }, { plan: "early", status: "active" }, { plan: "owner", status: "active" }]) {
+    const w = world({ held });
+    const r = await core.checkout(w.d, { item: "kit", waiver: true, user: null, email: " Held@X.com " });
+    assert.equal(r.body.code, "has-kit"); assert.equal(w.calls.length, 0); assert.equal(w.calls.looked, "held@x.com");
+  }
+  // refunded or deleted rows, and brand new emails, can buy; the checked email is the one Stripe locks in
+  for (const held of [null, { plan: "founding", status: "refunded" }, { plan: "standard", status: "deleted" }]) {
+    const w = world({ held });
+    const r = await core.checkout(w.d, { item: "kit", waiver: true, user: null, email: "Back@X.com" });
+    assert.equal(r.status, 200); assert.equal(w.calls[0].params.customer_email, "back@x.com");
+  }
+  // signed in, live, nothing typed: their sign-in email is used and checked
+  const w = world({ held: null });
+  await core.checkout(w.d, { item: "kit", waiver: true, user: { id: "u", email: "me@x.com" } });
+  assert.equal(w.calls.looked, "me@x.com"); assert.equal(w.calls[0].params.customer_email, "me@x.com");
+  // test mode: a test member's email may pay again (that exercises the automatic refund); a real member's may not
+  const o = member({ plan: "owner" });
+  assert.equal((await core.checkout(world({ live: false, m: o, held: { plan: "test", status: "active" } }).d, { item: "kit", waiver: true, user: { id: "u" }, email: "t@x.com" })).status, 200);
+  assert.equal((await core.checkout(world({ live: false, m: o, held: { plan: "owner", status: "active" } }).d, { item: "kit", waiver: true, user: { id: "u" }, email: "a@x.com" })).body.code, "has-kit");
 });
 
 await t("renewal and Robot Care need a signed-in member with the kit", async () => {
@@ -117,6 +144,23 @@ await t("webhook: a paid kit makes the membership once, however often Stripe sen
   const kit = h.rpcs.filter((r) => r.name === "stripe_kit_paid");
   assert.equal(kit.length, 1);
   assert.equal(kit[0].args.p_first_name, "Sam"); assert.equal(kit[0].args.p_amount, 9900); assert.equal(kit[0].args.p_plan, "founding");
+});
+
+await t("webhook: a second kit payment for an email that already has the kit is refunded, and a failed refund is logged, not thrown", async () => {
+  const mk = (id) => ({ id, type: "checkout.session.completed", livemode: true, data: { object: { id: "cs_" + id, mode: "payment", payment_status: "paid",
+    customer: "cus_9", payment_intent: "pi_dup", amount_total: 9900, customer_details: { email: "a@x.com", name: "A" }, metadata: { item: "kit", plan: "founding" } } } });
+  const calls = [], logs = [];
+  const d = { log: (...a) => logs.push(a.join(" ")), rpc: async (name) => name === "stripe_event_claim" ? true : { member_id: "m1", duplicate: true, note: "paid for a kit again" },
+    stripe: async (path, params) => { calls.push({ path, params }); return { id: "re_1" }; } };
+  let r = await core.handle(d, mk("evt_d1"));
+  assert.equal(r.body.refunded, true); assert.equal(calls[0].path, "refunds");
+  assert.equal(calls[0].params.payment_intent, "pi_dup"); assert.equal(calls[0].params.reason, "duplicate");
+  d.stripe = async () => { throw new Error("no permission"); };
+  r = await core.handle(d, mk("evt_d2"));
+  assert.equal(r.status, 200); assert.equal(r.body.refunded, false); assert.ok(logs.some((l) => /NOT refunded/.test(l) && /pi_dup/.test(l)));
+  // a first, ordinary payment is never refunded
+  const c2 = []; const d2 = { log: () => {}, rpc: async (name) => name === "stripe_event_claim" ? true : { member_id: "m2", duplicate: false }, stripe: async (p) => { c2.push(p); return {}; } };
+  r = await core.handle(d2, mk("evt_d3")); assert.equal(r.body.refunded, undefined); assert.equal(c2.length, 0);
 });
 
 await t("webhook: unpaid sessions wait; renewal, subscription and full refunds go to the right function", async () => {

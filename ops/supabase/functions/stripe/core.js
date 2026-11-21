@@ -3,7 +3,7 @@
 // and Node both run it.
 //
 // Routes (index.ts):
-//   POST /stripe/checkout {item, waiver?}  -> {url}   item: kit (no sign-in), renewal or robot_care (signed in)
+//   POST /stripe/checkout {item, waiver?, email?}  -> {url}   item: kit (no sign-in), renewal or robot_care (signed in)
 //        with embedded: true (the kit, on /buy.html) -> {client_secret, publishable_key} for Stripe's form on our page
 //   POST /stripe/portal                    -> {url}   signed in: Stripe's page for card, receipts, cancel Robot Care
 //   POST /stripe/webhook                   Stripe's events, signature checked
@@ -18,12 +18,15 @@ const no = (status, error, code) => ({ status, body: { ok: false, error, code } 
 const londonToday = (now) => new Date(now).toLocaleDateString("en-CA", { timeZone: "Europe/London" });   // YYYY-MM-DD
 
 // ── Checkout ───────────────────────────────────────────────────────────────────────────────────────────────────
-// d: { member(user) -> row|null, founding() -> {left, sales_open}, price(lookup) -> id, stripe(path, form) -> json,
+// d: { member(user) -> row|null, memberByEmail(email) -> {plan, status}|null, founding() -> {left, sales_open}, price(lookup) -> id, stripe(path, form) -> json,
 //      live: boolean, now: ms }
 // Card only: Apple Pay and Google Pay ride on "card". No Klarna, Revolut Pay, Amazon Pay or Link (Amit, 20 Nov 2026).
-const CARD_ONLY = { payment_method_types: ["card"] };
+// 21 Nov 2026: this API version refuses `payment_method_types` outright (every checkout failed with a 502 from the
+// evening of 20 Nov until this fix); `allowed_payment_method_types` is the filter that replaced it.
+const CARD_ONLY = { allowed_payment_method_types: ["card"] };
+const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-export async function checkout(d, { item, waiver, user, embedded }) {
+export async function checkout(d, { item, waiver, user, embedded, email }) {
   // Test mode is for the owner and test members only: a test card must never make a stranger a member.
   const me = user ? await d.member(user) : null;
   if (!d.live && !(me && me.status === "active" && ["owner", "test"].includes(me.plan)))
@@ -35,13 +38,25 @@ export async function checkout(d, { item, waiver, user, embedded }) {
     if (waiver !== true) return no(400, "Tick the box to say you understand the 14-day right to cancel ends when you open the code.", "waiver");
     if (d.live && me && ["active", "lapsed"].includes(me.status) && me.plan !== "test")
       return no(409, "You already have the kit. Manage membership is in Help and membership.", "has-kit");
+    // Nobody pays for the kit twice (Amit, 21 Nov 2026): the buyer's email is checked before Stripe is involved, and
+    // Stripe is given that same email so the one that pays is the one that was checked. Test members can pay again:
+    // that is how the automatic refund of a second payment gets tested.
+    const typed = typeof email === "string" ? email.trim().toLowerCase() : "";
+    if (typed && !EMAIL.test(typed)) return no(400, "That email doesn't look right. Check it and try again.", "email");
+    const buyer = typed || (d.live && user?.email) || "";
+    if (d.live && !buyer) return no(400, "Enter your email first.", "email");
+    if (buyer) {
+      const held = await d.memberByEmail(buyer);
+      if (held && ["active", "lapsed"].includes(held.status) && held.plan !== "test")
+        return no(409, "This email already has the kit, so there is nothing to pay. Sign in to the members area.", "has-kit");
+    }
     const plan = f.left > 0 ? "founding" : "standard";
     const waiverAt = new Date(d.now).toISOString();
     const meta = { item: "kit", plan, waiver_at: waiverAt };
     const s = await d.stripe("checkout/sessions", {
       mode: "payment", locale: "en-GB", ...CARD_ONLY,
       line_items: [{ price: await d.price(plan === "founding" ? "kit_founding" : "kit_standard"), quantity: 1 }],
-      customer_creation: "always", ...(user?.email && d.live ? { customer_email: user.email } : {}),
+      customer_creation: "always", ...(buyer ? { customer_email: buyer } : {}),
       metadata: meta, payment_intent_data: { metadata: meta },
       custom_text: { submit: { message: "You agreed that opening the code ends your 14-day right to cancel. The QuickStart promise still applies: see our terms." } },
       // On our page Stripe's form sits in a white card, so its own summary panel is white too (not the brand purple).
@@ -124,6 +139,14 @@ export async function handle(d, event) {
         p_plan: meta.plan, p_customer: o.customer, p_session: o.id, p_payment_intent: o.payment_intent,
         p_amount: o.amount_total, p_waiver_at: meta.waiver_at || null, p_live: live });
       if (r?.note) d.log("stripe: for the owner:", r.note);
+      // The safety net: this email already held a licence when the money arrived (a second tab, or a session opened
+      // before they joined). The licence is untouched; the second payment goes straight back.
+      if (r?.duplicate && o.payment_intent) {
+        try {
+          await d.stripe("refunds", { payment_intent: o.payment_intent, reason: "duplicate", metadata: { why: "second kit payment", member_id: r.member_id || "" } });
+          return ok({ kit: r, refunded: true });
+        } catch (e) { d.log("stripe: a second kit payment was NOT refunded, do it by hand:", o.payment_intent, String(e)); return ok({ kit: r, refunded: false }); }
+      }
       return ok({ kit: r });
     }
     if (meta.item === "renewal") {
