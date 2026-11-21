@@ -46,6 +46,10 @@
   .agree{display:flex;gap:12px;align-items:flex-start;font-size:14px;line-height:1.45;padding:14px;border-radius:12px;background:#FDEAF7;border:1px solid var(--pink-bg);cursor:pointer}
   .agree input{width:22px;height:22px;flex:none;margin:0;accent-color:var(--pink-bg)}
   .agree a{color:var(--pink-bg);font-weight:600}
+  .em{display:grid;gap:6px;margin-bottom:12px;font-size:14px;font-weight:700} .em small{font-weight:400;color:var(--text2);line-height:1.4}
+  .em input{min-height:52px;border-radius:12px;border:1px solid #CFC4D6;padding:0 14px;font:inherit;font-size:16px;font-weight:400;color:var(--text);background:#fff;width:100%}
+  .em input:focus-visible{outline:3px solid var(--pink-bg);outline-offset:2px}
+  .msg a{color:#A3006F;font-weight:700}
   .go{min-height:56px;border:0;border-radius:999px;background:var(--green);color:var(--text);font:inherit;font-size:18px;font-weight:800;cursor:pointer;padding:0 24px}
   .go:disabled{background:#D8CFDB;color:#5A3E62;cursor:not-allowed}
   .go:focus-visible,.agree input:focus-visible{outline:3px solid var(--pink-bg);outline-offset:2px}
@@ -87,6 +91,8 @@
       <h2>Pay <span>securely</span></h2>
       <p class="msg" id="closed" hidden>Sales open in January 2027. Until then, <a href="join.html" style="color:#A3006F;font-weight:700">join the free test drive</a> and you'll hear the moment they do.</p>
       <div id="step1">
+        <label class="em" for="email">Your email<input type="email" id="email" name="email" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false" required>
+          <small>You sign in to the members area with this, and your receipt goes to it. We check it first so nobody pays for the kit twice.</small></label>
         <label class="agree"><input type="checkbox" id="waiver"><span>I understand my 14-day right to cancel ends when I open the code. The QuickStart promise still applies: see the <a href="terms.html#cancel" target="_blank" rel="noopener">terms of sale</a>.</span></label>
       </div>
       <button class="go" type="button" id="go" disabled>Continue to payment</button>
@@ -140,26 +146,33 @@
       if (!f.sales_open && !token) { $("closed").hidden = false; $("step1").hidden = true; $("go").hidden = true; }
     }).catch(function () {});
 
-  $("waiver").addEventListener("change", function () { $("go").disabled = !this.checked; });
+  // 21 Nov 2026 (Amit): the email comes first, so the server can refuse before any payment if it already has the kit.
+  var em = $("email");
+  try { var su = JSON.parse(localStorage.getItem("mri-members-session") || "null"); if (su && su.user && su.user.email) em.value = su.user.email; } catch (e) {}
+  function emailOk() { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(em.value.trim()); }
+  function ready() { $("go").disabled = !($("waiver").checked && emailOk()); }
+  $("waiver").addEventListener("change", ready); em.addEventListener("input", ready);
 
   $("go").addEventListener("click", function () {
     var go = this; if (go.disabled) return;
     go.disabled = true; go.textContent = "Opening the payment form…"; say("");
     var h = { apikey: KEY, "Content-Type": "application/json" }; if (token) h.Authorization = "Bearer " + token;
-    fetch(SB + "/functions/v1/stripe/checkout", { method: "POST", headers: h, body: JSON.stringify({ item: "kit", waiver: true, embedded: true }) })
+    fetch(SB + "/functions/v1/stripe/checkout", { method: "POST", headers: h, body: JSON.stringify({ item: "kit", waiver: true, embedded: true, email: em.value.trim() }) })
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); })
       .then(function (r) {
+        if (r.j && r.j.code === "has-kit") { var e1 = new Error("has-kit"); e1.hasKit = true; throw e1; }
         if (!r.ok || !r.j.client_secret || !/^pk_(test|live)_/.test(r.j.publishable_key || "")) throw new Error((r.j && r.j.error) || "");
         var stripe = window.Stripe(r.j.publishable_key);
         var opts = { fetchClientSecret: function () { return Promise.resolve(r.j.client_secret); } };
         var make = stripe.createEmbeddedCheckoutPage || stripe.initEmbeddedCheckout;   // the newer name first
         return make.call(stripe, opts).then(function (co) {
-          $("step1").hidden = true; go.hidden = true; $("waiver").disabled = true;
+          $("step1").hidden = true; go.hidden = true; $("waiver").disabled = true; em.disabled = true;
           $("form").hidden = false; co.mount("#form");
         });
       })
       .catch(function (e) {
-        go.disabled = !$("waiver").checked; go.textContent = "Continue to payment";
+        go.textContent = "Continue to payment"; ready();
+        if (e && e.hasKit) { var m = $("msg"); m.hidden = false; m.className = "msg err"; m.innerHTML = 'This email already has the kit, so there is nothing to pay. <a href="members/">Sign in to the members area</a>.'; return; }
         say(e && e.message ? e.message : "The payment form didn't open. Check your connection and try again.", true);
       });
   });
