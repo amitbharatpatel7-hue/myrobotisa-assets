@@ -340,6 +340,20 @@ try {
       // search works across All
       await page.click('#ib-chips button[data-f=""]');
       await page.fill("#ib-q", "miss a week"); assert.deepEqual(await titles(page), [BOARD[7].title]);
+      // 21 Nov 2026 (Amit): a status chip with no ideas says so, rather than reading as an empty board
+      await page.fill("#ib-q", ""); await page.click("#ib-t-all"); await page.click('#ib-chips button[data-f="live"]');
+      assert.equal((await page.textContent("#ib-msg")).trim(), "No ideas at this stage yet.");
+      await page.click('#ib-chips button[data-f=""]');
+      // 21 Nov 2026 (Amit): one roadmap. Your updates lists the board's Building then Planned ideas, no typed-in cards.
+      await page.goto(URL_ + "#clips"); await page.waitForSelector("#bench .bch");
+      assert.deepEqual(await page.$$eval("#bench .bch", (c) => c.map((x) => [x.querySelector(".pill").textContent, x.querySelector("b").textContent, x.querySelector(".bch-pct").textContent])),
+        [["Building", BOARD[3].title, "1 vote"], ["Planned", BOARD[0].title, "6 votes"]]);
+      assert.equal(await page.$$eval("#bench .want, #bench .bar", (x) => x.length), 0, "no second vote, no typed-in percentages");
+      assert.equal(await page.$eval("#bench", (e) => e.scrollWidth <= e.clientWidth + 1), true, "bench fits the screen");
+      if (SHOTS) { await page.$eval("#bench", (e) => e.scrollIntoView({ block: "center" })); await page.screenshot({ path: path.join(SHOTS, `bench-${vp.width}.png`) }); }
+      await page.click("#bench .bch a"); await page.waitForTimeout(150);
+      assert.ok(page.url().endsWith("#post/" + BOARD[3].id), "a bench card opens its idea");
+      await page.goto(URL_ + "#ideas"); await page.waitForSelector("#ib-list .ib-t");
       // the menu link lands on All again
       await page.click("#ib-t-question"); await page.goto(URL_ + "#home"); await page.goto(URL_ + "#ideas"); await page.waitForTimeout(200);
       await page.evaluate(() => document.querySelector('a[href="#ideas"]').click()); await page.waitForTimeout(100);
