@@ -1,0 +1,34 @@
+name: Payments simulation (Stripe test mode)
+
+# Real Stripe TEST-mode kit payments, start to finish, with nobody typing a card (ops/payments_sim.py).
+# Started by hand only: no schedule, so it costs nothing until someone runs it. One run is one job of a few
+# minutes (60 buyers is about 80 payments). Needs the repository secret STRIPE_TEST_SECRET_KEY, a TEST key;
+# the script refuses anything that is not sk_test_ or rk_test_.
+on:
+  workflow_dispatch:
+    inputs:
+      count:
+        description: "How many buyers to simulate (a third pay twice, a third are refunded)"
+        default: "60"
+
+permissions:
+  contents: read
+  issues: write   # the result is posted on the "Payments simulation log" issue
+
+concurrency:
+  group: payments-sim
+  cancel-in-progress: false
+
+jobs:
+  simulate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pay, pay twice, refund
+        env:
+          STRIPE_TEST_SECRET_KEY: ${{ secrets.STRIPE_TEST_SECRET_KEY }}
+          COUNT: ${{ inputs.count }}
+          RUN: ${{ github.run_id }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 ops/payments_sim.py
