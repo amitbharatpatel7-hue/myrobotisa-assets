@@ -28,15 +28,21 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 export async function checkout(d, { item, waiver, user, embedded, email }) {
   // Test mode is for the owner and test members only: a test card must never make a stranger a member.
+  // Rehearsal (22 Nov 2026, Amit): live keys before sales open behave the same way. Only the owner and test members
+  // can pay, and what they pay for is recorded as a test (no founding number, no sale, sales stay closed), so real
+  // cards can prove the live setup without anything going public. It ends by itself when sales open.
   const me = user ? await d.member(user) : null;
-  if (!d.live && !(me && me.status === "active" && ["owner", "test"].includes(me.plan)))
-    return no(403, "Payments are being tested. Sales open in January.", "test-mode");
-  const buyers = d.live ? ["founding", "standard"] : ["founding", "standard", "owner", "test"];
+  const tester = !!(me && me.status === "active" && ["owner", "test"].includes(me.plan));
+  const f = await d.founding();
+  const rehearsal = !d.live || !f.sales_open;
+  if (rehearsal && !tester)
+    return d.live ? no(409, "Sales open in January. Join the free test drive for now.", "closed")
+      : no(403, "Payments are being tested. Sales open in January.", "test-mode");
+  const buyers = rehearsal ? ["founding", "standard", "owner", "test"] : ["founding", "standard"];
+  const mark = d.live && rehearsal ? { rehearsal: "1" } : {};
   if (item === "kit") {
-    const f = await d.founding();
-    if (!f.sales_open && d.live) return no(409, "Sales open in January. Join the free test drive for now.", "closed");
     if (waiver !== true) return no(400, "Tick the box to say you understand the 14-day right to cancel ends when you open the code.", "waiver");
-    if (d.live && me && ["active", "lapsed"].includes(me.status) && me.plan !== "test")
+    if (!rehearsal && me && ["active", "lapsed"].includes(me.status) && me.plan !== "test")
       return no(409, "You already have the kit. Manage membership is in Help and membership.", "has-kit");
     // Nobody pays for the kit twice (Amit, 21 Nov 2026): the buyer's email is checked before Stripe is involved, and
     // Stripe is given that same email so the one that pays is the one that was checked. Test members can pay again:
@@ -52,7 +58,7 @@ export async function checkout(d, { item, waiver, user, embedded, email }) {
     }
     const plan = f.left > 0 ? "founding" : "standard";
     const waiverAt = new Date(d.now).toISOString();
-    const meta = { item: "kit", plan, waiver_at: waiverAt };
+    const meta = { item: "kit", plan, waiver_at: waiverAt, ...mark };
     const s = await d.stripe("checkout/sessions", {
       mode: "payment", locale: "en-GB", ...CARD_ONLY,
       line_items: [{ price: await d.price(plan === "founding" ? "kit_founding" : "kit_standard"), quantity: 1 }],
@@ -74,7 +80,7 @@ export async function checkout(d, { item, waiver, user, embedded, email }) {
   if (!m || !["active", "lapsed"].includes(m.status) || !buyers.includes(m.plan))
     return no(403, "This is for members with the kit.", "not-member");
   const customer = m.stripe_customer_id ? { customer: m.stripe_customer_id } : { customer_email: m.email, customer_creation: "always" };
-  const meta = { item, member_id: m.id };
+  const meta = { item, member_id: m.id, ...mark };
   if (item === "renewal") {
     const s = await d.stripe("checkout/sessions", {
       mode: "payment", locale: "en-GB", ...CARD_ONLY, ...customer,
@@ -129,7 +135,8 @@ const firstName = (name) => String(name || "").trim().split(/\s+/)[0] || null;
 export async function handle(d, event) {
   if (!(await d.rpc("stripe_event_claim", { p_id: event.id, p_type: event.type }))) return ok({ repeat: true });
   const o = event.data?.object || {};
-  const live = !!event.livemode;
+  // A live payment made during the rehearsal is recorded as a test: it takes no founding number and is not a sale.
+  const live = !!event.livemode && (event.data?.object?.metadata || {}).rehearsal !== "1";
   if (event.type === "checkout.session.completed" || event.type === "checkout.session.async_payment_succeeded") {
     if (o.payment_status !== "paid" && o.mode !== "subscription") return ok({ waiting: o.payment_status });
     const meta = o.metadata || {};

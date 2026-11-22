@@ -135,6 +135,56 @@ function hooks() {
   return h;
 }
 
+await t("rehearsal: live keys before sales open let only the owner and test members pay, marked as a rehearsal", async () => {
+  const owner = member({ plan: "owner", email: "o@x.com" }), stranger = member({ plan: "founding" });
+  // nobody signed in, or a real member: closed, Stripe never called
+  for (const m of [null, stranger]) {
+    const w = world({ live: true, open: false, m });
+    for (const item of ["kit", "renewal", "robot_care"]) {
+      const r = await core.checkout(w.d, { item, waiver: true, user: m ? { id: "u" } : null, email: "n@x.com" });
+      assert.equal(r.body.code, "closed", item); 
+    }
+    assert.equal(w.calls.length, 0);
+  }
+  // the owner can buy the kit with a fresh email (not their own: that already has it), renew and start Robot Care
+  let w = world({ live: true, open: false, m: owner, held: null });
+  let r = await core.checkout(w.d, { item: "kit", waiver: true, user: { id: "u", email: "o@x.com" }, email: "live1@x.com" });
+  assert.equal(r.status, 200); assert.equal(w.calls[0].params.metadata.rehearsal, "1"); assert.equal(w.calls[0].params.payment_intent_data.metadata.rehearsal, "1");
+  w = world({ live: true, open: false, m: owner, held: { plan: "owner", status: "active" } });
+  assert.equal((await core.checkout(w.d, { item: "kit", waiver: true, user: { id: "u" }, email: "o@x.com" })).body.code, "has-kit");
+  w = world({ live: true, open: false, m: owner });
+  r = await core.checkout(w.d, { item: "renewal", user: { id: "u" } });
+  assert.equal(r.status, 200); assert.equal(w.calls[0].params.metadata.rehearsal, "1");
+  w = world({ live: true, open: false, m: owner });
+  r = await core.checkout(w.d, { item: "robot_care", user: { id: "u" } });
+  assert.equal(r.status, 200); assert.equal(w.calls[0].params.subscription_data.metadata.rehearsal, "1");
+  // once sales open the rehearsal ends by itself: the owner is refused like anyone with the kit, and nothing is marked
+  w = world({ live: true, open: true, m: owner });
+  assert.equal((await core.checkout(w.d, { item: "kit", waiver: true, user: { id: "u" }, email: "fresh@x.com" })).body.code, "has-kit");
+  assert.equal((await core.checkout(w.d, { item: "renewal", user: { id: "u" } })).body.code, "not-member");
+  w = world({ live: true, open: true, m: null, held: null });
+  await core.checkout(w.d, { item: "kit", waiver: true, user: null, email: "buyer@x.com" });
+  assert.equal(w.calls[0].params.metadata.rehearsal, undefined);
+  // test mode never marks anything (test payments are tests already)
+  w = world({ live: false, open: true, m: owner, held: null });
+  await core.checkout(w.d, { item: "kit", waiver: true, user: { id: "u" }, email: "t@x.com" });
+  assert.equal(w.calls[0].params.metadata.rehearsal, undefined);
+});
+
+await t("rehearsal: a live payment marked as a rehearsal is recorded as a test; an unmarked live one is real", async () => {
+  const ev = (id, meta) => ({ id, type: "checkout.session.completed", livemode: true, data: { object: { id: "cs_" + id, mode: "payment",
+    payment_status: "paid", customer: "cus_r", payment_intent: "pi_" + id, amount_total: 9900, customer_details: { email: "r@x.com", name: "R" }, metadata: meta } } });
+  let h = hooks();
+  await core.handle(h.d, ev("r1", { item: "kit", plan: "founding", rehearsal: "1" }));
+  assert.equal(h.rpcs.find((x) => x.name === "stripe_kit_paid").args.p_live, false);
+  h = hooks();
+  await core.handle(h.d, ev("r2", { item: "kit", plan: "founding" }));
+  assert.equal(h.rpcs.find((x) => x.name === "stripe_kit_paid").args.p_live, true);
+  h = hooks();
+  await core.handle(h.d, ev("r3", { item: "renewal", member_id: "m1", rehearsal: "1" }));
+  assert.equal(h.rpcs.find((x) => x.name === "stripe_renewal_paid").args.p_live, false);
+});
+
 await t("webhook: a paid kit makes the membership once, however often Stripe sends it", async () => {
   const h = hooks();
   const ev = { id: "evt_k", type: "checkout.session.completed", livemode: false, data: { object: {
