@@ -19,7 +19,9 @@
    "reveal_after": "2026-11-22T08:18:47Z",
    "published_at": "2026-10-29T21:32:09Z",
    "late": true,
-   "status": "committed"
+   "status": "revealed",
+   "revealed_at": "2026-11-23T21:31:09Z",
+   "commitment_matches": true
   },
   "2026-11-01": {
    "sha256": "716ff50c0ebe9151d5d141eb1b58717e45f7c3bf184a364d83dcc6e34e0dc351",
@@ -54,5 +56,5 @@
    "status": "committed"
   }
  },
- "updated_at": "2026-11-22T08:19:24Z"
+ "updated_at": "2026-11-23T21:31:11Z"
 }
