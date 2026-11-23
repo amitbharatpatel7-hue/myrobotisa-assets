@@ -1,0 +1,24 @@
+{
+ "decided_at": "2026-10-25T08:18:47Z",
+ "env": "live",
+ "halted": false,
+ "nonce": "bcd953e22c4c030254ff306263277331",
+ "orders": [
+  {
+   "est_value": 193.05,
+   "quantity": -1.0024,
+   "reason": "no longer in the pot's target",
+   "side": "SELL",
+   "sleeve": "moonshot",
+   "symbol": "ALAB"
+  }
+ ],
+ "risk_profile": "adventurous",
+ "version": 1,
+ "week": "2026-10-25",
+ "fills": [],
+ "sha256": "f76fc97ebef6a89f884b1a4c159f1bdc23e9c88e81683d05ccd755cc25714cf2",
+ "commitment_matches": true,
+ "commitment_published_at": "2026-10-29T21:32:09Z",
+ "revealed_at": "2026-11-23T21:31:09Z"
+}
