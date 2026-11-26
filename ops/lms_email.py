@@ -242,17 +242,62 @@ def _tile_text(part) -> str:
     return "".join(out)
 
 
-def _tiles(rows) -> str:
-    out = []
-    for i, r in enumerate(rows):
-        label, value, note = r[0], r[1], (r[2] if len(r) > 2 else "")
-        out.append(
-            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(CARD_DEEP)}'
-            f'border:1px solid {HAIRLINE};border-radius:14px;margin:{0 if i == 0 else 10}px 0 0;"><tr><td style="padding:14px 16px;">'
-            f'<div style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:{MUTED};font-family:{FONT_STACK};">{esc(label)}</div>'
-            f'<div style="margin-top:4px;font-size:22px;font-weight:600;line-height:1.25;color:{INK};font-family:{TILE_MONO};">{_tile_text(value)}</div>'
-            + (f'<div style="margin-top:2px;font-size:13px;line-height:1.45;color:{MUTED};font-family:{FONT_STACK};">{_tile_text(note)}</div>' if note else "")
-            + '</td></tr></table>')
+def _tile(r, top) -> str:
+    label, value, note = r[0], r[1], (r[2] if len(r) > 2 else "")
+    return (
+        f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" {_bg(CARD_DEEP)}'
+        f'border:1px solid {HAIRLINE};border-radius:14px;margin:{top}px 0 0;"><tr><td style="padding:14px 16px;">'
+        f'<div style="font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:{MUTED};font-family:{FONT_STACK};">{esc(label)}</div>'
+        f'<div style="margin-top:4px;font-size:22px;font-weight:600;line-height:1.25;color:{INK};font-family:{TILE_MONO};">{_tile_text(value)}</div>'
+        + (f'<div style="margin-top:2px;font-size:13px;line-height:1.45;color:{MUTED};font-family:{FONT_STACK};">{_tile_text(note)}</div>' if note else "")
+        + '</td></tr></table>')
+
+
+METER_COLORS = {"green": "#00E87A", "amber": "#FFA63D", "red": "#FF4D7A"}
+
+
+def _meter(meter: dict) -> str:
+    """v2.10 (Amit, 26 Nov 2026, the GitHub minutes card): one bar under a tile. `parts` are (percent, colour) segments
+    from the left, the rest is empty track; `key` names the colours; `ends` are the two labels under the bar's ends."""
+    parts = [(max(0.0, float(p)), METER_COLORS.get(c, METER_COLORS["green"])) for p, c in meter.get("parts", []) if float(p) > 0]
+    total = sum(p for p, _c in parts)
+    if total > 100:
+        parts = [(p * 100 / total, c) for p, c in parts]
+    rest = max(0.0, 100 - sum(p for p, _c in parts))
+    cell = 'height:12px;line-height:12px;font-size:0;'
+    cells = "".join(f'<td width="{p:.1f}%" bgcolor="{c}" style="width:{p:.1f}%;background:{c};background-color:{c};{cell}">&nbsp;</td>'
+                    for p, c in parts)
+    if rest:
+        cells += f'<td width="{rest:.1f}%" {_bg(PAGE)}width:{rest:.1f}%;{cell}">&nbsp;</td>'
+    small = f'font-size:11.5px;line-height:1.4;color:{MUTED};font-family:{FONT_STACK};'
+    key = " &nbsp; ".join(f'<span style="color:{METER_COLORS.get(c, METER_COLORS["green"])};">&#9632;</span> {esc(t)}'
+                          for t, c in meter.get("key", []))
+    ends = list(meter.get("ends", ("", ""))) + ["", ""]
+    return (f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:14px 0 0;border-radius:6px;overflow:hidden;"><tr>{cells}</tr></table>'
+            f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:6px 0 4px;"><tr>'
+            f'<td style="{small}white-space:nowrap;">{esc(ends[0])}</td><td align="center" style="{small}">{key}</td>'
+            f'<td align="right" style="{small}white-space:nowrap;">{esc(ends[1])}</td></tr></table>')
+
+
+def _tiles(rows, pair=None, meter=None) -> str:
+    """Stacked tiles. v2.10: `pair` is two row indices drawn side by side (short values only: each gets half a phone);
+    `meter` draws a bar after row `meter["after"]` (default 0). A theme older than v2.10 ignores both and stacks."""
+    rows = list(rows)
+    pair = [i for i in (pair or []) if isinstance(i, int) and 0 <= i < len(rows)]
+    pair = pair if len(pair) == 2 and pair[1] == pair[0] + 1 else []
+    out, i = [], 0
+    while i < len(rows):
+        top = 0 if i == 0 else 10
+        if pair and i == pair[0]:
+            out.append(f'<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>'
+                       f'<td width="50%" valign="top" style="width:50%;padding-right:5px;">{_tile(rows[i], top)}</td>'
+                       f'<td width="50%" valign="top" style="width:50%;padding-left:5px;">{_tile(rows[i + 1], top)}</td></tr></table>')
+            last, i = i + 1, i + 2
+        else:
+            out.append(_tile(rows[i], top))
+            last, i = i, i + 1
+        if meter and i - 1 >= meter.get("after", 0) > last - (2 if pair and last == pair[1] else 1):
+            out.append(_meter(meter))
     return "".join(out)
 
 
@@ -559,7 +604,7 @@ def _block_body_inner(block: dict) -> str:
     if "pills" in block:
         return _pill_row(block["pills"])
     if "tiles" in block:
-        return _tiles(block["tiles"])
+        return _tiles(block["tiles"], block.get("pair"), block.get("meter"))
     if "receipt" in block:
         return _receipt(block["receipt"])
     if "kv" in block:
